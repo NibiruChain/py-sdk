@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+grpcio = "*"
+asyncio = "*"
+aiohttp = "*"
+ecdsa = "*"
+ed25519 = "*"
+bech32 = "*"
+mnemonic = "*"
+hdwallets = "*"
+pysha3 = "*"
+protobuf = "*"
+grpcio-tools = "*"
+bip32 = "*"
+requests = "*"
+eip712_structs = "*"
+coincurve = "*"
+aiocron = "*"
+web3 = "*"
+nibiru-py = {path = "."}
+
+[dev-packages]
+
+[requires]
+python_version = "3"

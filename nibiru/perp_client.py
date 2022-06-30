@@ -17,7 +17,7 @@ class PerpClient:
 
     async def trader_position(self, token_pair: str, trader: str):
         req = perp_type.QueryTraderPositionRequest(
-            token_pair = token_pair,
+            tokenPair = token_pair,
             trader = trader,
         )
         return await self.api.TraderPosition(req)

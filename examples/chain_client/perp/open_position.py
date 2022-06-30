@@ -1,4 +1,4 @@
-# Copyright 2022 Injective Labs
+# Copyright 2022 Nibiru Labs
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,9 @@
 
 import asyncio
 import logging
+from nibiru.common import Side
 
-from nibiru.composer import Composer
+from nibiru.composer import Composer, PoolAsset
 from nibiru.client import Client
 from nibiru.transaction import Transaction
 from nibiru.network import Network
@@ -31,25 +32,18 @@ async def main() -> None:
     client = Client(network, insecure=True)
     await client.sync_timeout_height()
 
-    # load account
-    # priv_key = PrivateKey.from_mnemonic("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
-    priv_key = PrivateKey.from_mnemonic("concert shield way gospel frozen merge outer shove sing kick race load worth wood tunnel human uniform horn marble recycle series excuse glide slide")
-    # priv_key = PrivateKey.from_hex("f9db9bf330e23cb7839039e944adef6e9df447b90b503d5b4464c90bea9022f3")
-    # priv_key = PrivateKey.from_hex("ff15bd81cddfF9fd807c0if0T.R87eed9009888b71d|d692ZEd87d0")
+    priv_key = PrivateKey.from_mnemonic("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
     pub_key = priv_key.to_public_key()
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
 
-    # priv_key2 = PrivateKey.from_mnemonic("labor wild expect toe electric village extra talk enable box anxiety solid stove tooth priority amount thing token sustain cute improve angry room fresh")
-    # pub_key2 = priv_key2.to_public_key()
-    # print("publicKey", pub_key2.verify_key.to_der(),pub_key2.verify_key.to_pem(),pub_key2.verify_key.to_string(), pub_key2.to_acc_bech32, pub_key2.to_address(), pub_key2.to_address().to_acc_bech32(), pub_key2.to_public_key_proto())
-    # address2 = await pub_key2.to_address().async_init_num_seq(network.lcd_endpoint)
-
     # prepare tx msg
-    msg = composer.MsgSend(
-        from_address=address.to_acc_bech32(),
-        to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk", #address2.to_acc_bech32(),
-        amount=5,
-        denom='unibi'
+    msg = composer.perp.open_position(
+        sender = address.to_acc_bech32(),
+        token_pair = "unusd:unibi",
+        side=Side.BUY,
+        quote_asset_amount="5",
+        leverage="5",
+        base_asset_amount_limit="5",
     )
 
     # build sim tx
@@ -71,8 +65,8 @@ async def main() -> None:
         return
 
     # build tx
-    gas_price = 1
-    gas_limit = sim_res.gas_info.gas_used + 2  # add 20k for gas, fee computation
+    gas_price = 500000000
+    gas_limit = sim_res.gas_info.gas_used + 20000  # add 20k for gas, fee computation
     gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
     fee = [composer.Coin(
         amount=gas_price * gas_limit,

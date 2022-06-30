@@ -15,7 +15,7 @@
 import asyncio
 import logging
 
-from nibiru.composer import Composer as ProtoMsgComposer, PoolAsset
+from nibiru.composer import Composer, PoolAsset
 from nibiru.client import Client
 from nibiru.transaction import Transaction
 from nibiru.network import Network
@@ -25,7 +25,7 @@ from nibiru.wallet import PrivateKey
 async def main() -> None:
     # select network: local, testnet, mainnet
     network = Network.local()
-    composer = ProtoMsgComposer(network=network.string())
+    composer = Composer(network=network.string())
 
     # initialize grpc client
     client = Client(network, insecure=True)
@@ -36,19 +36,15 @@ async def main() -> None:
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
 
     # prepare tx msg
-    msg = composer.CreatePool(
+    msg = composer.dex.create_pool(
         creator=address.to_acc_bech32(),
         swap_fee="2",
         exit_fee="3",
         assets=[
-            PoolAsset(token=composer.Coin(4, "unibi"),weight="3"),
-            PoolAsset(token=composer.Coin(5, "unusd"),weight="4"),
+            PoolAsset(token=composer.Coin(4, "unusd"),weight="3"),
+            PoolAsset(token=composer.Coin(5, "uusdc"),weight="4"),
         ],
     )
-    print("address:")
-    print(address.to_acc_bech32())
-    print("num")
-    print(address.get_number())
 
     # build sim tx
     tx = (
@@ -69,8 +65,8 @@ async def main() -> None:
         return
 
     # build tx
-    gas_price = 500000000
-    gas_limit = sim_res.gas_info.gas_used + 20000  # add 20k for gas, fee computation
+    gas_price = 1
+    gas_limit = sim_res.gas_info.gas_used + 2  # add 20k for gas, fee computation
     gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
     fee = [composer.Coin(
         amount=gas_price * gas_limit,

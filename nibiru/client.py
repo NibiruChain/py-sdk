@@ -128,7 +128,7 @@ class Client:
             if insecure else grpc.aio.secure_channel(network.grpc_exchange_endpoint, credentials)
         )
         # Query services
-        self.dex = DexClient(self.exchange_channel)
+        self.dex_query = DexClient(self.exchange_channel)
         self.stubPricefeed = pricefeed_query.QueryStub(self.exchange_channel)
         self.perp = PerpClient(self.exchange_channel)
         self.stubLockup = lockup_query.QueryStub(self.exchange_channel)

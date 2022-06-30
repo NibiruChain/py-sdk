@@ -95,10 +95,11 @@ class Transaction:
         mode_info = cosmos_tx_type.ModeInfo(single=cosmos_tx_type.ModeInfo.Single(mode=tx_sign.SIGN_MODE_DIRECT))
 
         # if public_key:
-        #     any_public_key = any_pb2.Any()
+        #     any_public_key = any_pb2.Any(public_key.)
         #     any_public_key.Pack(public_key.to_public_key_proto(), type_url_prefix="")
         #     signer_info = cosmos_tx_type.SignerInfo(
         #         mode_info=mode_info, sequence=self.sequence, public_key=any_public_key
+        #         # mode_info=mode_info, sequence=self.sequence, public_key=public_key.to_public_key_proto()
         #     )
         # else:
         signer_info = cosmos_tx_type.SignerInfo(mode_info=mode_info, sequence=self.sequence)

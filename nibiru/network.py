@@ -31,6 +31,8 @@ class Network:
     def local(cls):
         return cls(
             lcd_endpoint='http://localhost:1317',
+            # grpc_endpoint='localhost:26657',
+            # grpc_exchange_endpoint='localhost:26657',
             grpc_endpoint='localhost:9090',
             grpc_exchange_endpoint='localhost:9090',
             chain_id='nibiru-localnet-0',

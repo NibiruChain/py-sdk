@@ -4,6 +4,9 @@ from dataclasses import dataclass
 
 from google.protobuf import any_pb2, message, timestamp_pb2
 
+from nibiru.dex_composer import DexComposer
+from nibiru.perp_composer import PerpComposer
+
 from .proto.cosmos.authz.v1beta1 import authz_pb2 as cosmos_authz_pb
 from .proto.cosmos.authz.v1beta1 import tx_pb2 as cosmos_authz_tx_pb
 
@@ -31,43 +34,18 @@ class PoolAsset:
 class Composer:
     def __init__(self, network: str):
         self.network = network
+        self.dex = DexComposer()
+        self.perp = PerpComposer()
 
-    def Coin(self, amount: int, denom: str):
+    def Coin(self, amount: float, denom: str):
         return cosmos_base_coin_pb.Coin(amount=str(amount), denom=denom)
 
-
-    # DEX
-    def CreatePool(self, creator: str, swap_fee: str, exit_fee: str, assets: List[PoolAsset]):
-        pool_assets = [pool_tx_pb.PoolAsset(token=a.token, weight=a.weight) for a in assets]
-
-        return dex_tx_pb.MsgCreatePool(
-            creator = creator,
-            poolParams = pool_tx_pb.PoolParams(swapFee=swap_fee, exitFee=exit_fee),
-            poolAssets = pool_assets,
+    def MsgSend(self, from_address: str, to_address: str, amount: int, denom: str):
+        return cosmos_bank_tx_pb.MsgSend(
+            from_address=from_address,
+            to_address=to_address,
+            amount=[self.Coin(amount=amount, denom=denom)],
         )
-
-    def JoinPool(self, sender: str, pool_id: int, tokens: List[cosmos_base_coin_pb.Coin]):
-        return dex_tx_pb.MsgJoinPool(
-            sender = sender,
-            pool_id = pool_id,
-            tokens_in = tokens,
-        )
-
-    def ExitPool(self, sender: str, pool_id: int, pool_shares: cosmos_base_coin_pb.Coin):
-        return dex_tx_pb.MsgExitPool(
-            sender = sender,
-            pool_id = pool_id,
-            pool_shares = pool_shares,
-        )
-
-    def SwapAssets(self, sender: str, pool_id: int, token_in: cosmos_base_coin_pb.Coin, token_out_denom):
-        return dex_tx_pb.MsgSwapAssets(
-            sender = sender,
-            pool_id = pool_id,
-            token_in = token_in,
-            token_out_denom = token_out_denom,
-        )
-    # DEX
 
     # def OrderData(self, market_id: str, subaccount_id: str, order_hash: str):
     #     return injective_exchange_tx_pb.OrderData(
@@ -240,7 +218,6 @@ class Composer:
     #             denom, peggy_denom, decimals
     #         )
     #     )
-
     #     return cosmos_bank_tx_pb.MsgSend(
     #         from_address=from_address,
     #         to_address=to_address,

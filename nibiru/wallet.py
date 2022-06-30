@@ -66,7 +66,7 @@ class PrivateKey:
         seed = Mnemonic("english").to_seed(words)
         self = cls(_error_do_not_use_init_directly=True)
         self.signing_key = SigningKey.from_string(
-            BIP32.from_seed(seed).get_privkey_from_path(path), curve=SECP256k1, hashfunc=hashlib.sha256
+            BIP32.from_seed(seed).get_privkey_from_path(path), curve=SECP256k1,# hashfunc=hashlib.sha256
         )
         return self
 
@@ -150,6 +150,7 @@ class PublicKey:
 
     def to_public_key_proto(self) -> PubKeyProto:
         return PubKeyProto(key=self.verify_key.to_string("compressed"))
+        # return self.verify_key.to_string("compressed")
 
     def _to_bech32(self, prefix: str) -> str:
         five_bit_r = convertbits(

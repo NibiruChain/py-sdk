@@ -13,7 +13,7 @@ from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
 
 from .exceptions import ConvertError, DecodeError
-from .proto.common.common_pb2 import PubKey as PubKeyProto
+from .proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 BECH32_PUBKEY_ACC_PREFIX = "nibipub"
 BECH32_PUBKEY_VAL_PREFIX = "nibivaloperpub"
@@ -100,8 +100,8 @@ class PrivateKey:
 
         :return: a signature of this private key over the given message
         """
-        # return self.signing_key.sign_deterministic(msg, hashfunc=hashlib.sha256, sigencode=sigencode_string_canonize)
-        return self.signing_key.sign_deterministic(msg, hashfunc=sha3.keccak_256, sigencode=sigencode_string_canonize)
+        return self.signing_key.sign_deterministic(msg, hashfunc=hashlib.sha256, sigencode=sigencode_string_canonize)
+        # return self.signing_key.sign_deterministic(msg, hashfunc=sha3.keccak_256, sigencode=sigencode_string_canonize)
 
 
 class PublicKey:
@@ -150,7 +150,6 @@ class PublicKey:
 
     def to_public_key_proto(self) -> PubKeyProto:
         return PubKeyProto(key=self.verify_key.to_string("compressed"))
-        # return self.verify_key.to_string("compressed")
 
     def _to_bech32(self, prefix: str) -> str:
         five_bit_r = convertbits(

@@ -6,8 +6,9 @@ import datetime
 from http.cookies import SimpleCookie
 from typing import List, Optional, Tuple, Union
 
-from .dex_client import DexClient
-from .perp_client import PerpClient
+from .clients import (
+    DexClient, PerpClient,
+)
 
 from .exceptions import NotFoundError, EmptyMsgError
 
@@ -91,15 +92,15 @@ class Client:
     ):
 
         # load root CA cert
-        if not insecure:
-            if network.env == 'testnet':
-                if credentials is None:
-                    with open(os.path.join(os.path.dirname(__file__), 'cert/testnet.crt'), 'rb') as f:
-                        credentials = grpc.ssl_channel_credentials(f.read())
-            if network.env == 'mainnet':
-                if credentials is None:
-                    with open(os.path.join(os.path.dirname(__file__), 'cert/mainnet.crt'), 'rb') as f:
-                        credentials = grpc.ssl_channel_credentials(f.read())
+        # if not insecure:
+        #     if network.env == 'testnet':
+        #         if credentials is None:
+        #             with open(os.path.join(os.path.dirname(__file__), 'cert/testnet.crt'), 'rb') as f:
+        #                 credentials = grpc.ssl_channel_credentials(f.read())
+        #     if network.env == 'mainnet':
+        #         if credentials is None:
+        #             with open(os.path.join(os.path.dirname(__file__), 'cert/mainnet.crt'), 'rb') as f:
+        #                 credentials = grpc.ssl_channel_credentials(f.read())
 
         # chain stubs
         self.chain_channel = (
@@ -128,7 +129,7 @@ class Client:
             if insecure else grpc.aio.secure_channel(network.grpc_exchange_endpoint, credentials)
         )
         # Query services
-        self.dex_query = DexClient(self.exchange_channel)
+        self.dex = DexClient(self.exchange_channel)
         self.stubPricefeed = pricefeed_query.QueryStub(self.exchange_channel)
         self.perp = PerpClient(self.exchange_channel)
         self.stubLockup = lockup_query.QueryStub(self.exchange_channel)

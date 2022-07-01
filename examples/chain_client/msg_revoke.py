@@ -1,4 +1,4 @@
-# Copyright 2022 Nibiru Labs
+# Copyright 2022 Injective Labs
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 import asyncio
 import logging
 
-from nibiru.composer import Composer, PoolAsset
+from nibiru.composer import Composer as ProtoMsgComposer
 from nibiru.client import Client
 from nibiru.transaction import Transaction
 from nibiru.network import Network
@@ -25,25 +25,23 @@ from nibiru.wallet import PrivateKey
 async def main() -> None:
     # select network: local, testnet, mainnet
     network = Network.local()
-    composer = Composer(network=network.string())
+    composer = ProtoMsgComposer(network=network.string())
 
     # initialize grpc client
     client = Client(network, insecure=True)
     await client.sync_timeout_height()
 
+    # load account
     priv_key = PrivateKey.from_mnemonic("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
     pub_key = priv_key.to_public_key()
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
+    subaccount_id = address.get_subaccount_id(index=0)
 
     # prepare tx msg
-    msg = composer.dex.create_pool(
-        creator=address.to_acc_bech32(),
-        swap_fee="2",
-        exit_fee="3",
-        assets=[
-            PoolAsset(token=composer.Coin(4, "unusd"),weight="3"),
-            PoolAsset(token=composer.Coin(5, "uusdc"),weight="4"),
-        ],
+    msg = composer.msg_revoke(
+        granter = "inj14au322k9munkmx5wrchz9q30juf5wjgz2cfqku",
+        grantee = "inj1hkhdaj2a2clmq5jq6mspsggqs32vynpk228q3r",
+        msg_type = "/injective.exchange.v1beta1.MsgCreateSpotLimitOrder"
     )
 
     # build sim tx
@@ -64,8 +62,8 @@ async def main() -> None:
         return
 
     # build tx
-    gas_price = 1
-    gas_limit = sim_res.gas_info.gas_used + 2  # add 2 for gas, fee computation
+    gas_price = 500000000
+    gas_limit = sim_res.gas_info.gas_used + 20000 # add 20k for gas, fee computation
     gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
     fee = [composer.Coin(
         amount=gas_price * gas_limit,

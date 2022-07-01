@@ -31,13 +31,11 @@ Requires Python 3.7+
 $ pipenv shell
 $ pipenv install
 
-# connecting to Nibiru Exchange API
-# and listening for new orders from a specific spot market
-$ python examples/exchange_client/spot_exchange_rpc/8_StreamOrders.py
+# connecting to Nibiru Exchange API and create a new pool
+$ python examples/chain_client/dex/create_pool.py
 
-# sending a msg with bank transfer
-# signs and posts a transaction to the Nibiru Chain
-$ python examples/chain_client/1_MsgSend.py
+# sending a msg with bank transfer signs and posts a transaction to the Nibiru Chain
+$ python examples/chain_client/msg_send.py
 ```
 Upgrade `pip` to the latest version, if you see these warnings:
   ```
@@ -48,7 +46,7 @@ Upgrade `pip` to the latest version, if you see these warnings:
 ### Development
 1. Generate proto binding & build
   ```
-  make gen
+  make protoc-gen
   python -m build
   ```
 
@@ -62,7 +60,7 @@ Upgrade `pip` to the latest version, if you see these warnings:
   ```
   # from local build
   pip uninstall nibiru-py
-  pip install nibiru-py --no-index --find-links /path/to/injective/sdk-python/dist
+  pip install nibiru-py --no-index --find-links /path/to/nibiru/sdk-python/dist
 
   # from pypi
   pip uninstall nibiru-py

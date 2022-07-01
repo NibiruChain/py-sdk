@@ -24,13 +24,15 @@ echo $proto_dirs
 for dir in $proto_dirs; do \
   echo "generating $dir"
   echo "$cosmos_sdk_dir"
-    mkdir -p ./nibiru/${dir}; \
-    python3 -m grpc_tools.protoc \
+  mkdir -p ./nibiru/${dir}; \
+  python3 -m grpc_tools.protoc \
     -I proto \
     -I "$cosmos_sdk_dir/third_party/proto" \
     -I "$cosmos_sdk_dir/proto" \
     --python_out=nibiru/proto \
     --grpc_python_out=nibiru/proto \
+    --mypy_out=nibiru/proto \
+    --mypy_grpc_out=nibiru/proto \
     $(find "${dir}" -type f -name '*.proto')
 done; \
 rm -rf proto

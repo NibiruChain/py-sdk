@@ -53,10 +53,9 @@ async def main() -> None:
         .with_sequence(address.get_sequence())
         .with_account_num(address.get_number())
         .with_chain_id(network.chain_id)
+        .with_signer(priv_key)
     )
-    sim_sign_doc = tx.get_sign_doc(pub_key)
-    sim_sig = priv_key.sign(sim_sign_doc.SerializeToString())
-    sim_tx_raw_bytes = tx.get_tx_data(sim_sig, pub_key)
+    sim_tx_raw_bytes = tx.get_signed_tx_data()
 
     # simulate tx
     (sim_res, success) = await client.simulate_tx(sim_tx_raw_bytes)
@@ -65,23 +64,21 @@ async def main() -> None:
         return
 
     # build tx
-    gas_price = 500000000
-    gas_limit = sim_res.gas_info.gas_used + 20000  # add 20k for gas, fee computation
+    gas_price = 1
+    gas_limit = sim_res.gas_info.gas_used + 2  # add 2 for gas, fee computation
     gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
     fee = [composer.Coin(
         amount=gas_price * gas_limit,
         denom=network.fee_denom,
     )]
     tx = tx.with_gas(gas_limit).with_fee(fee).with_memo('').with_timeout_height(client.timeout_height)
-    sign_doc = tx.get_sign_doc(pub_key)
-    sig = priv_key.sign(sign_doc.SerializeToString())
-    tx_raw_bytes = tx.get_tx_data(sig, pub_key)
+    tx_raw_bytes = tx.get_signed_tx_data()
 
     # broadcast tx: send_tx_async_mode, send_tx_sync_mode, send_tx_block_mode
     res = await client.send_tx_sync_mode(tx_raw_bytes)
     print(res)
     print("gas wanted: {}".format(gas_limit))
-    print("gas fee: {} INJ".format(gas_fee))
+    print("gas fee: {} unibi".format(gas_fee))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

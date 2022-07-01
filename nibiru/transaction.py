@@ -8,13 +8,14 @@ from .proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
 from .client import Client
 from .constant import MAX_MEMO_CHARACTERS
 from .exceptions import EmptyMsgError, NotFoundError, UndefinedError, ValueTooLargeError
-from .wallet import PublicKey
+from .wallet import PublicKey, PrivateKey
 
 class Transaction:
     def __init__(
         self,
         msgs: Tuple[message.Message,...] = None,
         account_num: int = None,
+        priv_key: PrivateKey = None,
         sequence: int = None,
         chain_id: str = None,
         fee: List[Coin] = None,
@@ -24,6 +25,7 @@ class Transaction:
     ):
         self.msgs = self.__convert_msgs(msgs) if msgs is not None else []
         self.account_num = account_num
+        self.priv_key = priv_key
         self.sequence = sequence
         self.chain_id = chain_id
         self.fee = cosmos_tx_type.Fee(amount=fee, gas_limit=gas)
@@ -53,6 +55,10 @@ class Transaction:
             self.sequence = account.sequence
             return self
         raise NotFoundError("Account doesn't exist")
+
+    def with_signer(self, priv_key: PrivateKey):
+        self.priv_key = priv_key
+        return self
 
     def with_account_num(self, account_num: int) -> "Transaction":
         self.account_num = account_num
@@ -94,15 +100,14 @@ class Transaction:
         body_bytes = body.SerializeToString()
         mode_info = cosmos_tx_type.ModeInfo(single=cosmos_tx_type.ModeInfo.Single(mode=tx_sign.SIGN_MODE_DIRECT))
 
-        # if public_key:
-        #     any_public_key = any_pb2.Any(public_key.)
-        #     any_public_key.Pack(public_key.to_public_key_proto(), type_url_prefix="")
-        #     signer_info = cosmos_tx_type.SignerInfo(
-        #         mode_info=mode_info, sequence=self.sequence, public_key=any_public_key
-        #         # mode_info=mode_info, sequence=self.sequence, public_key=public_key.to_public_key_proto()
-        #     )
-        # else:
-        signer_info = cosmos_tx_type.SignerInfo(mode_info=mode_info, sequence=self.sequence)
+        if public_key:
+            any_public_key = any_pb2.Any()
+            any_public_key.Pack(public_key.to_public_key_proto(), type_url_prefix="")
+            signer_info = cosmos_tx_type.SignerInfo(
+                mode_info=mode_info, sequence=self.sequence, public_key=any_public_key
+            )
+        else:
+            signer_info = cosmos_tx_type.SignerInfo(mode_info=mode_info, sequence=self.sequence)
 
         auth_info = cosmos_tx_type.AuthInfo(signer_infos=[signer_info], fee=self.fee)
         auth_info_bytes = auth_info.SerializeToString()
@@ -136,3 +141,13 @@ class Transaction:
 
         tx_raw = cosmos_tx_type.TxRaw(body_bytes=body_bytes, auth_info_bytes=auth_info_bytes, signatures=[signature])
         return tx_raw.SerializeToString()
+
+
+    def get_signed_tx_data(self) -> bytes:
+        if self.priv_key == None:
+            raise UndefinedError("priv_key should be defined")
+
+        pub_key = self.priv_key.to_public_key()
+        sign_doc = self.get_sign_doc(pub_key)
+        sig = self.priv_key.sign(sign_doc.SerializeToString())
+        return self.get_tx_data(sig, pub_key)

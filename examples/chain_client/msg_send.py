@@ -1,4 +1,4 @@
-# Copyright 2022 Nibiru Labs
+# Copyright 2022 Injective Labs
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 import asyncio
 import logging
 
-from nibiru.composer import Composer, PoolAsset
+from nibiru.composer import Composer
 from nibiru.client import Client
 from nibiru.transaction import Transaction
 from nibiru.network import Network
@@ -31,22 +31,20 @@ async def main() -> None:
     client = Client(network, insecure=True)
     await client.sync_timeout_height()
 
+    # load account
     priv_key = PrivateKey.from_mnemonic("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
     pub_key = priv_key.to_public_key()
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
 
     # prepare tx msg
-    msg = composer.dex.create_pool(
-        creator=address.to_acc_bech32(),
-        swap_fee="2",
-        exit_fee="3",
-        assets=[
-            PoolAsset(token=composer.Coin(4, "unusd"),weight="3"),
-            PoolAsset(token=composer.Coin(5, "uusdc"),weight="4"),
-        ],
+    msg = composer.msg_send(
+        from_address=address.to_acc_bech32(),
+        to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk",
+        amount=5,
+        denom='unibi'
     )
 
-    # build sim tx
+    # build tx
     tx = (
         Transaction()
         .with_messages(msg)
@@ -65,7 +63,7 @@ async def main() -> None:
 
     # build tx
     gas_price = 1
-    gas_limit = sim_res.gas_info.gas_used + 2  # add 2 for gas, fee computation
+    gas_limit = sim_res.gas_info.gas_used + 2  # add 20k for gas, fee computation
     gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
     fee = [composer.Coin(
         amount=gas_price * gas_limit,

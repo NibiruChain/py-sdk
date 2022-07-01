@@ -14,7 +14,7 @@ from setuptools import setup, Command, find_packages
 NAME = "nibiru-py"
 DESCRIPTION = "Nibiru Python SDK"
 URL = "https://github.com/NibiruChain/sdk-python"
-EMAIL = "admin@nibiru.co"
+EMAIL = "dev@nibiru.fi"
 AUTHOR = "Nibiru Chain"
 REQUIRES_PYTHON = ">=3.7.0"
 VERSION = "0.5.6.8"

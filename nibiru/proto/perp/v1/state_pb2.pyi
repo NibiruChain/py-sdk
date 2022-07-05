@@ -3,6 +3,7 @@
 isort:skip_file
 """
 import builtins
+import common.common_pb2
 import cosmos.base.v1beta1.coin_pb2
 import google.protobuf.descriptor
 import google.protobuf.duration_pb2
@@ -138,7 +139,7 @@ class Params(google.protobuf.message.Message):
 global___Params = Params
 
 class GenesisState(google.protobuf.message.Message):
-    """GenesisState defines the perp  module's genesis state."""
+    """GenesisState defines the perp module's genesis state."""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     PARAMS_FIELD_NUMBER: builtins.int
     VAULT_BALANCE_FIELD_NUMBER: builtins.int
@@ -194,9 +195,10 @@ class Position(google.protobuf.message.Message):
     trader_address: typing.Text
     """address identifies the address owner of this position"""
 
-    pair: typing.Text
-    """pair identifies the pair associated with this position"""
-
+    @property
+    def pair(self) -> common.common_pb2.AssetPair:
+        """pair identifies the pair associated with this position"""
+        pass
     size: typing.Text
     """Position size.
     signed int
@@ -217,18 +219,19 @@ class Position(google.protobuf.message.Message):
     """
 
     block_number: builtins.int
-    """BlockNumber is the block number of the change to the position."""
+    """BlockNumber is the last block number when this position changed."""
 
     def __init__(self,
         *,
         trader_address: typing.Text = ...,
-        pair: typing.Text = ...,
+        pair: typing.Optional[common.common_pb2.AssetPair] = ...,
         size: typing.Text = ...,
         margin: typing.Text = ...,
         open_notional: typing.Text = ...,
         last_update_cumulative_premium_fraction: typing.Text = ...,
         block_number: builtins.int = ...,
         ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["pair",b"pair"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["block_number",b"block_number","last_update_cumulative_premium_fraction",b"last_update_cumulative_premium_fraction","margin",b"margin","open_notional",b"open_notional","pair",b"pair","size",b"size","trader_address",b"trader_address"]) -> None: ...
 global___Position = Position
 
@@ -329,14 +332,16 @@ class PairMetadata(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     PAIR_FIELD_NUMBER: builtins.int
     CUMULATIVE_PREMIUM_FRACTIONS_FIELD_NUMBER: builtins.int
-    pair: typing.Text
+    @property
+    def pair(self) -> common.common_pb2.AssetPair: ...
     @property
     def cumulative_premium_fractions(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[typing.Text]: ...
     def __init__(self,
         *,
-        pair: typing.Text = ...,
+        pair: typing.Optional[common.common_pb2.AssetPair] = ...,
         cumulative_premium_fractions: typing.Optional[typing.Iterable[typing.Text]] = ...,
         ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["pair",b"pair"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["cumulative_premium_fractions",b"cumulative_premium_fractions","pair",b"pair"]) -> None: ...
 global___PairMetadata = PairMetadata
 

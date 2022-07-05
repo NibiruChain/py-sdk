@@ -31,7 +31,7 @@ class DexClient:
                 key = kwargs.get("key"),
                 offset = kwargs.get("offset"),
                 limit = kwargs.get("limit"),
-                countTotal = kwargs.get("count_total"),
+                count_total = kwargs.get("count_total"),
                 reverse = kwargs.get("reverse"),
             ),
         )
@@ -50,7 +50,7 @@ class DexClient:
         return await self.api.TotalLiquidity(req)
 
     async def total_pool_liquidity(self, pool_id: int):
-        req = dex_type.QueryTotalLiquidityRequest(poolId = pool_id)
+        req = dex_type.QueryTotalPoolLiquidityRequest(poolId = pool_id)
         return await self.api.TotalPoolLiquidity(req)
 
     async def total_shares(self, pool_id: int):

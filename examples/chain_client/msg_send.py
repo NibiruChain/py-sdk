@@ -63,7 +63,7 @@ async def main() -> None:
 
     # build tx
     gas_price = 1
-    gas_limit = sim_res.gas_info.gas_used + 2  # add 20k for gas, fee computation
+    gas_limit = sim_res.gas_info.gas_used + 20_000  # add 20k for gas, fee computation
     gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
     fee = [composer.Coin(
         amount=gas_price * gas_limit,
@@ -73,7 +73,7 @@ async def main() -> None:
     tx_raw_bytes = tx.get_signed_tx_data()
 
     # broadcast tx: send_tx_async_mode, send_tx_sync_mode, send_tx_block_mode
-    res = await client.send_tx_sync_mode(tx_raw_bytes)
+    res = await client.send_tx_block_mode(tx_raw_bytes)
     print(res)
     print("gas wanted: {}".format(gas_limit))
     print("gas fee: {} unibi".format(gas_fee))

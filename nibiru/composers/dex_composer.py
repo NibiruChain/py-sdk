@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from nibiru.proto.dex.v1 import (
     tx_pb2 as dex_tx_pb,
     pool_pb2 as pool_tx_pb,
@@ -24,21 +22,21 @@ class DexComposer:
     def join_pool(self, sender: str, pool_id: int, tokens: List[coin_pb.Coin]):
         return dex_tx_pb.MsgJoinPool(
             sender = sender,
-            pool_id = pool_id,
-            tokens_in = tokens,
+            poolId = pool_id,
+            tokensIn = tokens,
         )
 
     def exit_pool(self, sender: str, pool_id: int, pool_shares: coin_pb.Coin):
         return dex_tx_pb.MsgExitPool(
             sender = sender,
-            pool_id = pool_id,
-            pool_shares = pool_shares,
+            poolId = pool_id,
+            poolShares = pool_shares,
         )
 
     def swap_assets(self, sender: str, pool_id: int, token_in: coin_pb.Coin, token_out_denom):
         return dex_tx_pb.MsgSwapAssets(
             sender = sender,
-            pool_id = pool_id,
-            token_in = token_in,
-            token_out_denom = token_out_denom,
+            poolId = pool_id,
+            tokenIn = token_in,
+            tokenOutDenom = token_out_denom,
         )

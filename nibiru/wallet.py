@@ -1,7 +1,4 @@
-import sys
-import sha3
 import hashlib
-import bech32
 import aiohttp
 import json
 import requests
@@ -23,7 +20,6 @@ BECH32_ADDR_ACC_PREFIX = "nibi"
 BECH32_ADDR_VAL_PREFIX = "nibivaloper"
 BECH32_ADDR_CONS_PREFIX = "nibivalcons"
 
-# DEFAULT_DERIVATION_PATH = "m/44'/60'/0'/0/0"
 DEFAULT_DERIVATION_PATH = "m/44'/118'/0'/0/0"
 
 class PrivateKey:
@@ -66,14 +62,14 @@ class PrivateKey:
         seed = Mnemonic("english").to_seed(words)
         self = cls(_error_do_not_use_init_directly=True)
         self.signing_key = SigningKey.from_string(
-            BIP32.from_seed(seed).get_privkey_from_path(path), curve=SECP256k1,# hashfunc=hashlib.sha256
+            BIP32.from_seed(seed).get_privkey_from_path(path), curve=SECP256k1,
         )
         return self
 
     @classmethod
     def from_hex(cls, priv: str) -> "PrivateKey":
         self = cls(_error_do_not_use_init_directly=True)
-        self.signing_key = SigningKey.from_string(bytes.fromhex(priv), curve=SECP256k1, hashfunc=hashlib.sha256)
+        self.signing_key = SigningKey.from_string(bytes.fromhex(priv), curve=SECP256k1)
         return self
 
     def to_hex(self) -> str:

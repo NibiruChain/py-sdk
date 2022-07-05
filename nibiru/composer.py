@@ -1,14 +1,11 @@
-from time import time
-import json
 from dataclasses import dataclass
 
-from google.protobuf import any_pb2, message, timestamp_pb2
+from google.protobuf import any_pb2
 
 from nibiru.composers import ( 
     DexComposer, PerpComposer,
 )
 
-from .proto.cosmos.authz.v1beta1 import authz_pb2 as cosmos_authz_pb
 from .proto.cosmos.authz.v1beta1 import tx_pb2 as cosmos_authz_tx_pb
 
 from .proto.cosmos.bank.v1beta1 import tx_pb2 as cosmos_bank_tx_pb
@@ -63,13 +60,10 @@ class Composer:
         validator_address: str,
         amount: float
     ):
-
-        be_amount = amount_to_backend(amount, 18)
-
         return cosmos_staking_tx_pb.MsgDelegate(
             delegator_address=delegator_address,
             validator_address=validator_address,
-            amount=self.Coin(amount=be_amount, denom="inj"),
+            amount=self.Coin(amount=amount, denom="inj"),
         )
 
     def msg_withdraw_delegator_reward(

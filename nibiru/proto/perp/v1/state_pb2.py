@@ -17,9 +17,10 @@ from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from cosmos.base.v1beta1 import coin_pb2 as cosmos_dot_base_dot_v1beta1_dot_coin__pb2
 from cosmos_proto import cosmos_pb2 as cosmos__proto_dot_cosmos__pb2
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
+from common import common_pb2 as common_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13perp/v1/state.proto\x12\x0enibiru.perp.v1\x1a\x14gogoproto/gogo.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x1egoogle/protobuf/duration.proto\"\xca\x04\n\x06Params\x12\x0f\n\x07stopped\x18\x01 \x01(\x08\x12P\n\x18maintenance_margin_ratio\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12J\n\x12\x66\x65\x65_pool_fee_ratio\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12P\n\x18\x65\x63osystem_fund_fee_ratio\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12M\n\x15liquidation_fee_ratio\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12Q\n\x19partial_liquidation_ratio\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x18\n\x10\x65poch_identifier\x18\x07 \x01(\t\x12\x82\x01\n\x14twap_lookback_window\x18\x08 \x01(\x0b\x32\x19.google.protobuf.DurationBI\xc8\xde\x1f\x00\x98\xdf\x1f\x01\xea\xde\x1f\x1etwap_lookback_window,omitempty\xf2\xde\x1f\x1byaml:\"twap_lookback_window\"\"\x88\x04\n\x0cGenesisState\x12,\n\x06params\x18\x01 \x01(\x0b\x32\x16.nibiru.perp.v1.ParamsB\x04\xc8\xde\x1f\x00\x12W\n\rvault_balance\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB%\xf2\xde\x1f\x1dyaml:\"module_account_balance\"\xc8\xde\x1f\x00\x12Y\n\x0fperp_ef_balance\x18\x03 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB%\xf2\xde\x1f\x1dyaml:\"module_account_balance\"\xc8\xde\x1f\x00\x12Z\n\x10\x66\x65\x65_pool_balance\x18\x04 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB%\xf2\xde\x1f\x1dyaml:\"module_account_balance\"\xc8\xde\x1f\x00\x12\x33\n\rpair_metadata\x18\x05 \x03(\x0b\x32\x1c.nibiru.perp.v1.PairMetadata\x12+\n\tpositions\x18\x06 \x03(\x0b\x32\x18.nibiru.perp.v1.Position\x12\x39\n\x11prepaid_bad_debts\x18\x07 \x03(\x0b\x32\x1e.nibiru.perp.v1.PrepaidBadDebt\x12\x1d\n\x15whitelisted_addresses\x18\x08 \x03(\t\"\xec\x02\n\x08Position\x12\x16\n\x0etrader_address\x18\x01 \x01(\t\x12\x0c\n\x04pair\x18\x02 \x01(\t\x12<\n\x04size\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12>\n\x06margin\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x45\n\ropen_notional\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12_\n\'last_update_cumulative_premium_fraction\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0c\x62lock_number\x18\x07 \x01(\x03\"\x90\x05\n\x0cPositionResp\x12*\n\x08position\x18\x01 \x01(\x0b\x32\x18.nibiru.perp.v1.Position\x12P\n\x18\x65xchanged_notional_value\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x65xchanged_position_size\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12@\n\x08\x62\x61\x64_debt\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12G\n\x0f\x66unding_payment\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x44\n\x0crealized_pnl\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12L\n\x14unrealized_pnl_after\x18\x07 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12G\n\x0fmargin_to_vault\x18\x08 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12I\n\x11position_notional\x18\t \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\"\xb9\x02\n\rLiquidateResp\x12@\n\x08\x62\x61\x64_debt\x18\x01 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12I\n\x11\x66\x65\x65_to_liquidator\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00\x12R\n\x1a\x66\x65\x65_to_perp_ecosystem_fund\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00\x12\x12\n\nliquidator\x18\x04 \x01(\t\x12\x33\n\rposition_resp\x18\x05 \x01(\x0b\x32\x1c.nibiru.perp.v1.PositionResp\"r\n\x0cPairMetadata\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12T\n\x1c\x63umulative_premium_fractions\x18\x02 \x03(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\"_\n\x0ePrepaidBadDebt\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12>\n\x06\x61mount\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00*/\n\x04Side\x12\x14\n\x10SIDE_UNSPECIFIED\x10\x00\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02*V\n\rPnLCalcOption\x12\x1f\n\x1bPNL_CALC_OPTION_UNSPECIFIED\x10\x00\x12\x0e\n\nSPOT_PRICE\x10\x01\x12\x08\n\x04TWAP\x10\x02\x12\n\n\x06ORACLE\x10\x03*G\n\x13PnLPreferenceOption\x12\x1e\n\x1aPNL_PREFERENCE_UNSPECIFIED\x10\x00\x12\x07\n\x03MAX\x10\x01\x12\x07\n\x03MIN\x10\x02*q\n\x1cMarginCalculationPriceOption\x12/\n+MARGIN_CALCULATION_PRICE_OPTION_UNSPECIFIED\x10\x00\x12\x08\n\x04SPOT\x10\x01\x12\t\n\x05INDEX\x10\x02\x12\x0b\n\x07MAX_PNL\x10\x03\x42,Z*github.com/NibiruChain/nibiru/x/perp/typesb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13perp/v1/state.proto\x12\x0enibiru.perp.v1\x1a\x14gogoproto/gogo.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x13\x63ommon/common.proto\"\xca\x04\n\x06Params\x12\x0f\n\x07stopped\x18\x01 \x01(\x08\x12P\n\x18maintenance_margin_ratio\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12J\n\x12\x66\x65\x65_pool_fee_ratio\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12P\n\x18\x65\x63osystem_fund_fee_ratio\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12M\n\x15liquidation_fee_ratio\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12Q\n\x19partial_liquidation_ratio\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x18\n\x10\x65poch_identifier\x18\x07 \x01(\t\x12\x82\x01\n\x14twap_lookback_window\x18\x08 \x01(\x0b\x32\x19.google.protobuf.DurationBI\xc8\xde\x1f\x00\x98\xdf\x1f\x01\xea\xde\x1f\x1etwap_lookback_window,omitempty\xf2\xde\x1f\x1byaml:\"twap_lookback_window\"\"\x88\x04\n\x0cGenesisState\x12,\n\x06params\x18\x01 \x01(\x0b\x32\x16.nibiru.perp.v1.ParamsB\x04\xc8\xde\x1f\x00\x12W\n\rvault_balance\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB%\xf2\xde\x1f\x1dyaml:\"module_account_balance\"\xc8\xde\x1f\x00\x12Y\n\x0fperp_ef_balance\x18\x03 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB%\xf2\xde\x1f\x1dyaml:\"module_account_balance\"\xc8\xde\x1f\x00\x12Z\n\x10\x66\x65\x65_pool_balance\x18\x04 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB%\xf2\xde\x1f\x1dyaml:\"module_account_balance\"\xc8\xde\x1f\x00\x12\x33\n\rpair_metadata\x18\x05 \x03(\x0b\x32\x1c.nibiru.perp.v1.PairMetadata\x12+\n\tpositions\x18\x06 \x03(\x0b\x32\x18.nibiru.perp.v1.Position\x12\x39\n\x11prepaid_bad_debts\x18\x07 \x03(\x0b\x32\x1e.nibiru.perp.v1.PrepaidBadDebt\x12\x1d\n\x15whitelisted_addresses\x18\x08 \x03(\t\"\x8c\x03\n\x08Position\x12\x16\n\x0etrader_address\x18\x01 \x01(\t\x12,\n\x04pair\x18\x02 \x01(\x0b\x32\x18.nibiru.common.AssetPairB\x04\xc8\xde\x1f\x00\x12<\n\x04size\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12>\n\x06margin\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x45\n\ropen_notional\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12_\n\'last_update_cumulative_premium_fraction\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0c\x62lock_number\x18\x07 \x01(\x03\"\x90\x05\n\x0cPositionResp\x12*\n\x08position\x18\x01 \x01(\x0b\x32\x18.nibiru.perp.v1.Position\x12P\n\x18\x65xchanged_notional_value\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x65xchanged_position_size\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12@\n\x08\x62\x61\x64_debt\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12G\n\x0f\x66unding_payment\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x44\n\x0crealized_pnl\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12L\n\x14unrealized_pnl_after\x18\x07 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12G\n\x0fmargin_to_vault\x18\x08 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12I\n\x11position_notional\x18\t \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\"\xb9\x02\n\rLiquidateResp\x12@\n\x08\x62\x61\x64_debt\x18\x01 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12I\n\x11\x66\x65\x65_to_liquidator\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00\x12R\n\x1a\x66\x65\x65_to_perp_ecosystem_fund\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00\x12\x12\n\nliquidator\x18\x04 \x01(\t\x12\x33\n\rposition_resp\x18\x05 \x01(\x0b\x32\x1c.nibiru.perp.v1.PositionResp\"\x92\x01\n\x0cPairMetadata\x12,\n\x04pair\x18\x01 \x01(\x0b\x32\x18.nibiru.common.AssetPairB\x04\xc8\xde\x1f\x00\x12T\n\x1c\x63umulative_premium_fractions\x18\x02 \x03(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\"_\n\x0ePrepaidBadDebt\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12>\n\x06\x61mount\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00*/\n\x04Side\x12\x14\n\x10SIDE_UNSPECIFIED\x10\x00\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02*V\n\rPnLCalcOption\x12\x1f\n\x1bPNL_CALC_OPTION_UNSPECIFIED\x10\x00\x12\x0e\n\nSPOT_PRICE\x10\x01\x12\x08\n\x04TWAP\x10\x02\x12\n\n\x06ORACLE\x10\x03*G\n\x13PnLPreferenceOption\x12\x1e\n\x1aPNL_PREFERENCE_UNSPECIFIED\x10\x00\x12\x07\n\x03MAX\x10\x01\x12\x07\n\x03MIN\x10\x02*q\n\x1cMarginCalculationPriceOption\x12/\n+MARGIN_CALCULATION_PRICE_OPTION_UNSPECIFIED\x10\x00\x12\x08\n\x04SPOT\x10\x01\x12\t\n\x05INDEX\x10\x02\x12\x0b\n\x07MAX_PNL\x10\x03\x42,Z*github.com/NibiruChain/nibiru/x/perp/typesb\x06proto3')
 
 _SIDE = DESCRIPTOR.enum_types_by_name['Side']
 Side = enum_type_wrapper.EnumTypeWrapper(_SIDE)
@@ -125,6 +126,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _GENESISSTATE.fields_by_name['perp_ef_balance']._serialized_options = b'\362\336\037\035yaml:\"module_account_balance\"\310\336\037\000'
   _GENESISSTATE.fields_by_name['fee_pool_balance']._options = None
   _GENESISSTATE.fields_by_name['fee_pool_balance']._serialized_options = b'\362\336\037\035yaml:\"module_account_balance\"\310\336\037\000'
+  _POSITION.fields_by_name['pair']._options = None
+  _POSITION.fields_by_name['pair']._serialized_options = b'\310\336\037\000'
   _POSITION.fields_by_name['size']._options = None
   _POSITION.fields_by_name['size']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POSITION.fields_by_name['margin']._options = None
@@ -155,30 +158,32 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _LIQUIDATERESP.fields_by_name['fee_to_liquidator']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Int\310\336\037\000'
   _LIQUIDATERESP.fields_by_name['fee_to_perp_ecosystem_fund']._options = None
   _LIQUIDATERESP.fields_by_name['fee_to_perp_ecosystem_fund']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Int\310\336\037\000'
+  _PAIRMETADATA.fields_by_name['pair']._options = None
+  _PAIRMETADATA.fields_by_name['pair']._serialized_options = b'\310\336\037\000'
   _PAIRMETADATA.fields_by_name['cumulative_premium_fractions']._options = None
   _PAIRMETADATA.fields_by_name['cumulative_premium_fractions']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _PREPAIDBADDEBT.fields_by_name['amount']._options = None
   _PREPAIDBADDEBT.fields_by_name['amount']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Int\310\336\037\000'
-  _SIDE._serialized_start=2819
-  _SIDE._serialized_end=2866
-  _PNLCALCOPTION._serialized_start=2868
-  _PNLCALCOPTION._serialized_end=2954
-  _PNLPREFERENCEOPTION._serialized_start=2956
-  _PNLPREFERENCEOPTION._serialized_end=3027
-  _MARGINCALCULATIONPRICEOPTION._serialized_start=3029
-  _MARGINCALCULATIONPRICEOPTION._serialized_end=3142
-  _PARAMS._serialized_start=153
-  _PARAMS._serialized_end=739
-  _GENESISSTATE._serialized_start=742
-  _GENESISSTATE._serialized_end=1262
-  _POSITION._serialized_start=1265
-  _POSITION._serialized_end=1629
-  _POSITIONRESP._serialized_start=1632
-  _POSITIONRESP._serialized_end=2288
-  _LIQUIDATERESP._serialized_start=2291
-  _LIQUIDATERESP._serialized_end=2604
-  _PAIRMETADATA._serialized_start=2606
-  _PAIRMETADATA._serialized_end=2720
-  _PREPAIDBADDEBT._serialized_start=2722
-  _PREPAIDBADDEBT._serialized_end=2817
+  _SIDE._serialized_start=2905
+  _SIDE._serialized_end=2952
+  _PNLCALCOPTION._serialized_start=2954
+  _PNLCALCOPTION._serialized_end=3040
+  _PNLPREFERENCEOPTION._serialized_start=3042
+  _PNLPREFERENCEOPTION._serialized_end=3113
+  _MARGINCALCULATIONPRICEOPTION._serialized_start=3115
+  _MARGINCALCULATIONPRICEOPTION._serialized_end=3228
+  _PARAMS._serialized_start=174
+  _PARAMS._serialized_end=760
+  _GENESISSTATE._serialized_start=763
+  _GENESISSTATE._serialized_end=1283
+  _POSITION._serialized_start=1286
+  _POSITION._serialized_end=1682
+  _POSITIONRESP._serialized_start=1685
+  _POSITIONRESP._serialized_end=2341
+  _LIQUIDATERESP._serialized_start=2344
+  _LIQUIDATERESP._serialized_end=2657
+  _PAIRMETADATA._serialized_start=2660
+  _PAIRMETADATA._serialized_end=2806
+  _PREPAIDBADDEBT._serialized_start=2808
+  _PREPAIDBADDEBT._serialized_end=2903
 # @@protoc_insertion_point(module_scope)

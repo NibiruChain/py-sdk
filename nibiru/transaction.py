@@ -144,7 +144,7 @@ class Transaction:
 
 
     def get_signed_tx_data(self) -> bytes:
-        if self.priv_key == None:
+        if self.priv_key is None:
             raise UndefinedError("priv_key should be defined")
 
         pub_key = self.priv_key.to_public_key()

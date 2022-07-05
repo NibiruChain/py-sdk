@@ -11,21 +11,21 @@ class PerpComposer:
     def remove_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin):
         return tx.MsgRemoveMargin(
             sender = sender,
-            tokenPair = token_pair,
+            token_pair = token_pair,
             margin = margin,
         )
 
     def add_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin):
         return tx.MsgAddMargin(
             sender = sender,
-            tokenPair = token_pair,
+            token_pair = token_pair,
             margin = margin,
         )
 
     def liquidate(self, sender: str, token_pair: str, trader: str):
         return tx.MsgLiquidate(
             sender = sender,
-            tokenPair = token_pair,
+            token_pair = token_pair,
             trader = trader,
         )
 
@@ -44,5 +44,5 @@ class PerpComposer:
     def close_position(self, sender: str, token_pair: str):
         return tx.MsgClosePosition(
             sender = sender,
-            tokenPair = token_pair,
+            token_pair = token_pair,
         )

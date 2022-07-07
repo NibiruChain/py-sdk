@@ -15,16 +15,18 @@
 import asyncio
 import logging
 
-from nibiru import Sdk
+from nibiru import Sdk, Composer, PoolAsset
 
 async def main() -> None:
     trader = Sdk.authorize("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
-
-    res = await trader.tx.msg_send(
-        from_address=trader.address,
-        to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk",
-        amount=5,
-        denom='unibi'
+    res = await trader.tx.dex.create_pool(
+        creator=trader.address,
+        swap_fee="2",
+        exit_fee="3",
+        assets=[
+            PoolAsset(token=Composer.coin(4, "unusd"),weight="3"),
+            PoolAsset(token=Composer.coin(5, "unibi"),weight="4"),
+        ],
     )
     print(res)
 

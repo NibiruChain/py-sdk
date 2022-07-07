@@ -9,17 +9,17 @@ from .common import Tx
 
 class Dex(Tx):
     def create_pool(self, creator: str, swap_fee: str, exit_fee: str, assets: List[PoolAsset]):
-        msg = DexComposer.create_pool(creator, swap_fee, exit_fee, assets)
+        msg = DexComposer.create_pool(creator=creator, swap_fee=swap_fee, exit_fee=exit_fee, assets=assets)
         return super().execute(msg)
 
     def join_pool(self, sender: str, pool_id: int, tokens: List[coin_pb.Coin]):
-        msg = DexComposer.join_pool(sender, pool_id, tokens)
+        msg = DexComposer.join_pool(sender=sender, pool_id=pool_id, tokens=tokens)
         return super().execute(msg)
 
     def exit_pool(self, sender: str, pool_id: int, pool_shares: coin_pb.Coin):
-        msg = DexComposer.exit_pool(sender, pool_id, pool_shares)
+        msg = DexComposer.exit_pool(sender=sender, pool_id=pool_id, pool_shares=pool_shares)
         return super().execute(msg)
 
     def swap_assets(self, sender: str, pool_id: int, token_in: coin_pb.Coin, token_out_denom):
-        msg = DexComposer.swap_assets(sender, pool_id, token_in, token_out_denom)
+        msg = DexComposer.swap_assets(sender=sender, pool_id=pool_id, token_in=token_in, token_out_denom=token_out_denom)
         return super().execute(msg)

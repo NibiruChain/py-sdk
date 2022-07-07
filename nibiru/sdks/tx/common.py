@@ -20,7 +20,6 @@ class Tx:
         self.address = None
 
     async def execute(self, msg: message.Message):
-        # should this happen on every execution or only once at the beginning??
         await self.client.sync_timeout_height()
         address = await self.get_address_info()
         tx = (
@@ -41,7 +40,7 @@ class Tx:
 
 
     async def execute_tx(self, tx: Transaction, gas_wanted: float):
-            fee = [Composer.Coin(
+            fee = [Composer.coin(
                 amount=int(GAS_PRICE * gas_wanted),
                 denom=self.network.fee_denom,
             )]

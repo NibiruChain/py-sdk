@@ -21,7 +21,7 @@ class Composer:
     perp = PerpComposer
 
     @staticmethod
-    def Coin(amount: float, denom: str):
+    def coin(amount: float, denom: str):
         return cosmos_base_coin_pb.Coin(amount=str(amount), denom=denom)
 
     @staticmethod
@@ -29,7 +29,7 @@ class Composer:
         return cosmos_bank_tx_pb.MsgSend(
             from_address=from_address,
             to_address=to_address,
-            amount=[Composer.Coin(amount=amount, denom=denom)],
+            amount=[Composer.coin(amount=amount, denom=denom)],
         )
 
     @staticmethod
@@ -53,7 +53,7 @@ class Composer:
         return cosmos_staking_tx_pb.MsgDelegate(
             delegator_address=delegator_address,
             validator_address=validator_address,
-            amount=Composer.Coin(amount=amount, denom="inj"),
+            amount=Composer.coin(amount=amount, denom="inj"),
         )
 
     @staticmethod

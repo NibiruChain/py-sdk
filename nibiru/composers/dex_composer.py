@@ -1,3 +1,5 @@
+from typing import List
+
 from nibiru.proto.dex.v1 import (
     tx_pb2 as dex_tx_pb,
     pool_pb2 as pool_tx_pb,
@@ -5,8 +7,6 @@ from nibiru.proto.dex.v1 import (
 from nibiru.common import PoolAsset
 
 from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
-
-from typing import List
 
 
 class DexComposer:

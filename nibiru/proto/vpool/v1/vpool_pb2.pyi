@@ -3,6 +3,7 @@
 isort:skip_file
 """
 import builtins
+import common.common_pb2
 import google.protobuf.descriptor
 import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
@@ -96,9 +97,10 @@ class Pool(google.protobuf.message.Message):
     TRADE_LIMIT_RATIO_FIELD_NUMBER: builtins.int
     FLUCTUATION_LIMIT_RATIO_FIELD_NUMBER: builtins.int
     MAX_ORACLE_SPREAD_RATIO_FIELD_NUMBER: builtins.int
-    pair: typing.Text
-    """always BASE:QUOTE, e.g. BTC:NUSD or ETH:NUSD"""
-
+    @property
+    def pair(self) -> common.common_pb2.AssetPair:
+        """always BASE:QUOTE, e.g. BTC:NUSD or ETH:NUSD"""
+        pass
     base_asset_reserve: typing.Text
     """base asset is the crypto asset, e.g. BTC or ETH"""
 
@@ -116,12 +118,13 @@ class Pool(google.protobuf.message.Message):
 
     def __init__(self,
         *,
-        pair: typing.Text = ...,
+        pair: typing.Optional[common.common_pb2.AssetPair] = ...,
         base_asset_reserve: typing.Text = ...,
         quote_asset_reserve: typing.Text = ...,
         trade_limit_ratio: typing.Text = ...,
         fluctuation_limit_ratio: typing.Text = ...,
         max_oracle_spread_ratio: typing.Text = ...,
         ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["pair",b"pair"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["base_asset_reserve",b"base_asset_reserve","fluctuation_limit_ratio",b"fluctuation_limit_ratio","max_oracle_spread_ratio",b"max_oracle_spread_ratio","pair",b"pair","quote_asset_reserve",b"quote_asset_reserve","trade_limit_ratio",b"trade_limit_ratio"]) -> None: ...
 global___Pool = Pool

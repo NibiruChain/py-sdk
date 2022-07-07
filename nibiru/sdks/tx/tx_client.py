@@ -5,11 +5,13 @@ from nibiru.network import Network
 from nibiru.wallet import PrivateKey
 from .common import Tx
 from .dex import Dex
+from .perp import Perp
 
 class TxClient(Tx):
     def __init__(self, client: Client, network: Network, priv_key: PrivateKey):
         super().__init__(client=client, network=network, priv_key = priv_key)
         self.dex = Dex(client=client, network=network, priv_key = priv_key)
+        self.perp = Perp(client=client, network=network, priv_key = priv_key)
 
     async def msg_send(self, from_address: str, to_address: str, amount: int, denom: str):
         msg = Composer.msg_send(from_address, to_address, amount, denom)

@@ -14,14 +14,9 @@ from .exceptions import NotFoundError, EmptyMsgError
 
 from .proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 
-from .proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
-
 from .proto.cosmos.base.tendermint.v1beta1 import (
     query_pb2_grpc as tendermint_query_grpc,
     query_pb2 as tendermint_query,
-)
-from .proto.cosmos.base.query.v1beta1.pagination_pb2 import (
-    PageRequest, PageResponse,
 )
 
 from .proto.cosmos.auth.v1beta1 import (

@@ -28,3 +28,6 @@ class ConvertError(NibiruError):
 
 class SchemaError(NibiruError):
     pass
+
+class SimulationError(NibiruError):
+    pass

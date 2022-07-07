@@ -427,11 +427,11 @@
                 "pycryptodome"
             ],
             "hashes": [
-                "sha256:3c884e4f788b38cc92cff05c4e43bc6b82686066f04ecfae0e11cdcbe5a283bd",
-                "sha256:8cde211519ff1a98b46e9057cb909f12ab62e263eb30a0a94e2f7e1f46ac67a0"
+                "sha256:ae8ba88c1c2f0074e5e169bc0c08318c063054532809aa1bfc8367962b1b7088",
+                "sha256:b9432f2db8bc633a2016d38200d9e7a66d060660700c85253dd6095dfed1a2f7"
             ],
-            "markers": "python_version >= '3.5' and python_version < '4'",
-            "version": "==0.3.3"
+            "markers": "python_version >= '3.7' and python_version < '4'",
+            "version": "==0.4.0"
         },
         "eth-keyfile": {
             "hashes": [
@@ -465,11 +465,11 @@
         },
         "eth-utils": {
             "hashes": [
-                "sha256:74240a8c6f652d085ed3c85f5f1654203d2f10ff9062f83b3bad0a12ff321c7a",
-                "sha256:bf82762a46978714190b0370265a7148c954d3f0adaa31c6f085ea375e4c61af"
+                "sha256:11597842b0148c39d2638ad55897f9243479a8369be713b238b0684f8750215e",
+                "sha256:ac168aaa241fa0665e758b04009259d1b2b35daa0615fc563aad29f9ffc64d56"
             ],
             "markers": "python_version >= '3.5' and python_version < '4' and python_full_version != '3.5.2'",
-            "version": "==1.10.0"
+            "version": "==1.9.5"
         },
         "frozenlist": {
             "hashes": [
@@ -674,11 +674,11 @@
         },
         "jsonschema": {
             "hashes": [
-                "sha256:5eb781753403847fb320f05e9ab2191725b58c5e7f97f1bed63285ca423159bc",
-                "sha256:ec2802e6a37517f09d47d9ba107947589ae1d25ff557b925d83a321fc2aa5d3b"
+                "sha256:b19f62322b0f06927e8ae6215c01654e1885857cdcaf58ae1772b1aa97f1faf2",
+                "sha256:e331e32e29743014fa59fa77895b5d8669382a4904c8ef23144f7f078ec031c7"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==4.6.1"
+            "version": "==4.6.2"
         },
         "lru-dict": {
             "hashes": [
@@ -943,11 +943,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:990a4f7861b31532871ab72331e755b5f14efbe52d336ea7f6118144dd478741",
-                "sha256:c1848f654aea2e3526d17fc3ce6aeaa5e7e24e66e645b5be2171f3f6b4e5a178"
+                "sha256:16923d366ced322712c71ccb97164d07472abeecd13f3a6c283f6d5d26722793",
+                "sha256:db3b8e2f922b2a910a29804776c643ea609badb6a32c4bcc226fd4fd902cce65"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==62.6.0"
+            "version": "==63.1.0"
         },
         "six": {
             "hashes": [
@@ -983,11 +983,11 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14",
-                "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"
+                "sha256:8298d6d56d39be0e3bc13c1c97d133f9b45d797169a0e11cdd0e0489d786f7ec",
+                "sha256:879ba4d1e89654d9769ce13121e0f94310ea32e8d2f8cf587b77c08bbcdb30d6"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
-            "version": "==1.26.9"
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'",
+            "version": "==1.26.10"
         },
         "varint": {
             "hashes": [

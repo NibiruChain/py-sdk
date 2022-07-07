@@ -17,6 +17,7 @@ import logging
 
 from nibiru.composer import Composer
 from nibiru.client import Client
+from nibiru.constant import GAS_PRICE
 from nibiru.transaction import Transaction
 from nibiru.network import Network
 from nibiru.wallet import PrivateKey
@@ -25,7 +26,6 @@ from nibiru.wallet import PrivateKey
 async def main() -> None:
     # select network: local, testnet, mainnet
     network = Network.local()
-    composer = Composer(network=network.string())
 
     # initialize grpc client
     client = Client(network, insecure=True)
@@ -37,7 +37,7 @@ async def main() -> None:
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
 
     # prepare tx msg
-    msg = composer.msg_send(
+    msg = Composer.msg_send(
         from_address=address.to_acc_bech32(),
         to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk",
         amount=5,
@@ -61,12 +61,11 @@ async def main() -> None:
         print(sim_res)
         return
 
+    print(sim_res)
     # build tx
-    gas_price = 1
-    gas_limit = sim_res.gas_info.gas_used + 20_000  # add 20k for gas, fee computation
-    gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
+    gas_limit = sim_res.gas_info.gas_used * 1.25  # add 25% to the limit
     fee = [composer.Coin(
-        amount=gas_price * gas_limit,
+        amount=int(GAS_PRICE * gas_limit),
         denom=network.fee_denom,
     )]
     tx = tx.with_gas(gas_limit).with_fee(fee).with_memo('').with_timeout_height(client.timeout_height)
@@ -76,7 +75,7 @@ async def main() -> None:
     res = await client.send_tx_block_mode(tx_raw_bytes)
     print(res)
     print("gas wanted: {}".format(gas_limit))
-    print("gas fee: {} unibi".format(gas_fee))
+    print("gas fee: {} unibi".format(res.gas_used * GAS_PRICE))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

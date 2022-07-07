@@ -16,23 +16,21 @@ class Network:
         self.env = env
 
     @classmethod
-    def devnet(cls):
+    def devnet(cls) -> "Network":
         raise NotImplementedError
 
     @classmethod
-    def testnet(cls):
+    def testnet(cls) -> "Network":
         raise NotImplementedError
 
     @classmethod
-    def mainnet(cls):
+    def mainnet(cls) -> "Network":
         raise NotImplementedError
 
     @classmethod
-    def local(cls):
+    def local(cls) -> "Network":
         return cls(
             lcd_endpoint='http://localhost:1317',
-            # grpc_endpoint='localhost:26657',
-            # grpc_exchange_endpoint='localhost:26657',
             grpc_endpoint='localhost:9090',
             grpc_exchange_endpoint='localhost:9090',
             chain_id='nibiru-localnet-0',

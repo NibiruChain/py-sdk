@@ -1,4 +1,5 @@
 from typing import List, Tuple
+from numbers import Number
 
 from google.protobuf import any_pb2, message
 from .proto.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -76,8 +77,8 @@ class Transaction:
         self.fee = cosmos_tx_type.Fee(amount=fee, gas_limit=self.fee.gas_limit)
         return self
 
-    def with_gas(self, gas: int) -> "Transaction":
-        self.fee.gas_limit = gas
+    def with_gas(self, gas: Number) -> "Transaction":
+        self.fee.gas_limit = int(gas)
         return self
 
     def with_memo(self, memo: str) -> "Transaction":

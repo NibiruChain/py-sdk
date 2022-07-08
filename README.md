@@ -44,17 +44,18 @@ Upgrade `pip` to the latest version, if you see these warnings:
   ```
 
 ### Development
-1. Generate proto binding & build
-  ```
-  make protoc-gen
-  python -m build
-  ```
-
-2. Enable dev env
+1. Enable dev env
   ```
   pipenv shell
   pipenv install --dev
   ```
+
+2. Generate proto binding & build
+  ```
+  make proto-gen
+  python -m build
+  ```
+
 
 3. Install pkg
   ```
@@ -66,8 +67,3 @@ Upgrade `pip` to the latest version, if you see these warnings:
   pip uninstall nibiru-py
   pip install nibiru-py
   ```
-
-4. Fetch latest denom config
-```
-python pynibiru/fetch_metadata.py
-```

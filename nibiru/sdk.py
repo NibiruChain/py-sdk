@@ -19,7 +19,7 @@ class Sdk:
         self = cls(_error_do_not_use_init_directly=True)
         if key == "":
             (mnemonic, pk) = PrivateKey.generate()
-            logging.warning("The mnemonic used for the newly generated key is: %s", mnemonic)
+            logging.warning("The mnemonic used for the newly generated key is: \n%s", mnemonic)
             logging.warning("Please write down this key, it will NOT be recoverable otherwise")
         if len(key.split(" ")) > 1:
             pk = PrivateKey.from_mnemonic(key)

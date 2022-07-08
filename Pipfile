@@ -25,6 +25,10 @@ nibiru-py = {path = "."}
 
 [dev-packages]
 mypy-protobuf = "*"
+black = "*"
+pylint = "==2.13.4"
+pre-commit = "*"
+pep8-naming = "*"
 
 [requires]
 python_version = "3"

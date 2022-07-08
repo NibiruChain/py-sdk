@@ -1,0 +1,50 @@
+repos:
+  -   repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v3.1.0
+      hooks:
+        -   id: end-of-file-fixer
+            exclude: >
+              (?x)^(
+                  .+\.svg|
+                  .+\.min.js|
+                  .+\.xsd|
+                  .+\.md|
+                  .+\.tsx|
+                  .+\.ts|
+                  .+\.xsd|
+                  .+\.html|
+                  .+\.txt|
+                  .+\.ini|
+              )$
+        -   id: trailing-whitespace
+            exclude: >
+              (?x)^(
+                  .+\.svg|
+                  .+\.min.js|
+                  .+\.xsd|
+                  .+\.md|
+                  .+\.tsx|
+                  .+\.ts|
+                  .+\.xsd|
+                  .+\.html|
+                  .+\.txt|
+                  .+\.ini|
+              )$
+
+  -   repo: https://github.com/psf/black
+      rev: 22.3.0
+      hooks:
+        - id: black
+          files: \.py$
+
+  -   repo: https://github.com/PyCQA/isort
+      rev: 5.10.1
+      hooks:
+        - id: isort
+          files: \.py$
+          args: ["--profile", "black"]
+
+  -   repo: https://github.com/pycqa/flake8
+      rev: 4.0.1
+      hooks:
+        - id: flake8

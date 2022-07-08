@@ -67,3 +67,9 @@ Upgrade `pip` to the latest version, if you see these warnings:
   pip uninstall nibiru-py
   pip install nibiru-py
   ```
+### Linting
+Enable git hook which will perform linting before each commit:
+```shell
+pre-commit install
+```
+This will keep your code clean.

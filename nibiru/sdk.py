@@ -1,3 +1,4 @@
+import logging
 from nibiru.sdks.tx.tx_client import TxClient
 from .wallet import PrivateKey
 from .client import Client
@@ -18,8 +19,8 @@ class Sdk:
         self = cls(_error_do_not_use_init_directly=True)
         if key == "":
             (mnemonic, pk) = PrivateKey.generate()
-            print("The mnemonic used for the newly generated key is: {}".format(mnemonic))
-            print("Please write down this key, it will NOT be recoverable otherwise")
+            logging.warning("The mnemonic used for the newly generated key is: %s", mnemonic)
+            logging.warning("Please write down this key, it will NOT be recoverable otherwise")
         if len(key.split(" ")) > 1:
             pk = PrivateKey.from_mnemonic(key)
         elif len(key) > 0:

@@ -15,9 +15,10 @@ _sym_db = _symbol_database.Default()
 
 from cosmos_proto import cosmos_pb2 as cosmos__proto_dot_cosmos__pb2
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from common import common_pb2 as common_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14vpool/v1/vpool.proto\x12\x0fnibiru.vpool.v1\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x14gogoproto/gogo.proto\"\xd6\x01\n\x0fReserveSnapshot\x12J\n\x12\x62\x61se_asset_reserve\x18\x01 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12K\n\x13quote_asset_reserve\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0ctimestamp_ms\x18\x03 \x01(\x03\x12\x14\n\x0c\x62lock_number\x18\x04 \x01(\x03\"\x9a\x03\n\x04Pool\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12J\n\x12\x62\x61se_asset_reserve\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12K\n\x13quote_asset_reserve\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12I\n\x11trade_limit_ratio\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x66luctuation_limit_ratio\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17max_oracle_spread_ratio\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00*M\n\tDirection\x12\x19\n\x15\x44IRECTION_UNSPECIFIED\x10\x00\x12\x0f\n\x0b\x41\x44\x44_TO_POOL\x10\x01\x12\x14\n\x10REMOVE_FROM_POOL\x10\x02*g\n\x0eTwapCalcOption\x12 \n\x1cTWAP_CALC_OPTION_UNSPECIFIED\x10\x00\x12\x08\n\x04SPOT\x10\x01\x12\x14\n\x10QUOTE_ASSET_SWAP\x10\x02\x12\x13\n\x0f\x42\x41SE_ASSET_SWAP\x10\x03\x42-Z+github.com/NibiruChain/nibiru/x/vpool/typesb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14vpool/v1/vpool.proto\x12\x0fnibiru.vpool.v1\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x14gogoproto/gogo.proto\x1a\x13\x63ommon/common.proto\"\xd6\x01\n\x0fReserveSnapshot\x12J\n\x12\x62\x61se_asset_reserve\x18\x01 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12K\n\x13quote_asset_reserve\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0ctimestamp_ms\x18\x03 \x01(\x03\x12\x14\n\x0c\x62lock_number\x18\x04 \x01(\x03\"\xba\x03\n\x04Pool\x12,\n\x04pair\x18\x01 \x01(\x0b\x32\x18.nibiru.common.AssetPairB\x04\xc8\xde\x1f\x00\x12J\n\x12\x62\x61se_asset_reserve\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12K\n\x13quote_asset_reserve\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12I\n\x11trade_limit_ratio\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x66luctuation_limit_ratio\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17max_oracle_spread_ratio\x18\x06 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00*M\n\tDirection\x12\x19\n\x15\x44IRECTION_UNSPECIFIED\x10\x00\x12\x0f\n\x0b\x41\x44\x44_TO_POOL\x10\x01\x12\x14\n\x10REMOVE_FROM_POOL\x10\x02*g\n\x0eTwapCalcOption\x12 \n\x1cTWAP_CALC_OPTION_UNSPECIFIED\x10\x00\x12\x08\n\x04SPOT\x10\x01\x12\x14\n\x10QUOTE_ASSET_SWAP\x10\x02\x12\x13\n\x0f\x42\x41SE_ASSET_SWAP\x10\x03\x42-Z+github.com/NibiruChain/nibiru/x/vpool/typesb\x06proto3')
 
 _DIRECTION = DESCRIPTOR.enum_types_by_name['Direction']
 Direction = enum_type_wrapper.EnumTypeWrapper(_DIRECTION)
@@ -56,6 +57,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _RESERVESNAPSHOT.fields_by_name['base_asset_reserve']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _RESERVESNAPSHOT.fields_by_name['quote_asset_reserve']._options = None
   _RESERVESNAPSHOT.fields_by_name['quote_asset_reserve']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
+  _POOL.fields_by_name['pair']._options = None
+  _POOL.fields_by_name['pair']._serialized_options = b'\310\336\037\000'
   _POOL.fields_by_name['base_asset_reserve']._options = None
   _POOL.fields_by_name['base_asset_reserve']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POOL.fields_by_name['quote_asset_reserve']._options = None
@@ -66,12 +69,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _POOL.fields_by_name['fluctuation_limit_ratio']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POOL.fields_by_name['max_oracle_spread_ratio']._options = None
   _POOL.fields_by_name['max_oracle_spread_ratio']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
-  _DIRECTION._serialized_start=720
-  _DIRECTION._serialized_end=797
-  _TWAPCALCOPTION._serialized_start=799
-  _TWAPCALCOPTION._serialized_end=902
-  _RESERVESNAPSHOT._serialized_start=91
-  _RESERVESNAPSHOT._serialized_end=305
-  _POOL._serialized_start=308
-  _POOL._serialized_end=718
+  _DIRECTION._serialized_start=773
+  _DIRECTION._serialized_end=850
+  _TWAPCALCOPTION._serialized_start=852
+  _TWAPCALCOPTION._serialized_end=955
+  _RESERVESNAPSHOT._serialized_start=112
+  _RESERVESNAPSHOT._serialized_end=326
+  _POOL._serialized_start=329
+  _POOL._serialized_end=771
 # @@protoc_insertion_point(module_scope)

@@ -59,12 +59,29 @@ global___QueryTraderPositionRequest = QueryTraderPositionRequest
 class QueryTraderPositionResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     POSITION_FIELD_NUMBER: builtins.int
+    POSITION_NOTIONAL_FIELD_NUMBER: builtins.int
+    UNREALIZED_PNL_FIELD_NUMBER: builtins.int
+    MARGIN_RATIO_FIELD_NUMBER: builtins.int
     @property
-    def position(self) -> perp.v1.state_pb2.Position: ...
+    def position(self) -> perp.v1.state_pb2.Position:
+        """The position as it exists in the blockchain state"""
+        pass
+    position_notional: typing.Text
+    """The position's current notional value, if it were to be entirely closed (in margin units)."""
+
+    unrealized_pnl: typing.Text
+    """The position's unrealized PnL."""
+
+    margin_ratio: typing.Text
+    """The position's margin ratio, calculated from margin, unrealized PnL, and position notional."""
+
     def __init__(self,
         *,
         position: typing.Optional[perp.v1.state_pb2.Position] = ...,
+        position_notional: typing.Text = ...,
+        unrealized_pnl: typing.Text = ...,
+        margin_ratio: typing.Text = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["position",b"position"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["position",b"position"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["margin_ratio",b"margin_ratio","position",b"position","position_notional",b"position_notional","unrealized_pnl",b"unrealized_pnl"]) -> None: ...
 global___QueryTraderPositionResponse = QueryTraderPositionResponse

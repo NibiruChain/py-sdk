@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from google.protobuf import any_pb2
 
 from nibiru.composers import ( 
@@ -18,29 +16,24 @@ from .proto.cosmos.distribution.v1beta1 import tx_pb2 as cosmos_distribution_tx_
 from typing import List
 
 
-@dataclass
-class PoolAsset:
-    token: cosmos_base_coin_pb.Coin
-    weight: str
-
-
 class Composer:
-    def __init__(self, network: str):
-        self.network = network
-        self.dex = DexComposer()
-        self.perp = PerpComposer()
+    dex = DexComposer
+    perp = PerpComposer
 
-    def Coin(self, amount: float, denom: str):
+    @staticmethod
+    def coin(amount: float, denom: str):
         return cosmos_base_coin_pb.Coin(amount=str(amount), denom=denom)
 
-    def msg_send(self, from_address: str, to_address: str, amount: int, denom: str):
+    @staticmethod
+    def msg_send(from_address: str, to_address: str, amount: int, denom: str):
         return cosmos_bank_tx_pb.MsgSend(
             from_address=from_address,
             to_address=to_address,
-            amount=[self.Coin(amount=amount, denom=denom)],
+            amount=[Composer.coin(amount=amount, denom=denom)],
         )
 
-    def msg_exec(self, grantee: str, msgs: List):
+    @staticmethod
+    def msg_exec(grantee: str, msgs: List):
         any_msgs: List[any_pb2.Any] = []
         for msg in msgs:
             any_msg = any_pb2.Any()
@@ -49,28 +42,22 @@ class Composer:
 
         return cosmos_authz_tx_pb.MsgExec(grantee=grantee, msgs=any_msgs)
 
-    def msg_revoke(self, granter: str, grantee: str, msg_type: str):
+    @staticmethod
+    def msg_revoke(granter: str, grantee: str, msg_type: str):
         return cosmos_authz_tx_pb.MsgRevoke(
             granter=granter, grantee=grantee, msg_type_url=msg_type
         )
 
-    def msg_delegate(
-        self,
-        delegator_address: str,
-        validator_address: str,
-        amount: float
-    ):
+    @staticmethod
+    def msg_delegate( delegator_address: str, validator_address: str, amount: float):
         return cosmos_staking_tx_pb.MsgDelegate(
             delegator_address=delegator_address,
             validator_address=validator_address,
-            amount=self.Coin(amount=amount, denom="inj"),
+            amount=Composer.coin(amount=amount, denom="inj"),
         )
 
-    def msg_withdraw_delegator_reward(
-        self,
-        delegator_address: str,
-        validator_address: str
-    ):
+    @staticmethod
+    def msg_withdraw_delegator_reward( delegator_address: str, validator_address: str):
 
         return cosmos_distribution_tx_pb.MsgWithdrawDelegatorReward(
             delegator_address=delegator_address,

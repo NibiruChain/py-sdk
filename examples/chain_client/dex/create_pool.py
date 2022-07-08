@@ -1,4 +1,4 @@
-# Copyright 2022 Nibiru Labs
+# Copyright 2022 Nibiru Chain
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,17 +15,12 @@
 import asyncio
 import logging
 
-from nibiru.composer import Composer, PoolAsset
-from nibiru.client import Client
-from nibiru.transaction import Transaction
-from nibiru.network import Network
-from nibiru.wallet import PrivateKey
-
+from nibiru import Composer, PoolAsset, Client, Transaction, Network, PrivateKey
+from nibiru.constant import GAS_PRICE
 
 async def main() -> None:
     # select network: local, testnet, mainnet
     network = Network.local()
-    composer = Composer(network=network.string())
 
     # initialize grpc client
     client = Client(network, insecure=True)
@@ -36,13 +31,13 @@ async def main() -> None:
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
 
     # prepare tx msg
-    msg = composer.dex.create_pool(
+    msg = Composer.dex.create_pool(
         creator=address.to_acc_bech32(),
         swap_fee="2",
         exit_fee="3",
         assets=[
-            PoolAsset(token=composer.Coin(4, "unusd"),weight="3"),
-            PoolAsset(token=composer.Coin(5, "uusdc"),weight="4"),
+            PoolAsset(token=Composer.coin(4, "unusd"),weight="3"),
+            PoolAsset(token=Composer.coin(5, "unibi"),weight="4"),
         ],
     )
 
@@ -64,11 +59,9 @@ async def main() -> None:
         return
 
     # build tx
-    gas_price = 1
-    gas_limit = sim_res.gas_info.gas_used + 2  # add 2 for gas, fee computation
-    gas_fee = '{:.18f}'.format((gas_price * gas_limit) / pow(10, 18)).rstrip('0')
-    fee = [composer.Coin(
-        amount=gas_price * gas_limit,
+    gas_limit = sim_res.gas_info.gas_used * 1.25
+    fee = [Composer.coin(
+        amount=int(GAS_PRICE * gas_limit),
         denom=network.fee_denom,
     )]
     tx = tx.with_gas(gas_limit).with_fee(fee).with_memo('').with_timeout_height(client.timeout_height)
@@ -78,7 +71,7 @@ async def main() -> None:
     res = await client.send_tx_sync_mode(tx_raw_bytes)
     print(res)
     print("gas wanted: {}".format(gas_limit))
-    print("gas fee: {} unibi".format(gas_fee))
+    print("gas fee: {} unibi".format(res.gas_used * GAS_PRICE))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

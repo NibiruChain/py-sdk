@@ -16,12 +16,14 @@ class Sdk:
     @classmethod
     def authorize(cls, key: str = "") -> "Sdk":
         self = cls(_error_do_not_use_init_directly=True)
-        if len(key.split(" ")) > 0:
+        if key == "":
+            (mnemonic, pk) = PrivateKey.generate()
+            print("The mnemonic used for the newly generated key is: {}".format(mnemonic))
+            print("Please write down this key, it will NOT be recoverable otherwise")
+        if len(key.split(" ")) > 1:
             pk = PrivateKey.from_mnemonic(key)
         elif len(key) > 0:
             pk = PrivateKey.from_hex(key)
-        else:
-            pk = PrivateKey.generate()
 
         self.with_priv_key(pk)
 

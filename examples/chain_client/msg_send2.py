@@ -19,10 +19,11 @@ from nibiru import Sdk
 
 async def main() -> None:
     trader = Sdk.authorize("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
+    trader2 = Sdk.authorize()
 
     res = await trader.tx.msg_send(
         from_address=trader.address,
-        to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk",
+        to_address=trader2.address,
         amount=5,
         denom='unibi'
     )

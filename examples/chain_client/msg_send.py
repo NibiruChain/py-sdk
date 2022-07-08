@@ -15,67 +15,23 @@
 import asyncio
 import logging
 
-from nibiru.composer import Composer
-from nibiru.client import Client
-from nibiru.constant import GAS_PRICE
-from nibiru.transaction import Transaction
-from nibiru.network import Network
-from nibiru.wallet import PrivateKey
-
+from nibiru import Sdk
 
 async def main() -> None:
-    # select network: local, testnet, mainnet
-    network = Network.local()
+    sender = Sdk.authorize("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
+    receiver = Sdk.authorize()
 
-    # initialize grpc client
-    client = Client(network, insecure=True)
-    await client.sync_timeout_height()
-
-    # load account
-    priv_key = PrivateKey.from_mnemonic("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
-    pub_key = priv_key.to_public_key()
-    address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
-
-    # prepare tx msg
-    msg = Composer.msg_send(
-        from_address=address.to_acc_bech32(),
-        to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk",
+    res = await sender.tx.msg_send(
+        from_address=sender.address,
+        to_address=receiver.address,
         amount=5,
-        denom='unibi'
+        denom='unibi',
+        # additional params for gas price can be passed
+        # gas_price = 7,
+        # gas_multiplier = 1.25,
+        # gas_wanted = 50_000,
     )
-
-    # build tx
-    tx = (
-        Transaction()
-        .with_messages(msg)
-        .with_sequence(address.get_sequence())
-        .with_account_num(address.get_number())
-        .with_chain_id(network.chain_id)
-        .with_signer(priv_key)
-    )
-    sim_tx_raw_bytes = tx.get_signed_tx_data()
-
-    # simulate tx
-    (sim_res, success) = await client.simulate_tx(sim_tx_raw_bytes)
-    if not success:
-        print(sim_res)
-        return
-
-    print(sim_res)
-    # build tx
-    gas_limit = sim_res.gas_info.gas_used * 1.25  # add 25% to the limit
-    fee = [composer.Coin(
-        amount=int(GAS_PRICE * gas_limit),
-        denom=network.fee_denom,
-    )]
-    tx = tx.with_gas(gas_limit).with_fee(fee).with_memo('').with_timeout_height(client.timeout_height)
-    tx_raw_bytes = tx.get_signed_tx_data()
-
-    # broadcast tx: send_tx_async_mode, send_tx_sync_mode, send_tx_block_mode
-    res = await client.send_tx_block_mode(tx_raw_bytes)
-    print(res)
-    print("gas wanted: {}".format(gas_limit))
-    print("gas fee: {} unibi".format(res.gas_used * GAS_PRICE))
+    logging.info("Result: %s", res)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

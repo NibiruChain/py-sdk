@@ -4,7 +4,10 @@ from nibiru.proto.perp.v1 import (
     query_pb2 as perp_type,
 )
 
-class PerpClient:
+class Perp:
+    """
+    Perp allows to query the endpoints made available by the Nibiru Chain's PERP module.
+    """
     def __init__(
         self,
         channel: Channel

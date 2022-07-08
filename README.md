@@ -26,7 +26,7 @@ pip install nibiru-py
 ### Usage
 Requires Python 3.7+
 
-[Examples](https://github.com/NibiruLabs/sdk-python/tree/master/examples)
+[Examples](https://github.com/NibiruChain/sdk-python/tree/master/examples)
 ```bash
 $ pipenv shell
 $ pipenv install

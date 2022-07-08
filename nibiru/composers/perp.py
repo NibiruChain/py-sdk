@@ -1,4 +1,3 @@
-
 from nibiru.proto.perp.v1 import (
     tx_pb2 as tx,
     state_pb2 as state_pb,
@@ -7,7 +6,7 @@ from nibiru.proto.perp.v1 import (
 from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
 from nibiru.common import Side
 
-class PerpComposer:
+class Perp:
     @staticmethod
     def remove_margin(sender: str, token_pair: str, margin: coin_pb.Coin):
         return tx.MsgRemoveMargin(

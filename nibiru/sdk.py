@@ -1,5 +1,6 @@
 import logging
-from nibiru.sdks.tx.tx_client import TxClient
+from .common import TxConfig
+from .sdks.tx import TxClient
 from .wallet import PrivateKey
 from .client import Client
 from .network import Network
@@ -13,6 +14,7 @@ class Sdk:
         self.query = None
         self.tx = None
         self._network = None
+        self.config = TxConfig()
 
     @classmethod
     def authorize(cls, key: str = "") -> "Sdk":
@@ -37,12 +39,23 @@ class Sdk:
         
     def with_query_client(self, client: Client) -> "Sdk":
         self.query = client
-        self.tx = TxClient(client = client, network = self._network, priv_key = self._priv_key)
+        tx_client = TxClient(client = self.query, network = self._network, priv_key = self._priv_key, config = self.config)
+        self.with_tx_client(tx_client)
+        return self
+
+    def with_tx_client(self, client: TxClient) -> "Sdk":
+        self.tx = client
         return self
 
     def with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
         self._priv_key = priv_key
         self._network = self.with_network(Network.local())
+        return self
+
+    def with_config(self, config: TxConfig) -> "Sdk":
+        self.config = config
+        tx_client = TxClient(client = self.query, network = self._network, priv_key = self._priv_key, config = self.config)
+        self.with_tx_client(tx_client)
         return self
 
     @property

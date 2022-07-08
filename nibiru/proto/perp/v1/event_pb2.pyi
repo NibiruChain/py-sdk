@@ -61,9 +61,10 @@ class PositionChangedEvent(google.protobuf.message.Message):
     unrealized_pnl_after: typing.Text
     """unrealized profits and losses after the change"""
 
-    bad_debt: typing.Text
-    """Amount of bad debt cleared by the PerpEF during the change. Bad debt is negative net margin past the liquidation point of a position."""
-
+    @property
+    def bad_debt(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
+        """Amount of bad debt cleared by the PerpEF during the change. Bad debt is negative net margin past the liquidation point of a position."""
+        pass
     liquidation_penalty: typing.Text
     """amt of margin (y) lost due to liquidation"""
 
@@ -95,14 +96,14 @@ class PositionChangedEvent(google.protobuf.message.Message):
         position_size: typing.Text = ...,
         realized_pnl: typing.Text = ...,
         unrealized_pnl_after: typing.Text = ...,
-        bad_debt: typing.Text = ...,
+        bad_debt: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         liquidation_penalty: typing.Text = ...,
         spot_price: typing.Text = ...,
         funding_payment: typing.Text = ...,
         block_height: builtins.int = ...,
         block_time_ms: builtins.int = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["margin",b"margin","transaction_fee",b"transaction_fee"]) -> builtins.bool: ...
+    def HasField(self, field_name: typing_extensions.Literal["bad_debt",b"bad_debt","margin",b"margin","transaction_fee",b"transaction_fee"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["bad_debt",b"bad_debt","block_height",b"block_height","block_time_ms",b"block_time_ms","exchanged_position_size",b"exchanged_position_size","funding_payment",b"funding_payment","liquidation_penalty",b"liquidation_penalty","margin",b"margin","pair",b"pair","position_notional",b"position_notional","position_size",b"position_size","realized_pnl",b"realized_pnl","spot_price",b"spot_price","trader_address",b"trader_address","transaction_fee",b"transaction_fee","unrealized_pnl_after",b"unrealized_pnl_after"]) -> None: ...
 global___PositionChangedEvent = PositionChangedEvent
 
@@ -147,9 +148,10 @@ class PositionLiquidatedEvent(google.protobuf.message.Message):
     def fee_to_ecosystem_fund(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
         """Commission (in margin units) given to the ecosystem fund."""
         pass
-    bad_debt: typing.Text
-    """ Bad debt (margin units) cleared by the PerpEF during the tx. Bad debt is negative net margin past the liquidation point of a position."""
-
+    @property
+    def bad_debt(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
+        """ Bad debt (margin units) cleared by the PerpEF during the tx. Bad debt is negative net margin past the liquidation point of a position."""
+        pass
     @property
     def margin(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
         """Remaining margin in the position after liquidation"""
@@ -181,7 +183,7 @@ class PositionLiquidatedEvent(google.protobuf.message.Message):
         liquidator_address: typing.Text = ...,
         fee_to_liquidator: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         fee_to_ecosystem_fund: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
-        bad_debt: typing.Text = ...,
+        bad_debt: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         margin: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         position_notional: typing.Text = ...,
         position_size: typing.Text = ...,
@@ -190,7 +192,7 @@ class PositionLiquidatedEvent(google.protobuf.message.Message):
         block_height: builtins.int = ...,
         block_time_ms: builtins.int = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["fee_to_ecosystem_fund",b"fee_to_ecosystem_fund","fee_to_liquidator",b"fee_to_liquidator","margin",b"margin"]) -> builtins.bool: ...
+    def HasField(self, field_name: typing_extensions.Literal["bad_debt",b"bad_debt","fee_to_ecosystem_fund",b"fee_to_ecosystem_fund","fee_to_liquidator",b"fee_to_liquidator","margin",b"margin"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["bad_debt",b"bad_debt","block_height",b"block_height","block_time_ms",b"block_time_ms","exchanged_position_size",b"exchanged_position_size","exchanged_quote_amount",b"exchanged_quote_amount","fee_to_ecosystem_fund",b"fee_to_ecosystem_fund","fee_to_liquidator",b"fee_to_liquidator","liquidator_address",b"liquidator_address","margin",b"margin","mark_price",b"mark_price","pair",b"pair","position_notional",b"position_notional","position_size",b"position_size","trader_address",b"trader_address","unrealizedPnl",b"unrealizedPnl"]) -> None: ...
 global___PositionLiquidatedEvent = PositionLiquidatedEvent
 
@@ -218,32 +220,3 @@ class PositionSettledEvent(google.protobuf.message.Message):
         ) -> None: ...
     def ClearField(self, field_name: typing_extensions.Literal["pair",b"pair","settled_coins",b"settled_coins","trader_address",b"trader_address"]) -> None: ...
 global___PositionSettledEvent = PositionSettledEvent
-
-class MarginChangedEvent(google.protobuf.message.Message):
-    """Emitted when a position's margin is changed (AddMargin or RemoveMargin)."""
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    PAIR_FIELD_NUMBER: builtins.int
-    TRADER_ADDRESS_FIELD_NUMBER: builtins.int
-    MARGIN_AMOUNT_FIELD_NUMBER: builtins.int
-    FUNDING_PAYMENT_FIELD_NUMBER: builtins.int
-    pair: typing.Text
-    """Identifier for the virtual pool of the position."""
-
-    trader_address: typing.Text
-    """Owner of the position."""
-
-    margin_amount: typing.Text
-    """Amount of margin exchanged."""
-
-    funding_payment: typing.Text
-    """Amount of funding payment applied."""
-
-    def __init__(self,
-        *,
-        pair: typing.Text = ...,
-        trader_address: typing.Text = ...,
-        margin_amount: typing.Text = ...,
-        funding_payment: typing.Text = ...,
-        ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["funding_payment",b"funding_payment","margin_amount",b"margin_amount","pair",b"pair","trader_address",b"trader_address"]) -> None: ...
-global___MarginChangedEvent = MarginChangedEvent

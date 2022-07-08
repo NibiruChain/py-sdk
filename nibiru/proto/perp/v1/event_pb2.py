@@ -18,14 +18,13 @@ from perp.v1 import state_pb2 as perp_dot_v1_dot_state__pb2
 from cosmos.base.v1beta1 import coin_pb2 as cosmos_dot_base_dot_v1beta1_dot_coin__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13perp/v1/event.proto\x12\x0enibiru.perp.v1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x13perp/v1/state.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\"\x92\x07\n\x14PositionChangedEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12@\n\x06margin\x18\x03 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x15\xf2\xde\x1f\ryaml:\"margin\"\xc8\xde\x1f\x00\x12I\n\x11position_notional\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x65xchanged_position_size\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12R\n\x0ftransaction_fee\x18\x06 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x1e\xf2\xde\x1f\x16yaml:\"transaction_fee\"\xc8\xde\x1f\x00\x12\x45\n\rposition_size\x18\x07 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x44\n\x0crealized_pnl\x18\x08 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12L\n\x14unrealized_pnl_after\x18\t \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12@\n\x08\x62\x61\x64_debt\x18\n \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12K\n\x13liquidation_penalty\x18\x0b \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x42\n\nspot_price\x18\x0c \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12G\n\x0f\x66unding_payment\x18\r \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0c\x62lock_height\x18\x0e \x01(\x03\x12\x15\n\rblock_time_ms\x18\x0f \x01(\x03\"\x82\x07\n\x17PositionLiquidatedEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12N\n\x16\x65xchanged_quote_amount\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x65xchanged_position_size\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x1a\n\x12liquidator_address\x18\x05 \x01(\t\x12V\n\x11\x66\x65\x65_to_liquidator\x18\x06 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB \xf2\xde\x1f\x18yaml:\"fee_to_liquidator\"\xc8\xde\x1f\x00\x12^\n\x15\x66\x65\x65_to_ecosystem_fund\x18\x07 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB$\xf2\xde\x1f\x1cyaml:\"fee_to_ecosystem_fund\"\xc8\xde\x1f\x00\x12@\n\x08\x62\x61\x64_debt\x18\x08 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12@\n\x06margin\x18\t \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x15\xf2\xde\x1f\ryaml:\"margin\"\xc8\xde\x1f\x00\x12I\n\x11position_notional\x18\n \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x45\n\rposition_size\x18\x0b \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x45\n\runrealizedPnl\x18\x0c \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x42\n\nmark_price\x18\r \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0c\x62lock_height\x18\x0e \x01(\x03\x12\x15\n\rblock_time_ms\x18\x0f \x01(\x03\"\xb8\x01\n\x14PositionSettledEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12z\n\rsettled_coins\x18\x03 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBH\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x14yaml:\"settled_coins\"\xc8\xde\x1f\x00\"\xca\x01\n\x12MarginChangedEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12\x45\n\rmargin_amount\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xc8\xde\x1f\x00\x12G\n\x0f\x66unding_payment\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x42,Z*github.com/NibiruChain/nibiru/x/perp/typesb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13perp/v1/event.proto\x12\x0enibiru.perp.v1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x13perp/v1/state.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\"\x83\x07\n\x14PositionChangedEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12@\n\x06margin\x18\x03 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x15\xf2\xde\x1f\ryaml:\"margin\"\xc8\xde\x1f\x00\x12I\n\x11position_notional\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x65xchanged_position_size\x18\x05 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12R\n\x0ftransaction_fee\x18\x06 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x1e\xf2\xde\x1f\x16yaml:\"transaction_fee\"\xc8\xde\x1f\x00\x12\x45\n\rposition_size\x18\x07 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x44\n\x0crealized_pnl\x18\x08 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12L\n\x14unrealized_pnl_after\x18\t \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x31\n\x08\x62\x61\x64_debt\x18\n \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x04\xc8\xde\x1f\x00\x12K\n\x13liquidation_penalty\x18\x0b \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x42\n\nspot_price\x18\x0c \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12G\n\x0f\x66unding_payment\x18\r \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0c\x62lock_height\x18\x0e \x01(\x03\x12\x15\n\rblock_time_ms\x18\x0f \x01(\x03\"\xf3\x06\n\x17PositionLiquidatedEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12N\n\x16\x65xchanged_quote_amount\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12O\n\x17\x65xchanged_position_size\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x1a\n\x12liquidator_address\x18\x05 \x01(\t\x12V\n\x11\x66\x65\x65_to_liquidator\x18\x06 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB \xf2\xde\x1f\x18yaml:\"fee_to_liquidator\"\xc8\xde\x1f\x00\x12^\n\x15\x66\x65\x65_to_ecosystem_fund\x18\x07 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB$\xf2\xde\x1f\x1cyaml:\"fee_to_ecosystem_fund\"\xc8\xde\x1f\x00\x12\x31\n\x08\x62\x61\x64_debt\x18\x08 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x04\xc8\xde\x1f\x00\x12@\n\x06margin\x18\t \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x15\xf2\xde\x1f\ryaml:\"margin\"\xc8\xde\x1f\x00\x12I\n\x11position_notional\x18\n \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x45\n\rposition_size\x18\x0b \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x45\n\runrealizedPnl\x18\x0c \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x42\n\nmark_price\x18\r \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x14\n\x0c\x62lock_height\x18\x0e \x01(\x03\x12\x15\n\rblock_time_ms\x18\x0f \x01(\x03\"\xb8\x01\n\x14PositionSettledEvent\x12\x0c\n\x04pair\x18\x01 \x01(\t\x12\x16\n\x0etrader_address\x18\x02 \x01(\t\x12z\n\rsettled_coins\x18\x03 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBH\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x14yaml:\"settled_coins\"\xc8\xde\x1f\x00\x42,Z*github.com/NibiruChain/nibiru/x/perp/typesb\x06proto3')
 
 
 
 _POSITIONCHANGEDEVENT = DESCRIPTOR.message_types_by_name['PositionChangedEvent']
 _POSITIONLIQUIDATEDEVENT = DESCRIPTOR.message_types_by_name['PositionLiquidatedEvent']
 _POSITIONSETTLEDEVENT = DESCRIPTOR.message_types_by_name['PositionSettledEvent']
-_MARGINCHANGEDEVENT = DESCRIPTOR.message_types_by_name['MarginChangedEvent']
 PositionChangedEvent = _reflection.GeneratedProtocolMessageType('PositionChangedEvent', (_message.Message,), {
   'DESCRIPTOR' : _POSITIONCHANGEDEVENT,
   '__module__' : 'perp.v1.event_pb2'
@@ -47,13 +46,6 @@ PositionSettledEvent = _reflection.GeneratedProtocolMessageType('PositionSettled
   })
 _sym_db.RegisterMessage(PositionSettledEvent)
 
-MarginChangedEvent = _reflection.GeneratedProtocolMessageType('MarginChangedEvent', (_message.Message,), {
-  'DESCRIPTOR' : _MARGINCHANGEDEVENT,
-  '__module__' : 'perp.v1.event_pb2'
-  # @@protoc_insertion_point(class_scope:nibiru.perp.v1.MarginChangedEvent)
-  })
-_sym_db.RegisterMessage(MarginChangedEvent)
-
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -73,7 +65,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _POSITIONCHANGEDEVENT.fields_by_name['unrealized_pnl_after']._options = None
   _POSITIONCHANGEDEVENT.fields_by_name['unrealized_pnl_after']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POSITIONCHANGEDEVENT.fields_by_name['bad_debt']._options = None
-  _POSITIONCHANGEDEVENT.fields_by_name['bad_debt']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
+  _POSITIONCHANGEDEVENT.fields_by_name['bad_debt']._serialized_options = b'\310\336\037\000'
   _POSITIONCHANGEDEVENT.fields_by_name['liquidation_penalty']._options = None
   _POSITIONCHANGEDEVENT.fields_by_name['liquidation_penalty']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POSITIONCHANGEDEVENT.fields_by_name['spot_price']._options = None
@@ -89,7 +81,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _POSITIONLIQUIDATEDEVENT.fields_by_name['fee_to_ecosystem_fund']._options = None
   _POSITIONLIQUIDATEDEVENT.fields_by_name['fee_to_ecosystem_fund']._serialized_options = b'\362\336\037\034yaml:\"fee_to_ecosystem_fund\"\310\336\037\000'
   _POSITIONLIQUIDATEDEVENT.fields_by_name['bad_debt']._options = None
-  _POSITIONLIQUIDATEDEVENT.fields_by_name['bad_debt']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
+  _POSITIONLIQUIDATEDEVENT.fields_by_name['bad_debt']._serialized_options = b'\310\336\037\000'
   _POSITIONLIQUIDATEDEVENT.fields_by_name['margin']._options = None
   _POSITIONLIQUIDATEDEVENT.fields_by_name['margin']._serialized_options = b'\362\336\037\ryaml:\"margin\"\310\336\037\000'
   _POSITIONLIQUIDATEDEVENT.fields_by_name['position_notional']._options = None
@@ -102,16 +94,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _POSITIONLIQUIDATEDEVENT.fields_by_name['mark_price']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POSITIONSETTLEDEVENT.fields_by_name['settled_coins']._options = None
   _POSITIONSETTLEDEVENT.fields_by_name['settled_coins']._serialized_options = b'\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins\362\336\037\024yaml:\"settled_coins\"\310\336\037\000'
-  _MARGINCHANGEDEVENT.fields_by_name['margin_amount']._options = None
-  _MARGINCHANGEDEVENT.fields_by_name['margin_amount']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Int\310\336\037\000'
-  _MARGINCHANGEDEVENT.fields_by_name['funding_payment']._options = None
-  _MARGINCHANGEDEVENT.fields_by_name['funding_payment']._serialized_options = b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Dec\310\336\037\000'
   _POSITIONCHANGEDEVENT._serialized_start=145
-  _POSITIONCHANGEDEVENT._serialized_end=1059
-  _POSITIONLIQUIDATEDEVENT._serialized_start=1062
-  _POSITIONLIQUIDATEDEVENT._serialized_end=1960
-  _POSITIONSETTLEDEVENT._serialized_start=1963
-  _POSITIONSETTLEDEVENT._serialized_end=2147
-  _MARGINCHANGEDEVENT._serialized_start=2150
-  _MARGINCHANGEDEVENT._serialized_end=2352
+  _POSITIONCHANGEDEVENT._serialized_end=1044
+  _POSITIONLIQUIDATEDEVENT._serialized_start=1047
+  _POSITIONLIQUIDATEDEVENT._serialized_end=1930
+  _POSITIONSETTLEDEVENT._serialized_start=1933
+  _POSITIONSETTLEDEVENT._serialized_end=2117
 # @@protoc_insertion_point(module_scope)

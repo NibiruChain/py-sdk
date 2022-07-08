@@ -1,2 +1,2 @@
-from .dex_client import DexClient
-from .perp_client import PerpClient
+from .dex import Dex
+from .perp import Perp

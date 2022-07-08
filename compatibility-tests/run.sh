@@ -20,7 +20,7 @@ install_libraries() {
 	python3 -m pip install grpcio
 	python3 -m pip install typing
 	python3 -m pip install protobuf
-	python3 -m pip install injective-py
+	python3 -m pip install nibiru-py
 }
 
 wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz

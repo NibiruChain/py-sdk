@@ -9,7 +9,7 @@ from nibiru.common import PoolAsset
 from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
 
 
-class DexComposer:
+class Dex:
     @staticmethod
     def create_pool(creator: str, swap_fee: str, exit_fee: str, assets: List[PoolAsset]):
         pool_assets = [pool_tx_pb.PoolAsset(token=a.token, weight=a.weight) for a in assets]

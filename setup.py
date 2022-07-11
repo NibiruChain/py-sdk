@@ -9,7 +9,7 @@ import os
 import sys
 from shutil import rmtree
 
-from setuptools import setup, Command, find_packages
+from setuptools import Command, find_packages, setup
 
 NAME = "nibiru-py"
 DESCRIPTION = "Nibiru Python SDK"
@@ -17,7 +17,7 @@ URL = "https://github.com/NibiruChain/sdk-python"
 EMAIL = "dev@nibiru.fi"
 AUTHOR = "Nibiru Chain"
 REQUIRES_PYTHON = ">=3.7.0"
-VERSION = "0.5.6.8"
+VERSION = "0.0.1"
 
 REQUIRED = [
     "grpcio",
@@ -34,7 +34,7 @@ REQUIRED = [
     "requests",
     "eip712_structs",
     "coincurve",
-    "aiocron"
+    "aiocron",
 ]
 
 # The rest you shouldn't have to touch too much :)

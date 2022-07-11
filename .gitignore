@@ -141,5 +141,6 @@ cython_debug/
 
 .idea
 *.code-workspace
+.vscode
 .chain_cookie
 .exchange_cookie

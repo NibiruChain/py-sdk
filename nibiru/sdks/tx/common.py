@@ -4,7 +4,7 @@ from copy import deepcopy
 from google.protobuf import message
 
 from nibiru.client import Client
-from nibiru.common import TxConfig
+from nibiru.common import TxConfig, TxType
 from nibiru.composer import Composer
 from nibiru.constant import GAS_PRICE
 from nibiru.exceptions import SimulationError
@@ -26,9 +26,9 @@ class Tx:
         self.msgs.extend(msgs)
         return self
 
-    async def execute(self):
+    async def execute(self, **kwargs):
         try:
-            res = await self.execute_msg(*self.msgs)
+            res = await self.execute_msg(*self.msgs, **kwargs)
         except SimulationError as err:
             raise err
         else:
@@ -74,6 +74,14 @@ class Tx:
         logging.info("Executing transaction with fee: %s and gas_wanted: %d", fee, gas_wanted)
         tx = tx.with_gas(gas_wanted).with_fee(fee).with_memo("").with_timeout_height(self.client.timeout_height)
         tx_raw_bytes = tx.get_signed_tx_data()
+
+        return await self._send_tx(tx_raw_bytes, conf.tx_type)
+
+    async def _send_tx(self, tx_raw_bytes, tx_type: TxType):
+        if tx_type == TxType.SYNC:
+            return await self.client.send_tx_sync_mode(tx_raw_bytes)
+        elif tx_type == TxType.ASYNC:
+            return await self.client.send_tx_async_mode(tx_raw_bytes)
 
         return await self.client.send_tx_block_mode(tx_raw_bytes)
 

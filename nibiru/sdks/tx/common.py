@@ -2,12 +2,13 @@ import logging
 from copy import deepcopy
 
 from google.protobuf import message
+from grpc import RpcError
 
 from nibiru.client import Client
 from nibiru.common import TxConfig, TxType
 from nibiru.composer import Composer
 from nibiru.constant import GAS_PRICE
-from nibiru.exceptions import SimulationError
+from nibiru.exceptions import SimulationError, TxError
 from nibiru.network import Network
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
@@ -37,24 +38,24 @@ class Tx:
         return res
 
     async def execute_msg(self, *msg: message.Message, **kwargs):
-        await self.client.sync_timeout_height()
-        address = await self.get_address_info()
-        tx = (
-            Transaction()
-            .with_messages(*msg)
-            .with_sequence(address.get_sequence())
-            .with_account_num(address.get_number())
-            .with_chain_id(self.network.chain_id)
-            .with_signer(self.priv_key)
-        )
         try:
+            await self.client.sync_timeout_height()
+            address = await self.get_address_info()
+            tx = (
+                Transaction()
+                .with_messages(*msg)
+                .with_sequence(address.get_sequence())
+                .with_account_num(address.get_number())
+                .with_chain_id(self.network.chain_id)
+                .with_signer(self.priv_key)
+            )
             sim_res = await self.simulate(tx)
-        except SimulationError as err:
-            logging.error("Aborting execution due to error: %s", err)
-            raise SimulationError("Aborting execution due to simulation error") from err
-        else:
             gas_estimate = sim_res.gas_info.gas_used
             return await self.execute_tx(tx, gas_estimate, **kwargs)
+        except (RpcError, SimulationError) as err:
+            logging.error("Failed tx execution: %s", err)
+            address.decrease_sequence()
+            raise TxError("Failed to execute transaction") from err
 
     async def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):
         conf = self.get_config(**kwargs)

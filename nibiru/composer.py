@@ -1,24 +1,19 @@
 from google.protobuf import any_pb2
+from typing import List
 
-from nibiru.composers import ( 
-    DexComposer, PerpComposer,
+from .composers import (
+    Dex, Perp
 )
 
 from .proto.cosmos.authz.v1beta1 import tx_pb2 as cosmos_authz_tx_pb
-
 from .proto.cosmos.bank.v1beta1 import tx_pb2 as cosmos_bank_tx_pb
 from .proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
-
 from .proto.cosmos.staking.v1beta1 import tx_pb2 as cosmos_staking_tx_pb
-
 from .proto.cosmos.distribution.v1beta1 import tx_pb2 as cosmos_distribution_tx_pb
 
-from typing import List
-
-
 class Composer:
-    dex = DexComposer
-    perp = PerpComposer
+    dex = Dex
+    perp = Perp
 
     @staticmethod
     def coin(amount: float, denom: str):
@@ -72,34 +67,34 @@ class Composer:
     #     if not simulation:
     #         data = bytes.fromhex(data)
     #     header_map = {
-    #         "/injective.exchange.v1beta1.MsgCreateSpotLimitOrder": injective_exchange_tx_pb.MsgCreateSpotLimitOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCreateSpotMarketOrder": injective_exchange_tx_pb.MsgCreateSpotMarketOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCreateDerivativeLimitOrder": injective_exchange_tx_pb.MsgCreateDerivativeLimitOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCreateDerivativeMarketOrder": injective_exchange_tx_pb.MsgCreateDerivativeMarketOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCancelSpotOrder": injective_exchange_tx_pb.MsgCancelSpotOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCancelDerivativeOrder": injective_exchange_tx_pb.MsgCancelDerivativeOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgBatchCancelSpotOrders": injective_exchange_tx_pb.MsgBatchCancelSpotOrdersResponse,
-    #         "/injective.exchange.v1beta1.MsgBatchCancelDerivativeOrders": injective_exchange_tx_pb.MsgBatchCancelDerivativeOrdersResponse,
-    #         "/injective.exchange.v1beta1.MsgBatchCreateSpotLimitOrders": injective_exchange_tx_pb.MsgBatchCreateSpotLimitOrdersResponse,
-    #         "/injective.exchange.v1beta1.MsgBatchCreateDerivativeLimitOrders": injective_exchange_tx_pb.MsgBatchCreateDerivativeLimitOrdersResponse,
-    #         "/injective.exchange.v1beta1.MsgBatchUpdateOrders": injective_exchange_tx_pb.MsgBatchUpdateOrdersResponse,
-    #         "/injective.exchange.v1beta1.MsgDeposit": injective_exchange_tx_pb.MsgDepositResponse,
-    #         "/injective.exchange.v1beta1.MsgWithdraw": injective_exchange_tx_pb.MsgWithdrawResponse,
-    #         "/injective.exchange.v1beta1.MsgSubaccountTransfer": injective_exchange_tx_pb.MsgSubaccountTransferResponse,
-    #         "/injective.exchange.v1beta1.MsgLiquidatePosition": injective_exchange_tx_pb.MsgLiquidatePositionResponse,
-    #         "/injective.exchange.v1beta1.MsgIncreasePositionMargin": injective_exchange_tx_pb.MsgIncreasePositionMarginResponse,
-    #         "/injective.auction.v1beta1.MsgBid": injective_auction_tx_pb.MsgBidResponse,
-    #         "/injective.exchange.v1beta1.MsgCreateBinaryOptionsLimitOrder": injective_exchange_tx_pb.MsgCreateBinaryOptionsLimitOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCreateBinaryOptionsMarketOrder": injective_exchange_tx_pb.MsgCreateBinaryOptionsMarketOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgCancelBinaryOptionsOrder": injective_exchange_tx_pb.MsgCancelBinaryOptionsOrderResponse,
-    #         "/injective.exchange.v1beta1.MsgAdminUpdateBinaryOptionsMarket": injective_exchange_tx_pb.MsgAdminUpdateBinaryOptionsMarketResponse,
-    #         "/injective.exchange.v1beta1.MsgInstantBinaryOptionsMarketLaunch": injective_exchange_tx_pb.MsgInstantBinaryOptionsMarketLaunchResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCreateSpotLimitOrder": injective_exchange_tx_pb.MsgCreateSpotLimitOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCreateSpotMarketOrder": injective_exchange_tx_pb.MsgCreateSpotMarketOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCreateDerivativeLimitOrder": injective_exchange_tx_pb.MsgCreateDerivativeLimitOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCreateDerivativeMarketOrder": injective_exchange_tx_pb.MsgCreateDerivativeMarketOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCancelSpotOrder": injective_exchange_tx_pb.MsgCancelSpotOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCancelDerivativeOrder": injective_exchange_tx_pb.MsgCancelDerivativeOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgBatchCancelSpotOrders": injective_exchange_tx_pb.MsgBatchCancelSpotOrdersResponse,
+    #         "/nibiru.exchange.v1beta1.MsgBatchCancelDerivativeOrders": injective_exchange_tx_pb.MsgBatchCancelDerivativeOrdersResponse,
+    #         "/nibiru.exchange.v1beta1.MsgBatchCreateSpotLimitOrders": injective_exchange_tx_pb.MsgBatchCreateSpotLimitOrdersResponse,
+    #         "/nibiru.exchange.v1beta1.MsgBatchCreateDerivativeLimitOrders": injective_exchange_tx_pb.MsgBatchCreateDerivativeLimitOrdersResponse,
+    #         "/nibiru.exchange.v1beta1.MsgBatchUpdateOrders": injective_exchange_tx_pb.MsgBatchUpdateOrdersResponse,
+    #         "/nibiru.exchange.v1beta1.MsgDeposit": injective_exchange_tx_pb.MsgDepositResponse,
+    #         "/nibiru.exchange.v1beta1.MsgWithdraw": injective_exchange_tx_pb.MsgWithdrawResponse,
+    #         "/nibiru.exchange.v1beta1.MsgSubaccountTransfer": injective_exchange_tx_pb.MsgSubaccountTransferResponse,
+    #         "/nibiru.exchange.v1beta1.MsgLiquidatePosition": injective_exchange_tx_pb.MsgLiquidatePositionResponse,
+    #         "/nibiru.exchange.v1beta1.MsgIncreasePositionMargin": injective_exchange_tx_pb.MsgIncreasePositionMarginResponse,
+    #         "/nibiru.auction.v1beta1.MsgBid": injective_auction_tx_pb.MsgBidResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCreateBinaryOptionsLimitOrder": injective_exchange_tx_pb.MsgCreateBinaryOptionsLimitOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCreateBinaryOptionsMarketOrder": injective_exchange_tx_pb.MsgCreateBinaryOptionsMarketOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgCancelBinaryOptionsOrder": injective_exchange_tx_pb.MsgCancelBinaryOptionsOrderResponse,
+    #         "/nibiru.exchange.v1beta1.MsgAdminUpdateBinaryOptionsMarket": injective_exchange_tx_pb.MsgAdminUpdateBinaryOptionsMarketResponse,
+    #         "/nibiru.exchange.v1beta1.MsgInstantBinaryOptionsMarketLaunch": injective_exchange_tx_pb.MsgInstantBinaryOptionsMarketLaunchResponse,
     #         "/cosmos.bank.v1beta1.MsgSend": cosmos_bank_tx_pb.MsgSendResponse,
     #         "/cosmos.authz.v1beta1.MsgGrant": cosmos_authz_tx_pb.MsgGrantResponse,
     #         "/cosmos.authz.v1beta1.MsgExec": cosmos_authz_tx_pb.MsgExecResponse,
     #         "/cosmos.authz.v1beta1.MsgRevoke": cosmos_authz_tx_pb.MsgRevokeResponse,
-    #         "/injective.oracle.v1beta1.MsgRelayPriceFeedPrice": injective_oracle_tx_pb.MsgRelayPriceFeedPriceResponse,
-    #         "/injective.oracle.v1beta1.MsgRelayProviderPrices": injective_oracle_tx_pb.MsgRelayProviderPrices
+    #         "/nibiru.oracle.v1beta1.MsgRelayPriceFeedPrice": injective_oracle_tx_pb.MsgRelayPriceFeedPriceResponse,
+    #         "/nibiru.oracle.v1beta1.MsgRelayProviderPrices": injective_oracle_tx_pb.MsgRelayProviderPrices
     #     }
 
     #     response = tx_response_pb.TxResponseData.FromString(data)
@@ -112,27 +107,27 @@ class Composer:
     # @staticmethod
     # def UnpackMsgExecResponse(msg_type, data):
     #     header_map = {
-    #         "MsgCreateSpotLimitOrder": injective_exchange_tx_pb.MsgCreateSpotLimitOrderResponse,
-    #         "MsgCreateSpotMarketOrder": injective_exchange_tx_pb.MsgCreateSpotMarketOrderResponse,
-    #         "MsgCreateDerivativeLimitOrder": injective_exchange_tx_pb.MsgCreateDerivativeLimitOrderResponse,
-    #         "MsgCreateDerivativeMarketOrder": injective_exchange_tx_pb.MsgCreateDerivativeMarketOrderResponse,
-    #         "MsgCancelSpotOrder": injective_exchange_tx_pb.MsgCancelSpotOrderResponse,
-    #         "MsgCancelDerivativeOrder": injective_exchange_tx_pb.MsgCancelDerivativeOrderResponse,
-    #         "MsgBatchCancelSpotOrders": injective_exchange_tx_pb.MsgBatchCancelSpotOrdersResponse,
-    #         "MsgBatchCancelDerivativeOrders": injective_exchange_tx_pb.MsgBatchCancelDerivativeOrdersResponse,
-    #         "MsgBatchCreateSpotLimitOrders": injective_exchange_tx_pb.MsgBatchCreateSpotLimitOrdersResponse,
-    #         "MsgBatchCreateDerivativeLimitOrders": injective_exchange_tx_pb.MsgBatchCreateDerivativeLimitOrdersResponse,
-    #         "MsgBatchUpdateOrders": injective_exchange_tx_pb.MsgBatchUpdateOrdersResponse,
-    #         "MsgDeposit": injective_exchange_tx_pb.MsgDepositResponse,
-    #         "MsgWithdraw": injective_exchange_tx_pb.MsgWithdrawResponse,
-    #         "MsgSubaccountTransfer": injective_exchange_tx_pb.MsgSubaccountTransferResponse,
-    #         "MsgLiquidatePosition": injective_exchange_tx_pb.MsgLiquidatePositionResponse,
-    #         "MsgIncreasePositionMargin": injective_exchange_tx_pb.MsgIncreasePositionMarginResponse,
-    #         "MsgCreateBinaryOptionsLimitOrder": injective_exchange_tx_pb.MsgCreateBinaryOptionsLimitOrderResponse,
-    #         "MsgCreateBinaryOptionsMarketOrder": injective_exchange_tx_pb.MsgCreateBinaryOptionsMarketOrderResponse,
-    #         "MsgCancelBinaryOptionsOrder": injective_exchange_tx_pb.MsgCancelBinaryOptionsOrderResponse,
-    #         "MsgAdminUpdateBinaryOptionsMarket": injective_exchange_tx_pb.MsgAdminUpdateBinaryOptionsMarketResponse,
-    #         "MsgInstantBinaryOptionsMarketLaunch": injective_exchange_tx_pb.MsgInstantBinaryOptionsMarketLaunchResponse
+    #         "MsgCreateSpotLimitOrder": nibiru_exchange_tx_pb.MsgCreateSpotLimitOrderResponse,
+    #         "MsgCreateSpotMarketOrder": nibiru_exchange_tx_pb.MsgCreateSpotMarketOrderResponse,
+    #         "MsgCreateDerivativeLimitOrder": nibiru_exchange_tx_pb.MsgCreateDerivativeLimitOrderResponse,
+    #         "MsgCreateDerivativeMarketOrder": nibiru_exchange_tx_pb.MsgCreateDerivativeMarketOrderResponse,
+    #         "MsgCancelSpotOrder": nibiru_exchange_tx_pb.MsgCancelSpotOrderResponse,
+    #         "MsgCancelDerivativeOrder": nibiru_exchange_tx_pb.MsgCancelDerivativeOrderResponse,
+    #         "MsgBatchCancelSpotOrders": nibiru_exchange_tx_pb.MsgBatchCancelSpotOrdersResponse,
+    #         "MsgBatchCancelDerivativeOrders": nibiru_exchange_tx_pb.MsgBatchCancelDerivativeOrdersResponse,
+    #         "MsgBatchCreateSpotLimitOrders": nibiru_exchange_tx_pb.MsgBatchCreateSpotLimitOrdersResponse,
+    #         "MsgBatchCreateDerivativeLimitOrders": nibiru_exchange_tx_pb.MsgBatchCreateDerivativeLimitOrdersResponse,
+    #         "MsgBatchUpdateOrders": nibiru_exchange_tx_pb.MsgBatchUpdateOrdersResponse,
+    #         "MsgDeposit": nibiru_exchange_tx_pb.MsgDepositResponse,
+    #         "MsgWithdraw": nibiru_exchange_tx_pb.MsgWithdrawResponse,
+    #         "MsgSubaccountTransfer": nibiru_exchange_tx_pb.MsgSubaccountTransferResponse,
+    #         "MsgLiquidatePosition": nibiru_exchange_tx_pb.MsgLiquidatePositionResponse,
+    #         "MsgIncreasePositionMargin": nibiru_exchange_tx_pb.MsgIncreasePositionMarginResponse,
+    #         "MsgCreateBinaryOptionsLimitOrder": nibiru_exchange_tx_pb.MsgCreateBinaryOptionsLimitOrderResponse,
+    #         "MsgCreateBinaryOptionsMarketOrder": nibiru_exchange_tx_pb.MsgCreateBinaryOptionsMarketOrderResponse,
+    #         "MsgCancelBinaryOptionsOrder": nibiru_exchange_tx_pb.MsgCancelBinaryOptionsOrderResponse,
+    #         "MsgAdminUpdateBinaryOptionsMarket": nibiru_exchange_tx_pb.MsgAdminUpdateBinaryOptionsMarketResponse,
+    #         "MsgInstantBinaryOptionsMarketLaunch": nibiru_exchange_tx_pb.MsgInstantBinaryOptionsMarketLaunchResponse
     #     }
 
     #     return header_map[msg_type].FromString(bytes(data, "utf-8"))

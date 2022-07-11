@@ -7,7 +7,7 @@ import grpc
 import base64
 
 from typing import Any, Dict, List
-from injective.chain_client._wallet import (
+from nibiru.chain_client._wallet import (
     generate_wallet,
     privkey_to_address,
     privkey_to_pubkey,
@@ -16,9 +16,9 @@ from injective.chain_client._wallet import (
     DEFAULT_BECH32_HRP,
 )
 
-from injective.chain_client._typings import SyncMode
-import injective.exchange_api.injective_accounts_rpc_pb2 as accounts_rpc_pb
-import injective.exchange_api.injective_accounts_rpc_pb2_grpc as accounts_rpc_grpc
+from nibiru.chain_client._typings import SyncMode
+import nibiru.exchange_api.nibiru_accounts_rpc_pb2 as accounts_rpc_pb
+import nibiru.exchange_api.nibiru_accounts_rpc_pb2_grpc as accounts_rpc_grpc
 
 MIN_GAS_PRICE = 500000000
 
@@ -34,7 +34,7 @@ class Transaction:
         gas: int,
         fee_denom: str = "inj",
         memo: str = "",
-        chain_id: str = "injective-888",
+        chain_id: str = "nibiru-888",
         hrp: str = DEFAULT_BECH32_HRP,
         sync_mode: SyncMode = "block",
     ) -> None:
@@ -62,7 +62,7 @@ class Transaction:
         }
         self._msgs.append(msg)
 
-    # Injective â€¢ Exchange Module
+    # Nibiru Exchange Module
 
     def add_exchange_msg_deposit(self, subaccount: str, amount: int, denom: str = "inj") -> None:
         msg = {
@@ -89,7 +89,7 @@ class Transaction:
                 "signatures": [
                     {
                         "signature": self._sign(),
-                        "pub_key": {"type": "injective/PubKeyEthSecp256k1", "value": base64_pubkey},
+                        "pub_key": {"type": "nibiru/PubKeyEthSecp256k1", "value": base64_pubkey},
                         "account_number": str(self._account_num),
                         "sequence": str(self._sequence),
                     }
@@ -130,7 +130,7 @@ class Transaction:
 async def get_account_num_seq(address: str) -> (int, int):
     async with aiohttp.ClientSession() as session:
         async with session.request(
-            'GET', 'http://staking-lcd-testnet.injective.network/cosmos/auth/v1beta1/accounts/' + address,
+            'GET', 'http://staking-lcd-testnet.nibiru.network/cosmos/auth/v1beta1/accounts/' + address,
             headers={'Accept-Encoding': 'application/json'},
         ) as response:
             if response.status != 200:
@@ -144,7 +144,7 @@ async def get_account_num_seq(address: str) -> (int, int):
 async def post_tx(tx_json: str):
     async with aiohttp.ClientSession() as session:
         async with session.request(
-            'POST', 'http://staking-lcd-testnet.injective.network/txs', data=tx_json,
+            'POST', 'http://staking-lcd-testnet.nibiru.network/txs', data=tx_json,
             headers={'Content-Type': 'application/json'},
         ) as response:
             if response.status != 200:
@@ -168,8 +168,8 @@ async def msg_send():
 
     acc_num, acc_seq = await get_account_num_seq(sender_acc_addr)
 
-    async with grpc.aio.insecure_channel('testnet-sentry0.injective.network:9910') as channel:
-        accounts_rpc = accounts_rpc_grpc.InjectiveAccountsRPCStub(channel)
+    async with grpc.aio.insecure_channel('testnet-sentry0.nibiru.network:9910') as channel:
+        accounts_rpc = accounts_rpc_grpc.nibiruAccountsRPCStub(channel)
         account_addr = "inj14au322k9munkmx5wrchz9q30juf5wjgz2cfqku"
 
         subacc = await accounts_rpc.SubaccountsList(accounts_rpc_pb.SubaccountsListRequest(account_address = account_addr))

@@ -8,7 +8,7 @@ The aim of this repo was to test all python versions from 3.7.0 to 3.9.6 for com
 
  A) Downloads all python versions and extracts the contents
  B) Opens a subshell and installs python
- C) Installs all the dependencies used by the Injective Exchange API and Chain Client
+ C) Installs all the dependencies used by the Nibiru Exchange API and Chain Client
  D) Saves the python version and the stdout/stderr of the tests.py script to the results.txt file to have both successful and error output.
  E) Purges python and all its dependencies, repeats until the last version.
 
@@ -16,7 +16,7 @@ The aim of this repo was to test all python versions from 3.7.0 to 3.9.6 for com
 
  2. tests.py
 
-This python script imports all the libraries used by the Injective Exchange API and Chain Client. It makes a gRPC request and uses the data to broadcast a transaction to the chain with both cosmos-sdk and exchange messages using a REST API endpoint. Certain libraries are imported from injective-py which you can find [here](https://pypi.org/project/injective-py/).
+This python script imports all the libraries used by the Nibiru Exchange API and Chain Client. It makes a gRPC request and uses the data to broadcast a transaction to the chain with both cosmos-sdk and exchange messages using a REST API endpoint. Certain libraries are imported from nibiru-py which you can find [here](https://pypi.org/project/injective-py/).
 
  3. results.txt
 

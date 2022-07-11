@@ -1,13 +1,17 @@
 from grpc import Channel
+from typing import List
+
 from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru.proto.dex.v1 import (
     query_pb2_grpc as dex_query,
     query_pb2 as dex_type,
 )
 from nibiru.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from typing import List
 
-class DexClient:
+class Dex:
+    """
+    Dex allows to query the endpoints made available by the Nibiru Chain's DEX module.
+    """
     def __init__(
         self,
         channel: Channel
@@ -27,6 +31,15 @@ class DexClient:
         return await self.api.Pool(req)
 
     async def pools(self, **kwargs):
+        '''
+        Returns all available pools
+        Parameters:
+            key (bytes): The page key for the next page. Only key or offset should be set
+            offset (int): The number of entries to skip. Only offset or key should be set
+            limit (int): The number of max results in the page
+            count_total (bool): Indicates if the response should contain the total number of results
+            reverse (bool): Indicates if the results should be returned in descending order
+        '''
         req = dex_type.QueryPoolsRequest(pagination = PageRequest(
                 key = kwargs.get("key"),
                 offset = kwargs.get("offset"),

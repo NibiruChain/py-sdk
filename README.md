@@ -26,7 +26,7 @@ pip install nibiru-py
 ### Usage
 Requires Python 3.7+
 
-[Examples](https://github.com/NibiruLabs/sdk-python/tree/master/examples)
+[Examples](https://github.com/NibiruChain/sdk-python/tree/master/examples)
 ```bash
 $ pipenv shell
 $ pipenv install
@@ -67,3 +67,9 @@ Upgrade `pip` to the latest version, if you see these warnings:
   pip uninstall nibiru-py
   pip install nibiru-py
   ```
+### Linting
+Enable git hook which will perform linting before each commit:
+```shell
+pre-commit install
+```
+This will keep your code clean.

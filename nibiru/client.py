@@ -7,10 +7,10 @@ from http.cookies import SimpleCookie
 from typing import List, Optional, Tuple, Union
 
 from .clients import (
-    DexClient, PerpClient,
+    Dex as DexClient, Perp as PerpClient,
 )
 
-from .exceptions import NotFoundError, EmptyMsgError
+from .exceptions import NotFoundError
 
 from .proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 
@@ -152,19 +152,19 @@ class Client:
         self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
 
     # cookie helper methods
-    async def fetch_cookie(self, type):
+    async def fetch_cookie(self, chain_type):
         metadata = None
-        if type == "chain":
+        if chain_type == "chain":
             req = tendermint_query.GetLatestBlockRequest()
             metadata = await self.stubCosmosTendermint.GetLatestBlock(req).initial_metadata()
             time.sleep(DEFAULT_BLOCK_TIME)
-        # if type == "exchange":
+        # if chain_type == "exchange":
             # not sure what to do here, do we have a counterpart or can any req/resp be used??
             # req = exchange_meta_rpc_pb.VersionRequest()
             # metadata = await self.stubMeta.Version(req).initial_metadata()
         return metadata
 
-    async def renew_cookie(self, existing_cookie, type):
+    async def renew_cookie(self, existing_cookie, chain_type):
         metadata = None
         # format cookie date into RFC1123 standard
         cookie = SimpleCookie()
@@ -180,35 +180,35 @@ class Client:
         # renew session if timestamp diff < offset
         timestamp_diff = expire_timestamp - int(time.time())
         if timestamp_diff < DEFAULT_SESSION_RENEWAL_OFFSET:
-            metadata = await self.fetch_cookie(type)
+            metadata = await self.fetch_cookie(chain_type)
         else:
             metadata = (("cookie", existing_cookie),)
         return metadata
 
-    async def load_cookie(self, type):
+    async def load_cookie(self, chain_type):
         metadata = None
         if self.insecure:
             return metadata
 
-        if type == "chain":
+        if chain_type == "chain":
             if self.chain_cookie != "":
-                 metadata = await self.renew_cookie(self.chain_cookie, type)
-                 self.set_cookie(metadata, type)
+                 metadata = await self.renew_cookie(self.chain_cookie, chain_type)
+                 self.set_cookie(metadata, chain_type)
             else:
-                metadata = await self.fetch_cookie(type)
-                self.set_cookie(metadata, type)
+                metadata = await self.fetch_cookie(chain_type)
+                self.set_cookie(metadata, chain_type)
 
-        if type == "exchange":
+        if chain_type == "exchange":
             if self.exchange_cookie != "":
-                 metadata = await self.renew_cookie(self.exchange_cookie, type)
-                 self.set_cookie(metadata, type)
+                 metadata = await self.renew_cookie(self.exchange_cookie, chain_type)
+                 self.set_cookie(metadata, chain_type)
             else:
-                metadata = await self.fetch_cookie(type)
-                self.set_cookie(metadata, type)
+                metadata = await self.fetch_cookie(chain_type)
+                self.set_cookie(metadata, chain_type)
 
         return metadata
 
-    def set_cookie(self, metadata, type):
+    def set_cookie(self, metadata, chain_type):
         new_cookie = None
         if self.insecure:
             return new_cookie
@@ -220,7 +220,7 @@ class Client:
         if new_cookie == None:
             return
 
-        if type == "chain":
+        if chain_type == "chain":
             # write to client instance
             self.chain_cookie = new_cookie
             # write to disk
@@ -229,7 +229,7 @@ class Client:
             cookie_file.close()
             print("chain session cookie saved to disk")
 
-        if type == "exchange":
+        if chain_type == "exchange":
             self.exchange_cookie = new_cookie
 
     # default client methods
@@ -273,26 +273,26 @@ class Client:
     ) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
         try:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
-            metadata = await self.load_cookie(type="chain")
+            metadata = await self.load_cookie(chain_type="chain")
             return await self.stubTx.Simulate.__call__(req, metadata=metadata), True
         except grpc.RpcError as err:
             return err, False
 
     async def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC)
-        metadata = await self.load_cookie(type="chain")
+        metadata = await self.load_cookie(chain_type="chain")
         result = await self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
         return result.tx_response
 
     async def send_tx_async_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_ASYNC)
-        metadata = await self.load_cookie(type="chain")
+        metadata = await self.load_cookie(chain_type="chain")
         result = await self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
         return result.tx_response
 
     async def send_tx_block_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_BLOCK)
-        metadata = await self.load_cookie(type="chain")
+        metadata = await self.load_cookie(chain_type="chain")
         result = await self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
         return result.tx_response
 
@@ -323,6 +323,3 @@ class Client:
                 denom=denom
             )
         )
-
-    # Nibiru Exchange client methods
-

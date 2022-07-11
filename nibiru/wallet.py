@@ -1,11 +1,12 @@
 import hashlib
-import aiohttp
 import json
-import requests
 from typing import Tuple
-from bech32 import bech32_encode, bech32_decode, convertbits
+
+import aiohttp
+import requests
+from bech32 import bech32_decode, bech32_encode, convertbits
 from bip32 import BIP32
-from ecdsa import SigningKey, VerifyingKey, SECP256k1, BadSignatureError
+from ecdsa import BadSignatureError, SECP256k1, SigningKey, VerifyingKey
 from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
 
@@ -21,6 +22,7 @@ BECH32_ADDR_VAL_PREFIX = "nibivaloper"
 BECH32_ADDR_CONS_PREFIX = "nibivalcons"
 
 DEFAULT_DERIVATION_PATH = "m/44'/118'/0'/0/0"
+
 
 class PrivateKey:
     """
@@ -62,7 +64,8 @@ class PrivateKey:
         seed = Mnemonic("english").to_seed(words)
         self = cls(_error_do_not_use_init_directly=True)
         self.signing_key = SigningKey.from_string(
-            BIP32.from_seed(seed).get_privkey_from_path(path), curve=SECP256k1,
+            BIP32.from_seed(seed).get_privkey_from_path(path),
+            curve=SECP256k1,
         )
         return self
 
@@ -182,7 +185,6 @@ class PublicKey:
         r = hashlib.new("ripemd160", s).digest()
         return Address(r)
 
-
     def verify(self, msg: bytes, sig: bytes) -> bool:
         """
         Verify a signature made from the given message.
@@ -267,7 +269,8 @@ class Address:
     async def async_init_num_seq(self, lcd_endpoint: str) -> "Address":
         async with aiohttp.ClientSession() as session:
             async with session.request(
-                'GET', lcd_endpoint + '/cosmos/auth/v1beta1/accounts/' + self.to_acc_bech32(),
+                'GET',
+                lcd_endpoint + '/cosmos/auth/v1beta1/accounts/' + self.to_acc_bech32(),
                 headers={'Accept-Encoding': 'application/json'},
             ) as response:
                 if response.status != 200:
@@ -280,9 +283,11 @@ class Address:
                 self.sequence = int(acc['sequence'])
                 return self
 
-    def init_num_seq(self, lcd_endpoint: str)-> "Address":
-        response = requests.get(f"{lcd_endpoint}/cosmos/auth/v1beta1/accounts/{self.to_acc_bech32()}", 
-                headers={'Accept-Encoding': 'application/json'})
+    def init_num_seq(self, lcd_endpoint: str) -> "Address":
+        response = requests.get(
+            f"{lcd_endpoint}/cosmos/auth/v1beta1/accounts/{self.to_acc_bech32()}",
+            headers={'Accept-Encoding': 'application/json'},
+        )
         if response.status_code != 200:
             raise ValueError("HTTP response status", response.status_code)
         resp = json.loads(response.text)
@@ -291,10 +296,14 @@ class Address:
         self.sequence = int(acc['sequence'])
         return self
 
+    def decrease_sequence(self):
+        """If a tx failed the sequence should not increase"""
+        self.sequence -= 1
+
     def get_sequence(self):
         current_seq = self.sequence
         self.sequence += 1
         return current_seq
-        
+
     def get_number(self):
         return self.number

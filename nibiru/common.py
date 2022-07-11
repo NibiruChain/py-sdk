@@ -23,7 +23,7 @@ class PoolAsset:
 
 class TxConfig:
     def __init__(
-        self, gas_wanted: int = 0, gas_multiplier: float = 0, gas_price: float = 0, tx_type: TxType = TxType.BLOCK
+        self, gas_wanted: int = 0, gas_multiplier: float = 0, gas_price: float = 0, tx_type: TxType = TxType.ASYNC
     ):
         '''
         Parameters:
@@ -31,7 +31,7 @@ class TxConfig:
             gas_multiplier (float): Set the gas multiplier that's being applied to the estimated gas, defaults to 1.25.
                                     If gas_wanted is set this property is ignored.
             gas_price(float): Set the gas price used to calculate the fee
-            tx_type (TxType): Configure how to execute the tx, defaults to `BLOCK`
+            tx_type (TxType): Configure how to execute the tx, defaults to `ASYNC`
         '''
         self.gas_multiplier = gas_multiplier
         self.gas_wanted = gas_wanted

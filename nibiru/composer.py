@@ -1,15 +1,14 @@
-from google.protobuf import any_pb2
 from typing import List
 
-from .composers import (
-    Dex, Perp
-)
+from google.protobuf import any_pb2
 
+from .composers import Dex, Perp
 from .proto.cosmos.authz.v1beta1 import tx_pb2 as cosmos_authz_tx_pb
 from .proto.cosmos.bank.v1beta1 import tx_pb2 as cosmos_bank_tx_pb
 from .proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+from .proto.cosmos.distribution.v1beta1 import tx_pb2 as tx_pb
 from .proto.cosmos.staking.v1beta1 import tx_pb2 as cosmos_staking_tx_pb
-from .proto.cosmos.distribution.v1beta1 import tx_pb2 as cosmos_distribution_tx_pb
+
 
 class Composer:
     dex = Dex
@@ -20,11 +19,11 @@ class Composer:
         return cosmos_base_coin_pb.Coin(amount=str(amount), denom=denom)
 
     @staticmethod
-    def msg_send(from_address: str, to_address: str, amount: int, denom: str):
+    def msg_send(from_address: str, to_address: str, coins: List[cosmos_base_coin_pb.Coin]):
         return cosmos_bank_tx_pb.MsgSend(
             from_address=from_address,
             to_address=to_address,
-            amount=[Composer.coin(amount=amount, denom=denom)],
+            amount=coins,
         )
 
     @staticmethod
@@ -39,12 +38,10 @@ class Composer:
 
     @staticmethod
     def msg_revoke(granter: str, grantee: str, msg_type: str):
-        return cosmos_authz_tx_pb.MsgRevoke(
-            granter=granter, grantee=grantee, msg_type_url=msg_type
-        )
+        return cosmos_authz_tx_pb.MsgRevoke(granter=granter, grantee=grantee, msg_type_url=msg_type)
 
     @staticmethod
-    def msg_delegate( delegator_address: str, validator_address: str, amount: float):
+    def msg_delegate(delegator_address: str, validator_address: str, amount: float):
         return cosmos_staking_tx_pb.MsgDelegate(
             delegator_address=delegator_address,
             validator_address=validator_address,
@@ -52,11 +49,10 @@ class Composer:
         )
 
     @staticmethod
-    def msg_withdraw_delegator_reward( delegator_address: str, validator_address: str):
+    def msg_withdraw_delegator_reward(delegator_address: str, validator_address: str):
 
-        return cosmos_distribution_tx_pb.MsgWithdrawDelegatorReward(
-            delegator_address=delegator_address,
-            validator_address=validator_address
+        return tx_pb.MsgWithdrawDelegatorReward(
+            delegator_address=delegator_address, validator_address=validator_address
         )
 
     # # data field format: [request-msg-header][raw-byte-msg-response]

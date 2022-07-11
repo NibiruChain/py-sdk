@@ -24,18 +24,22 @@ async def main() -> None:
     )
     receiver = Sdk.authorize()
 
-    res = await sender.tx.msg_send(
-        from_address=sender.address,
-        to_address=receiver.address,
-        coins=[
-            Composer.coin(amount=5, denom="unibi"),
-            Composer.coin(amount=3, denom="unusd"),
-        ],
-        # additional params for gas price can be passed
-        # gas_price = 7,
-        # gas_multiplier = 1.25,
-        # gas_wanted = 50_000,
-    )
+    res = await sender.tx.add_messages(
+        Composer.msg_send(
+            from_address=sender.address,
+            to_address=receiver.address,
+            coins=[Composer.coin(amount=5, denom="unibi")],
+            # additional params for gas price can be passed
+            # gas_price = 7,
+            # gas_multiplier = 1.25,
+            # gas_wanted = 50_000,
+        ),
+        Composer.msg_send(
+            from_address=sender.address,
+            to_address=receiver.address,
+            coins=[Composer.coin(amount=7, denom="unusd")],
+        ),
+    ).execute()
     logging.info("Result: %s", res)
 
 

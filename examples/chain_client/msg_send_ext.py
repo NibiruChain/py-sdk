@@ -15,7 +15,7 @@
 import asyncio
 import logging
 
-from nibiru import Composer, Client, Transaction, Network, PrivateKey
+from nibiru import Client, Composer, Network, PrivateKey, Transaction
 from nibiru.constant import GAS_PRICE
 
 
@@ -28,7 +28,9 @@ async def main() -> None:
     await client.sync_timeout_height()
 
     # load account
-    priv_key = PrivateKey.from_mnemonic("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
+    priv_key = PrivateKey.from_mnemonic(
+        "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
+    )
     pub_key = priv_key.to_public_key()
     address = await pub_key.to_address().async_init_num_seq(network.lcd_endpoint)
 
@@ -36,8 +38,7 @@ async def main() -> None:
     msg = Composer.msg_send(
         from_address=address.to_acc_bech32(),
         to_address="nibi1j38z56cus02vq6f5m0mz2mygufvjss43fj34gk",
-        amount=5,
-        denom='unibi'
+        coins=[Composer.coin(amount=5, denom="unibi")],
     )
 
     # build tx
@@ -57,21 +58,24 @@ async def main() -> None:
         print(sim_res)
         return
 
-    print(sim_res)
+    print("Simulation response: \n", sim_res)
     # build tx
     gas_limit = sim_res.gas_info.gas_used * 1.25  # add 25% to the limit
-    fee = [Composer.coin(
-        amount=int(GAS_PRICE * gas_limit),
-        denom=network.fee_denom,
-    )]
-    tx = tx.with_gas(gas_limit).with_fee(fee).with_memo('').with_timeout_height(client.timeout_height)
+    fee = [
+        Composer.coin(
+            amount=int(GAS_PRICE * gas_limit),
+            denom=network.fee_denom,
+        )
+    ]
+    tx = tx.with_gas(gas_limit).with_fee(fee).with_memo("").with_timeout_height(client.timeout_height)
     tx_raw_bytes = tx.get_signed_tx_data()
 
     # broadcast tx: send_tx_async_mode, send_tx_sync_mode, send_tx_block_mode
     res = await client.send_tx_block_mode(tx_raw_bytes)
-    print(res)
+    print("Transaction response: \n", res)
     print("gas wanted: {}".format(gas_limit))
     print("gas fee: {} unibi".format(res.gas_used * GAS_PRICE))
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

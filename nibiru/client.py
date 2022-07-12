@@ -1,82 +1,46 @@
-import os
-import time
-import grpc
-import aiocron
 import datetime
+import logging
+import time
 from http.cookies import SimpleCookie
 from typing import List, Optional, Tuple, Union
 
-from .clients import (
-    Dex as DexClient, Perp as PerpClient,
-)
+import grpc
 
+from .clients import Dex as DexClient
+from .clients import Perp as PerpClient
 from .exceptions import NotFoundError
-
+from .network import Network
+from .proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
+from .proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
+from .proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
+from .proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
+from .proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc
+from .proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
+from .proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
 from .proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-
+from .proto.cosmos.base.tendermint.v1beta1 import query_pb2 as tendermint_query
 from .proto.cosmos.base.tendermint.v1beta1 import (
     query_pb2_grpc as tendermint_query_grpc,
-    query_pb2 as tendermint_query,
 )
+from .proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
+from .proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
+from .proto.epochs import query_pb2_grpc as epochs_query
+from .proto.incentivization.v1 import incentivization_pb2_grpc as incentivization_query
+from .proto.lockup.v1 import query_pb2_grpc as lockup_query
+from .proto.pricefeed import query_pb2_grpc as pricefeed_query
+from .proto.stablecoin import query_pb2_grpc as stablecoin_query
+from .proto.vpool.v1 import query_pb2_grpc as vpool_query
 
-from .proto.cosmos.auth.v1beta1 import (
-    query_pb2_grpc as auth_query_grpc,
-    query_pb2 as auth_query,
-    auth_pb2 as auth_type,
-)
-from .proto.cosmos.authz.v1beta1 import (
-    query_pb2_grpc as authz_query_grpc,
-    query_pb2 as authz_query,
-    authz_pb2 as authz_type,
-)
-from .proto.cosmos.bank.v1beta1 import (
-    query_pb2_grpc as bank_query_grpc,
-    query_pb2 as bank_query,
-)
-from .proto.cosmos.tx.v1beta1 import (
-    service_pb2_grpc as tx_service_grpc,
-    service_pb2 as tx_service,
-)
-from .proto.dex.v1 import (
-    query_pb2_grpc as dex_query,
-    query_pb2 as dex_type,
-)
-from .proto.pricefeed import (
-    query_pb2_grpc as pricefeed_query,
-    query_pb2 as pricefeed_type,
-)
-from .proto.lockup.v1 import (
-    query_pb2_grpc as lockup_query,
-    query_pb2 as lockup_type,
-)
-from .proto.incentivization.v1 import (
-    incentivization_pb2_grpc as incentivization_query,
-    incentivization_pb2 as incentivization_type,
-)
-from .proto.vpool.v1 import (
-    query_pb2_grpc as vpool_query,
-    query_pb2 as vpool_type,
-)
-from .proto.stablecoin import (
-    query_pb2_grpc as stablecoin_query,
-    query_pb2 as stablecoin_type,
-)
-from .proto.epochs import (
-    query_pb2_grpc as epochs_query,
-    query_pb2 as epochs_type,
-)
-
-from .network import Network
-
-DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL = 10 # seconds
-DEFAULT_TIMEOUTHEIGHT = 20 # blocks
-DEFAULT_SESSION_RENEWAL_OFFSET = 120 # seconds
-DEFAULT_BLOCK_TIME = 3 # seconds
+DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL = 10  # seconds
+DEFAULT_TIMEOUTHEIGHT = 20  # blocks
+DEFAULT_SESSION_RENEWAL_OFFSET = 120  # seconds
+DEFAULT_BLOCK_TIME = 3  # seconds
 DEFAULT_CHAIN_COOKIE_NAME = '.chain_cookie'
 
 # use append mode to create file if not exist
 cookie_file = open(DEFAULT_CHAIN_COOKIE_NAME, "a+")
 cookie_file.close()
+
 
 class Client:
     def __init__(
@@ -100,7 +64,8 @@ class Client:
         # chain stubs
         self.chain_channel = (
             grpc.aio.insecure_channel(network.grpc_endpoint)
-            if insecure else grpc.aio.secure_channel(network.grpc_endpoint, credentials)
+            if insecure
+            else grpc.aio.secure_channel(network.grpc_endpoint, credentials)
         )
         self.insecure = insecure
         self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(self.chain_channel)
@@ -113,7 +78,7 @@ class Client:
         cookie_file = open(DEFAULT_CHAIN_COOKIE_NAME, "r+")
         self.chain_cookie = cookie_file.read()
         cookie_file.close()
-        print("chain session cookie loaded from disk:", self.chain_cookie)
+        logging.info("chain session cookie loaded from disk: %s", self.chain_cookie)
 
         self.exchange_cookie = ""
         self.timeout_height = 1
@@ -121,7 +86,8 @@ class Client:
         # exchange stubs
         self.exchange_channel = (
             grpc.aio.insecure_channel(network.grpc_exchange_endpoint)
-            if insecure else grpc.aio.secure_channel(network.grpc_exchange_endpoint, credentials)
+            if insecure
+            else grpc.aio.secure_channel(network.grpc_exchange_endpoint, credentials)
         )
         # Query services
         self.dex = DexClient(self.exchange_channel)
@@ -134,12 +100,12 @@ class Client:
         self.stubEpochs = epochs_query.QueryStub(self.exchange_channel)
 
         # timeout height update routine
-        aiocron.crontab(
-            '* * * * * */{}'.format(DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL),
-            func=self.sync_timeout_height,
-            args=(),
-            start=True
-        )
+        # aiocron.crontab(
+        #     '* * * * * */{}'.format(DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL),
+        #     func=self.sync_timeout_height,
+        #     args=(),
+        #     start=True
+        # )
 
     async def close_exchange_channel(self):
         await self.exchange_channel.close()
@@ -159,9 +125,9 @@ class Client:
             metadata = await self.stubCosmosTendermint.GetLatestBlock(req).initial_metadata()
             time.sleep(DEFAULT_BLOCK_TIME)
         # if chain_type == "exchange":
-            # not sure what to do here, do we have a counterpart or can any req/resp be used??
-            # req = exchange_meta_rpc_pb.VersionRequest()
-            # metadata = await self.stubMeta.Version(req).initial_metadata()
+        # not sure what to do here, do we have a counterpart or can any req/resp be used??
+        # req = exchange_meta_rpc_pb.VersionRequest()
+        # metadata = await self.stubMeta.Version(req).initial_metadata()
         return metadata
 
     async def renew_cookie(self, existing_cookie, chain_type):
@@ -170,7 +136,7 @@ class Client:
         cookie = SimpleCookie()
         cookie.load(existing_cookie)
         expires_at = cookie.get("grpc-cookie").get("expires")
-        expires_at = expires_at.replace("-"," ")
+        expires_at = expires_at.replace("-", " ")
         yyyy = "20{}".format(expires_at[12:14])
         expires_at = expires_at[:12] + yyyy + expires_at[14:]
 
@@ -192,16 +158,16 @@ class Client:
 
         if chain_type == "chain":
             if self.chain_cookie != "":
-                 metadata = await self.renew_cookie(self.chain_cookie, chain_type)
-                 self.set_cookie(metadata, chain_type)
+                metadata = await self.renew_cookie(self.chain_cookie, chain_type)
+                self.set_cookie(metadata, chain_type)
             else:
                 metadata = await self.fetch_cookie(chain_type)
                 self.set_cookie(metadata, chain_type)
 
         if chain_type == "exchange":
             if self.exchange_cookie != "":
-                 metadata = await self.renew_cookie(self.exchange_cookie, chain_type)
-                 self.set_cookie(metadata, chain_type)
+                metadata = await self.renew_cookie(self.exchange_cookie, chain_type)
+                self.set_cookie(metadata, chain_type)
             else:
                 metadata = await self.fetch_cookie(chain_type)
                 self.set_cookie(metadata, chain_type)
@@ -217,7 +183,7 @@ class Client:
             if k == "set-cookie":
                 new_cookie = v
 
-        if new_cookie == None:
+        if new_cookie is None:
             return
 
         if chain_type == "chain":
@@ -227,7 +193,7 @@ class Client:
             cookie_file = open(DEFAULT_CHAIN_COOKIE_NAME, "w")
             cookie_file.write(new_cookie)
             cookie_file.close()
-            print("chain session cookie saved to disk")
+            logging.info("chain session cookie saved to disk")
 
         if chain_type == "exchange":
             self.exchange_cookie = new_cookie
@@ -239,9 +205,7 @@ class Client:
 
     async def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
         try:
-            account_any = await self.stubAuth.Account(
-                auth_query.QueryAccountRequest(address=address)
-            ).account
+            account_any = await self.stubAuth.Account(auth_query.QueryAccountRequest(address=address)).account
             account = auth_type.BaseAccount()
             if account_any.Is(account.DESCRIPTOR):
                 account_any.Unpack(account)
@@ -253,11 +217,7 @@ class Client:
         tx = await self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
         request_ids = []
         for tx in tx.tx_response.logs:
-            request_event = [
-                event
-                for event in tx.events
-                if event.type == "request" or event.type == "report"
-            ]
+            request_event = [event for event in tx.events if event.type == "request" or event.type == "report"]
             if len(request_event) == 1:
                 attrs = request_event[0].attributes
                 attr_id = [attr for attr in attrs if attr.key == "id"]
@@ -268,9 +228,7 @@ class Client:
             raise NotFoundError("Request Id is not found")
         return request_ids
 
-    async def simulate_tx(
-        self, tx_byte: bytes
-    ) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
+    async def simulate_tx(self, tx_byte: bytes) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
         try:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
             metadata = await self.load_cookie(chain_type="chain")
@@ -310,16 +268,7 @@ class Client:
         )
 
     async def get_bank_balances(self, address: str):
-        return await self.stubBank.AllBalances(
-            bank_query.QueryAllBalancesRequest(
-                address=address
-            )
-        )
+        return await self.stubBank.AllBalances(bank_query.QueryAllBalancesRequest(address=address))
 
     async def get_bank_balance(self, address: str, denom: str):
-        return await self.stubBank.Balance(
-            bank_query.QueryBalanceRequest(
-                address=address,
-                denom=denom
-            )
-        )
+        return await self.stubBank.Balance(bank_query.QueryBalanceRequest(address=address, denom=denom))

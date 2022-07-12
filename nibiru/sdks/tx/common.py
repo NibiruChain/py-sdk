@@ -39,6 +39,7 @@ class Tx:
 
     async def execute_msg(self, *msg: message.Message, **kwargs):
         try:
+            # TODO: It shouldn't be necessary to resync the block height for every tx, use bgTask instead
             await self.client.sync_timeout_height()
             address = await self.get_address_info()
             tx = (

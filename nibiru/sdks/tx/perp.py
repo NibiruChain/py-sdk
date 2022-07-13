@@ -6,19 +6,19 @@ from .common import Tx
 
 
 class Perp(Tx):
-    async def remove_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
+    def remove_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
         msg = PerpComposer.remove_margin(sender=sender, token_pair=token_pair, margin=margin)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def add_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
+    def add_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
         msg = PerpComposer.add_margin(sender=sender, token_pair=token_pair, margin=margin)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def liquidate(self, sender: str, token_pair: str, trader: str, **kwargs):
+    def liquidate(self, sender: str, token_pair: str, trader: str, **kwargs):
         msg = PerpComposer.liquidate(sender=sender, token_pair=token_pair, trader=trader)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def open_position(
+    def open_position(
         self,
         sender: str,
         token_pair: str,
@@ -36,11 +36,11 @@ class Perp(Tx):
             leverage=leverage,
             base_asset_amount_limit=base_asset_amount_limit,
         )
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def close_position(self, sender: str, token_pair: str, **kwargs):
+    def close_position(self, sender: str, token_pair: str, **kwargs):
         msg = PerpComposer.close_position(
             sender=sender,
             token_pair=token_pair,
         )
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)

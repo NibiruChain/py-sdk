@@ -266,18 +266,18 @@ class Address:
     def get_ethereum_address(self) -> str:
         return '0x' + self.addr.hex()
 
-    async def async_init_num_seq(self, lcd_endpoint: str) -> "Address":
-        async with aiohttp.ClientSession() as session:
-            async with session.request(
+    def async_init_num_seq(self, lcd_endpoint: str) -> "Address":
+        with aiohttp.ClientSession() as session:
+            with session.request(
                 'GET',
                 lcd_endpoint + '/cosmos/auth/v1beta1/accounts/' + self.to_acc_bech32(),
                 headers={'Accept-Encoding': 'application/json'},
             ) as response:
                 if response.status != 200:
-                    print(await response.text())
+                    print(response.text())
                     raise ValueError("HTTP response status", response.status)
 
-                resp = json.loads(await response.text())
+                resp = json.loads(response.text())
                 acc = resp['account']
                 self.number = int(acc['account_number'])
                 self.sequence = int(acc['sequence'])

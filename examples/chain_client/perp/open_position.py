@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
+
 import logging
 
 from nibiru import Sdk, Side
 
-async def main() -> None:
-    trader = Sdk.authorize("guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host")
-    res = await trader.tx.perp.open_position(
-        sender = trader.address,
-        token_pair = "unusd:unibi",
+
+def main() -> None:
+    trader = Sdk.authorize(
+        "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
+    )
+    res = trader.tx.perp.open_position(
+        sender=trader.address,
+        token_pair="unusd:unibi",
         side=Side.BUY,
         quote_asset_amount="5",
         leverage="5",
@@ -29,6 +32,7 @@ async def main() -> None:
     )
     print(res)
 
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    asyncio.get_event_loop().run_until_complete(main())
+    main()

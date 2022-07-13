@@ -21,7 +21,6 @@ VERSION = "0.0.4"
 
 REQUIRED = [
     "grpcio",
-    "asyncio",
     "aiohttp",
     "ecdsa",
     "bech32",

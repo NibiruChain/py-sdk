@@ -13,18 +13,20 @@
 # limitations under the License.
 """Nibiru Exchange API client for Python. Example only."""
 
-import asyncio
+
 import logging
 
 from nibiru.client import Client
 from nibiru.network import Network
 
-async def main() -> None:
+
+def main() -> None:
     network = Network.local()
     client = Client(network, insecure=True)
-    resp = await client.dex.params()
+    resp = client.dex.params()
     print(resp)
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    asyncio.get_event_loop().run_until_complete(main())
+    main()

@@ -1,2 +1,2 @@
-from .dex import Dex
-from .perp import Perp
+from .dex import Dex  # noqa
+from .perp import Perp  # noqa

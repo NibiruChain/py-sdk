@@ -15,6 +15,11 @@ class Side(Enum):
     SELL = 2
 
 
+class Direction(Enum):
+    ADD = 1
+    REMOVE = 2
+
+
 @dataclass
 class PoolAsset:
     token: coin_pb.Coin

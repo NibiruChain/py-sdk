@@ -12,19 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import logging
 
 from nibiru import Composer, Sdk
 
 
-async def main() -> None:
+def main() -> None:
     sender = Sdk.authorize(
         "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
     )
     receiver = Sdk.authorize()
 
-    res = await sender.tx.msg_send(
+    res = sender.tx.msg_send(
         from_address=sender.address,
         to_address=receiver.address,
         coins=[
@@ -41,4 +40,4 @@ async def main() -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    asyncio.get_event_loop().run_until_complete(main())
+    main()

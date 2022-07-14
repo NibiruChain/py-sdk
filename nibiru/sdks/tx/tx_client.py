@@ -18,22 +18,22 @@ class TxClient(Tx):
         self.dex = Dex(client=client, network=network, priv_key=priv_key, config=config)
         self.perp = Perp(client=client, network=network, priv_key=priv_key, config=config)
 
-    async def msg_send(self, from_address: str, to_address: str, coins: List[Coin], **kwargs):
+    def msg_send(self, from_address: str, to_address: str, coins: List[Coin], **kwargs):
         msg = Composer.msg_send(from_address, to_address, coins=coins)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def msg_exec(self, grantee: str, msgs: List, **kwargs):
+    def msg_exec(self, grantee: str, msgs: List, **kwargs):
         msg = Composer.msg_exec(grantee, msgs)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def msg_revoke(self, granter: str, grantee: str, msg_type: str, **kwargs):
+    def msg_revoke(self, granter: str, grantee: str, msg_type: str, **kwargs):
         msg = Composer.msg_revoke(granter, grantee, msg_type)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def msg_delegate(self, delegator_address: str, validator_address: str, amount: float, **kwargs):
+    def msg_delegate(self, delegator_address: str, validator_address: str, amount: float, **kwargs):
         msg = Composer.msg_delegate(delegator_address, validator_address, amount)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def msg_withdraw_delegator_reward(self, delegator_address: str, validator_address: str, **kwargs):
+    def msg_withdraw_delegator_reward(self, delegator_address: str, validator_address: str, **kwargs):
         msg = Composer.msg_withdraw_delegator_reward(delegator_address, validator_address)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)

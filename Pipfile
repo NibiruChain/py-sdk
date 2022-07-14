@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 grpcio = "*"
 asyncio = "*"
-aiohttp = "*"
 ecdsa = "*"
 ed25519 = "*"
 bech32 = "*"
@@ -20,7 +19,6 @@ requests = "*"
 eip712_structs = "*"
 coincurve = "*"
 aiocron = "*"
-web3 = "*"
 nibiru-py = {path = "."}
 
 [dev-packages]

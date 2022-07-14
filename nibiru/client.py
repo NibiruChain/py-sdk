@@ -9,7 +9,6 @@ import grpc
 from .clients import Dex as DexClient
 from .clients import Perp as PerpClient
 from .clients import VPool as VPoolClient
-from .clients import VPoolClient
 from .exceptions import NotFoundError
 from .network import Network
 from .proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type

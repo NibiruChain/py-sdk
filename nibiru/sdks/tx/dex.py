@@ -8,23 +8,23 @@ from .common import Tx
 
 
 class Dex(Tx):
-    async def create_pool(self, creator: str, swap_fee: str, exit_fee: str, assets: List[PoolAsset], **kwargs):
+    def create_pool(self, creator: str, swap_fee: str, exit_fee: str, assets: List[PoolAsset], **kwargs):
         msg = DexComposer.create_pool(creator=creator, swap_fee=swap_fee, exit_fee=exit_fee, assets=assets)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def join_pool(self, sender: str, pool_id: int, tokens: List[coin_pb.Coin], **kwargs):
+    def join_pool(self, sender: str, pool_id: int, tokens: List[coin_pb.Coin], **kwargs):
         msg = DexComposer.join_pool(sender=sender, pool_id=pool_id, tokens=tokens)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def exit_pool(self, sender: str, pool_id: int, pool_shares: coin_pb.Coin, **kwargs):
+    def exit_pool(self, sender: str, pool_id: int, pool_shares: coin_pb.Coin, **kwargs):
         msg = DexComposer.exit_pool(sender=sender, pool_id=pool_id, pool_shares=pool_shares)
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)
 
-    async def swap_assets(self, sender: str, pool_id: int, token_in: coin_pb.Coin, token_out_denom, **kwargs):
+    def swap_assets(self, sender: str, pool_id: int, token_in: coin_pb.Coin, token_out_denom, **kwargs):
         msg = DexComposer.swap_assets(
             sender=sender,
             pool_id=pool_id,
             token_in=token_in,
             token_out_denom=token_out_denom,
         )
-        return await super().execute_msg(msg, **kwargs)
+        return super().execute_msg(msg, **kwargs)

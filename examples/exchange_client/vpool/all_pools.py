@@ -1,4 +1,4 @@
-# Copyright 2022 Nibiru Labs
+# Copyright 2021 Nibiru Labs
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,27 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Nibiru Exchange API client for Python. Example only."""
 
 import logging
 
-from nibiru import Sdk, Side
+from nibiru.client import Client
+from nibiru.network import Network
 
 
 def main() -> None:
-    trader = Sdk.authorize(
-        "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
-    )
-    res = trader.tx.perp.open_position(
-        sender=trader.address,
-        token_pair="unusd:unibi",
-        side=Side.BUY,
-        quote_asset_amount="5",
-        leverage="5",
-        base_asset_amount_limit="5",
-    )
-    print(res)
+    network = Network.local()
+    client = Client(network, insecure=True)
+    resp = client.vpool.all_pools()
+    print(resp)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     main()

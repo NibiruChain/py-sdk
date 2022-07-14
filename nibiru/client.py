@@ -8,6 +8,8 @@ import grpc
 
 from .clients import Dex as DexClient
 from .clients import Perp as PerpClient
+from .clients import VPool as VPoolClient
+from .clients import VPoolClient
 from .exceptions import NotFoundError
 from .network import Network
 from .proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
@@ -29,7 +31,6 @@ from .proto.incentivization.v1 import incentivization_pb2_grpc as incentivizatio
 from .proto.lockup.v1 import query_pb2_grpc as lockup_query
 from .proto.pricefeed import query_pb2_grpc as pricefeed_query
 from .proto.stablecoin import query_pb2_grpc as stablecoin_query
-from .proto.vpool.v1 import query_pb2_grpc as vpool_query
 
 DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL = 10  # seconds
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -63,9 +64,9 @@ class Client:
 
         # chain stubs
         self.chain_channel = (
-            grpc.aio.insecure_channel(network.grpc_endpoint)
+            grpc.insecure_channel(network.grpc_endpoint)
             if insecure
-            else grpc.aio.secure_channel(network.grpc_endpoint, credentials)
+            else grpc.secure_channel(network.grpc_endpoint, credentials)
         )
         self.insecure = insecure
         self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(self.chain_channel)
@@ -85,9 +86,9 @@ class Client:
 
         # exchange stubs
         self.exchange_channel = (
-            grpc.aio.insecure_channel(network.grpc_exchange_endpoint)
+            grpc.insecure_channel(network.grpc_exchange_endpoint)
             if insecure
-            else grpc.aio.secure_channel(network.grpc_exchange_endpoint, credentials)
+            else grpc.secure_channel(network.grpc_exchange_endpoint, credentials)
         )
         # Query services
         self.dex = DexClient(self.exchange_channel)
@@ -95,7 +96,7 @@ class Client:
         self.perp = PerpClient(self.exchange_channel)
         self.stubLockup = lockup_query.QueryStub(self.exchange_channel)
         self.stubIncentivization = incentivization_query.QueryStub(self.exchange_channel)
-        self.stubVpool = vpool_query.QueryStub(self.exchange_channel)
+        self.vpool = VPoolClient(self.exchange_channel)
         self.stubStablecoin = stablecoin_query.QueryStub(self.exchange_channel)
         self.stubEpochs = epochs_query.QueryStub(self.exchange_channel)
 
@@ -107,30 +108,30 @@ class Client:
         #     start=True
         # )
 
-    async def close_exchange_channel(self):
-        await self.exchange_channel.close()
+    def close_exchange_channel(self):
+        self.exchange_channel.close()
 
-    async def close_chain_channel(self):
-        await self.chain_channel.close()
+    def close_chain_channel(self):
+        self.chain_channel.close()
 
-    async def sync_timeout_height(self):
-        block = await self.get_latest_block()
+    def sync_timeout_height(self):
+        block = self.get_latest_block()
         self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
 
     # cookie helper methods
-    async def fetch_cookie(self, chain_type):
+    def fetch_cookie(self, chain_type):
         metadata = None
         if chain_type == "chain":
             req = tendermint_query.GetLatestBlockRequest()
-            metadata = await self.stubCosmosTendermint.GetLatestBlock(req).initial_metadata()
+            metadata = self.stubCosmosTendermint.GetLatestBlock(req).initial_metadata()
             time.sleep(DEFAULT_BLOCK_TIME)
         # if chain_type == "exchange":
         # not sure what to do here, do we have a counterpart or can any req/resp be used??
         # req = exchange_meta_rpc_pb.VersionRequest()
-        # metadata = await self.stubMeta.Version(req).initial_metadata()
+        # metadata = self.stubMeta.Version(req).initial_metadata()
         return metadata
 
-    async def renew_cookie(self, existing_cookie, chain_type):
+    def renew_cookie(self, existing_cookie, chain_type):
         metadata = None
         # format cookie date into RFC1123 standard
         cookie = SimpleCookie()
@@ -146,30 +147,30 @@ class Client:
         # renew session if timestamp diff < offset
         timestamp_diff = expire_timestamp - int(time.time())
         if timestamp_diff < DEFAULT_SESSION_RENEWAL_OFFSET:
-            metadata = await self.fetch_cookie(chain_type)
+            metadata = self.fetch_cookie(chain_type)
         else:
             metadata = (("cookie", existing_cookie),)
         return metadata
 
-    async def load_cookie(self, chain_type):
+    def load_cookie(self, chain_type):
         metadata = None
         if self.insecure:
             return metadata
 
         if chain_type == "chain":
             if self.chain_cookie != "":
-                metadata = await self.renew_cookie(self.chain_cookie, chain_type)
+                metadata = self.renew_cookie(self.chain_cookie, chain_type)
                 self.set_cookie(metadata, chain_type)
             else:
-                metadata = await self.fetch_cookie(chain_type)
+                metadata = self.fetch_cookie(chain_type)
                 self.set_cookie(metadata, chain_type)
 
         if chain_type == "exchange":
             if self.exchange_cookie != "":
-                metadata = await self.renew_cookie(self.exchange_cookie, chain_type)
+                metadata = self.renew_cookie(self.exchange_cookie, chain_type)
                 self.set_cookie(metadata, chain_type)
             else:
-                metadata = await self.fetch_cookie(chain_type)
+                metadata = self.fetch_cookie(chain_type)
                 self.set_cookie(metadata, chain_type)
 
         return metadata
@@ -199,13 +200,13 @@ class Client:
             self.exchange_cookie = new_cookie
 
     # default client methods
-    async def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:
+    def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:
         req = tendermint_query.GetLatestBlockRequest()
-        return await self.stubCosmosTendermint.GetLatestBlock(req)
+        return self.stubCosmosTendermint.GetLatestBlock(req)
 
-    async def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
+    def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
         try:
-            account_any = await self.stubAuth.Account(auth_query.QueryAccountRequest(address=address)).account
+            account_any = self.stubAuth.Account(auth_query.QueryAccountRequest(address=address)).account
             account = auth_type.BaseAccount()
             if account_any.Is(account.DESCRIPTOR):
                 account_any.Unpack(account)
@@ -213,8 +214,8 @@ class Client:
         except:
             return None
 
-    async def get_request_id_by_tx_hash(self, tx_hash: bytes) -> List[int]:
-        tx = await self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
+    def get_request_id_by_tx_hash(self, tx_hash: bytes) -> List[int]:
+        tx = self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
         request_ids = []
         for tx in tx.tx_response.logs:
             request_event = [event for event in tx.events if event.type == "request" or event.type == "report"]
@@ -228,38 +229,38 @@ class Client:
             raise NotFoundError("Request Id is not found")
         return request_ids
 
-    async def simulate_tx(self, tx_byte: bytes) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
+    def simulate_tx(self, tx_byte: bytes) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
         try:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
-            metadata = await self.load_cookie(chain_type="chain")
-            return await self.stubTx.Simulate.__call__(req, metadata=metadata), True
+            metadata = self.load_cookie(chain_type="chain")
+            return self.stubTx.Simulate.__call__(req, metadata=metadata), True
         except grpc.RpcError as err:
             return err, False
 
-    async def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
+    def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC)
-        metadata = await self.load_cookie(chain_type="chain")
-        result = await self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
+        metadata = self.load_cookie(chain_type="chain")
+        result = self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
         return result.tx_response
 
-    async def send_tx_async_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
+    def send_tx_async_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_ASYNC)
-        metadata = await self.load_cookie(chain_type="chain")
-        result = await self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
+        metadata = self.load_cookie(chain_type="chain")
+        result = self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
         return result.tx_response
 
-    async def send_tx_block_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
+    def send_tx_block_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_BLOCK)
-        metadata = await self.load_cookie(chain_type="chain")
-        result = await self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
+        metadata = self.load_cookie(chain_type="chain")
+        result = self.stubTx.BroadcastTx.__call__(req, metadata=metadata)
         return result.tx_response
 
-    async def get_chain_id(self) -> str:
-        latest_block = await self.get_latest_block()
+    def get_chain_id(self) -> str:
+        latest_block = self.get_latest_block()
         return latest_block.block.header.chain_id
 
-    async def get_grants(self, granter: str, grantee: str, **kwargs):
-        return await self.stubAuthz.Grants(
+    def get_grants(self, granter: str, grantee: str, **kwargs):
+        return self.stubAuthz.Grants(
             authz_query.QueryGrantsRequest(
                 granter=granter,
                 grantee=grantee,
@@ -267,8 +268,8 @@ class Client:
             )
         )
 
-    async def get_bank_balances(self, address: str):
-        return await self.stubBank.AllBalances(bank_query.QueryAllBalancesRequest(address=address))
+    def get_bank_balances(self, address: str):
+        return self.stubBank.AllBalances(bank_query.QueryAllBalancesRequest(address=address))
 
-    async def get_bank_balance(self, address: str, denom: str):
-        return await self.stubBank.Balance(bank_query.QueryBalanceRequest(address=address, denom=denom))
+    def get_bank_balance(self, address: str, denom: str):
+        return self.stubBank.Balance(bank_query.QueryBalanceRequest(address=address, denom=denom))

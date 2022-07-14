@@ -27,9 +27,9 @@ class Tx:
         self.msgs.extend(msgs)
         return self
 
-    async def execute(self, **kwargs):
+    def execute(self, **kwargs):
         try:
-            res = await self.execute_msg(*self.msgs, **kwargs)
+            res = self.execute_msg(*self.msgs, **kwargs)
         except SimulationError as err:
             raise err
         else:
@@ -37,11 +37,11 @@ class Tx:
 
         return res
 
-    async def execute_msg(self, *msg: message.Message, **kwargs):
+    def execute_msg(self, *msg: message.Message, **kwargs):
         try:
             # TODO: It shouldn't be necessary to resync the block height for every tx, use bgTask instead
-            await self.client.sync_timeout_height()
-            address = await self.get_address_info()
+            self.client.sync_timeout_height()
+            address = self.get_address_info()
             tx = (
                 Transaction()
                 .with_messages(*msg)
@@ -50,15 +50,15 @@ class Tx:
                 .with_chain_id(self.network.chain_id)
                 .with_signer(self.priv_key)
             )
-            sim_res = await self.simulate(tx)
+            sim_res = self.simulate(tx)
             gas_estimate = sim_res.gas_info.gas_used
-            return await self.execute_tx(tx, gas_estimate, **kwargs)
+            return self.execute_tx(tx, gas_estimate, **kwargs)
         except (RpcError, SimulationError) as err:
             logging.error("Failed tx execution: %s", err)
             address.decrease_sequence()
             raise TxError("Failed to execute transaction") from err
 
-    async def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):
+    def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):
         conf = self.get_config(**kwargs)
         gas_wanted = gas_estimate * 1.25
         if conf.gas_wanted > 0:
@@ -77,29 +77,29 @@ class Tx:
         tx = tx.with_gas(gas_wanted).with_fee(fee).with_memo("").with_timeout_height(self.client.timeout_height)
         tx_raw_bytes = tx.get_signed_tx_data()
 
-        return await self._send_tx(tx_raw_bytes, conf.tx_type)
+        return self._send_tx(tx_raw_bytes, conf.tx_type)
 
-    async def _send_tx(self, tx_raw_bytes, tx_type: TxType):
+    def _send_tx(self, tx_raw_bytes, tx_type: TxType):
         if tx_type == TxType.SYNC:
-            return await self.client.send_tx_sync_mode(tx_raw_bytes)
+            return self.client.send_tx_sync_mode(tx_raw_bytes)
         elif tx_type == TxType.ASYNC:
-            return await self.client.send_tx_async_mode(tx_raw_bytes)
+            return self.client.send_tx_async_mode(tx_raw_bytes)
 
-        return await self.client.send_tx_block_mode(tx_raw_bytes)
+        return self.client.send_tx_block_mode(tx_raw_bytes)
 
-    async def simulate(self, tx: Transaction):
+    def simulate(self, tx: Transaction):
         sim_tx_raw_bytes = tx.get_signed_tx_data()
 
-        (sim_res, success) = await self.client.simulate_tx(sim_tx_raw_bytes)
+        (sim_res, success) = self.client.simulate_tx(sim_tx_raw_bytes)
         if not success:
             raise SimulationError("failed to simulate tx : {}".format(sim_res))
 
         return sim_res
 
-    async def get_address_info(self):
+    def get_address_info(self):
         if self.address is None:
             pub_key = self.priv_key.to_public_key()
-            self.address = await pub_key.to_address().async_init_num_seq(self.network.lcd_endpoint)
+            self.address = pub_key.to_address().init_num_seq(self.network.lcd_endpoint)
 
         return self.address
 

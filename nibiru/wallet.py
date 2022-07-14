@@ -2,7 +2,6 @@ import hashlib
 import json
 from typing import Tuple
 
-import aiohttp
 import requests
 from bech32 import bech32_decode, bech32_encode, convertbits
 from bip32 import BIP32
@@ -262,26 +261,6 @@ class Address:
         """Return a hex representation of address"""
         id = index.to_bytes(12, byteorder='big').hex()
         return '0x' + self.addr.hex() + id
-
-    def get_ethereum_address(self) -> str:
-        return '0x' + self.addr.hex()
-
-    async def async_init_num_seq(self, lcd_endpoint: str) -> "Address":
-        async with aiohttp.ClientSession() as session:
-            async with session.request(
-                'GET',
-                lcd_endpoint + '/cosmos/auth/v1beta1/accounts/' + self.to_acc_bech32(),
-                headers={'Accept-Encoding': 'application/json'},
-            ) as response:
-                if response.status != 200:
-                    print(await response.text())
-                    raise ValueError("HTTP response status", response.status)
-
-                resp = json.loads(await response.text())
-                acc = resp['account']
-                self.number = int(acc['account_number'])
-                self.sequence = int(acc['sequence'])
-                return self
 
     def init_num_seq(self, lcd_endpoint: str) -> "Address":
         response = requests.get(

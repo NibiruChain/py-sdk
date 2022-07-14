@@ -1,1 +1,1 @@
-from .tx_client import TxClient
+from .tx_client import TxClient  # noqa

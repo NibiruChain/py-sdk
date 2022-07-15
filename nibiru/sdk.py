@@ -1,9 +1,11 @@
 import logging
+
+from .client import Client
 from .common import TxConfig
+from .network import Network
 from .sdks.tx import TxClient
 from .wallet import PrivateKey
-from .client import Client
-from .network import Network
+
 
 class Sdk:
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
@@ -36,10 +38,10 @@ class Sdk:
         self._network = network
         self.with_query_client(Client(self._network, True))
         return self
-        
+
     def with_query_client(self, client: Client) -> "Sdk":
         self.query = client
-        tx_client = TxClient(client = self.query, network = self._network, priv_key = self._priv_key, config = self.config)
+        tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
         self.with_tx_client(tx_client)
         return self
 
@@ -49,12 +51,12 @@ class Sdk:
 
     def with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
         self._priv_key = priv_key
-        self._network = self.with_network(Network.local())
+        self.with_network(Network.local())
         return self
 
     def with_config(self, config: TxConfig) -> "Sdk":
         self.config = config
-        tx_client = TxClient(client = self.query, network = self._network, priv_key = self._priv_key, config = self.config)
+        tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
         self.with_tx_client(tx_client)
         return self
 

@@ -71,47 +71,47 @@ class Dex:
 
     def spot_price(self, pool_id: int, token_in_denom: str, token_out_denom: str):
         req = dex_type.QuerySpotPriceRequest(
-            poolId=pool_id,
-            tokenInDenom=token_in_denom,
-            tokenOutDenom=token_out_denom,
+            pool_id=pool_id,
+            token_in_denom=token_in_denom,
+            token_out_denom=token_out_denom,
         )
         return self.api.SpotPrice(req)
 
     def estimate_swap_exact_amount_in(self, pool_id: int, token_in: cosmos_base_coin_pb.Coin, token_out_denom: str):
         req = dex_type.QuerySwapExactAmountInRequest(
-            poolId=pool_id,
-            tokenIn=token_in,
-            tokenOutDenom=token_out_denom,
+            pool_id=pool_id,
+            token_in=token_in,
+            token_out_denom=token_out_denom,
         )
         return self.api.EstimateSwapExactAmountIn(req)
 
     def estimate_swap_exact_amount_out(self, pool_id: int, token_out: cosmos_base_coin_pb.Coin, token_in_denom: str):
         req = dex_type.QuerySwapExactAmountOutRequest(
-            poolId=pool_id,
-            tokenOut=token_out,
-            tokenInDenom=token_in_denom,
+            pool_id=pool_id,
+            token_out=token_out,
+            token_in_denom=token_in_denom,
         )
         return self.api.EstimateSwapExactAmountOut(req)
 
     def estimate_join_exact_amount_in(self, pool_id: int, tokens_in: List[cosmos_base_coin_pb.Coin]):
         req = dex_type.QueryJoinExactAmountInRequest(
-            poolId=pool_id,
-            tokensIn=tokens_in,
+            pool_id=pool_id,
+            tokens_in=tokens_in,
         )
         return self.api.EstimateJoinExactAmountIn(req)
 
     def estimate_join_exact_amount_out(self, pool_id: int):
         req = dex_type.QueryJoinExactAmountOutRequest(
-            poolId=pool_id,
+            pool_id=pool_id,
         )
         return self.api.EstimateJoinExactAmountOut(req)
 
     def estimate_exit_exact_amount_in(self, pool_id: int, num_shares: int):
-        req = dex_type.QueryExitExactAmountInRequest(poolId=pool_id, poolSharesIn=num_shares)
+        req = dex_type.QueryExitExactAmountInRequest(pool_id=pool_id, pool_shares_in=num_shares)
         return self.api.EstimateExitExactAmountIn(req)
 
     def estimate_exit_exact_amount_out(self, pool_id: int):
         req = dex_type.QueryExitExactAmountOutRequest(
-            poolId=pool_id,
+            pool_id=pool_id,
         )
         return self.api.EstimateExitExactAmountOut(req)

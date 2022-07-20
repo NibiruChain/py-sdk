@@ -46,24 +46,24 @@ global___QueryPoolNumberRequest = QueryPoolNumberRequest
 
 class QueryPoolNumberResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryPoolNumberResponse = QueryPoolNumberResponse
 
 class QueryPoolRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryPoolRequest = QueryPoolRequest
 
 class QueryPoolResponse(google.protobuf.message.Message):
@@ -115,26 +115,26 @@ global___QueryPoolsResponse = QueryPoolsResponse
 
 class QueryPoolParamsRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryPoolParamsRequest = QueryPoolParamsRequest
 
 class QueryPoolParamsResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLPARAMS_FIELD_NUMBER: builtins.int
+    POOL_PARAMS_FIELD_NUMBER: builtins.int
     @property
-    def poolParams(self) -> dex.v1.pool_pb2.PoolParams: ...
+    def pool_params(self) -> dex.v1.pool_pb2.PoolParams: ...
     def __init__(self,
         *,
-        poolParams: typing.Optional[dex.v1.pool_pb2.PoolParams] = ...,
+        pool_params: typing.Optional[dex.v1.pool_pb2.PoolParams] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["poolParams",b"poolParams"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolParams",b"poolParams"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["pool_params",b"pool_params"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_params",b"pool_params"]) -> None: ...
 global___QueryPoolParamsResponse = QueryPoolParamsResponse
 
 class QueryNumPoolsRequest(google.protobuf.message.Message):
@@ -145,13 +145,13 @@ global___QueryNumPoolsRequest = QueryNumPoolsRequest
 
 class QueryNumPoolsResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    NUMPOOLS_FIELD_NUMBER: builtins.int
-    numPools: builtins.int
+    NUM_POOLS_FIELD_NUMBER: builtins.int
+    num_pools: builtins.int
     def __init__(self,
         *,
-        numPools: builtins.int = ...,
+        num_pools: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["numPools",b"numPools"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["num_pools",b"num_pools"]) -> None: ...
 global___QueryNumPoolsResponse = QueryNumPoolsResponse
 
 class QueryTotalLiquidityRequest(google.protobuf.message.Message):
@@ -180,13 +180,13 @@ class QueryTotalPoolLiquidityRequest(google.protobuf.message.Message):
     Query total liquidity for a pool
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryTotalPoolLiquidityRequest = QueryTotalPoolLiquidityRequest
 
 class QueryTotalPoolLiquidityResponse(google.protobuf.message.Message):
@@ -203,28 +203,28 @@ global___QueryTotalPoolLiquidityResponse = QueryTotalPoolLiquidityResponse
 
 class QueryTotalSharesRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryTotalSharesRequest = QueryTotalSharesRequest
 
 class QueryTotalSharesResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TOTALSHARES_FIELD_NUMBER: builtins.int
+    TOTAL_SHARES_FIELD_NUMBER: builtins.int
     @property
-    def totalShares(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
+    def total_shares(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
         """sum of all LP tokens sent out"""
         pass
     def __init__(self,
         *,
-        totalShares: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        total_shares: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["totalShares",b"totalShares"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["totalShares",b"totalShares"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["total_shares",b"total_shares"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["total_shares",b"total_shares"]) -> None: ...
 global___QueryTotalSharesResponse = QueryTotalSharesResponse
 
 class QuerySpotPriceRequest(google.protobuf.message.Message):
@@ -233,34 +233,34 @@ class QuerySpotPriceRequest(google.protobuf.message.Message):
     and tokenOutDenom=NIBI would give "9.123".
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    TOKENINDENOM_FIELD_NUMBER: builtins.int
-    TOKENOUTDENOM_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
-    tokenInDenom: typing.Text
+    POOL_ID_FIELD_NUMBER: builtins.int
+    TOKEN_IN_DENOM_FIELD_NUMBER: builtins.int
+    TOKEN_OUT_DENOM_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
+    token_in_denom: typing.Text
     """the denomination of the token you are giving into the pool"""
 
-    tokenOutDenom: typing.Text
+    token_out_denom: typing.Text
     """the denomination of the token you are taking out of the pool"""
 
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
-        tokenInDenom: typing.Text = ...,
-        tokenOutDenom: typing.Text = ...,
+        pool_id: builtins.int = ...,
+        token_in_denom: typing.Text = ...,
+        token_out_denom: typing.Text = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","tokenInDenom",b"tokenInDenom","tokenOutDenom",b"tokenOutDenom"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","token_in_denom",b"token_in_denom","token_out_denom",b"token_out_denom"]) -> None: ...
 global___QuerySpotPriceRequest = QuerySpotPriceRequest
 
 class QuerySpotPriceResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    SPOTPRICE_FIELD_NUMBER: builtins.int
-    spotPrice: typing.Text
+    SPOT_PRICE_FIELD_NUMBER: builtins.int
+    spot_price: typing.Text
     def __init__(self,
         *,
-        spotPrice: typing.Text = ...,
+        spot_price: typing.Text = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["spotPrice",b"spotPrice"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["spot_price",b"spot_price"]) -> None: ...
 global___QuerySpotPriceResponse = QuerySpotPriceResponse
 
 class QuerySwapExactAmountInRequest(google.protobuf.message.Message):
@@ -268,34 +268,34 @@ class QuerySwapExactAmountInRequest(google.protobuf.message.Message):
     the expected amount of tokens out received from a swap.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    TOKENIN_FIELD_NUMBER: builtins.int
-    TOKENOUTDENOM_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    TOKEN_IN_FIELD_NUMBER: builtins.int
+    TOKEN_OUT_DENOM_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     @property
-    def tokenIn(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
-    tokenOutDenom: typing.Text
+    def token_in(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    token_out_denom: typing.Text
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
-        tokenIn: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
-        tokenOutDenom: typing.Text = ...,
+        pool_id: builtins.int = ...,
+        token_in: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        token_out_denom: typing.Text = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["tokenIn",b"tokenIn"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","tokenIn",b"tokenIn","tokenOutDenom",b"tokenOutDenom"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["token_in",b"token_in"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","token_in",b"token_in","token_out_denom",b"token_out_denom"]) -> None: ...
 global___QuerySwapExactAmountInRequest = QuerySwapExactAmountInRequest
 
 class QuerySwapExactAmountInResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TOKENOUT_FIELD_NUMBER: builtins.int
+    TOKEN_OUT_FIELD_NUMBER: builtins.int
     @property
-    def tokenOut(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    def token_out(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
     def __init__(self,
         *,
-        tokenOut: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        token_out: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["tokenOut",b"tokenOut"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["tokenOut",b"tokenOut"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["token_out",b"token_out"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["token_out",b"token_out"]) -> None: ...
 global___QuerySwapExactAmountInResponse = QuerySwapExactAmountInResponse
 
 class QuerySwapExactAmountOutRequest(google.protobuf.message.Message):
@@ -303,79 +303,79 @@ class QuerySwapExactAmountOutRequest(google.protobuf.message.Message):
     the expected amount of tokens in required to do the swap.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    TOKENOUT_FIELD_NUMBER: builtins.int
-    TOKENINDENOM_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    TOKEN_OUT_FIELD_NUMBER: builtins.int
+    TOKEN_IN_DENOM_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     @property
-    def tokenOut(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
-    tokenInDenom: typing.Text
+    def token_out(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    token_in_denom: typing.Text
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
-        tokenOut: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
-        tokenInDenom: typing.Text = ...,
+        pool_id: builtins.int = ...,
+        token_out: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        token_in_denom: typing.Text = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["tokenOut",b"tokenOut"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","tokenInDenom",b"tokenInDenom","tokenOut",b"tokenOut"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["token_out",b"token_out"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","token_in_denom",b"token_in_denom","token_out",b"token_out"]) -> None: ...
 global___QuerySwapExactAmountOutRequest = QuerySwapExactAmountOutRequest
 
 class QuerySwapExactAmountOutResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TOKENIN_FIELD_NUMBER: builtins.int
+    TOKEN_IN_FIELD_NUMBER: builtins.int
     @property
-    def tokenIn(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    def token_in(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
     def __init__(self,
         *,
-        tokenIn: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        token_in: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["tokenIn",b"tokenIn"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["tokenIn",b"tokenIn"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["token_in",b"token_in"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["token_in",b"token_in"]) -> None: ...
 global___QuerySwapExactAmountOutResponse = QuerySwapExactAmountOutResponse
 
 class QueryJoinExactAmountInRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    TOKENSIN_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    TOKENS_IN_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     @property
-    def tokensIn(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]: ...
+    def tokens_in(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]: ...
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
-        tokensIn: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        pool_id: builtins.int = ...,
+        tokens_in: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","tokensIn",b"tokensIn"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","tokens_in",b"tokens_in"]) -> None: ...
 global___QueryJoinExactAmountInRequest = QueryJoinExactAmountInRequest
 
 class QueryJoinExactAmountInResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLSHARESOUT_FIELD_NUMBER: builtins.int
-    REMCOINS_FIELD_NUMBER: builtins.int
-    poolSharesOut: typing.Text
+    POOL_SHARES_OUT_FIELD_NUMBER: builtins.int
+    REM_COINS_FIELD_NUMBER: builtins.int
+    pool_shares_out: typing.Text
     """amount of pool shares returned to user after join"""
 
     @property
-    def remCoins(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
+    def rem_coins(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
         """coins remaining after pool join"""
         pass
     def __init__(self,
         *,
-        poolSharesOut: typing.Text = ...,
-        remCoins: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        pool_shares_out: typing.Text = ...,
+        rem_coins: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolSharesOut",b"poolSharesOut","remCoins",b"remCoins"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_shares_out",b"pool_shares_out","rem_coins",b"rem_coins"]) -> None: ...
 global___QueryJoinExactAmountInResponse = QueryJoinExactAmountInResponse
 
 class QueryJoinExactAmountOutRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryJoinExactAmountOutRequest = QueryJoinExactAmountOutRequest
 
 class QueryJoinExactAmountOutResponse(google.protobuf.message.Message):
@@ -386,43 +386,43 @@ global___QueryJoinExactAmountOutResponse = QueryJoinExactAmountOutResponse
 
 class QueryExitExactAmountInRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    POOLSHARESIN_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
-    poolSharesIn: typing.Text
+    POOL_ID_FIELD_NUMBER: builtins.int
+    POOL_SHARES_IN_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
+    pool_shares_in: typing.Text
     """amount of pool shares to return to pool"""
 
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
-        poolSharesIn: typing.Text = ...,
+        pool_id: builtins.int = ...,
+        pool_shares_in: typing.Text = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","poolSharesIn",b"poolSharesIn"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","pool_shares_in",b"pool_shares_in"]) -> None: ...
 global___QueryExitExactAmountInRequest = QueryExitExactAmountInRequest
 
 class QueryExitExactAmountInResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TOKENSOUT_FIELD_NUMBER: builtins.int
+    TOKENS_OUT_FIELD_NUMBER: builtins.int
     @property
-    def tokensOut(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
+    def tokens_out(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
         """coins obtained after exiting"""
         pass
     def __init__(self,
         *,
-        tokensOut: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        tokens_out: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["tokensOut",b"tokensOut"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["tokens_out",b"tokens_out"]) -> None: ...
 global___QueryExitExactAmountInResponse = QueryExitExactAmountInResponse
 
 class QueryExitExactAmountOutRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___QueryExitExactAmountOutRequest = QueryExitExactAmountOutRequest
 
 class QueryExitExactAmountOutResponse(google.protobuf.message.Message):

@@ -23,11 +23,11 @@ class VPool:
         return self.api.AllPools(req)
 
     def base_asset_price(self, pair: str, direction: Direction, base_asset_amount: str):
-        dir = pbDirection.DIRECTION_UNSPECIFIED
+        dir_pb = pbDirection.DIRECTION_UNSPECIFIED
         if direction == Direction.ADD:
-            dir = pbDirection.ADD_TO_POOL
+            dir_pb = pbDirection.ADD_TO_POOL
         elif direction == Direction.REMOVE:
-            dir = pbDirection.REMOVE_FROM_POOL
+            dir_pb = pbDirection.REMOVE_FROM_POOL
 
-        req = vpool_type.QueryBaseAssetPriceRequest(pair=pair, direction=dir, base_asset_amount=base_asset_amount)
+        req = vpool_type.QueryBaseAssetPriceRequest(pair=pair, direction=dir_pb, base_asset_amount=base_asset_amount)
         return self.api.BaseAssetPrice(req)

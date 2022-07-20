@@ -16,32 +16,32 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 class MsgCreatePool(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     CREATOR_FIELD_NUMBER: builtins.int
-    POOLPARAMS_FIELD_NUMBER: builtins.int
-    POOLASSETS_FIELD_NUMBER: builtins.int
+    POOL_PARAMS_FIELD_NUMBER: builtins.int
+    POOL_ASSETS_FIELD_NUMBER: builtins.int
     creator: typing.Text
     @property
-    def poolParams(self) -> dex.v1.pool_pb2.PoolParams: ...
+    def pool_params(self) -> dex.v1.pool_pb2.PoolParams: ...
     @property
-    def poolAssets(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[dex.v1.pool_pb2.PoolAsset]: ...
+    def pool_assets(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[dex.v1.pool_pb2.PoolAsset]: ...
     def __init__(self,
         *,
         creator: typing.Text = ...,
-        poolParams: typing.Optional[dex.v1.pool_pb2.PoolParams] = ...,
-        poolAssets: typing.Optional[typing.Iterable[dex.v1.pool_pb2.PoolAsset]] = ...,
+        pool_params: typing.Optional[dex.v1.pool_pb2.PoolParams] = ...,
+        pool_assets: typing.Optional[typing.Iterable[dex.v1.pool_pb2.PoolAsset]] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["poolParams",b"poolParams"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["creator",b"creator","poolAssets",b"poolAssets","poolParams",b"poolParams"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["pool_params",b"pool_params"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["creator",b"creator","pool_assets",b"pool_assets","pool_params",b"pool_params"]) -> None: ...
 global___MsgCreatePool = MsgCreatePool
 
 class MsgCreatePoolResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    POOLID_FIELD_NUMBER: builtins.int
-    poolId: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    pool_id: builtins.int
     def __init__(self,
         *,
-        poolId: builtins.int = ...,
+        pool_id: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id"]) -> None: ...
 global___MsgCreatePoolResponse = MsgCreatePoolResponse
 
 class MsgJoinPool(google.protobuf.message.Message):
@@ -50,19 +50,19 @@ class MsgJoinPool(google.protobuf.message.Message):
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     SENDER_FIELD_NUMBER: builtins.int
-    POOLID_FIELD_NUMBER: builtins.int
-    TOKENSIN_FIELD_NUMBER: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    TOKENS_IN_FIELD_NUMBER: builtins.int
     sender: typing.Text
-    poolId: builtins.int
+    pool_id: builtins.int
     @property
-    def tokensIn(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]: ...
+    def tokens_in(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]: ...
     def __init__(self,
         *,
         sender: typing.Text = ...,
-        poolId: builtins.int = ...,
-        tokensIn: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        pool_id: builtins.int = ...,
+        tokens_in: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","sender",b"sender","tokensIn",b"tokensIn"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","sender",b"sender","tokens_in",b"tokens_in"]) -> None: ...
 global___MsgJoinPool = MsgJoinPool
 
 class MsgJoinPoolResponse(google.protobuf.message.Message):
@@ -71,94 +71,94 @@ class MsgJoinPoolResponse(google.protobuf.message.Message):
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     POOL_FIELD_NUMBER: builtins.int
-    NUMPOOLSHARESOUT_FIELD_NUMBER: builtins.int
-    REMAININGCOINS_FIELD_NUMBER: builtins.int
+    NUM_POOL_SHARES_OUT_FIELD_NUMBER: builtins.int
+    REMAINING_COINS_FIELD_NUMBER: builtins.int
     @property
     def pool(self) -> dex.v1.pool_pb2.Pool:
         """the final state of the pool after a join"""
         pass
     @property
-    def numPoolSharesOut(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
+    def num_pool_shares_out(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
         """sum of LP tokens minted from the join"""
         pass
     @property
-    def remainingCoins(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
+    def remaining_coins(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
         """remaining tokens from attempting to join the pool"""
         pass
     def __init__(self,
         *,
         pool: typing.Optional[dex.v1.pool_pb2.Pool] = ...,
-        numPoolSharesOut: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
-        remainingCoins: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        num_pool_shares_out: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        remaining_coins: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["numPoolSharesOut",b"numPoolSharesOut","pool",b"pool"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["numPoolSharesOut",b"numPoolSharesOut","pool",b"pool","remainingCoins",b"remainingCoins"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["num_pool_shares_out",b"num_pool_shares_out","pool",b"pool"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["num_pool_shares_out",b"num_pool_shares_out","pool",b"pool","remaining_coins",b"remaining_coins"]) -> None: ...
 global___MsgJoinPoolResponse = MsgJoinPoolResponse
 
 class MsgExitPool(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     SENDER_FIELD_NUMBER: builtins.int
-    POOLID_FIELD_NUMBER: builtins.int
-    POOLSHARES_FIELD_NUMBER: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    POOL_SHARES_FIELD_NUMBER: builtins.int
     sender: typing.Text
-    poolId: builtins.int
+    pool_id: builtins.int
     @property
-    def poolShares(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    def pool_shares(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
     def __init__(self,
         *,
         sender: typing.Text = ...,
-        poolId: builtins.int = ...,
-        poolShares: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        pool_id: builtins.int = ...,
+        pool_shares: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["poolShares",b"poolShares"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","poolShares",b"poolShares","sender",b"sender"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["pool_shares",b"pool_shares"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","pool_shares",b"pool_shares","sender",b"sender"]) -> None: ...
 global___MsgExitPool = MsgExitPool
 
 class MsgExitPoolResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TOKENSOUT_FIELD_NUMBER: builtins.int
+    TOKENS_OUT_FIELD_NUMBER: builtins.int
     @property
-    def tokensOut(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]: ...
+    def tokens_out(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]: ...
     def __init__(self,
         *,
-        tokensOut: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        tokens_out: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["tokensOut",b"tokensOut"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["tokens_out",b"tokens_out"]) -> None: ...
 global___MsgExitPoolResponse = MsgExitPoolResponse
 
 class MsgSwapAssets(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     SENDER_FIELD_NUMBER: builtins.int
-    POOLID_FIELD_NUMBER: builtins.int
-    TOKENIN_FIELD_NUMBER: builtins.int
-    TOKENOUTDENOM_FIELD_NUMBER: builtins.int
+    POOL_ID_FIELD_NUMBER: builtins.int
+    TOKEN_IN_FIELD_NUMBER: builtins.int
+    TOKEN_OUT_DENOM_FIELD_NUMBER: builtins.int
     sender: typing.Text
-    poolId: builtins.int
+    pool_id: builtins.int
     @property
-    def tokenIn(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
-    tokenOutDenom: typing.Text
+    def token_in(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    token_out_denom: typing.Text
     def __init__(self,
         *,
         sender: typing.Text = ...,
-        poolId: builtins.int = ...,
-        tokenIn: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
-        tokenOutDenom: typing.Text = ...,
+        pool_id: builtins.int = ...,
+        token_in: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        token_out_denom: typing.Text = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["tokenIn",b"tokenIn"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["poolId",b"poolId","sender",b"sender","tokenIn",b"tokenIn","tokenOutDenom",b"tokenOutDenom"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["token_in",b"token_in"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_id",b"pool_id","sender",b"sender","token_in",b"token_in","token_out_denom",b"token_out_denom"]) -> None: ...
 global___MsgSwapAssets = MsgSwapAssets
 
 class MsgSwapAssetsResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TOKENOUT_FIELD_NUMBER: builtins.int
+    TOKEN_OUT_FIELD_NUMBER: builtins.int
     @property
-    def tokenOut(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    def token_out(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
     def __init__(self,
         *,
-        tokenOut: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        token_out: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["tokenOut",b"tokenOut"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["tokenOut",b"tokenOut"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["token_out",b"token_out"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["token_out",b"token_out"]) -> None: ...
 global___MsgSwapAssetsResponse = MsgSwapAssetsResponse
 
 class EventPoolJoined(google.protobuf.message.Message):

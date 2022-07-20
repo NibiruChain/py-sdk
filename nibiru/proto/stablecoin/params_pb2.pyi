@@ -13,22 +13,22 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 class Params(google.protobuf.message.Message):
     """Params defines the parameters for the module."""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    COLLRATIO_FIELD_NUMBER: builtins.int
-    FEERATIO_FIELD_NUMBER: builtins.int
-    EFFEERATIO_FIELD_NUMBER: builtins.int
+    COLL_RATIO_FIELD_NUMBER: builtins.int
+    FEE_RATIO_FIELD_NUMBER: builtins.int
+    EF_FEE_RATIO_FIELD_NUMBER: builtins.int
     BONUS_RATE_RECOLL_FIELD_NUMBER: builtins.int
     DISTR_EPOCH_IDENTIFIER_FIELD_NUMBER: builtins.int
-    ADJUSTMENTSTEP_FIELD_NUMBER: builtins.int
-    PRICELOWERBOUND_FIELD_NUMBER: builtins.int
-    PRICEUPPERBOUND_FIELD_NUMBER: builtins.int
-    ISCOLLATERALRATIOVALID_FIELD_NUMBER: builtins.int
-    collRatio: builtins.int
+    ADJUSTMENT_STEP_FIELD_NUMBER: builtins.int
+    PRICE_LOWER_BOUND_FIELD_NUMBER: builtins.int
+    PRICE_UPPER_BOUND_FIELD_NUMBER: builtins.int
+    IS_COLLATERAL_RATIO_VALID_FIELD_NUMBER: builtins.int
+    coll_ratio: builtins.int
     """collRatio is the ratio needed as collateral to exchange for stables"""
 
-    feeRatio: builtins.int
+    fee_ratio: builtins.int
     """feeRatio is the ratio taken as fees when minting or burning stables"""
 
-    efFeeRatio: builtins.int
+    ef_fee_ratio: builtins.int
     """efFeeRatio is the ratio taken from the fees that goes to Ecosystem Fund"""
 
     bonus_rate_recoll: builtins.int
@@ -39,29 +39,29 @@ class Params(google.protobuf.message.Message):
     distr_epoch_identifier: typing.Text
     """distr_epoch_identifier defines the frequnecy of update for the collateral ratio"""
 
-    adjustmentStep: builtins.int
+    adjustment_step: builtins.int
     """adjustmentStep is the size of the step taken when updating the collateral ratio"""
 
-    priceLowerBound: builtins.int
+    price_lower_bound: builtins.int
     """priceLowerBound is the lower bound for the stable coin to trigger a collateral ratio update"""
 
-    priceUpperBound: builtins.int
+    price_upper_bound: builtins.int
     """priceUpperBound is the upper bound for the stable coin to trigger a collateral ratio update"""
 
-    isCollateralRatioValid: builtins.bool
+    is_collateral_ratio_valid: builtins.bool
     """isCollateralRatioValid checks if the collateral ratio is correctly updated"""
 
     def __init__(self,
         *,
-        collRatio: builtins.int = ...,
-        feeRatio: builtins.int = ...,
-        efFeeRatio: builtins.int = ...,
+        coll_ratio: builtins.int = ...,
+        fee_ratio: builtins.int = ...,
+        ef_fee_ratio: builtins.int = ...,
         bonus_rate_recoll: builtins.int = ...,
         distr_epoch_identifier: typing.Text = ...,
-        adjustmentStep: builtins.int = ...,
-        priceLowerBound: builtins.int = ...,
-        priceUpperBound: builtins.int = ...,
-        isCollateralRatioValid: builtins.bool = ...,
+        adjustment_step: builtins.int = ...,
+        price_lower_bound: builtins.int = ...,
+        price_upper_bound: builtins.int = ...,
+        is_collateral_ratio_valid: builtins.bool = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["adjustmentStep",b"adjustmentStep","bonus_rate_recoll",b"bonus_rate_recoll","collRatio",b"collRatio","distr_epoch_identifier",b"distr_epoch_identifier","efFeeRatio",b"efFeeRatio","feeRatio",b"feeRatio","isCollateralRatioValid",b"isCollateralRatioValid","priceLowerBound",b"priceLowerBound","priceUpperBound",b"priceUpperBound"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["adjustment_step",b"adjustment_step","bonus_rate_recoll",b"bonus_rate_recoll","coll_ratio",b"coll_ratio","distr_epoch_identifier",b"distr_epoch_identifier","ef_fee_ratio",b"ef_fee_ratio","fee_ratio",b"fee_ratio","is_collateral_ratio_valid",b"is_collateral_ratio_valid","price_lower_bound",b"price_lower_bound","price_upper_bound",b"price_upper_bound"]) -> None: ...
 global___Params = Params

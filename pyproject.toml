@@ -3,3 +3,9 @@ line-length = 120
 skip-string-normalization = true
 target-version = ['py39']
 include = '.*\.pyi?$'
+extend-exclude = '''
+^/(
+    \.vscode
+  | nibiru/proto
+)$
+'''

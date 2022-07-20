@@ -23,15 +23,29 @@ class EpochInfo(google.protobuf.message.Message):
     EPOCH_COUNTING_STARTED_FIELD_NUMBER: builtins.int
     CURRENT_EPOCH_START_HEIGHT_FIELD_NUMBER: builtins.int
     identifier: typing.Text
+    """A string identifier for the epoch. e.g. "15min" or "1hour" """
+
     @property
-    def start_time(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    def start_time(self) -> google.protobuf.timestamp_pb2.Timestamp:
+        """When the epoch repetitino should start."""
+        pass
     @property
-    def duration(self) -> google.protobuf.duration_pb2.Duration: ...
+    def duration(self) -> google.protobuf.duration_pb2.Duration:
+        """How long each epoch lasts for."""
+        pass
     current_epoch: builtins.int
+    """The current epoch number, starting from 1."""
+
     @property
-    def current_epoch_start_time(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    def current_epoch_start_time(self) -> google.protobuf.timestamp_pb2.Timestamp:
+        """The start timestamp of the current epoch."""
+        pass
     epoch_counting_started: builtins.bool
+    """Whether or not this epoch has started. Set to true if current blocktime >= start_time."""
+
     current_epoch_start_height: builtins.int
+    """The block height at which the current epoch started at."""
+
     def __init__(self,
         *,
         identifier: typing.Text = ...,

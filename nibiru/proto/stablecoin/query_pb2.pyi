@@ -42,7 +42,7 @@ global___QueryParamsResponse = QueryParamsResponse
 class QueryModuleAccountBalances(google.protobuf.message.Message):
     """---------------------------------------- ModuleAccountBalances
 
-    QueryModuleAccountBalances is the request type for the balance of the 
+    QueryModuleAccountBalances is the request type for the balance of the
     x/stablecoin module account.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -52,16 +52,16 @@ global___QueryModuleAccountBalances = QueryModuleAccountBalances
 
 class QueryModuleAccountBalancesResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    MODULEACCOUNTBALANCES_FIELD_NUMBER: builtins.int
+    MODULE_ACCOUNT_BALANCES_FIELD_NUMBER: builtins.int
     @property
-    def moduleAccountBalances(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
+    def module_account_balances(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[cosmos.base.v1beta1.coin_pb2.Coin]:
         """ModuleAccountBalances is the balance of all coins in the x/stablecoin module."""
         pass
     def __init__(self,
         *,
-        moduleAccountBalances: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
+        module_account_balances: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["moduleAccountBalances",b"moduleAccountBalances"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["module_account_balances",b"module_account_balances"]) -> None: ...
 global___QueryModuleAccountBalancesResponse = QueryModuleAccountBalancesResponse
 
 class QueryCirculatingSupplies(google.protobuf.message.Message):
@@ -80,16 +80,16 @@ class QueryCirculatingSuppliesResponse(google.protobuf.message.Message):
     NIBI_FIELD_NUMBER: builtins.int
     NUSD_FIELD_NUMBER: builtins.int
     @property
-    def NIBI(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    def nibi(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
     @property
-    def NUSD(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
+    def nusd(self) -> cosmos.base.v1beta1.coin_pb2.Coin: ...
     def __init__(self,
         *,
-        NIBI: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
-        NUSD: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        nibi: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        nusd: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["NIBI",b"NIBI","NUSD",b"NUSD"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["NIBI",b"NIBI","NUSD",b"NUSD"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["nibi",b"nibi","nusd",b"nusd"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["nibi",b"nibi","nusd",b"nusd"]) -> None: ...
 global___QueryCirculatingSuppliesResponse = QueryCirculatingSuppliesResponse
 
 class QueryGovToMintStable(google.protobuf.message.Message):

@@ -38,5 +38,5 @@ class TxError(NibiruError):
     pass
 
 
-class InvalidArgument(NibiruError):
+class InvalidArgumentError(NibiruError):
     pass

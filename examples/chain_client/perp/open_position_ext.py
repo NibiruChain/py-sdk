@@ -37,9 +37,9 @@ def main() -> None:
         sender=address.to_acc_bech32(),
         token_pair="unusd:unibi",
         side=Side.BUY,
-        quote_asset_amount="5",
-        leverage="5",
-        base_asset_amount_limit="5",
+        quote_asset_amount=5,
+        leverage=5,
+        base_asset_amount_limit=5,
     )
 
     # build sim tx

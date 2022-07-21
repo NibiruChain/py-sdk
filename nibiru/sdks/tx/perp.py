@@ -23,9 +23,9 @@ class Perp(Tx):
         sender: str,
         token_pair: str,
         side: Side,
-        quote_asset_amount: str,
-        leverage: str,
-        base_asset_amount_limit: str,
+        quote_asset_amount: float,
+        leverage: float,
+        base_asset_amount_limit: float,
         **kwargs,
     ):
         msg = PerpComposer.open_position(

@@ -8,7 +8,7 @@ from .common import Tx
 
 
 class Dex(Tx):
-    def create_pool(self, creator: str, swap_fee: str, exit_fee: str, assets: List[PoolAsset], **kwargs):
+    def create_pool(self, creator: str, swap_fee: float, exit_fee: float, assets: List[PoolAsset], **kwargs):
         msg = DexComposer.create_pool(creator=creator, swap_fee=swap_fee, exit_fee=exit_fee, assets=assets)
         return super().execute_msg(msg, **kwargs)
 

@@ -21,7 +21,14 @@ class Network:
 
     @classmethod
     def testnet(cls) -> "Network":
-        raise NotImplementedError
+        return cls(
+            lcd_endpoint='http://ec2-54-221-169-63.compute-1.amazonaws.com:1317',
+            grpc_endpoint='ec2-54-221-169-63.compute-1.amazonaws.com:9090',
+            grpc_exchange_endpoint='ec2-54-221-169-63.compute-1.amazonaws.com:9090',
+            chain_id='nibiru-testnet-3',
+            fee_denom='unibi',
+            env='test',
+        )
 
     @classmethod
     def mainnet(cls) -> "Network":
@@ -35,7 +42,7 @@ class Network:
             grpc_exchange_endpoint='localhost:9090',
             chain_id='nibiru-localnet-0',
             fee_denom='unibi',
-            env='local'
+            env='local',
         )
 
     def string(self):

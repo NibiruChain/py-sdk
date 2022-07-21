@@ -25,9 +25,9 @@ def main() -> None:
         sender=trader.address,
         token_pair="unusd:unibi",
         side=Side.BUY,
-        quote_asset_amount="5",
-        leverage="5",
-        base_asset_amount_limit="5",
+        quote_asset_amount=1,
+        leverage=2,
+        base_asset_amount_limit=3,
     )
     print(res)
 

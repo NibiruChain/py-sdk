@@ -20,8 +20,7 @@ class Dex:
 
     def params(self):
         req = dex_type.QueryParamsRequest()
-        return self.api.Params(req)
-        # return deserialize(self.api.Params(req))
+        return deserialize(self.api.Params(req))
 
     def pool_number(self):
         req = dex_type.QueryPoolsRequest()

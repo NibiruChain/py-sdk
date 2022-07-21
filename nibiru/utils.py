@@ -2,7 +2,7 @@ from nibiru.exceptions import ConvertError, InvalidArgumentError
 
 # number of decimal places
 PRECISION = 18
-INT_MULT = 10**6
+INT_MULT = 1e6
 
 
 # reimplementation of cosmos-sdk/types/decimal.go
@@ -114,7 +114,7 @@ def sdkdec_to_float(dec_str: str) -> float:
 
 
 def float_to_sdkint(i: float) -> str:
-    return i * INT_MULT
+    return str(i * INT_MULT)
 
 
 def sdkint_to_float(int_str: str) -> float:

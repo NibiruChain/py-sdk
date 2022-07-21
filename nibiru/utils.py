@@ -114,7 +114,7 @@ def sdkdec_to_float(dec_str: str) -> float:
 
 
 def float_to_sdkint(i: float) -> str:
-    return str(i * INT_MULT)
+    return str(int(i * INT_MULT))
 
 
 def sdkint_to_float(int_str: str) -> float:

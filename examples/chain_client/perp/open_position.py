@@ -23,11 +23,11 @@ def main() -> None:
     )
     res = trader.tx.perp.open_position(
         sender=trader.address,
-        token_pair="unusd:unibi",
+        token_pair="axlwbtc:unusd",
         side=Side.BUY,
-        quote_asset_amount=1,
-        leverage=2,
-        base_asset_amount_limit=3,
+        quote_asset_amount=1000,
+        leverage=10,
+        base_asset_amount_limit=0,
     )
     print(res)
 

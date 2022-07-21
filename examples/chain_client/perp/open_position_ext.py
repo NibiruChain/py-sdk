@@ -35,11 +35,11 @@ def main() -> None:
     # prepare tx msg
     msg = Composer.perp.open_position(
         sender=address.to_acc_bech32(),
-        token_pair="unusd:unibi",
+        token_pair="axlwbtc:unusd",
         side=Side.BUY,
-        quote_asset_amount=5,
-        leverage=5,
-        base_asset_amount_limit=5,
+        quote_asset_amount=1000,
+        leverage=1,
+        base_asset_amount_limit=0,
     )
 
     # build sim tx

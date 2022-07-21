@@ -166,8 +166,52 @@ global___MsgOpenPosition = MsgOpenPosition
 
 class MsgOpenPositionResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    POSITION_FIELD_NUMBER: builtins.int
+    EXCHANGED_NOTIONAL_VALUE_FIELD_NUMBER: builtins.int
+    EXCHANGED_POSITION_SIZE_FIELD_NUMBER: builtins.int
+    FUNDING_PAYMENT_FIELD_NUMBER: builtins.int
+    REALIZED_PNL_FIELD_NUMBER: builtins.int
+    UNREALIZED_PNL_AFTER_FIELD_NUMBER: builtins.int
+    MARGIN_TO_VAULT_FIELD_NUMBER: builtins.int
+    POSITION_NOTIONAL_FIELD_NUMBER: builtins.int
+    @property
+    def position(self) -> perp.v1.state_pb2.Position: ...
+    exchanged_notional_value: typing.Text
+    """The amount of quote assets exchanged."""
+
+    exchanged_position_size: typing.Text
+    """The amount of base assets exchanged."""
+
+    funding_payment: typing.Text
+    """The funding payment applied on this position change, measured in quote units."""
+
+    realized_pnl: typing.Text
+    """The amount of PnL realized on this position changed, measured in quote units."""
+
+    unrealized_pnl_after: typing.Text
+    """The unrealized PnL in the position after the position change, measured in quote units."""
+
+    margin_to_vault: typing.Text
+    """The amount of margin the trader has to give to the vault.
+    A negative value means the vault pays the trader.
+    """
+
+    position_notional: typing.Text
+    """The position's notional value after the position change, measured in quote units."""
+
     def __init__(self,
+        *,
+        position: typing.Optional[perp.v1.state_pb2.Position] = ...,
+        exchanged_notional_value: typing.Text = ...,
+        exchanged_position_size: typing.Text = ...,
+        funding_payment: typing.Text = ...,
+        realized_pnl: typing.Text = ...,
+        unrealized_pnl_after: typing.Text = ...,
+        margin_to_vault: typing.Text = ...,
+        position_notional: typing.Text = ...,
         ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["position",b"position"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["exchanged_notional_value",b"exchanged_notional_value","exchanged_position_size",b"exchanged_position_size","funding_payment",b"funding_payment","margin_to_vault",b"margin_to_vault","position",b"position","position_notional",b"position_notional","realized_pnl",b"realized_pnl","unrealized_pnl_after",b"unrealized_pnl_after"]) -> None: ...
 global___MsgOpenPositionResponse = MsgOpenPositionResponse
 
 class MsgClosePosition(google.protobuf.message.Message):

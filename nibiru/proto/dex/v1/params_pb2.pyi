@@ -15,10 +15,10 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 class Params(google.protobuf.message.Message):
     """Params defines the parameters for the module."""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    STARTINGPOOLNUMBER_FIELD_NUMBER: builtins.int
+    STARTING_POOL_NUMBER_FIELD_NUMBER: builtins.int
     POOL_CREATION_FEE_FIELD_NUMBER: builtins.int
     WHITELISTED_ASSET_FIELD_NUMBER: builtins.int
-    startingPoolNumber: builtins.int
+    starting_pool_number: builtins.int
     """The start pool number, i.e. the first pool number that isn't taken yet."""
 
     @property
@@ -31,9 +31,9 @@ class Params(google.protobuf.message.Message):
         pass
     def __init__(self,
         *,
-        startingPoolNumber: builtins.int = ...,
+        starting_pool_number: builtins.int = ...,
         pool_creation_fee: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         whitelisted_asset: typing.Optional[typing.Iterable[typing.Text]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["pool_creation_fee",b"pool_creation_fee","startingPoolNumber",b"startingPoolNumber","whitelisted_asset",b"whitelisted_asset"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pool_creation_fee",b"pool_creation_fee","starting_pool_number",b"starting_pool_number","whitelisted_asset",b"whitelisted_asset"]) -> None: ...
 global___Params = Params

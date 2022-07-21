@@ -36,3 +36,7 @@ class SimulationError(NibiruError):
 
 class TxError(NibiruError):
     pass
+
+
+class InvalidArgumentError(NibiruError):
+    pass

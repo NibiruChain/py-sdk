@@ -72,10 +72,10 @@ class PositionChangedEvent(google.protobuf.message.Message):
     """vPrice defined as yRes / xRes for a vpool, where yRes is the quote reserves and xRes is the base reserves."""
 
     funding_payment: typing.Text
-    """A funding payment made or received by the trader on the current position. 
+    """A funding payment made or received by the trader on the current position.
     'fundingPayment' is positive if 'owner' is the sender and negative if 'owner'
-    is the receiver of the payment. Its magnitude is abs(vSize * fundingRate). 
-    Funding payments act to converge the mark price (vPrice) and index price 
+    is the receiver of the payment. Its magnitude is abs(vSize * fundingRate).
+    Funding payments act to converge the mark price (vPrice) and index price
     (average price on major exchanges).
     """
 
@@ -220,3 +220,50 @@ class PositionSettledEvent(google.protobuf.message.Message):
         ) -> None: ...
     def ClearField(self, field_name: typing_extensions.Literal["pair",b"pair","settled_coins",b"settled_coins","trader_address",b"trader_address"]) -> None: ...
 global___PositionSettledEvent = PositionSettledEvent
+
+class FundingRateChangedEvent(google.protobuf.message.Message):
+    """Emitted when a new funding rate is calculated."""
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    PAIR_FIELD_NUMBER: builtins.int
+    MARK_PRICE_FIELD_NUMBER: builtins.int
+    INDEX_PRICE_FIELD_NUMBER: builtins.int
+    LATEST_FUNDING_RATE_FIELD_NUMBER: builtins.int
+    CUMULATIVE_FUNDING_RATE_FIELD_NUMBER: builtins.int
+    BLOCK_HEIGHT_FIELD_NUMBER: builtins.int
+    BLOCK_TIME_MS_FIELD_NUMBER: builtins.int
+    pair: typing.Text
+    """The pair for which the funding rate was calculated."""
+
+    mark_price: typing.Text
+    """The mark price of the pair."""
+
+    index_price: typing.Text
+    """The oracle index price of the pair."""
+
+    latest_funding_rate: typing.Text
+    """The latest funding rate."""
+
+    cumulative_funding_rate: typing.Text
+    """The latest cumulative funding rate.
+    The funding rate a position will pay is the difference between this value
+    and the latest cumulative funding rate on the position.
+    """
+
+    block_height: builtins.int
+    """The block number at which the funding rate was calculated."""
+
+    block_time_ms: builtins.int
+    """The block time in unix milliseconds at which the funding rate was calculated."""
+
+    def __init__(self,
+        *,
+        pair: typing.Text = ...,
+        mark_price: typing.Text = ...,
+        index_price: typing.Text = ...,
+        latest_funding_rate: typing.Text = ...,
+        cumulative_funding_rate: typing.Text = ...,
+        block_height: builtins.int = ...,
+        block_time_ms: builtins.int = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["block_height",b"block_height","block_time_ms",b"block_time_ms","cumulative_funding_rate",b"cumulative_funding_rate","index_price",b"index_price","latest_funding_rate",b"latest_funding_rate","mark_price",b"mark_price","pair",b"pair"]) -> None: ...
+global___FundingRateChangedEvent = FundingRateChangedEvent

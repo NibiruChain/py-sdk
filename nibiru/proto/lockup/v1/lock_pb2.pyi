@@ -19,12 +19,12 @@ class Lock(google.protobuf.message.Message):
     It stores owner, duration, unlock time and the amount of coins locked.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    LOCKID_FIELD_NUMBER: builtins.int
+    LOCK_ID_FIELD_NUMBER: builtins.int
     OWNER_FIELD_NUMBER: builtins.int
     DURATION_FIELD_NUMBER: builtins.int
     END_TIME_FIELD_NUMBER: builtins.int
     COINS_FIELD_NUMBER: builtins.int
-    lockId: builtins.int
+    lock_id: builtins.int
     """unique autoincrementing numeric lock id"""
 
     owner: typing.Text
@@ -44,12 +44,12 @@ class Lock(google.protobuf.message.Message):
         pass
     def __init__(self,
         *,
-        lockId: builtins.int = ...,
+        lock_id: builtins.int = ...,
         owner: typing.Text = ...,
         duration: typing.Optional[google.protobuf.duration_pb2.Duration] = ...,
         end_time: typing.Optional[google.protobuf.timestamp_pb2.Timestamp] = ...,
         coins: typing.Optional[typing.Iterable[cosmos.base.v1beta1.coin_pb2.Coin]] = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["duration",b"duration","end_time",b"end_time"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["coins",b"coins","duration",b"duration","end_time",b"end_time","lockId",b"lockId","owner",b"owner"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["coins",b"coins","duration",b"duration","end_time",b"end_time","lock_id",b"lock_id","owner",b"owner"]) -> None: ...
 global___Lock = Lock

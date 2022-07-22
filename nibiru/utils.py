@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from google.protobuf.timestamp_pb2 import Timestamp
+
 from nibiru.exceptions import ConvertError, InvalidArgumentError
 
 # number of decimal places
@@ -94,8 +98,7 @@ def sdkdec_to_float(dec_str: str) -> float:
         bz_str = '0.'
 
         # set relevant digits to 0
-        for _ in range(PRECISION - input_size):
-            bz_str += '0'
+        bz_str += '0' * (PRECISION - input_size)
 
         # set final digits
         bz_str += dec_str
@@ -119,3 +122,9 @@ def float_to_sdkint(i: float) -> str:
 
 def sdkint_to_float(int_str: str) -> float:
     return float(int_str) / INT_MULT
+
+
+def toTsPb(dt: datetime):
+    ts = Timestamp()
+    ts.FromDatetime(dt)
+    return ts

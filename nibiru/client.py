@@ -8,6 +8,7 @@ import grpc
 
 from .clients import Dex as DexClient
 from .clients import Perp as PerpClient
+from .clients import Pricefeed as PricefeedClient
 from .clients import VPool as VPoolClient
 from .exceptions import NotFoundError
 from .network import Network
@@ -28,7 +29,6 @@ from .proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 from .proto.epochs import query_pb2_grpc as epochs_query
 from .proto.incentivization.v1 import incentivization_pb2_grpc as incentivization_query
 from .proto.lockup.v1 import query_pb2_grpc as lockup_query
-from .proto.pricefeed import query_pb2_grpc as pricefeed_query
 from .proto.stablecoin import query_pb2_grpc as stablecoin_query
 
 DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL = 10  # seconds
@@ -91,7 +91,7 @@ class Client:
         )
         # Query services
         self.dex = DexClient(self.exchange_channel)
-        self.stubPricefeed = pricefeed_query.QueryStub(self.exchange_channel)
+        self.pricefeed = PricefeedClient(self.exchange_channel)
         self.perp = PerpClient(self.exchange_channel)
         self.stubLockup = lockup_query.QueryStub(self.exchange_channel)
         self.stubIncentivization = incentivization_query.QueryStub(self.exchange_channel)

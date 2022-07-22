@@ -38,6 +38,7 @@ class Tx:
         return res
 
     def execute_msg(self, *msg: message.Message, **kwargs):
+        address = None
         try:
             # TODO: It shouldn't be necessary to resync the block height for every tx, use bgTask instead
             self.client.sync_timeout_height()
@@ -55,7 +56,8 @@ class Tx:
             return self.execute_tx(tx, gas_estimate, **kwargs)
         except (RpcError, SimulationError) as err:
             logging.error("Failed tx execution: %s", err)
-            address.decrease_sequence()
+            if address:
+                address.decrease_sequence()
             raise TxError("Failed to execute transaction") from err
 
     def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):

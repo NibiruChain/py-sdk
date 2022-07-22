@@ -9,8 +9,8 @@ from nibiru.utils import float_to_sdkdec
 
 class Dex:
     @staticmethod
-    def create_pool(creator: str, swap_fee: float, exit_fee: float, assets: List[PoolAsset]):
-        pool_assets = [pool_tx_pb.PoolAsset(token=a.token, weight=a.weight) for a in assets]
+    def create_pool(creator: str, assets: List[PoolAsset], swap_fee: float = 0, exit_fee: float = 0):
+        pool_assets = [pool_tx_pb.PoolAsset(token=a.token, weight=str(a.weight)) for a in assets]
         swap_fee_dec = float_to_sdkdec(swap_fee)
         exit_fee_dec = float_to_sdkdec(exit_fee)
         return dex_tx_pb.MsgCreatePool(

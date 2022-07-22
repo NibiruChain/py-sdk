@@ -22,12 +22,12 @@ class Network:
     @classmethod
     def testnet(cls) -> "Network":
         return cls(
-            lcd_endpoint='http://ec2-54-221-169-63.compute-1.amazonaws.com:1317',
-            grpc_endpoint='ec2-54-221-169-63.compute-1.amazonaws.com:9090',
-            grpc_exchange_endpoint='ec2-54-221-169-63.compute-1.amazonaws.com:9090',
+            lcd_endpoint='https://lcd.nibiru.fi',
+            grpc_endpoint='rpc.nibiru.fi:9090',
+            grpc_exchange_endpoint='rpc.nibiru.fi:9090',
             chain_id='nibiru-testnet-3',
             fee_denom='unibi',
-            env='test',
+            env='testnet',
         )
 
     @classmethod

@@ -19,7 +19,7 @@ protoc_gen_gocosmos
 
 cosmos_sdk_dir=$(go list -f '{{ .Dir }}' -m github.com/cosmos/cosmos-sdk)
 cd -;
-proto_dirs=$(find $cosmos_sdk_dir/proto $cosmos_sdk_dir/third_party/proto/ ./proto -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
+proto_dirs=$(find $cosmos_sdk_dir/proto $cosmos_sdk_dir/third_party/proto ./proto -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
 echo $proto_dirs
 for dir in $proto_dirs; do \
   echo "generating $dir"

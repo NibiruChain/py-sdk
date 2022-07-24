@@ -15,16 +15,16 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 class PoolParams(google.protobuf.message.Message):
     """Configuration parameters for the pool."""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    SWAP_FEE_FIELD_NUMBER: builtins.int
-    EXIT_FEE_FIELD_NUMBER: builtins.int
-    swap_fee: typing.Text
-    exit_fee: typing.Text
+    SWAPFEE_FIELD_NUMBER: builtins.int
+    EXITFEE_FIELD_NUMBER: builtins.int
+    swapFee: typing.Text
+    exitFee: typing.Text
     def __init__(self,
         *,
-        swap_fee: typing.Text = ...,
-        exit_fee: typing.Text = ...,
+        swapFee: typing.Text = ...,
+        exitFee: typing.Text = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["exit_fee",b"exit_fee","swap_fee",b"swap_fee"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["exitFee",b"exitFee","swapFee",b"swapFee"]) -> None: ...
 global___PoolParams = PoolParams
 
 class PoolAsset(google.protobuf.message.Message):
@@ -54,10 +54,10 @@ class Pool(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     ID_FIELD_NUMBER: builtins.int
     ADDRESS_FIELD_NUMBER: builtins.int
-    POOL_PARAMS_FIELD_NUMBER: builtins.int
-    POOL_ASSETS_FIELD_NUMBER: builtins.int
-    TOTAL_WEIGHT_FIELD_NUMBER: builtins.int
-    TOTAL_SHARES_FIELD_NUMBER: builtins.int
+    POOLPARAMS_FIELD_NUMBER: builtins.int
+    POOLASSETS_FIELD_NUMBER: builtins.int
+    TOTALWEIGHT_FIELD_NUMBER: builtins.int
+    TOTALSHARES_FIELD_NUMBER: builtins.int
     id: builtins.int
     """The pool id."""
 
@@ -65,31 +65,31 @@ class Pool(google.protobuf.message.Message):
     """The pool account address."""
 
     @property
-    def pool_params(self) -> global___PoolParams:
+    def poolParams(self) -> global___PoolParams:
         """Fees and other pool-specific parameters."""
         pass
     @property
-    def pool_assets(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___PoolAsset]:
+    def poolAssets(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___PoolAsset]:
         """These are assumed to be sorted by denomiation.
         They contain the pool asset and the information about the weight
         """
         pass
-    total_weight: typing.Text
+    totalWeight: typing.Text
     """sum of all non-normalized pool weights"""
 
     @property
-    def total_shares(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
+    def totalShares(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
         """sum of all LP tokens sent out"""
         pass
     def __init__(self,
         *,
         id: builtins.int = ...,
         address: typing.Text = ...,
-        pool_params: typing.Optional[global___PoolParams] = ...,
-        pool_assets: typing.Optional[typing.Iterable[global___PoolAsset]] = ...,
-        total_weight: typing.Text = ...,
-        total_shares: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
+        poolParams: typing.Optional[global___PoolParams] = ...,
+        poolAssets: typing.Optional[typing.Iterable[global___PoolAsset]] = ...,
+        totalWeight: typing.Text = ...,
+        totalShares: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["pool_params",b"pool_params","total_shares",b"total_shares"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["address",b"address","id",b"id","pool_assets",b"pool_assets","pool_params",b"pool_params","total_shares",b"total_shares","total_weight",b"total_weight"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["poolParams",b"poolParams","totalShares",b"totalShares"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["address",b"address","id",b"id","poolAssets",b"poolAssets","poolParams",b"poolParams","totalShares",b"totalShares","totalWeight",b"totalWeight"]) -> None: ...
 global___Pool = Pool

@@ -16,7 +16,7 @@ _sym_db = _symbol_database.Default()
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x17stablecoin/params.proto\x12\x14nibiru.stablecoin.v1\x1a\x14gogoproto/gogo.proto\"\x95\x02\n\x06Params\x12\x12\n\ncoll_ratio\x18\x01 \x01(\x03\x12\x11\n\tfee_ratio\x18\x02 \x01(\x03\x12\x14\n\x0c\x65\x66_fee_ratio\x18\x03 \x01(\x03\x12\x19\n\x11\x62onus_rate_recoll\x18\x04 \x01(\x03\x12\x41\n\x16\x64istr_epoch_identifier\x18\x05 \x01(\tB!\xf2\xde\x1f\x1dyaml:\"distr_epoch_identifier\"\x12\x17\n\x0f\x61\x64justment_step\x18\x06 \x01(\x03\x12\x19\n\x11price_lower_bound\x18\x07 \x01(\x03\x12\x19\n\x11price_upper_bound\x18\x08 \x01(\x03\x12!\n\x19is_collateral_ratio_valid\x18\t \x01(\x08\x42\x32Z0github.com/NibiruChain/nibiru/x/stablecoin/typesb\x06proto3'
+    b'\n\x17stablecoin/params.proto\x12\x14nibiru.stablecoin.v1\x1a\x14gogoproto/gogo.proto\"\x89\x02\n\x06Params\x12\x11\n\tcollRatio\x18\x01 \x01(\x03\x12\x10\n\x08\x66\x65\x65Ratio\x18\x02 \x01(\x03\x12\x12\n\nefFeeRatio\x18\x03 \x01(\x03\x12\x19\n\x11\x62onus_rate_recoll\x18\x04 \x01(\x03\x12\x41\n\x16\x64istr_epoch_identifier\x18\x05 \x01(\tB!\xf2\xde\x1f\x1dyaml:\"distr_epoch_identifier\"\x12\x16\n\x0e\x61\x64justmentStep\x18\x06 \x01(\x03\x12\x17\n\x0fpriceLowerBound\x18\x07 \x01(\x03\x12\x17\n\x0fpriceUpperBound\x18\x08 \x01(\x03\x12\x1e\n\x16isCollateralRatioValid\x18\t \x01(\x08\x42\x32Z0github.com/NibiruChain/nibiru/x/stablecoin/typesb\x06proto3'
 )
 
 
@@ -41,5 +41,5 @@ if _descriptor._USE_C_DESCRIPTORS == False:
         'distr_epoch_identifier'
     ]._serialized_options = b'\362\336\037\035yaml:\"distr_epoch_identifier\"'
     _PARAMS._serialized_start = 72
-    _PARAMS._serialized_end = 349
+    _PARAMS._serialized_end = 337
 # @@protoc_insertion_point(module_scope)

@@ -18,7 +18,7 @@ from cosmos_proto import cosmos_pb2 as cosmos__proto_dot_cosmos__pb2
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x13\x64\x65x/v1/params.proto\x12\rnibiru.dex.v1\x1a\x14gogoproto/gogo.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x19\x63osmos_proto/cosmos.proto\"\xcc\x01\n\x06Params\x12\x1c\n\x14starting_pool_number\x18\x01 \x01(\x04\x12\x82\x01\n\x11pool_creation_fee\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBL\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x18yaml:\"pool_creation_fee\"\xc8\xde\x1f\x00\x12\x19\n\x11whitelisted_asset\x18\x03 \x03(\t:\x04\x98\xa0\x1f\x00\x42+Z)github.com/NibiruChain/nibiru/x/dex/typesb\x06proto3'
+    b'\n\x13\x64\x65x/v1/params.proto\x12\rnibiru.dex.v1\x1a\x14gogoproto/gogo.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x19\x63osmos_proto/cosmos.proto\"\xca\x01\n\x06Params\x12\x1a\n\x12startingPoolNumber\x18\x01 \x01(\x04\x12\x82\x01\n\x11pool_creation_fee\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBL\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x18yaml:\"pool_creation_fee\"\xc8\xde\x1f\x00\x12\x19\n\x11whitelisted_asset\x18\x03 \x03(\t:\x04\x98\xa0\x1f\x00\x42+Z)github.com/NibiruChain/nibiru/x/dex/typesb\x06proto3'
 )
 
 
@@ -45,5 +45,5 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _PARAMS._options = None
     _PARAMS._serialized_options = b'\230\240\037\000'
     _PARAMS._serialized_start = 120
-    _PARAMS._serialized_end = 324
+    _PARAMS._serialized_end = 322
 # @@protoc_insertion_point(module_scope)

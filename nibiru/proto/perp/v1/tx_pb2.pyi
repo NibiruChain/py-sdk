@@ -39,26 +39,18 @@ class MsgRemoveMarginResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     MARGIN_OUT_FIELD_NUMBER: builtins.int
     FUNDING_PAYMENT_FIELD_NUMBER: builtins.int
-    POSITION_FIELD_NUMBER: builtins.int
     @property
     def margin_out(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
-        """tokens transferred back to the trader"""
+        """MarginOut: tokens transferred back to the trader"""
         pass
     funding_payment: typing.Text
-    """the funding payment applied on this position interaction"""
-
-    @property
-    def position(self) -> perp.v1.state_pb2.Position:
-        """The resulting position"""
-        pass
     def __init__(self,
         *,
         margin_out: typing.Optional[cosmos.base.v1beta1.coin_pb2.Coin] = ...,
         funding_payment: typing.Text = ...,
-        position: typing.Optional[perp.v1.state_pb2.Position] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["margin_out",b"margin_out","position",b"position"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["funding_payment",b"funding_payment","margin_out",b"margin_out","position",b"position"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["margin_out",b"margin_out"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["funding_payment",b"funding_payment","margin_out",b"margin_out"]) -> None: ...
 global___MsgRemoveMarginResponse = MsgRemoveMarginResponse
 
 class MsgAddMargin(google.protobuf.message.Message):
@@ -241,35 +233,6 @@ global___MsgClosePosition = MsgClosePosition
 
 class MsgClosePositionResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    EXCHANGED_NOTIONAL_VALUE_FIELD_NUMBER: builtins.int
-    EXCHANGED_POSITION_SIZE_FIELD_NUMBER: builtins.int
-    FUNDING_PAYMENT_FIELD_NUMBER: builtins.int
-    REALIZED_PNL_FIELD_NUMBER: builtins.int
-    MARGIN_TO_TRADER_FIELD_NUMBER: builtins.int
-    exchanged_notional_value: typing.Text
-    """The amount of quote assets exchanged."""
-
-    exchanged_position_size: typing.Text
-    """The amount of base assets exchanged."""
-
-    funding_payment: typing.Text
-    """The funding payment applied on this position change, measured in quote units."""
-
-    realized_pnl: typing.Text
-    """The amount of PnL realized on this position changed, measured in quote units."""
-
-    margin_to_trader: typing.Text
-    """The amount of margin the trader receives after closing the position, from the vault.
-    Should never be negative.
-    """
-
     def __init__(self,
-        *,
-        exchanged_notional_value: typing.Text = ...,
-        exchanged_position_size: typing.Text = ...,
-        funding_payment: typing.Text = ...,
-        realized_pnl: typing.Text = ...,
-        margin_to_trader: typing.Text = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["exchanged_notional_value",b"exchanged_notional_value","exchanged_position_size",b"exchanged_position_size","funding_payment",b"funding_payment","margin_to_trader",b"margin_to_trader","realized_pnl",b"realized_pnl"]) -> None: ...
 global___MsgClosePositionResponse = MsgClosePositionResponse

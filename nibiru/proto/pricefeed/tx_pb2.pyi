@@ -14,14 +14,11 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 class MsgPostPrice(google.protobuf.message.Message):
     """MsgPostPrice represents a method for creating a new post price"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    ORACLE_FIELD_NUMBER: builtins.int
+    FROM_FIELD_NUMBER: builtins.int
     TOKEN0_FIELD_NUMBER: builtins.int
     TOKEN1_FIELD_NUMBER: builtins.int
     PRICE_FIELD_NUMBER: builtins.int
     EXPIRY_FIELD_NUMBER: builtins.int
-    oracle: typing.Text
-    """From: address of oracle"""
-
     token0: typing.Text
     """Token0: denominator unit of the price, a.k.a. quote asset"""
 
@@ -35,14 +32,13 @@ class MsgPostPrice(google.protobuf.message.Message):
     def expiry(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
     def __init__(self,
         *,
-        oracle: typing.Text = ...,
         token0: typing.Text = ...,
         token1: typing.Text = ...,
         price: typing.Text = ...,
         expiry: typing.Optional[google.protobuf.timestamp_pb2.Timestamp] = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["expiry",b"expiry"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["expiry",b"expiry","oracle",b"oracle","price",b"price","token0",b"token0","token1",b"token1"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["expiry",b"expiry","from",b"from","price",b"price","token0",b"token0","token1",b"token1"]) -> None: ...
 global___MsgPostPrice = MsgPostPrice
 
 class MsgPostPriceResponse(google.protobuf.message.Message):

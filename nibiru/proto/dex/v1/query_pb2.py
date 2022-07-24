@@ -23,7 +23,7 @@ from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x12\x64\x65x/v1/query.proto\x12\rnibiru.dex.v1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x13\x64\x65x/v1/params.proto\x1a\x11\x64\x65x/v1/pool.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\"\x14\n\x12QueryParamsRequest\"B\n\x13QueryParamsResponse\x12+\n\x06params\x18\x01 \x01(\x0b\x32\x15.nibiru.dex.v1.ParamsB\x04\xc8\xde\x1f\x00\"\x18\n\x16QueryPoolNumberRequest\"*\n\x17QueryPoolNumberResponse\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"#\n\x10QueryPoolRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"6\n\x11QueryPoolResponse\x12!\n\x04pool\x18\x01 \x01(\x0b\x32\x13.nibiru.dex.v1.Pool\"O\n\x11QueryPoolsRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"u\n\x12QueryPoolsResponse\x12\"\n\x05pools\x18\x01 \x03(\x0b\x32\x13.nibiru.dex.v1.Pool\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\")\n\x16QueryPoolParamsRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"I\n\x17QueryPoolParamsResponse\x12.\n\x0bpool_params\x18\x01 \x01(\x0b\x32\x19.nibiru.dex.v1.PoolParams\"\x16\n\x14QueryNumPoolsRequest\"*\n\x15QueryNumPoolsResponse\x12\x11\n\tnum_pools\x18\x01 \x01(\x04\"\x1c\n\x1aQueryTotalLiquidityRequest\"\x91\x01\n\x1bQueryTotalLiquidityResponse\x12r\n\tliquidity\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"liquidity\"\xc8\xde\x1f\x00\"1\n\x1eQueryTotalPoolLiquidityRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"\x95\x01\n\x1fQueryTotalPoolLiquidityResponse\x12r\n\tliquidity\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"liquidity\"\xc8\xde\x1f\x00\"*\n\x17QueryTotalSharesRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"h\n\x18QueryTotalSharesResponse\x12L\n\x0ctotal_shares\x18\x01 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x1b\xf2\xde\x1f\x13yaml:\"total_shares\"\xc8\xde\x1f\x00\"Y\n\x15QuerySpotPriceRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\x12\x16\n\x0etoken_in_denom\x18\x02 \x01(\t\x12\x17\n\x0ftoken_out_denom\x18\x03 \x01(\t\",\n\x16QuerySpotPriceResponse\x12\x12\n\nspot_price\x18\x01 \x01(\t\"\x8f\x01\n\x1dQuerySwapExactAmountInRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\x12\x44\n\x08token_in\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x17\xf2\xde\x1f\x0fyaml:\"token_in\"\xc8\xde\x1f\x00\x12\x17\n\x0ftoken_out_denom\x18\x03 \x01(\t\"h\n\x1eQuerySwapExactAmountInResponse\x12\x46\n\ttoken_out\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x18\xf2\xde\x1f\x10yaml:\"token_out\"\xc8\xde\x1f\x00\"\x91\x01\n\x1eQuerySwapExactAmountOutRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\x12\x46\n\ttoken_out\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x18\xf2\xde\x1f\x10yaml:\"token_out\"\xc8\xde\x1f\x00\x12\x16\n\x0etoken_in_denom\x18\x03 \x01(\t\"g\n\x1fQuerySwapExactAmountOutResponse\x12\x44\n\x08token_in\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x17\xf2\xde\x1f\x0fyaml:\"token_in\"\xc8\xde\x1f\x00\"\xa4\x01\n\x1dQueryJoinExactAmountInRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\x12r\n\ttokens_in\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"tokens_in\"\xc8\xde\x1f\x00\"\xf7\x01\n\x1eQueryJoinExactAmountInResponse\x12\x61\n\x0fpool_shares_out\x18\x01 \x01(\tBH\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xf2\xde\x1f\x16yaml:\"pool_shares_out\"\xc8\xde\x1f\x00\x12r\n\trem_coins\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"rem_coins\"\xc8\xde\x1f\x00\"1\n\x1eQueryJoinExactAmountOutRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"!\n\x1fQueryJoinExactAmountOutResponse\"\x91\x01\n\x1dQueryExitExactAmountInRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\x12_\n\x0epool_shares_in\x18\x02 \x01(\tBG\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xf2\xde\x1f\x15yaml:\"pool_shares_in\"\xc8\xde\x1f\x00\"\x96\x01\n\x1eQueryExitExactAmountInResponse\x12t\n\ntokens_out\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBE\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x11yaml:\"tokens_out\"\xc8\xde\x1f\x00\"1\n\x1eQueryExitExactAmountOutRequest\x12\x0f\n\x07pool_id\x18\x01 \x01(\x04\"!\n\x1fQueryExitExactAmountOutResponse2\xf5\x12\n\x05Query\x12k\n\x06Params\x12!.nibiru.dex.v1.QueryParamsRequest\x1a\".nibiru.dex.v1.QueryParamsResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/nibiru/dex/params\x12|\n\nPoolNumber\x12%.nibiru.dex.v1.QueryPoolNumberRequest\x1a&.nibiru.dex.v1.QueryPoolNumberResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/nibiru/dex/pool_number\x12\x63\n\x04Pool\x12\x1f.nibiru.dex.v1.QueryPoolRequest\x1a .nibiru.dex.v1.QueryPoolResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/nibiru/dex/pool\x12g\n\x05Pools\x12 .nibiru.dex.v1.QueryPoolsRequest\x1a!.nibiru.dex.v1.QueryPoolsResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/nibiru/dex/pools\x12\x87\x01\n\nPoolParams\x12%.nibiru.dex.v1.QueryPoolParamsRequest\x1a&.nibiru.dex.v1.QueryPoolParamsResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/nibiru/dex/pools/{pool_id}/params\x12t\n\x08NumPools\x12#.nibiru.dex.v1.QueryNumPoolsRequest\x1a$.nibiru.dex.v1.QueryNumPoolsResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/nibiru/dex/num_pools\x12\x8c\x01\n\x0eTotalLiquidity\x12).nibiru.dex.v1.QueryTotalLiquidityRequest\x1a*.nibiru.dex.v1.QueryTotalLiquidityResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/nibiru/dex/total_liquidity\x12\xad\x01\n\x12TotalPoolLiquidity\x12-.nibiru.dex.v1.QueryTotalPoolLiquidityRequest\x1a..nibiru.dex.v1.QueryTotalPoolLiquidityResponse\"8\x82\xd3\xe4\x93\x02\x32\x12\x30/nibiru/dex/pools/{pool_id}/total_pool_liquidity\x12\x90\x01\n\x0bTotalShares\x12&.nibiru.dex.v1.QueryTotalSharesRequest\x1a\'.nibiru.dex.v1.QueryTotalSharesResponse\"0\x82\xd3\xe4\x93\x02*\x12(/nibiru/dex/pools/{pool_id}/total_shares\x12\x84\x01\n\tSpotPrice\x12$.nibiru.dex.v1.QuerySpotPriceRequest\x1a%.nibiru.dex.v1.QuerySpotPriceResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/nibiru/dex/pools/{pool_id}/prices\x12\xb5\x01\n\x19\x45stimateSwapExactAmountIn\x12,.nibiru.dex.v1.QuerySwapExactAmountInRequest\x1a-.nibiru.dex.v1.QuerySwapExactAmountInResponse\";\x82\xd3\xe4\x93\x02\x35\x12\x33/nibiru/dex/{pool_id}/estimate/swap_exact_amount_in\x12\xb9\x01\n\x1a\x45stimateSwapExactAmountOut\x12-.nibiru.dex.v1.QuerySwapExactAmountOutRequest\x1a..nibiru.dex.v1.QuerySwapExactAmountOutResponse\"<\x82\xd3\xe4\x93\x02\x36\x12\x34/nibiru/dex/{pool_id}/estimate/swap_exact_amount_out\x12\xb5\x01\n\x19\x45stimateJoinExactAmountIn\x12,.nibiru.dex.v1.QueryJoinExactAmountInRequest\x1a-.nibiru.dex.v1.QueryJoinExactAmountInResponse\";\x82\xd3\xe4\x93\x02\x35\x12\x33/nibiru/dex/{pool_id}/estimate/join_exact_amount_in\x12\xb9\x01\n\x1a\x45stimateJoinExactAmountOut\x12-.nibiru.dex.v1.QueryJoinExactAmountOutRequest\x1a..nibiru.dex.v1.QueryJoinExactAmountOutResponse\"<\x82\xd3\xe4\x93\x02\x36\x12\x34/nibiru/dex/{pool_id}/estimate/join_exact_amount_out\x12\xb5\x01\n\x19\x45stimateExitExactAmountIn\x12,.nibiru.dex.v1.QueryExitExactAmountInRequest\x1a-.nibiru.dex.v1.QueryExitExactAmountInResponse\";\x82\xd3\xe4\x93\x02\x35\x12\x33/nibiru/dex/{pool_id}/estimate/exit_exact_amount_in\x12\xb9\x01\n\x1a\x45stimateExitExactAmountOut\x12-.nibiru.dex.v1.QueryExitExactAmountOutRequest\x1a..nibiru.dex.v1.QueryExitExactAmountOutResponse\"<\x82\xd3\xe4\x93\x02\x36\x12\x34/nibiru/dex/{pool_id}/estimate/exit_exact_amount_outB+Z)github.com/NibiruChain/nibiru/x/dex/typesb\x06proto3'
+    b'\n\x12\x64\x65x/v1/query.proto\x12\rnibiru.dex.v1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x13\x64\x65x/v1/params.proto\x1a\x11\x64\x65x/v1/pool.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\"\x14\n\x12QueryParamsRequest\"B\n\x13QueryParamsResponse\x12+\n\x06params\x18\x01 \x01(\x0b\x32\x15.nibiru.dex.v1.ParamsB\x04\xc8\xde\x1f\x00\"\x18\n\x16QueryPoolNumberRequest\")\n\x17QueryPoolNumberResponse\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"\"\n\x10QueryPoolRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"6\n\x11QueryPoolResponse\x12!\n\x04pool\x18\x01 \x01(\x0b\x32\x13.nibiru.dex.v1.Pool\"O\n\x11QueryPoolsRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"u\n\x12QueryPoolsResponse\x12\"\n\x05pools\x18\x01 \x03(\x0b\x32\x13.nibiru.dex.v1.Pool\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"(\n\x16QueryPoolParamsRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"H\n\x17QueryPoolParamsResponse\x12-\n\npoolParams\x18\x01 \x01(\x0b\x32\x19.nibiru.dex.v1.PoolParams\"\x16\n\x14QueryNumPoolsRequest\")\n\x15QueryNumPoolsResponse\x12\x10\n\x08numPools\x18\x01 \x01(\x04\"\x1c\n\x1aQueryTotalLiquidityRequest\"\x91\x01\n\x1bQueryTotalLiquidityResponse\x12r\n\tliquidity\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"liquidity\"\xc8\xde\x1f\x00\"0\n\x1eQueryTotalPoolLiquidityRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"\x95\x01\n\x1fQueryTotalPoolLiquidityResponse\x12r\n\tliquidity\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"liquidity\"\xc8\xde\x1f\x00\")\n\x17QueryTotalSharesRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"g\n\x18QueryTotalSharesResponse\x12K\n\x0btotalShares\x18\x01 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x1b\xf2\xde\x1f\x13yaml:\"total_shares\"\xc8\xde\x1f\x00\"T\n\x15QuerySpotPriceRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\x12\x14\n\x0ctokenInDenom\x18\x02 \x01(\t\x12\x15\n\rtokenOutDenom\x18\x03 \x01(\t\"+\n\x16QuerySpotPriceResponse\x12\x11\n\tspotPrice\x18\x01 \x01(\t\"\x8b\x01\n\x1dQuerySwapExactAmountInRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\x12\x43\n\x07tokenIn\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x17\xf2\xde\x1f\x0fyaml:\"token_in\"\xc8\xde\x1f\x00\x12\x15\n\rtokenOutDenom\x18\x03 \x01(\t\"g\n\x1eQuerySwapExactAmountInResponse\x12\x45\n\x08tokenOut\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x18\xf2\xde\x1f\x10yaml:\"token_out\"\xc8\xde\x1f\x00\"\x8d\x01\n\x1eQuerySwapExactAmountOutRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\x12\x45\n\x08tokenOut\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x18\xf2\xde\x1f\x10yaml:\"token_out\"\xc8\xde\x1f\x00\x12\x14\n\x0ctokenInDenom\x18\x03 \x01(\t\"f\n\x1fQuerySwapExactAmountOutResponse\x12\x43\n\x07tokenIn\x18\x02 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x17\xf2\xde\x1f\x0fyaml:\"token_in\"\xc8\xde\x1f\x00\"\xa2\x01\n\x1dQueryJoinExactAmountInRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\x12q\n\x08tokensIn\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"tokens_in\"\xc8\xde\x1f\x00\"\xf4\x01\n\x1eQueryJoinExactAmountInResponse\x12_\n\rpoolSharesOut\x18\x01 \x01(\tBH\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xf2\xde\x1f\x16yaml:\"pool_shares_out\"\xc8\xde\x1f\x00\x12q\n\x08remCoins\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBD\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x10yaml:\"rem_coins\"\xc8\xde\x1f\x00\"0\n\x1eQueryJoinExactAmountOutRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"!\n\x1fQueryJoinExactAmountOutResponse\"\x8e\x01\n\x1dQueryExitExactAmountInRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\x12]\n\x0cpoolSharesIn\x18\x02 \x01(\tBG\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Int\xf2\xde\x1f\x15yaml:\"pool_shares_in\"\xc8\xde\x1f\x00\"\x95\x01\n\x1eQueryExitExactAmountInResponse\x12s\n\ttokensOut\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinBE\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\xf2\xde\x1f\x11yaml:\"tokens_out\"\xc8\xde\x1f\x00\"0\n\x1eQueryExitExactAmountOutRequest\x12\x0e\n\x06poolId\x18\x01 \x01(\x04\"!\n\x1fQueryExitExactAmountOutResponse2\xeb\x12\n\x05Query\x12k\n\x06Params\x12!.nibiru.dex.v1.QueryParamsRequest\x1a\".nibiru.dex.v1.QueryParamsResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/nibiru/dex/params\x12|\n\nPoolNumber\x12%.nibiru.dex.v1.QueryPoolNumberRequest\x1a&.nibiru.dex.v1.QueryPoolNumberResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/nibiru/dex/pool_number\x12\x63\n\x04Pool\x12\x1f.nibiru.dex.v1.QueryPoolRequest\x1a .nibiru.dex.v1.QueryPoolResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/nibiru/dex/pool\x12g\n\x05Pools\x12 .nibiru.dex.v1.QueryPoolsRequest\x1a!.nibiru.dex.v1.QueryPoolsResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/nibiru/dex/pools\x12\x86\x01\n\nPoolParams\x12%.nibiru.dex.v1.QueryPoolParamsRequest\x1a&.nibiru.dex.v1.QueryPoolParamsResponse\")\x82\xd3\xe4\x93\x02#\x12!/nibiru/dex/pools/{poolId}/params\x12t\n\x08NumPools\x12#.nibiru.dex.v1.QueryNumPoolsRequest\x1a$.nibiru.dex.v1.QueryNumPoolsResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/nibiru/dex/num_pools\x12\x8c\x01\n\x0eTotalLiquidity\x12).nibiru.dex.v1.QueryTotalLiquidityRequest\x1a*.nibiru.dex.v1.QueryTotalLiquidityResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/nibiru/dex/total_liquidity\x12\xac\x01\n\x12TotalPoolLiquidity\x12-.nibiru.dex.v1.QueryTotalPoolLiquidityRequest\x1a..nibiru.dex.v1.QueryTotalPoolLiquidityResponse\"7\x82\xd3\xe4\x93\x02\x31\x12//nibiru/dex/pools/{poolId}/total_pool_liquidity\x12\x8f\x01\n\x0bTotalShares\x12&.nibiru.dex.v1.QueryTotalSharesRequest\x1a\'.nibiru.dex.v1.QueryTotalSharesResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/nibiru/dex/pools/{poolId}/total_shares\x12\x83\x01\n\tSpotPrice\x12$.nibiru.dex.v1.QuerySpotPriceRequest\x1a%.nibiru.dex.v1.QuerySpotPriceResponse\")\x82\xd3\xe4\x93\x02#\x12!/nibiru/dex/pools/{poolId}/prices\x12\xb4\x01\n\x19\x45stimateSwapExactAmountIn\x12,.nibiru.dex.v1.QuerySwapExactAmountInRequest\x1a-.nibiru.dex.v1.QuerySwapExactAmountInResponse\":\x82\xd3\xe4\x93\x02\x34\x12\x32/nibiru/dex/{poolId}/estimate/swap_exact_amount_in\x12\xb8\x01\n\x1a\x45stimateSwapExactAmountOut\x12-.nibiru.dex.v1.QuerySwapExactAmountOutRequest\x1a..nibiru.dex.v1.QuerySwapExactAmountOutResponse\";\x82\xd3\xe4\x93\x02\x35\x12\x33/nibiru/dex/{poolId}/estimate/swap_exact_amount_out\x12\xb4\x01\n\x19\x45stimateJoinExactAmountIn\x12,.nibiru.dex.v1.QueryJoinExactAmountInRequest\x1a-.nibiru.dex.v1.QueryJoinExactAmountInResponse\":\x82\xd3\xe4\x93\x02\x34\x12\x32/nibiru/dex/{poolId}/estimate/join_exact_amount_in\x12\xb8\x01\n\x1a\x45stimateJoinExactAmountOut\x12-.nibiru.dex.v1.QueryJoinExactAmountOutRequest\x1a..nibiru.dex.v1.QueryJoinExactAmountOutResponse\";\x82\xd3\xe4\x93\x02\x35\x12\x33/nibiru/dex/{poolId}/estimate/join_exact_amount_out\x12\xb4\x01\n\x19\x45stimateExitExactAmountIn\x12,.nibiru.dex.v1.QueryExitExactAmountInRequest\x1a-.nibiru.dex.v1.QueryExitExactAmountInResponse\":\x82\xd3\xe4\x93\x02\x34\x12\x32/nibiru/dex/{poolId}/estimate/exit_exact_amount_in\x12\xb8\x01\n\x1a\x45stimateExitExactAmountOut\x12-.nibiru.dex.v1.QueryExitExactAmountOutRequest\x1a..nibiru.dex.v1.QueryExitExactAmountOutResponse\";\x82\xd3\xe4\x93\x02\x35\x12\x33/nibiru/dex/{poolId}/estimate/exit_exact_amount_outB+Z)github.com/NibiruChain/nibiru/x/dex/typesb\x06proto3'
 )
 
 
@@ -430,53 +430,53 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     ]._serialized_options = (
         b'\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins\362\336\037\020yaml:\"liquidity\"\310\336\037\000'
     )
-    _QUERYTOTALSHARESRESPONSE.fields_by_name['total_shares']._options = None
+    _QUERYTOTALSHARESRESPONSE.fields_by_name['totalShares']._options = None
     _QUERYTOTALSHARESRESPONSE.fields_by_name[
-        'total_shares'
+        'totalShares'
     ]._serialized_options = b'\362\336\037\023yaml:\"total_shares\"\310\336\037\000'
-    _QUERYSWAPEXACTAMOUNTINREQUEST.fields_by_name['token_in']._options = None
+    _QUERYSWAPEXACTAMOUNTINREQUEST.fields_by_name['tokenIn']._options = None
     _QUERYSWAPEXACTAMOUNTINREQUEST.fields_by_name[
-        'token_in'
+        'tokenIn'
     ]._serialized_options = b'\362\336\037\017yaml:\"token_in\"\310\336\037\000'
-    _QUERYSWAPEXACTAMOUNTINRESPONSE.fields_by_name['token_out']._options = None
+    _QUERYSWAPEXACTAMOUNTINRESPONSE.fields_by_name['tokenOut']._options = None
     _QUERYSWAPEXACTAMOUNTINRESPONSE.fields_by_name[
-        'token_out'
+        'tokenOut'
     ]._serialized_options = b'\362\336\037\020yaml:\"token_out\"\310\336\037\000'
-    _QUERYSWAPEXACTAMOUNTOUTREQUEST.fields_by_name['token_out']._options = None
+    _QUERYSWAPEXACTAMOUNTOUTREQUEST.fields_by_name['tokenOut']._options = None
     _QUERYSWAPEXACTAMOUNTOUTREQUEST.fields_by_name[
-        'token_out'
+        'tokenOut'
     ]._serialized_options = b'\362\336\037\020yaml:\"token_out\"\310\336\037\000'
-    _QUERYSWAPEXACTAMOUNTOUTRESPONSE.fields_by_name['token_in']._options = None
+    _QUERYSWAPEXACTAMOUNTOUTRESPONSE.fields_by_name['tokenIn']._options = None
     _QUERYSWAPEXACTAMOUNTOUTRESPONSE.fields_by_name[
-        'token_in'
+        'tokenIn'
     ]._serialized_options = b'\362\336\037\017yaml:\"token_in\"\310\336\037\000'
-    _QUERYJOINEXACTAMOUNTINREQUEST.fields_by_name['tokens_in']._options = None
+    _QUERYJOINEXACTAMOUNTINREQUEST.fields_by_name['tokensIn']._options = None
     _QUERYJOINEXACTAMOUNTINREQUEST.fields_by_name[
-        'tokens_in'
+        'tokensIn'
     ]._serialized_options = (
         b'\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins\362\336\037\020yaml:\"tokens_in\"\310\336\037\000'
     )
-    _QUERYJOINEXACTAMOUNTINRESPONSE.fields_by_name['pool_shares_out']._options = None
+    _QUERYJOINEXACTAMOUNTINRESPONSE.fields_by_name['poolSharesOut']._options = None
     _QUERYJOINEXACTAMOUNTINRESPONSE.fields_by_name[
-        'pool_shares_out'
+        'poolSharesOut'
     ]._serialized_options = (
         b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Int\362\336\037\026yaml:\"pool_shares_out\"\310\336\037\000'
     )
-    _QUERYJOINEXACTAMOUNTINRESPONSE.fields_by_name['rem_coins']._options = None
+    _QUERYJOINEXACTAMOUNTINRESPONSE.fields_by_name['remCoins']._options = None
     _QUERYJOINEXACTAMOUNTINRESPONSE.fields_by_name[
-        'rem_coins'
+        'remCoins'
     ]._serialized_options = (
         b'\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins\362\336\037\020yaml:\"rem_coins\"\310\336\037\000'
     )
-    _QUERYEXITEXACTAMOUNTINREQUEST.fields_by_name['pool_shares_in']._options = None
+    _QUERYEXITEXACTAMOUNTINREQUEST.fields_by_name['poolSharesIn']._options = None
     _QUERYEXITEXACTAMOUNTINREQUEST.fields_by_name[
-        'pool_shares_in'
+        'poolSharesIn'
     ]._serialized_options = (
         b'\332\336\037&github.com/cosmos/cosmos-sdk/types.Int\362\336\037\025yaml:\"pool_shares_in\"\310\336\037\000'
     )
-    _QUERYEXITEXACTAMOUNTINRESPONSE.fields_by_name['tokens_out']._options = None
+    _QUERYEXITEXACTAMOUNTINRESPONSE.fields_by_name['tokensOut']._options = None
     _QUERYEXITEXACTAMOUNTINRESPONSE.fields_by_name[
-        'tokens_out'
+        'tokensOut'
     ]._serialized_options = (
         b'\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins\362\336\037\021yaml:\"tokens_out\"\310\336\037\000'
     )
@@ -493,7 +493,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _QUERY.methods_by_name['PoolParams']._options = None
     _QUERY.methods_by_name[
         'PoolParams'
-    ]._serialized_options = b'\202\323\344\223\002$\022\"/nibiru/dex/pools/{pool_id}/params'
+    ]._serialized_options = b'\202\323\344\223\002#\022!/nibiru/dex/pools/{poolId}/params'
     _QUERY.methods_by_name['NumPools']._options = None
     _QUERY.methods_by_name['NumPools']._serialized_options = b'\202\323\344\223\002\027\022\025/nibiru/dex/num_pools'
     _QUERY.methods_by_name['TotalLiquidity']._options = None
@@ -503,39 +503,39 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _QUERY.methods_by_name['TotalPoolLiquidity']._options = None
     _QUERY.methods_by_name[
         'TotalPoolLiquidity'
-    ]._serialized_options = b'\202\323\344\223\0022\0220/nibiru/dex/pools/{pool_id}/total_pool_liquidity'
+    ]._serialized_options = b'\202\323\344\223\0021\022//nibiru/dex/pools/{poolId}/total_pool_liquidity'
     _QUERY.methods_by_name['TotalShares']._options = None
     _QUERY.methods_by_name[
         'TotalShares'
-    ]._serialized_options = b'\202\323\344\223\002*\022(/nibiru/dex/pools/{pool_id}/total_shares'
+    ]._serialized_options = b'\202\323\344\223\002)\022\'/nibiru/dex/pools/{poolId}/total_shares'
     _QUERY.methods_by_name['SpotPrice']._options = None
     _QUERY.methods_by_name[
         'SpotPrice'
-    ]._serialized_options = b'\202\323\344\223\002$\022\"/nibiru/dex/pools/{pool_id}/prices'
+    ]._serialized_options = b'\202\323\344\223\002#\022!/nibiru/dex/pools/{poolId}/prices'
     _QUERY.methods_by_name['EstimateSwapExactAmountIn']._options = None
     _QUERY.methods_by_name[
         'EstimateSwapExactAmountIn'
-    ]._serialized_options = b'\202\323\344\223\0025\0223/nibiru/dex/{pool_id}/estimate/swap_exact_amount_in'
+    ]._serialized_options = b'\202\323\344\223\0024\0222/nibiru/dex/{poolId}/estimate/swap_exact_amount_in'
     _QUERY.methods_by_name['EstimateSwapExactAmountOut']._options = None
     _QUERY.methods_by_name[
         'EstimateSwapExactAmountOut'
-    ]._serialized_options = b'\202\323\344\223\0026\0224/nibiru/dex/{pool_id}/estimate/swap_exact_amount_out'
+    ]._serialized_options = b'\202\323\344\223\0025\0223/nibiru/dex/{poolId}/estimate/swap_exact_amount_out'
     _QUERY.methods_by_name['EstimateJoinExactAmountIn']._options = None
     _QUERY.methods_by_name[
         'EstimateJoinExactAmountIn'
-    ]._serialized_options = b'\202\323\344\223\0025\0223/nibiru/dex/{pool_id}/estimate/join_exact_amount_in'
+    ]._serialized_options = b'\202\323\344\223\0024\0222/nibiru/dex/{poolId}/estimate/join_exact_amount_in'
     _QUERY.methods_by_name['EstimateJoinExactAmountOut']._options = None
     _QUERY.methods_by_name[
         'EstimateJoinExactAmountOut'
-    ]._serialized_options = b'\202\323\344\223\0026\0224/nibiru/dex/{pool_id}/estimate/join_exact_amount_out'
+    ]._serialized_options = b'\202\323\344\223\0025\0223/nibiru/dex/{poolId}/estimate/join_exact_amount_out'
     _QUERY.methods_by_name['EstimateExitExactAmountIn']._options = None
     _QUERY.methods_by_name[
         'EstimateExitExactAmountIn'
-    ]._serialized_options = b'\202\323\344\223\0025\0223/nibiru/dex/{pool_id}/estimate/exit_exact_amount_in'
+    ]._serialized_options = b'\202\323\344\223\0024\0222/nibiru/dex/{poolId}/estimate/exit_exact_amount_in'
     _QUERY.methods_by_name['EstimateExitExactAmountOut']._options = None
     _QUERY.methods_by_name[
         'EstimateExitExactAmountOut'
-    ]._serialized_options = b'\202\323\344\223\0026\0224/nibiru/dex/{pool_id}/estimate/exit_exact_amount_out'
+    ]._serialized_options = b'\202\323\344\223\0025\0223/nibiru/dex/{poolId}/estimate/exit_exact_amount_out'
     _QUERYPARAMSREQUEST._serialized_start = 205
     _QUERYPARAMSREQUEST._serialized_end = 225
     _QUERYPARAMSRESPONSE._serialized_start = 227
@@ -543,63 +543,63 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _QUERYPOOLNUMBERREQUEST._serialized_start = 295
     _QUERYPOOLNUMBERREQUEST._serialized_end = 319
     _QUERYPOOLNUMBERRESPONSE._serialized_start = 321
-    _QUERYPOOLNUMBERRESPONSE._serialized_end = 363
-    _QUERYPOOLREQUEST._serialized_start = 365
-    _QUERYPOOLREQUEST._serialized_end = 400
-    _QUERYPOOLRESPONSE._serialized_start = 402
-    _QUERYPOOLRESPONSE._serialized_end = 456
-    _QUERYPOOLSREQUEST._serialized_start = 458
-    _QUERYPOOLSREQUEST._serialized_end = 537
-    _QUERYPOOLSRESPONSE._serialized_start = 539
-    _QUERYPOOLSRESPONSE._serialized_end = 656
-    _QUERYPOOLPARAMSREQUEST._serialized_start = 658
-    _QUERYPOOLPARAMSREQUEST._serialized_end = 699
-    _QUERYPOOLPARAMSRESPONSE._serialized_start = 701
-    _QUERYPOOLPARAMSRESPONSE._serialized_end = 774
-    _QUERYNUMPOOLSREQUEST._serialized_start = 776
-    _QUERYNUMPOOLSREQUEST._serialized_end = 798
-    _QUERYNUMPOOLSRESPONSE._serialized_start = 800
-    _QUERYNUMPOOLSRESPONSE._serialized_end = 842
-    _QUERYTOTALLIQUIDITYREQUEST._serialized_start = 844
-    _QUERYTOTALLIQUIDITYREQUEST._serialized_end = 872
-    _QUERYTOTALLIQUIDITYRESPONSE._serialized_start = 875
-    _QUERYTOTALLIQUIDITYRESPONSE._serialized_end = 1020
-    _QUERYTOTALPOOLLIQUIDITYREQUEST._serialized_start = 1022
-    _QUERYTOTALPOOLLIQUIDITYREQUEST._serialized_end = 1071
-    _QUERYTOTALPOOLLIQUIDITYRESPONSE._serialized_start = 1074
-    _QUERYTOTALPOOLLIQUIDITYRESPONSE._serialized_end = 1223
-    _QUERYTOTALSHARESREQUEST._serialized_start = 1225
-    _QUERYTOTALSHARESREQUEST._serialized_end = 1267
-    _QUERYTOTALSHARESRESPONSE._serialized_start = 1269
-    _QUERYTOTALSHARESRESPONSE._serialized_end = 1373
-    _QUERYSPOTPRICEREQUEST._serialized_start = 1375
-    _QUERYSPOTPRICEREQUEST._serialized_end = 1464
-    _QUERYSPOTPRICERESPONSE._serialized_start = 1466
-    _QUERYSPOTPRICERESPONSE._serialized_end = 1510
-    _QUERYSWAPEXACTAMOUNTINREQUEST._serialized_start = 1513
-    _QUERYSWAPEXACTAMOUNTINREQUEST._serialized_end = 1656
-    _QUERYSWAPEXACTAMOUNTINRESPONSE._serialized_start = 1658
-    _QUERYSWAPEXACTAMOUNTINRESPONSE._serialized_end = 1762
-    _QUERYSWAPEXACTAMOUNTOUTREQUEST._serialized_start = 1765
-    _QUERYSWAPEXACTAMOUNTOUTREQUEST._serialized_end = 1910
-    _QUERYSWAPEXACTAMOUNTOUTRESPONSE._serialized_start = 1912
-    _QUERYSWAPEXACTAMOUNTOUTRESPONSE._serialized_end = 2015
-    _QUERYJOINEXACTAMOUNTINREQUEST._serialized_start = 2018
-    _QUERYJOINEXACTAMOUNTINREQUEST._serialized_end = 2182
-    _QUERYJOINEXACTAMOUNTINRESPONSE._serialized_start = 2185
-    _QUERYJOINEXACTAMOUNTINRESPONSE._serialized_end = 2432
-    _QUERYJOINEXACTAMOUNTOUTREQUEST._serialized_start = 2434
-    _QUERYJOINEXACTAMOUNTOUTREQUEST._serialized_end = 2483
-    _QUERYJOINEXACTAMOUNTOUTRESPONSE._serialized_start = 2485
-    _QUERYJOINEXACTAMOUNTOUTRESPONSE._serialized_end = 2518
-    _QUERYEXITEXACTAMOUNTINREQUEST._serialized_start = 2521
-    _QUERYEXITEXACTAMOUNTINREQUEST._serialized_end = 2666
-    _QUERYEXITEXACTAMOUNTINRESPONSE._serialized_start = 2669
-    _QUERYEXITEXACTAMOUNTINRESPONSE._serialized_end = 2819
-    _QUERYEXITEXACTAMOUNTOUTREQUEST._serialized_start = 2821
-    _QUERYEXITEXACTAMOUNTOUTREQUEST._serialized_end = 2870
-    _QUERYEXITEXACTAMOUNTOUTRESPONSE._serialized_start = 2872
-    _QUERYEXITEXACTAMOUNTOUTRESPONSE._serialized_end = 2905
-    _QUERY._serialized_start = 2908
-    _QUERY._serialized_end = 5329
+    _QUERYPOOLNUMBERRESPONSE._serialized_end = 362
+    _QUERYPOOLREQUEST._serialized_start = 364
+    _QUERYPOOLREQUEST._serialized_end = 398
+    _QUERYPOOLRESPONSE._serialized_start = 400
+    _QUERYPOOLRESPONSE._serialized_end = 454
+    _QUERYPOOLSREQUEST._serialized_start = 456
+    _QUERYPOOLSREQUEST._serialized_end = 535
+    _QUERYPOOLSRESPONSE._serialized_start = 537
+    _QUERYPOOLSRESPONSE._serialized_end = 654
+    _QUERYPOOLPARAMSREQUEST._serialized_start = 656
+    _QUERYPOOLPARAMSREQUEST._serialized_end = 696
+    _QUERYPOOLPARAMSRESPONSE._serialized_start = 698
+    _QUERYPOOLPARAMSRESPONSE._serialized_end = 770
+    _QUERYNUMPOOLSREQUEST._serialized_start = 772
+    _QUERYNUMPOOLSREQUEST._serialized_end = 794
+    _QUERYNUMPOOLSRESPONSE._serialized_start = 796
+    _QUERYNUMPOOLSRESPONSE._serialized_end = 837
+    _QUERYTOTALLIQUIDITYREQUEST._serialized_start = 839
+    _QUERYTOTALLIQUIDITYREQUEST._serialized_end = 867
+    _QUERYTOTALLIQUIDITYRESPONSE._serialized_start = 870
+    _QUERYTOTALLIQUIDITYRESPONSE._serialized_end = 1015
+    _QUERYTOTALPOOLLIQUIDITYREQUEST._serialized_start = 1017
+    _QUERYTOTALPOOLLIQUIDITYREQUEST._serialized_end = 1065
+    _QUERYTOTALPOOLLIQUIDITYRESPONSE._serialized_start = 1068
+    _QUERYTOTALPOOLLIQUIDITYRESPONSE._serialized_end = 1217
+    _QUERYTOTALSHARESREQUEST._serialized_start = 1219
+    _QUERYTOTALSHARESREQUEST._serialized_end = 1260
+    _QUERYTOTALSHARESRESPONSE._serialized_start = 1262
+    _QUERYTOTALSHARESRESPONSE._serialized_end = 1365
+    _QUERYSPOTPRICEREQUEST._serialized_start = 1367
+    _QUERYSPOTPRICEREQUEST._serialized_end = 1451
+    _QUERYSPOTPRICERESPONSE._serialized_start = 1453
+    _QUERYSPOTPRICERESPONSE._serialized_end = 1496
+    _QUERYSWAPEXACTAMOUNTINREQUEST._serialized_start = 1499
+    _QUERYSWAPEXACTAMOUNTINREQUEST._serialized_end = 1638
+    _QUERYSWAPEXACTAMOUNTINRESPONSE._serialized_start = 1640
+    _QUERYSWAPEXACTAMOUNTINRESPONSE._serialized_end = 1743
+    _QUERYSWAPEXACTAMOUNTOUTREQUEST._serialized_start = 1746
+    _QUERYSWAPEXACTAMOUNTOUTREQUEST._serialized_end = 1887
+    _QUERYSWAPEXACTAMOUNTOUTRESPONSE._serialized_start = 1889
+    _QUERYSWAPEXACTAMOUNTOUTRESPONSE._serialized_end = 1991
+    _QUERYJOINEXACTAMOUNTINREQUEST._serialized_start = 1994
+    _QUERYJOINEXACTAMOUNTINREQUEST._serialized_end = 2156
+    _QUERYJOINEXACTAMOUNTINRESPONSE._serialized_start = 2159
+    _QUERYJOINEXACTAMOUNTINRESPONSE._serialized_end = 2403
+    _QUERYJOINEXACTAMOUNTOUTREQUEST._serialized_start = 2405
+    _QUERYJOINEXACTAMOUNTOUTREQUEST._serialized_end = 2453
+    _QUERYJOINEXACTAMOUNTOUTRESPONSE._serialized_start = 2455
+    _QUERYJOINEXACTAMOUNTOUTRESPONSE._serialized_end = 2488
+    _QUERYEXITEXACTAMOUNTINREQUEST._serialized_start = 2491
+    _QUERYEXITEXACTAMOUNTINREQUEST._serialized_end = 2633
+    _QUERYEXITEXACTAMOUNTINRESPONSE._serialized_start = 2636
+    _QUERYEXITEXACTAMOUNTINRESPONSE._serialized_end = 2785
+    _QUERYEXITEXACTAMOUNTOUTREQUEST._serialized_start = 2787
+    _QUERYEXITEXACTAMOUNTOUTREQUEST._serialized_end = 2835
+    _QUERYEXITEXACTAMOUNTOUTRESPONSE._serialized_start = 2837
+    _QUERYEXITEXACTAMOUNTOUTRESPONSE._serialized_end = 2870
+    _QUERY._serialized_start = 2873
+    _QUERY._serialized_end = 5284
 # @@protoc_insertion_point(module_scope)

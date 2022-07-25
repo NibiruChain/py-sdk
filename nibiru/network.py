@@ -23,8 +23,8 @@ class Network:
     def testnet(cls) -> "Network":
         return cls(
             lcd_endpoint='https://lcd.nibiru.fi',
-            grpc_endpoint='rpc.nibiru.fi:9090',
-            grpc_exchange_endpoint='rpc.nibiru.fi:9090',
+            grpc_endpoint='rpc.nibiru.fi',
+            grpc_exchange_endpoint='rpc.nibiru.fi',
             chain_id='nibiru-testnet-3',
             fee_denom='unibi',
             env='testnet',

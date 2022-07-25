@@ -14,20 +14,21 @@
 
 import logging
 
-from nibiru import Sdk, Side
+from nibiru import Network, Sdk, Side
 
 
 def main() -> None:
     trader = Sdk.authorize(
         "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
-    )
+    ).with_network(Network.testnet(), False)
     res = trader.tx.perp.open_position(
         sender=trader.address,
         token_pair="axlwbtc:unusd",
         side=Side.BUY,
-        quote_asset_amount=1000,
-        leverage=10,
+        quote_asset_amount=0.1,
+        leverage=1,
         base_asset_amount_limit=0,
+        tx_type='block',
     )
     print(res)
 

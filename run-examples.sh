@@ -1,5 +1,5 @@
 runChainExamples(){
-  examples=$(find -s examples/chain_client_examples -type f -mindepth 1 -name '*.py')
+  examples=$(find -s examples/chain_client -type f -mindepth 1 -name '*.py')
   echo "Running all chain examples..."
   for example in $examples
   do
@@ -10,7 +10,7 @@ runChainExamples(){
 }
 
 runExchangeExamples(){
-  dirs=$(find -s examples/exchange_api_examples -type d -mindepth 1)
+  dirs=$(find -s examples/exchange_client -type d -mindepth 1)
   for dir in $dirs
   do
     examples=$(find -s $dir -type f -name '*.py')
@@ -37,6 +37,7 @@ case $TYPE in
     ;;
 
   *)
-    echo "Missing required argument, must be \"chain\" or \"exchange\""
+    runExchangeExamples
+    runChainExamples
     ;;
 esac

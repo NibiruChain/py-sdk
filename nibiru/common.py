@@ -23,7 +23,7 @@ class Direction(Enum):
 @dataclass
 class PoolAsset:
     token: coin_pb.Coin
-    weight: str
+    weight: int
 
 
 class TxConfig:

@@ -10,6 +10,7 @@ from nibiru.wallet import PrivateKey
 from .common import Tx
 from .dex import Dex
 from .perp import Perp
+from .pricefeed import Pricefeed
 
 
 class TxClient(Tx):
@@ -17,6 +18,7 @@ class TxClient(Tx):
         super().__init__(client=client, network=network, priv_key=priv_key, config=config)
         self.dex = Dex(client=client, network=network, priv_key=priv_key, config=config)
         self.perp = Perp(client=client, network=network, priv_key=priv_key, config=config)
+        self.pricefeed = Pricefeed(client=client, network=network, priv_key=priv_key, config=config)
 
     def msg_send(self, from_address: str, to_address: str, coins: List[Coin], **kwargs):
         msg = Composer.msg_send(from_address, to_address, coins=coins)

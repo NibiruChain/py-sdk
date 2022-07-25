@@ -53,12 +53,16 @@ Upgrade `pip` to the latest version, if you see these warnings:
 2. Generate proto binding & build
   ```
   make proto-gen
-  python -m build
+  python -m build     # Run `pip install build` in case this fails
   ```
 
 
 3. Install pkg
   ```
+  # from local
+  # build and install
+  pip install .
+
   # from local build
   pip uninstall nibiru-py
   pip install nibiru-py --no-index --find-links /path/to/nibiru/sdk-python/dist

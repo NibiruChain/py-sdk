@@ -34,9 +34,9 @@ class Sdk:
 
         return self
 
-    def with_network(self, network: Network) -> "Sdk":
+    def with_network(self, network: Network, insecure=True) -> "Sdk":
         self._network = network
-        self.with_query_client(Client(self._network, True))
+        self.with_query_client(Client(self._network, insecure))
         return self
 
     def with_query_client(self, client: Client) -> "Sdk":

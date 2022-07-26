@@ -15,11 +15,12 @@
 
 import logging
 
+from nibiru.network import Network
 from nibiru.sdk import Sdk
 
 
 def main() -> None:
-    resp = Sdk.authorize().query.dex.params()
+    resp = Sdk.authorize().with_network(Network.testnet(), False).query.dex.params()
     print(resp)
 
 

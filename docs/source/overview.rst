@@ -17,7 +17,7 @@ Quick start
 -----------
 
 To interact with the chain, you will need to create an account. 
-You can create a new account using the CLI command 
+You can create a new account using the CLI command.
 
 .. code:: python
 

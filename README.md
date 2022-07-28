@@ -1,6 +1,27 @@
-## Nibiru Python SDK
+# Nibiru Python SDK
 
-[![Documentation Status](https://readthedocs.org/projects/nibiru-py/badge/?version=latest)](https://nibiru-py.readthedocs.io/en/latest/?badge=latest)
+> Interact with the Nibiru protocol using Python.
+
+[![PyPI Version][pypi-image]][pypi-url]
+[![][documentation-image]][documentation-url]
+[![][discord-image]][discord-url]
+[![][stars-image]][stars-url]
+
+<!-- Badges: -->
+
+[pypi-image]: https://img.shields.io/pypi/v/nibiru-py
+[pypi-url]: https://pypi.org/project/nibiru-py/
+[stars-image]: https://img.shields.io/github/stars/NibiruChain?style=social
+[stars-url]: https://github.com/NibiruChain
+[documentation-image]: https://readthedocs.org/projects/nibiru-py/badge/?version=latest
+[documentation-url]: https://nibiru-py.readthedocs.io/en/latest/?badge=latest
+[discord-image]: https://img.shields.io/discord/947911971515293759
+[discord-url]: https://discord.gg/
+
+The nibiru-py allows you to connect and trade with the Nibiru Protocol. It provides quick access to market data for storage, analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
+
+It is intended to be used by coders, developers, technically-skilled traders, data-scientists and financial analysts for building trading algorithms.
+
 
 
 ### Dependencies

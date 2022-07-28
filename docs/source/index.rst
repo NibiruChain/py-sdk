@@ -19,6 +19,7 @@ Contents
    overview
    perpetual
    general
+   constants
 
 Index
 ==================

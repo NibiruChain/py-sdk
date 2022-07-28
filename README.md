@@ -22,7 +22,11 @@ The nibiru-py allows you to connect and trade with the Nibiru Protocol. It provi
 
 It is intended to be used by coders, developers, technically-skilled traders, data-scientists and financial analysts for building trading algorithms.
 
+## Documentation
 
+Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.readthedocs.io/en/latest/index.html)
+
+## Installation
 
 ### Dependencies
 

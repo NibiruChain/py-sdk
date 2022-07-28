@@ -1,25 +1,13 @@
-Concepts \| x/perp
-==================
-
--  `Perp Positions`_
-
-   -  `Mark Price and Index Price`_
-   -  `Leverage and Perp Position Value`_
-   -  `Margin and Margin Ratio`_
-   -  `Funding Payments`_
-
--  `Virtual Pools`_
--  `Liquidations`_
--  `References`_
-
---------------
-
 Perp Positions
 ==============
 
 A perpetual contract, or perp, is a type of crypto-native derivative
 that enables traders to speculate on price movements without holding the
 underlying asset. Nibiru allows traders to trade perps with leverage.
+
+-  `Mark Price and Index Price`_
+-  `Leverage and Perp Position Value`_
+-  `Margin and Margin Ratio`_
 
 Mark Price and Index Price
 --------------------------
@@ -220,10 +208,8 @@ from the query call of the perp module.
 .. _Liquidations: #liquidations
 .. _References: #references
 
---------------
-
 References
-==========
+----------
 
 -  Index Price and Mark Price. BTSE. `[support.btse.com]`_
 -  Notional Value vs. Market Value: An Overview. Investopedia.

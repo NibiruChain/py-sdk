@@ -10,7 +10,7 @@ INT_MULT = 1e6
 
 
 # reimplementation of cosmos-sdk/types/decimal.go
-def float_to_sdkdec(dec: float) -> str:
+def to_sdk_dec(dec: float) -> str:
     '''
     create a decimal from an input decimal.
     valid must come in the form:
@@ -73,7 +73,7 @@ def float_to_sdkdec(dec: float) -> str:
     return combined_str
 
 
-def sdkdec_to_float(dec_str: str) -> float:
+def from_sdk_dec(dec_str: str) -> float:
     if dec_str is None or dec_str == '':
         return 0
 
@@ -116,11 +116,11 @@ def sdkdec_to_float(dec_str: str) -> float:
     return float(bz_str)
 
 
-def float_to_sdkint(i: float) -> str:
+def to_sdk_int(i: float) -> str:
     return str(int(i * INT_MULT))
 
 
-def sdkint_to_float(int_str: str) -> float:
+def from_sdk_int(int_str: str) -> float:
     return float(int_str) / INT_MULT
 
 

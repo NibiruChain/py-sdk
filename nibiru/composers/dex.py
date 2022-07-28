@@ -4,15 +4,15 @@ from nibiru.common import PoolAsset
 from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
 from nibiru.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru.proto.dex.v1 import tx_pb2 as dex_tx_pb
-from nibiru.utils import float_to_sdkdec
+from nibiru.utils import to_sdk_dec
 
 
 class Dex:
     @staticmethod
     def create_pool(creator: str, assets: List[PoolAsset], swap_fee: float = 0, exit_fee: float = 0):
         pool_assets = [pool_tx_pb.PoolAsset(token=a.token, weight=str(a.weight)) for a in assets]
-        swap_fee_dec = float_to_sdkdec(swap_fee)
-        exit_fee_dec = float_to_sdkdec(exit_fee)
+        swap_fee_dec = to_sdk_dec(swap_fee)
+        exit_fee_dec = to_sdk_dec(exit_fee)
         return dex_tx_pb.MsgCreatePool(
             creator=creator,
             pool_params=pool_tx_pb.PoolParams(swapFee=swap_fee_dec, exitFee=exit_fee_dec),

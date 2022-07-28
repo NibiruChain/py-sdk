@@ -10,8 +10,9 @@ Contents
    :maxdepth: 2
 
    overview
-   constants
+   perpetual
    general
+   constants
 
 Index
 ==================

@@ -22,10 +22,6 @@ from .proto.cosmos.base.tendermint.v1beta1 import (
 )
 from .proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from .proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
-from .proto.epochs import query_pb2_grpc as epochs_query
-from .proto.incentivization.v1 import incentivization_pb2_grpc as incentivization_query
-from .proto.lockup.v1 import query_pb2_grpc as lockup_query
-from .proto.stablecoin import query_pb2_grpc as stablecoin_query
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 
@@ -34,7 +30,7 @@ class Client:
     def __init__(
         self,
         network: Network,
-        insecure: bool = False,
+        insecure=False,
         credentials: grpc.ChannelCredentials = None,
     ):
 
@@ -67,19 +63,7 @@ class Client:
         self.dex = DexClient(self.exchange_channel)
         self.pricefeed = PricefeedClient(self.exchange_channel)
         self.perp = PerpClient(self.exchange_channel)
-        self.stubLockup = lockup_query.QueryStub(self.exchange_channel)
-        self.stubIncentivization = incentivization_query.QueryStub(self.exchange_channel)
         self.vpool = VPoolClient(self.exchange_channel)
-        self.stubStablecoin = stablecoin_query.QueryStub(self.exchange_channel)
-        self.stubEpochs = epochs_query.QueryStub(self.exchange_channel)
-
-        # timeout height update routine
-        # aiocron.crontab(
-        #     '* * * * * */{}'.format(DEFAULT_TIMEOUTHEIGHT_SYNC_INTERVAL),
-        #     func=self.sync_timeout_height,
-        #     args=(),
-        #     start=True
-        # )
 
     def close_exchange_channel(self):
         self.exchange_channel.close()

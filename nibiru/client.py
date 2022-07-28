@@ -30,7 +30,7 @@ class Client:
     def __init__(
         self,
         network: Network,
-        insecure: bool = False,
+        insecure=False,
         credentials: grpc.ChannelCredentials = None,
     ):
 

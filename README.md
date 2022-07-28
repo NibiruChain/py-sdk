@@ -1,5 +1,8 @@
 ## Nibiru Python SDK
 
+[![Documentation Status](https://readthedocs.org/projects/nibiru-py/badge/?version=latest)](https://nibiru-py.readthedocs.io/en/latest/?badge=latest)
+
+
 ### Dependencies
 
 **Ubuntu**

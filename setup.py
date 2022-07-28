@@ -16,7 +16,7 @@ DESCRIPTION = "Nibiru Python SDK"
 URL = "https://github.com/NibiruChain/sdk-python"
 EMAIL = "dev@nibiru.fi"
 AUTHOR = "Nibiru Chain"
-REQUIRES_PYTHON = ">=3.7.0"
+REQUIRES_PYTHON = ">=3.9.0"
 VERSION = "0.0.11"
 
 REQUIRED = [

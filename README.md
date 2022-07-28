@@ -27,7 +27,7 @@ pip install nibiru-py
 ```
 
 ### Usage
-Requires Python 3.7+
+Requires Python 3.9+
 
 [Examples](https://github.com/NibiruChain/sdk-python/tree/master/examples)
 ```bash

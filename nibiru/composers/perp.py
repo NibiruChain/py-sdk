@@ -2,7 +2,7 @@ from nibiru.common import Side
 from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
 from nibiru.proto.perp.v1 import state_pb2 as state_pb
 from nibiru.proto.perp.v1 import tx_pb2 as tx
-from nibiru.utils import float_to_sdkdec, float_to_sdkint
+from nibiru.utils import to_sdk_dec, to_sdk_int
 
 
 class Perp:
@@ -40,9 +40,9 @@ class Perp:
         base_asset_amount_limit: float,
     ):
         pb_side = state_pb.Side.BUY if side == Side.BUY else state_pb.SELL
-        quote_asset_amount_pb = float_to_sdkint(quote_asset_amount)
-        base_asset_amount_limit_pb = float_to_sdkint(base_asset_amount_limit)
-        leverage_pb = float_to_sdkdec(leverage)
+        quote_asset_amount_pb = to_sdk_int(quote_asset_amount)
+        base_asset_amount_limit_pb = to_sdk_int(base_asset_amount_limit)
+        leverage_pb = to_sdk_dec(leverage)
         return tx.MsgOpenPosition(
             sender=sender,
             token_pair=token_pair,

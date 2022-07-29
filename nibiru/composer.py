@@ -2,7 +2,7 @@ from typing import List
 
 from google.protobuf import any_pb2
 
-from .composers import Dex, Perp, Pricefeed
+from .composers import Dex, Pricefeed
 from .proto.cosmos.authz.v1beta1 import tx_pb2 as cosmos_authz_tx_pb
 from .proto.cosmos.bank.v1beta1 import tx_pb2 as cosmos_bank_tx_pb
 from .proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
@@ -12,7 +12,6 @@ from .proto.cosmos.staking.v1beta1 import tx_pb2 as cosmos_staking_tx_pb
 
 class Composer:
     dex = Dex
-    perp = Perp
     pricefeed = Pricefeed
 
     @staticmethod

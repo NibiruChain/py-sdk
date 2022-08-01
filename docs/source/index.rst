@@ -18,6 +18,7 @@ Contents
 
    overview
    perpetual
+   dex
    general
 
 Index

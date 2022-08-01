@@ -22,7 +22,11 @@ The nibiru-py allows you to connect and trade with the Nibiru Protocol. It provi
 
 It is intended to be used by coders, developers, technically-skilled traders, data-scientists and financial analysts for building trading algorithms.
 
+## Documentation
 
+Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.readthedocs.io/en/latest/index.html)
+
+## Installation
 
 ### Dependencies
 
@@ -50,7 +54,7 @@ pip install nibiru-py
 ### Usage
 Requires Python 3.9+
 
-[Examples](https://github.com/NibiruChain/sdk-python/tree/master/examples)
+[Examples](https://github.com/NibiruChain/nibiru-py/tree/master/examples)
 ```bash
 $ pipenv shell
 $ pipenv install
@@ -89,7 +93,7 @@ Upgrade `pip` to the latest version, if you see these warnings:
 
   # from local build
   pip uninstall nibiru-py
-  pip install nibiru-py --no-index --find-links /path/to/nibiru/sdk-python/dist
+  pip install nibiru-py --no-index --find-links /path/to/nibiru/nibiru-py/dist
 
   # from pypi
   pip uninstall nibiru-py

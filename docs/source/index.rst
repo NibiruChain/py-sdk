@@ -20,6 +20,7 @@ Contents
    perpetual
    dex
    general
+   constants
 
 Index
 ==================

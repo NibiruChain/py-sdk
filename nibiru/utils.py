@@ -72,6 +72,8 @@ def to_sdk_dec(dec: float) -> str:
 
     return combined_str
 
+def from_sdk_dec_24(dec_str: str) -> float:
+    return float(dec_str) * 1e-24
 
 def from_sdk_dec(dec_str: str) -> float:
     if dec_str is None or dec_str == '':

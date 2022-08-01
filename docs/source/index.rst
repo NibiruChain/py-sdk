@@ -20,7 +20,7 @@ Contents
    perpetual
    dex
    general
-   constants
+   modules
 
 Index
 ==================

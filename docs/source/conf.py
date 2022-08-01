@@ -2,6 +2,11 @@
 
 # -- Project information
 
+import os
+import sys
+
+sys.path.append(os.path.abspath('../../'))
+
 project = 'nibiru-py'
 copyright = '2022, Nibiru Labs'
 author = 'John Connor'
@@ -50,8 +55,3 @@ napoleon_use_rtype = True
 napoleon_preprocess_types = False
 napoleon_type_aliases = None
 napoleon_attr_annotations = True
-
-
-import os
-import sys
-sys.path.insert(0, os.path.abspath('../nibiru'))

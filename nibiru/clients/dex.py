@@ -7,7 +7,7 @@ from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru.proto.dex.v1 import query_pb2 as dex_type
 from nibiru.proto.dex.v1 import query_pb2_grpc as dex_query
 
-from .util import deserialize
+from nibiru.clients.util import deserialize
 
 
 class Dex:

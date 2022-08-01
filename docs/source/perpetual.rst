@@ -1,5 +1,5 @@
-Perp Positions
-==============
+Perpetual exchange market
+=========================
 
 A perpetual contract, or perp, is a type of crypto-native derivative
 that enables traders to speculate on price movements without holding the
@@ -199,7 +199,7 @@ from the query call of the perp module.
     '''
 
 
-.. _Perp Positions: #perp-positions
+.. _Perpetual exchange market: #perp-positions
 .. _Mark Price and Index Price: #mark-price-and-index-price
 .. _Leverage and Perp Position Value: #leverage-and-perp-position-value
 .. _Margin and Margin Ratio: #margin-and-margin-ratio

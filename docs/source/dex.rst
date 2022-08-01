@@ -1,14 +1,12 @@
-Concepts
-========
+Decentralized Spot Exchange (Dex)
+=================================
 
 The ``x/dex`` module is responsible for creating, joining, and
 exiting liquidity pools that are dictated by an AMM for swaps.
 
-Pool
-----
 
 Creation of Pool
-~~~~~~~~~~~~~~~~
+----------------
 
 When a pool is created, a fixed amount of 100 LP shares is minted and
 sent to the pool creator. The base pool share denom is in the format of
@@ -57,7 +55,7 @@ You can then query the pools with the dex queries:
 
 
 Joining Pool
-~~~~~~~~~~~~
+------------
 
 When joining a pool, users provide the tokens they are willing to
 deposit. The application will try to deposit as many tokens as it can
@@ -103,7 +101,7 @@ provided.
 
 
 Exiting Pool
-~~~~~~~~~~~~
+------------
 
 When exiting the pool, the user also provides the number of LP shares
 they are returning to the pool, and will receive assets in proportion to
@@ -176,7 +174,7 @@ with the current reserves of the pool:
 
 
 Spot Price
-~~~~~~~~~~
+----------
 
 Meanwhile, calculation of the spot price with a swap fee is done using
 the following formula

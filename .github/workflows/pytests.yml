@@ -1,0 +1,35 @@
+name: Run tests
+
+on: [push]
+
+jobs: 
+  tests: 
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Check out the repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with: 
+        python-version: 3.9.13
+
+    - name: Run python
+      run: python --version && python -c "print('hello')"
+
+    - name: Install pipenv with pip
+      run: pip install pipenv 
+
+    - id: cache-pipenv
+      uses: actions/cache@v1
+      with:
+        path: ~/.local/share/virtualenvs
+        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+    - name: Install dependencies
+      if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      run: |
+        pipenv install --dev 
+
+    - name: Run Python SDK tests
+      run: pipenv run pytest -p no:warnings

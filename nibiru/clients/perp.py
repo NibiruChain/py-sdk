@@ -21,16 +21,15 @@ class Perp:
         Get the parameters of the perp module.
 
         Output sample:
-
-        {
-            "maintenanceMarginRatio": 0.0625,
-            "feePoolFeeRatio": 0.001,
-            "ecosystemFundFeeRatio": 0.001,
-            "liquidationFeeRatio": 0.025,
-            "partialLiquidationRatio": 0.25,
-            "epochIdentifier": "30 min",
-            "twapLookbackWindow": "900s"
-        }
+            {
+                "maintenanceMarginRatio": 0.0625,
+                "feePoolFeeRatio": 0.001,
+                "ecosystemFundFeeRatio": 0.001,
+                "liquidationFeeRatio": 0.025,
+                "partialLiquidationRatio": 0.25,
+                "epochIdentifier": "30 min",
+                "twapLookbackWindow": "900s"
+            }
 
         Returns:
             dict: The current parameters for the perpetual module
@@ -61,23 +60,23 @@ class Perp:
             trader (str): The trader address
 
         Sample output:
-        {
-            "position": {
-                "traderAddress": "nibi1zaavvzxez0elund",
-                "pair": {
-                    "token0": "axlwbtc",
-                    "token1": "unusd"
+            {
+                "position": {
+                    "traderAddress": "nibi1zaavvzxez0elund",
+                    "pair": {
+                        "token0": "axlwbtc",
+                        "token1": "unusd"
+                    },
+                    "size": 11.241446725317692,
+                    "margin": 45999.99999999999,
+                    "openNotional": 230000.0,
+                    "lastUpdateCumulativePremiumFraction": "0",
+                    "blockNumber": "278"
                 },
-                "size": 11.241446725317692,
-                "margin": 45999.99999999999,
-                "openNotional": 230000.0,
-                "lastUpdateCumulativePremiumFraction": "0",
-                "blockNumber": "278"
-            },
-            "positionNotional": 230000.0,
-            "unrealizedPnl": 1.024e-20,
-            "marginRatio": 0.2
-        }
+                "positionNotional": 230000.0,
+                "unrealizedPnl": 1.024e-20,
+                "marginRatio": 0.2
+            }
 
         Returns:
             dict: The output of the query
@@ -96,17 +95,16 @@ class Perp:
             "openNotional",
         ]
 
-        sdk_dec_fields= [
-            "positionNotional", 
-            "unrealizedPnl", 
+        sdk_dec_fields = [
+            "positionNotional",
+            "unrealizedPnl",
         ]
         for field in position_sdk_dec_fields:
             output["position"][field] = from_sdk_dec_24(output["position"][field])
-
 
         for field in sdk_dec_fields:
             output[field] = from_sdk_dec_24(output[field])
 
         output["marginRatio"] = from_sdk_dec(output["marginRatio"])
-        
+
         return output

@@ -5,6 +5,10 @@ on: [push]
 jobs: 
   tests: 
     runs-on: ubuntu-latest
+    env: 
+      CHAIN_ID: ${{ secrets.CHAIN_ID }}
+      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+      HOST: ${{ secrets.HOST }}
     steps: 
     - name: Check out the repo
       uses: actions/checkout@v3

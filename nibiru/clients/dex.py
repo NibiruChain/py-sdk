@@ -23,7 +23,8 @@ class Dex:
         """
         Requests the parameters of the dex module.
 
-        Sample output:
+        Sample output::
+
             {
                 "startingPoolNumber": "1",
                 "poolCreationFee": [
@@ -54,7 +55,7 @@ class Dex:
         """
         Return all available pools in the dex module.
 
-        Sample output:
+        Sample output::
 
             [
                 {
@@ -151,7 +152,7 @@ class Dex:
         """
         Returns the total liquidity for a specific pool id
 
-        Sample output:
+        Sample output::
             {
                 "liquidity": [
                     {
@@ -178,7 +179,7 @@ class Dex:
         """
         Returns the total amount of shares for the pool specified
 
-        Sample output:
+        Sample output::
             {
                 "totalShares": {
                     "denom": "nibiru/pool/1",
@@ -222,7 +223,7 @@ class Dex:
         """
         Estimate the output of the swap with the current reserves
 
-        Sample output:
+        Sample output::
 
             {
                 "tokenOut": {
@@ -254,7 +255,7 @@ class Dex:
         """
         Estimate the number of share given for a join pool operation
 
-        Sample output:
+        Sample output::
 
             {
                 "poolSharesOut": 100000000000000.0,
@@ -289,7 +290,7 @@ class Dex:
         """
         Estimate the output of an exit pool transaction with the current level of reserves
 
-        Sample output:
+        Sample output::
 
             {
                 "tokensOut": [

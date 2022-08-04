@@ -21,6 +21,7 @@ class Perp:
         Get the parameters of the perp module.
 
         Output sample::
+
             {
                 "maintenanceMarginRatio": 0.0625,
                 "feePoolFeeRatio": 0.001,
@@ -60,6 +61,7 @@ class Perp:
             trader (str): The trader address
 
         Sample output::
+
             {
                 "position": {
                     "traderAddress": "nibi1zaavvzxez0elund",

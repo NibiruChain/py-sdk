@@ -24,6 +24,7 @@ class Dex:
         Requests the parameters of the dex module.
 
         Sample output::
+
             {
                 "startingPoolNumber": "1",
                 "poolCreationFee": [
@@ -127,7 +128,8 @@ class Dex:
         """
         Returns the total amount of liquidity for the dex module
 
-        Output sample:
+        Output sample::
+
             {
                 "liquidity": [
                     {
@@ -152,6 +154,7 @@ class Dex:
         Returns the total liquidity for a specific pool id
 
         Sample output::
+
             {
                 "liquidity": [
                     {
@@ -179,6 +182,7 @@ class Dex:
         Returns the total amount of shares for the pool specified
 
         Sample output::
+
             {
                 "totalShares": {
                     "denom": "nibiru/pool/1",
@@ -295,11 +299,11 @@ class Dex:
                 "tokensOut": [
                     {
                         "denom": "unibi",
-                        "amount": "0"
+                        "amount": 1000.5
                     },
                     {
                         "denom": "unusd",
-                        "amount": "0"
+                        "amount": 100.2
                     }
                 ]
             }
@@ -316,4 +320,4 @@ class Dex:
                 dex_type.QueryExitExactAmountInRequest(pool_id=pool_id, pool_shares_in=str(num_shares * 1e6))
             )
         )
-        return output
+        return format_fields_nested(object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"])

@@ -20,7 +20,7 @@ class Perp:
         """
         Get the parameters of the perp module.
 
-        Output sample:
+        Output sample::
             {
                 "maintenanceMarginRatio": 0.0625,
                 "feePoolFeeRatio": 0.001,
@@ -59,7 +59,7 @@ class Perp:
             token_pair (str): The token pair
             trader (str): The trader address
 
-        Sample output:
+        Sample output::
             {
                 "position": {
                     "traderAddress": "nibi1zaavvzxez0elund",

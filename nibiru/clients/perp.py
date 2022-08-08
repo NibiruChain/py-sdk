@@ -23,7 +23,6 @@ class Perp:
         Output sample::
 
             {
-                "maintenanceMarginRatio": 0.0625,
                 "feePoolFeeRatio": 0.001,
                 "ecosystemFundFeeRatio": 0.001,
                 "liquidationFeeRatio": 0.025,
@@ -39,7 +38,6 @@ class Perp:
         output = MessageToDict(proto_output)["params"]
 
         sdk_dec_fields = [
-            "maintenanceMarginRatio",
             "feePoolFeeRatio",
             "ecosystemFundFeeRatio",
             "liquidationFeeRatio",

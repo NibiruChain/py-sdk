@@ -1,27 +1,26 @@
+import json
 from typing import List, Optional, Tuple, Union
 
 import grpc
 
-from .clients import Dex as DexClient
-from .clients import Perp as PerpClient
-from .clients import Pricefeed as PricefeedClient
-from .clients import VPool as VPoolClient
-from .exceptions import NotFoundError
-from .network import Network
-from .proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
-from .proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
-from .proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
-from .proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
-from .proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc
-from .proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
-from .proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
-from .proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-from .proto.cosmos.base.tendermint.v1beta1 import query_pb2 as tendermint_query
-from .proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2_grpc as tendermint_query_grpc,
-)
-from .proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
-from .proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
+from nibiru.clients import Dex as DexClient
+from nibiru.clients import Perp as PerpClient
+from nibiru.clients import Pricefeed as PricefeedClient
+from nibiru.clients import VPool as VPoolClient
+from nibiru.exceptions import NotFoundError
+from nibiru.network import Network
+from nibiru.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
+from nibiru.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
+from nibiru.proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
+from nibiru.proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
+from nibiru.proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc
+from nibiru.proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
+from nibiru.proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
+from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
+from nibiru.proto.cosmos.base.tendermint.v1beta1 import query_pb2 as tendermint_query
+from nibiru.proto.cosmos.base.tendermint.v1beta1 import query_pb2_grpc as tendermint_query_grpc
+from nibiru.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
+from nibiru.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 
@@ -110,7 +109,7 @@ class Client:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
             return self.stubTx.Simulate.__call__(req), True
         except grpc.RpcError as err:
-            return err, False
+            return json.loads(err._state.debug_error_string)["grpc_message"], False
 
     def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC)

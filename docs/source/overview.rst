@@ -58,7 +58,6 @@ a chain on your localnet, but you can connect to a remote node by running the fo
     network = nibiru.Network(
         lcd_endpoint='https://lcd.nibiru.fi:1317',
         grpc_endpoint=f'https://rpc.nibiru.fi:9090',
-        grpc_exchange_endpoint=f'https://rpc.nibiru.fi:9090',
         chain_id="nibiru-testnet-3",
         fee_denom='unibi',
         env='local',

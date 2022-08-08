@@ -52,20 +52,11 @@ class Client:
 
         self.timeout_height = 1
 
-        # exchange stubs
-        self.exchange_channel = (
-            grpc.insecure_channel(network.grpc_exchange_endpoint)
-            if insecure
-            else grpc.secure_channel(network.grpc_exchange_endpoint, credentials)
-        )
         # Query services
-        self.dex = DexClient(self.exchange_channel)
-        self.pricefeed = PricefeedClient(self.exchange_channel)
-        self.perp = PerpClient(self.exchange_channel)
-        self.vpool = VPoolClient(self.exchange_channel)
-
-    def close_exchange_channel(self):
-        self.exchange_channel.close()
+        self.dex = DexClient(self.chain_channel)
+        self.pricefeed = PricefeedClient(self.chain_channel)
+        self.perp = PerpClient(self.chain_channel)
+        self.vpool = VPoolClient(self.chain_channel)
 
     def close_chain_channel(self):
         self.chain_channel.close()

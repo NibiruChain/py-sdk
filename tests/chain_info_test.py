@@ -37,7 +37,6 @@ def network() -> nibiru.Network:
     return nibiru.Network(
         lcd_endpoint=f'http://{CONFIG.HOST}.:{CONFIG.LCD_PORT}',
         grpc_endpoint=f'{CONFIG.HOST}:{CONFIG.GRPC_PORT}',
-        grpc_exchange_endpoint=f'{CONFIG.HOST}:{CONFIG.GRPC_PORT}',
         chain_id=CONFIG.CHAIN_ID,
         fee_denom='unibi',
         env="local",

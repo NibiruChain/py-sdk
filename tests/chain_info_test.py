@@ -59,7 +59,7 @@ def test_query_perp_params(val_node: nibiru.Sdk):
         "epochIdentifier",
         "feePoolFeeRatio",
         "liquidationFeeRatio",
-        "maintenanceMarginRatio",
+        # "maintenanceMarginRatio",
         "partialLiquidationRatio",
         "twapLookbackWindow",
     ]

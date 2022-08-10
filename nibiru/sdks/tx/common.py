@@ -5,7 +5,6 @@ from copy import deepcopy
 from google.protobuf import message
 from google.protobuf.json_format import MessageToDict
 from grpc import RpcError
-from loguru import logger
 from nibiru.client import Client
 from nibiru.common import TxConfig, TxType
 from nibiru.composer import Composer

@@ -35,6 +35,7 @@ REQUIRED = [
     "eip712_structs",
     "coincurve",
     "aiocron",
+    "python-dotenv",
 ]
 
 # The rest you shouldn't have to touch too much :)

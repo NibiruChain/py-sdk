@@ -17,7 +17,7 @@ URL = "https://github.com/NibiruChain/nibiru-py"
 EMAIL = "dev@nibiru.fi"
 AUTHOR = "Nibiru Chain"
 REQUIRES_PYTHON = ">=3.9.0"
-VERSION = "0.0.11"
+VERSION = "0.0.12"
 
 REQUIRED = [
     "grpcio",

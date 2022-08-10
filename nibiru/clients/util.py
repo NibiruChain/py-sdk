@@ -1,4 +1,4 @@
-from nibiru.utils import sdkdec_to_float, sdkint_to_float
+from nibiru.utils import from_sdk_dec
 
 BASE_ATTRS = [
     'ByteSize',
@@ -77,10 +77,8 @@ def deserialize(obj: object) -> dict:
             if custom_dtype is not None:
 
                 if "cosmos/cosmos-sdk/types.Dec" in str(custom_dtype):
-                    serialized_output[str(attr)] = sdkdec_to_float(obj.__getattribute__(attr))
+                    serialized_output[str(attr)] = from_sdk_dec(obj.__getattribute__(attr))
 
-                elif "cosmos/cosmos-sdk/types.Int" in str(custom_dtype):
-                    serialized_output[str(attr)] = sdkint_to_float(obj.__getattribute__(attr))
                 else:
                     try:
                         val = obj.__getattribute__(attr)

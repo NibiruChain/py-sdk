@@ -13,11 +13,11 @@ from setuptools import Command, find_packages, setup
 
 NAME = "nibiru-py"
 DESCRIPTION = "Nibiru Python SDK"
-URL = "https://github.com/NibiruChain/sdk-python"
+URL = "https://github.com/NibiruChain/nibiru-py"
 EMAIL = "dev@nibiru.fi"
 AUTHOR = "Nibiru Chain"
-REQUIRES_PYTHON = ">=3.7.0"
-VERSION = "0.0.9"
+REQUIRES_PYTHON = ">=3.9.0"
+VERSION = "0.0.12"
 
 REQUIRED = [
     "grpcio",

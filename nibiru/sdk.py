@@ -34,9 +34,9 @@ class Sdk:
 
         return self
 
-    def with_network(self, network: Network) -> "Sdk":
+    def with_network(self, network: Network, insecure=False) -> "Sdk":
         self._network = network
-        self.with_query_client(Client(self._network, True))
+        self.with_query_client(Client(self._network, insecure))
         return self
 
     def with_query_client(self, client: Client) -> "Sdk":
@@ -51,7 +51,7 @@ class Sdk:
 
     def with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
         self._priv_key = priv_key
-        self.with_network(Network.local())
+        self.with_network(Network.local(), True)
         return self
 
     def with_config(self, config: TxConfig) -> "Sdk":

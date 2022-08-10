@@ -18,7 +18,7 @@ from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x12pricefeed/tx.proto\x12\x13nibiru.pricefeed.v1\x1a\x14gogoproto/gogo.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto\"\xb7\x01\n\x0cMsgPostPrice\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\x0e\n\x06token0\x18\x02 \x01(\t\x12\x0e\n\x06token1\x18\x03 \x01(\t\x12=\n\x05price\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x34\n\x06\x65xpiry\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x08\x90\xdf\x1f\x01\xc8\xde\x1f\x00:\x04\x88\xa0\x1f\x00\"\x16\n\x14MsgPostPriceResponse\"\xb3\x01\n\x16\x45ventOracleUpdatePrice\x12\x0f\n\x07pair_id\x18\x01 \x01(\t\x12\x0e\n\x06oracle\x18\x02 \x01(\t\x12\x42\n\npair_price\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x34\n\x06\x65xpiry\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x08\x90\xdf\x1f\x01\xc8\xde\x1f\x00\"l\n\x15\x45ventPairPriceUpdated\x12\x0f\n\x07pair_id\x18\x01 \x01(\t\x12\x42\n\npair_price\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x32\x86\x01\n\x03Msg\x12\x7f\n\tPostPrice\x12!.nibiru.pricefeed.v1.MsgPostPrice\x1a).nibiru.pricefeed.v1.MsgPostPriceResponse\"$\x82\xd3\xe4\x93\x02\x1e\"\x1c/nibiru/pricefeed/post-priceB9Z/github.com/NibiruChain/nibiru/x/pricefeed/types\xa8\xe2\x1e\x01\xe0\xe1\x1e\x01\x62\x06proto3'
+    b'\n\x12pricefeed/tx.proto\x12\x13nibiru.pricefeed.v1\x1a\x14gogoproto/gogo.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto\"\xb9\x01\n\x0cMsgPostPrice\x12\x0e\n\x06oracle\x18\x01 \x01(\t\x12\x0e\n\x06token0\x18\x02 \x01(\t\x12\x0e\n\x06token1\x18\x03 \x01(\t\x12=\n\x05price\x18\x04 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x34\n\x06\x65xpiry\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x08\x90\xdf\x1f\x01\xc8\xde\x1f\x00:\x04\x88\xa0\x1f\x00\"\x16\n\x14MsgPostPriceResponse\"\xb3\x01\n\x16\x45ventOracleUpdatePrice\x12\x0f\n\x07pair_id\x18\x01 \x01(\t\x12\x0e\n\x06oracle\x18\x02 \x01(\t\x12\x42\n\npair_price\x18\x03 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x12\x34\n\x06\x65xpiry\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x08\x90\xdf\x1f\x01\xc8\xde\x1f\x00\"l\n\x15\x45ventPairPriceUpdated\x12\x0f\n\x07pair_id\x18\x01 \x01(\t\x12\x42\n\npair_price\x18\x02 \x01(\tB.\xda\xde\x1f&github.com/cosmos/cosmos-sdk/types.Dec\xc8\xde\x1f\x00\x32\x86\x01\n\x03Msg\x12\x7f\n\tPostPrice\x12!.nibiru.pricefeed.v1.MsgPostPrice\x1a).nibiru.pricefeed.v1.MsgPostPriceResponse\"$\x82\xd3\xe4\x93\x02\x1e\"\x1c/nibiru/pricefeed/post-priceB9Z/github.com/NibiruChain/nibiru/x/pricefeed/types\xa8\xe2\x1e\x01\xe0\xe1\x1e\x01\x62\x06proto3'
 )
 
 
@@ -100,13 +100,13 @@ if _descriptor._USE_C_DESCRIPTORS == False:
         'PostPrice'
     ]._serialized_options = b'\202\323\344\223\002\036\"\034/nibiru/pricefeed/post-price'
     _MSGPOSTPRICE._serialized_start = 129
-    _MSGPOSTPRICE._serialized_end = 312
-    _MSGPOSTPRICERESPONSE._serialized_start = 314
-    _MSGPOSTPRICERESPONSE._serialized_end = 336
-    _EVENTORACLEUPDATEPRICE._serialized_start = 339
-    _EVENTORACLEUPDATEPRICE._serialized_end = 518
-    _EVENTPAIRPRICEUPDATED._serialized_start = 520
-    _EVENTPAIRPRICEUPDATED._serialized_end = 628
-    _MSG._serialized_start = 631
-    _MSG._serialized_end = 765
+    _MSGPOSTPRICE._serialized_end = 314
+    _MSGPOSTPRICERESPONSE._serialized_start = 316
+    _MSGPOSTPRICERESPONSE._serialized_end = 338
+    _EVENTORACLEUPDATEPRICE._serialized_start = 341
+    _EVENTORACLEUPDATEPRICE._serialized_end = 520
+    _EVENTPAIRPRICEUPDATED._serialized_start = 522
+    _EVENTPAIRPRICEUPDATED._serialized_end = 630
+    _MSG._serialized_start = 633
+    _MSG._serialized_end = 767
 # @@protoc_insertion_point(module_scope)

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from .proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
-
+from .proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 
 class TxType(Enum):
     SYNC = 1
@@ -19,11 +19,18 @@ class Direction(Enum):
     ADD = 1
     REMOVE = 2
 
+@dataclass
+class Coin:
+    amount: float
+    denom: str
+
+    def _generate_proto_object(self):
+        return cosmos_base_coin_pb.Coin(amount=str(self.amount), denom=self.denom)
 
 @dataclass
 class PoolAsset:
-    token: coin_pb.Coin
-    weight: str
+    token: Coin
+    weight: float
 
 
 class TxConfig:

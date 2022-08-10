@@ -144,3 +144,4 @@ cython_debug/
 .vscode
 .chain_cookie
 .exchange_cookie
+*.ipynb

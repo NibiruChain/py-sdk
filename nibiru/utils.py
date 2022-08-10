@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from google.protobuf.timestamp_pb2 import Timestamp
+from typing import Union, Callable, Any
 from nibiru.exceptions import ConvertError, InvalidArgumentError
 
 # number of decimal places
@@ -6,7 +10,7 @@ INT_MULT = 1e6
 
 
 # reimplementation of cosmos-sdk/types/decimal.go
-def float_to_sdkdec(dec: float) -> str:
+def to_sdk_dec(dec: float) -> str:
     '''
     create a decimal from an input decimal.
     valid must come in the form:
@@ -69,7 +73,52 @@ def float_to_sdkdec(dec: float) -> str:
     return combined_str
 
 
-def sdkdec_to_float(dec_str: str) -> float:
+def from_sdk_dec_24(dec_str: str) -> float:
+    return float(dec_str) * 1e-24
+
+
+def from_sdk_dec_n(dec_str: str, n: int = 6) -> float:
+    return float(dec_str) * 10 ** (-n)
+
+
+def format_fields_nested(object: Union[list, dict], fn: Callable[[Any], Any], fields: list[str]) -> Union[list, dict]:
+    """
+    Format the fields inside a nested dictionary with the function provided
+
+    Args:
+        object (Union[list, dict]): The object to format
+        fn (Callable[[Any], Any]): The function to format objects with
+        fields (list[str]): The fields to format
+
+    Returns:
+        Union[list, dict]: The output formatted
+    """
+    if type(object) == dict:
+        output = {}
+        for k, v in object.items():
+            if type(v) in (dict, list):
+                output[k] = format_fields_nested(v, fn, fields)
+            else:
+                if k in fields:
+                    output[k] = fn(v)
+                else:
+                    output[k] = v
+
+        return output
+
+    if type(object) == list:
+        output = []
+
+        for element in object:
+            if type(object) in (dict, list):
+                output.append(format_fields_nested(element, fn, fields))
+            else:
+                output.append(element)
+
+        return output
+
+
+def from_sdk_dec(dec_str: str) -> float:
     if dec_str is None or dec_str == '':
         return 0
 
@@ -94,8 +143,7 @@ def sdkdec_to_float(dec_str: str) -> float:
         bz_str = '0.'
 
         # set relevant digits to 0
-        for _ in range(PRECISION - input_size):
-            bz_str += '0'
+        bz_str += '0' * (PRECISION - input_size)
 
         # set final digits
         bz_str += dec_str
@@ -113,9 +161,15 @@ def sdkdec_to_float(dec_str: str) -> float:
     return float(bz_str)
 
 
-def float_to_sdkint(i: float) -> str:
+def to_sdk_int(i: float) -> str:
     return str(int(i * INT_MULT))
 
 
-def sdkint_to_float(int_str: str) -> float:
+def from_sdk_int(int_str: str) -> float:
     return float(int_str) / INT_MULT
+
+
+def toTsPb(dt: datetime):
+    ts = Timestamp()
+    ts.FromDatetime(dt)
+    return ts

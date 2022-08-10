@@ -1,7 +1,2 @@
-proto-gen: copy-proto
+proto-gen:
 	./scripts/protocgen.sh
-
-copy-proto:
-	@rm -rf nibiru/proto
-	@mkdir -p proto/
-	@cp -r ../nibiru/proto/ proto/

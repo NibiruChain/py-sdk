@@ -1,7 +1,9 @@
+import json
 import logging
 from copy import deepcopy
 
 from google.protobuf import message
+from google.protobuf.json_format import MessageToDict
 from grpc import RpcError
 from nibiru.client import Client
 from nibiru.common import TxConfig, TxType
@@ -12,7 +14,6 @@ from nibiru.network import Network
 from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
-from loguru import logger
 
 
 class Tx:
@@ -83,6 +84,10 @@ class Tx:
                 address.decrease_sequence()
                 raise TxError(tx_output.raw_log)
 
+            tx_output = MessageToDict(tx_output)
+
+            # Convert raw log into a dictionary
+            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
             return tx_output
 
         except SimulationError as err:

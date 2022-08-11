@@ -16,7 +16,7 @@ from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
 
 
-class Tx:
+class BaseTxClient:
     def __init__(self, priv_key: PrivateKey, network: Network, client: GrpcClient, config: TxConfig):
         self.priv_key = priv_key
         self.network = network

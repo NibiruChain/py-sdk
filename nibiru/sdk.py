@@ -61,6 +61,6 @@ class Sdk:
         return self
 
     @property
-    def address(self):
+    def address(self) -> str:
         pub_key = self._priv_key.to_public_key()
         return pub_key.to_address().to_acc_bech32()

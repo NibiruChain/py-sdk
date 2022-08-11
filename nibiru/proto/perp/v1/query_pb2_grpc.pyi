@@ -14,7 +14,7 @@ class QueryStub:
         perp.v1.query_pb2.QueryParamsResponse]
     """Parameters queries the parameters of the x/perp module."""
 
-    TraderPosition: grpc.UnaryUnaryMultiCallable[
+    QueryTraderPosition: grpc.UnaryUnaryMultiCallable[
         perp.v1.query_pb2.QueryTraderPositionRequest,
         perp.v1.query_pb2.QueryTraderPositionResponse]
 
@@ -30,7 +30,7 @@ class QueryServicer(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def TraderPosition(self,
+    def QueryTraderPosition(self,
         request: perp.v1.query_pb2.QueryTraderPositionRequest,
         context: grpc.ServicerContext,
     ) -> perp.v1.query_pb2.QueryTraderPositionResponse: ...

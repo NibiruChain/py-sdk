@@ -5,6 +5,7 @@ isort:skip_file
 import builtins
 import common.common_pb2
 import google.protobuf.descriptor
+import google.protobuf.duration_pb2
 import google.protobuf.internal.containers
 import google.protobuf.message
 import google.protobuf.timestamp_pb2
@@ -17,21 +18,28 @@ class Params(google.protobuf.message.Message):
     """Params defines the parameters for the x/pricefeed module."""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     PAIRS_FIELD_NUMBER: builtins.int
+    TWAP_LOOKBACK_WINDOW_FIELD_NUMBER: builtins.int
     @property
     def pairs(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[common.common_pb2.AssetPair]:
-        """Pairs is the list of valid trading pairs for the module. 
+        """Pairs is the list of valid trading pairs for the module.
         Add new trading pairs
         """
+        pass
+    @property
+    def twap_lookback_window(self) -> google.protobuf.duration_pb2.Duration:
+        """amount of time to look back for TWAP calculations"""
         pass
     def __init__(self,
         *,
         pairs: typing.Optional[typing.Iterable[common.common_pb2.AssetPair]] = ...,
+        twap_lookback_window: typing.Optional[google.protobuf.duration_pb2.Duration] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["pairs",b"pairs"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["twap_lookback_window",b"twap_lookback_window"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pairs",b"pairs","twap_lookback_window",b"twap_lookback_window"]) -> None: ...
 global___Params = Params
 
 class OraclesMarshaler(google.protobuf.message.Message):
-    """OraclesMarshaler is a codec.ProtoMarshaler for an oracles array in the 
+    """OraclesMarshaler is a codec.ProtoMarshaler for an oracles array in the
     OraclesState sdk.KVStore.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -46,7 +54,7 @@ class OraclesMarshaler(google.protobuf.message.Message):
 global___OraclesMarshaler = OraclesMarshaler
 
 class ActivePairMarshaler(google.protobuf.message.Message):
-    """ActivePairMarshaler is a codec.ProtoMarshaler for the "IsActive" status of  
+    """ActivePairMarshaler is a codec.ProtoMarshaler for the "IsActive" status of
     a pair in the ActivePairState sdk.KVStore.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor

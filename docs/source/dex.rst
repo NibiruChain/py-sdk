@@ -43,9 +43,9 @@ You can create a pool with the nibiru-py package with:
                     amount=10000,
                 ),
                 weight=50
-            ),    
+            ),
         ]
-    )    
+    )
 
 You can then query the pools with the dex queries:
 
@@ -79,7 +79,7 @@ provided.
             nib.Coin(
                 denom="unibi",
                 amount=10000,
-            ),        
+            ),
             nib.Coin(
                 denom="unusd",
                 amount=10000,
@@ -88,7 +88,7 @@ provided.
     )
 
     trader.query.get_bank_balance(
-        trader.address, 
+        trader.address,
         denom="nibiru/pool/4"
     )
 
@@ -190,7 +190,7 @@ You can query the spot price with:
 .. code:: python
 
     trader.query.dex.spot_price(
-        pool_id=4, 
-        token_in_denom="unibi", 
+        pool_id=4,
+        token_in_denom="unibi",
         token_out_denom="unusd"
     )

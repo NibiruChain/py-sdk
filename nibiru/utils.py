@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import Any, Callable, Union
 
 from google.protobuf.timestamp_pb2 import Timestamp
-from typing import Union, Callable, Any
+
 from nibiru.exceptions import ConvertError, InvalidArgumentError
 
 # number of decimal places

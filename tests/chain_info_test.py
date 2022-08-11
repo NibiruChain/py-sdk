@@ -1,11 +1,13 @@
 # chain_info_test.py
-import os
 import dataclasses
+import os
+from typing import Any, Dict, List, Union
+
 import pytest
 import requests
+
 import nibiru
 from nibiru import common
-from typing import Any, Dict, Union, List
 
 
 @dataclasses.dataclass
@@ -61,7 +63,7 @@ def test_query_perp_params(val_node: nibiru.Sdk):
 
     perp_param_names: List[str] = [
         "ecosystemFundFeeRatio",
-        "epochIdentifier",
+        # "epochIdentifier",
         "feePoolFeeRatio",
         "liquidationFeeRatio",
         "partialLiquidationRatio",

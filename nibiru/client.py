@@ -18,7 +18,9 @@ from nibiru.proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
 from nibiru.proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
 from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru.proto.cosmos.base.tendermint.v1beta1 import query_pb2 as tendermint_query
-from nibiru.proto.cosmos.base.tendermint.v1beta1 import query_pb2_grpc as tendermint_query_grpc
+from nibiru.proto.cosmos.base.tendermint.v1beta1 import (
+    query_pb2_grpc as tendermint_query_grpc,
+)
 from nibiru.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 

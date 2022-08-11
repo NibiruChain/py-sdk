@@ -21,7 +21,7 @@ class Params(google.protobuf.message.Message):
     TWAP_LOOKBACK_WINDOW_FIELD_NUMBER: builtins.int
     @property
     def pairs(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[common.common_pb2.AssetPair]:
-        """Pairs is the list of valid trading pairs for the module. 
+        """Pairs is the list of valid trading pairs for the module.
         Add new trading pairs
         """
         pass
@@ -39,7 +39,7 @@ class Params(google.protobuf.message.Message):
 global___Params = Params
 
 class OraclesMarshaler(google.protobuf.message.Message):
-    """OraclesMarshaler is a codec.ProtoMarshaler for an oracles array in the 
+    """OraclesMarshaler is a codec.ProtoMarshaler for an oracles array in the
     OraclesState sdk.KVStore.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -54,7 +54,7 @@ class OraclesMarshaler(google.protobuf.message.Message):
 global___OraclesMarshaler = OraclesMarshaler
 
 class ActivePairMarshaler(google.protobuf.message.Message):
-    """ActivePairMarshaler is a codec.ProtoMarshaler for the "IsActive" status of  
+    """ActivePairMarshaler is a codec.ProtoMarshaler for the "IsActive" status of
     a pair in the ActivePairState sdk.KVStore.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor

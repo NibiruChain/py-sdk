@@ -147,7 +147,7 @@ class PoolPrices(google.protobuf.message.Message):
     SWAP_INVARIANT_FIELD_NUMBER: builtins.int
     BLOCK_NUMBER_FIELD_NUMBER: builtins.int
     mark_price: typing.Text
-    """MarkPrice is the instantaneous price of the perp. 
+    """MarkPrice is the instantaneous price of the perp.
     Equivalent to quoteAssetReserve / baseAssetReserve.
     """
 

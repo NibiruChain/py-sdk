@@ -1,11 +1,13 @@
 # chain_info_test.py
-import os
 import dataclasses
+import os
+from typing import Any, Dict, List, Union
+
 import pytest
 import requests
+
 import nibiru
 from nibiru import common
-from typing import Any, Dict, Union, List
 
 
 @dataclasses.dataclass

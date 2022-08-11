@@ -1,11 +1,9 @@
+from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 
 from nibiru.proto.perp.v1 import query_pb2 as perp_type
 from nibiru.proto.perp.v1 import query_pb2_grpc as perp_query
-from google.protobuf.json_format import MessageToDict
 from nibiru.utils import from_sdk_dec, from_sdk_dec_24
-
-from .util import deserialize
 
 
 class Perp:

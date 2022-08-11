@@ -14,8 +14,8 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
 class MsgMintStable(google.protobuf.message.Message):
     """
-    MsgMintStable: Msg to mint NUSD. A user deposits NIBI and collateral and gets 
-    NUSD in return. The amount of NUSD received depends on the current price set 
+    MsgMintStable: Msg to mint NUSD. A user deposits NIBI and collateral and gets
+    NUSD in return. The amount of NUSD received depends on the current price set
     by the pricefeed library and the current collateral ratio for the protocol.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -59,8 +59,8 @@ global___MsgMintStableResponse = MsgMintStableResponse
 
 class MsgBurnStable(google.protobuf.message.Message):
     """
-    MsgBurnStable allows users to burn NUSD in exchange for NIBI and collateral. 
-    The amount of NIBI and Collateral received depends on the current price set by 
+    MsgBurnStable allows users to burn NUSD in exchange for NIBI and collateral.
+    The amount of NIBI and Collateral received depends on the current price set by
     the x/pricefeed library and the current collateral ratio.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -79,7 +79,7 @@ class MsgBurnStable(google.protobuf.message.Message):
 global___MsgBurnStable = MsgBurnStable
 
 class MsgBurnStableResponse(google.protobuf.message.Message):
-    """MsgBurnStableResponse specifies the amount of collateral and governance 
+    """MsgBurnStableResponse specifies the amount of collateral and governance
     token the user will receive after their burn transaction.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -143,7 +143,7 @@ class MsgBuyback(google.protobuf.message.Message):
     creator: typing.Text
     @property
     def gov(self) -> cosmos.base.v1beta1.coin_pb2.Coin:
-        """Gov (sdk.Coin): Tokens the caller wants to sell to the protocol in exchange 
+        """Gov (sdk.Coin): Tokens the caller wants to sell to the protocol in exchange
         for collateral.
         """
         pass

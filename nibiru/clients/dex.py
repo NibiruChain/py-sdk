@@ -2,13 +2,12 @@ from typing import List
 
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
-from nibiru.clients.util import deserialize
+
+from nibiru.common import Coin
 from nibiru.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru.proto.dex.v1 import query_pb2 as dex_type
 from nibiru.proto.dex.v1 import query_pb2_grpc as dex_query
 from nibiru.utils import format_fields_nested, from_sdk_dec_n
-from nibiru.common import Coin
 
 
 class Dex:

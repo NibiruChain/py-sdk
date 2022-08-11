@@ -16,7 +16,7 @@ Install with ``pip``:
 Quick start
 -----------
 
-To interact with the chain, you will need to create an account. 
+To interact with the chain, you will need to create an account.
 You can create a new account using the CLI command.
 
 .. code:: python
@@ -47,7 +47,7 @@ You can create a new account using the CLI command.
 Using a different chain
 -----------------------
 
-You can connect to any chain (localnet, testnet or mainnet) using this python SDK. By default, it will try to look for 
+You can connect to any chain (localnet, testnet or mainnet) using this python SDK. By default, it will try to look for
 a chain on your localnet, but you can connect to a remote node by running the following commands
 
 .. code:: python
@@ -96,6 +96,4 @@ that it was picked by a block. This behavior can be changed using the TxConfig o
         quote_asset_amount=1000,
         leverage=10,
         base_asset_amount_limit=0,
-    )    
-
-
+    )

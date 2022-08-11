@@ -40,7 +40,7 @@ global___QueryParamsResponse = QueryParamsResponse
 class QueryTraderPositionRequest(google.protobuf.message.Message):
     """---------------------------------------- TraderPosition
 
-    QueryTraderPositionRequest is the request type for the position of the 
+    QueryTraderPositionRequest is the request type for the position of the
     x/perp module account.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -76,12 +76,12 @@ class QueryTraderPositionResponse(google.protobuf.message.Message):
 
     margin_ratio_mark: typing.Text
     """margin ratio of the position based on the mark price, mark TWAP. The higher
-    value of the possible margin ratios (TWAP and instantaneous) is taken to be 
+    value of the possible margin ratios (TWAP and instantaneous) is taken to be
     'marginRatioMark'. Calculated from margin, unrealized PnL, and position notional.
     """
 
     margin_ratio_index: typing.Text
-    """margin ratio of the position based on the index price. Calculated from margin, 
+    """margin ratio of the position based on the index price. Calculated from margin,
     unrealized PnL, and position notional.
     """
 

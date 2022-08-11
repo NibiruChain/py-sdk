@@ -2,27 +2,27 @@ name: Run tests
 
 on: [push]
 
-jobs: 
-  tests: 
+jobs:
+  tests:
     runs-on: ubuntu-latest
-    env: 
+    env:
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       HOST: ${{ secrets.HOST }}
-    steps: 
+    steps:
     - name: Check out the repo
       uses: actions/checkout@v3
 
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
-      with: 
+      with:
         python-version: 3.9.13
 
     - name: Run python
       run: python --version && python -c "print('hello')"
 
     - name: Install pipenv with pip
-      run: pip install pipenv 
+      run: pip install pipenv
 
     - id: cache-pipenv
       uses: actions/cache@v1
@@ -33,7 +33,7 @@ jobs:
     - name: Install dependencies
       if: steps.cache-pipenv.outputs.cache-hit != 'true'
       run: |
-        pipenv install --dev 
+        pipenv install --dev
 
     - name: Run Python SDK tests
       run: pipenv run pytest -p no:warnings

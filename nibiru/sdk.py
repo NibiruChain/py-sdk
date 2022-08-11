@@ -15,8 +15,8 @@ class Sdk:
         self._priv_key: PrivateKey = None
         self.query = None
         self.tx_client = None
-        self._network = None
-        self.config = TxConfig()
+        self.network = None
+        self.tx_config = TxConfig()
 
     @classmethod
     def authorize(cls, key: str = "") -> "Sdk":
@@ -35,13 +35,13 @@ class Sdk:
         return self
 
     def with_network(self, network: Network, insecure=False) -> "Sdk":
-        self._network = network
-        self.with_query_client(GrpcClient(self._network, insecure))
+        self.network = network
+        self.with_query_client(GrpcClient(self.network, insecure))
         return self
 
     def with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
-        tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
+        tx_client = TxClient(client=self.query, network=self.network, priv_key=self._priv_key, config=self.tx_config)
         self.with_tx_client(tx_client)
         return self
 
@@ -55,8 +55,8 @@ class Sdk:
         return self
 
     def with_config(self, config: TxConfig) -> "Sdk":
-        self.config = config
-        tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
+        self.tx_config = config
+        tx_client = TxClient(client=self.query, network=self.network, priv_key=self._priv_key, config=self.tx_config)
         self.with_tx_client(tx_client)
         return self
 

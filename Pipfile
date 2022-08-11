@@ -20,6 +20,7 @@ eip712_structs = "*"
 coincurve = "*"
 aiocron = "*"
 python-dotenv = "*"
+dotenv = "*"
 
 [dev-packages]
 mypy-protobuf = "*"

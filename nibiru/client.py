@@ -27,7 +27,7 @@ from nibiru.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 
 
-class Client:
+class GrpcClient:
     def __init__(
         self,
         network: Network,

@@ -1,6 +1,6 @@
 import logging
 
-from .client import Client
+from .client import GrpcClient
 from .common import TxConfig
 from .network import Network
 from .sdks.tx import TxClient
@@ -36,10 +36,10 @@ class Sdk:
 
     def with_network(self, network: Network, insecure=False) -> "Sdk":
         self._network = network
-        self.with_query_client(Client(self._network, insecure))
+        self.with_query_client(GrpcClient(self._network, insecure))
         return self
 
-    def with_query_client(self, client: Client) -> "Sdk":
+    def with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
         tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
         self.with_tx_client(tx_client)

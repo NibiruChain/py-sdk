@@ -5,7 +5,7 @@ from copy import deepcopy
 from google.protobuf import message
 from google.protobuf.json_format import MessageToDict
 
-from nibiru.client import Client
+from nibiru.client import GrpcClient
 from nibiru.common import TxConfig, TxType
 from nibiru.composer import Composer
 from nibiru.constant import GAS_PRICE
@@ -17,7 +17,7 @@ from nibiru.wallet import PrivateKey
 
 
 class Tx:
-    def __init__(self, priv_key: PrivateKey, network: Network, client: Client, config: TxConfig):
+    def __init__(self, priv_key: PrivateKey, network: Network, client: GrpcClient, config: TxConfig):
         self.priv_key = priv_key
         self.network = network
         self.client = client

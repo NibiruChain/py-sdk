@@ -1,6 +1,6 @@
 from typing import List
 
-from nibiru.client import Client
+from nibiru.client import GrpcClient
 from nibiru.common import TxConfig
 from nibiru.composer import Composer
 from nibiru.network import Network
@@ -14,7 +14,7 @@ from .pricefeed import Pricefeed
 
 
 class TxClient(Tx):
-    def __init__(self, client: Client, network: Network, priv_key: PrivateKey, config: TxConfig):
+    def __init__(self, client: GrpcClient, network: Network, priv_key: PrivateKey, config: TxConfig):
         super().__init__(client=client, network=network, priv_key=priv_key, config=config)
         self.dex = Dex(client=client, network=network, priv_key=priv_key, config=config)
         self.perp = Perp(client=client, network=network, priv_key=priv_key, config=config)

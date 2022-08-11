@@ -15,13 +15,13 @@
 
 import logging
 
-from nibiru.client import Client
+from nibiru.client import GrpcClient
 from nibiru.network import Network
 
 
 def main() -> None:
     network = Network.local()
-    client = Client(network, insecure=True)
+    client = GrpcClient(network, insecure=True)
     resp = client.perp.params()
     print(resp)
 

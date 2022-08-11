@@ -23,7 +23,7 @@ def main() -> None:
     )
     receiver = Sdk.authorize()
 
-    res = sender.tx.add_messages(
+    res = sender.tx_client.add_messages(
         Composer.msg_send(
             from_address=sender.address,
             to_address=receiver.address,

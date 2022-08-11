@@ -21,7 +21,7 @@ def main() -> None:
     trader = Sdk.authorize(
         "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
     ).with_network(Network.testnet())
-    res = trader.tx.perp.open_position(
+    res = trader.tx_client.perp.open_position(
         sender=trader.address,
         token_pair="axlwbtc:unusd",
         side=Side.BUY,

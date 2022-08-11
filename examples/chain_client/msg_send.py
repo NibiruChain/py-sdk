@@ -23,7 +23,7 @@ def main() -> None:
     )
     receiver = Sdk.authorize()
 
-    res = sender.tx.msg_send(
+    res = sender.tx_client.msg_send(
         from_address=sender.address,
         to_address=receiver.address,
         coins=[

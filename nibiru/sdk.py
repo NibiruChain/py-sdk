@@ -12,7 +12,7 @@ class Sdk:
         """Unsupported, please use from_mnemonic to initialize."""
         if not _error_do_not_use_init_directly:
             raise TypeError("Please use PrivateKey.from_mnemonic() to construct me")
-        self._priv_key: PrivateKey = None
+        self.priv_key: PrivateKey = None
         self.query = None
         self.tx_client = None
         self.network = None
@@ -41,7 +41,7 @@ class Sdk:
 
     def with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
-        tx_client = TxClient(client=self.query, network=self.network, priv_key=self._priv_key, config=self.tx_config)
+        tx_client = TxClient(client=self.query, network=self.network, priv_key=self.priv_key, config=self.tx_config)
         self.with_tx_client(tx_client)
         return self
 
@@ -50,17 +50,17 @@ class Sdk:
         return self
 
     def with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
-        self._priv_key = priv_key
+        self.priv_key = priv_key
         self.with_network(Network.local(), True)
         return self
 
     def with_config(self, config: TxConfig) -> "Sdk":
         self.tx_config = config
-        tx_client = TxClient(client=self.query, network=self.network, priv_key=self._priv_key, config=self.tx_config)
+        tx_client = TxClient(client=self.query, network=self.network, priv_key=self.priv_key, config=self.tx_config)
         self.with_tx_client(tx_client)
         return self
 
     @property
     def address(self) -> str:
-        pub_key = self._priv_key.to_public_key()
+        pub_key = self.priv_key.to_public_key()
         return pub_key.to_address().to_acc_bech32()

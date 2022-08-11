@@ -1,8 +1,8 @@
 import unittest
 from collections import namedtuple
 
-from nibiru.exceptions import ConvertError, InvalidArgumentError
-from nibiru.utils import from_sdk_dec, to_sdk_dec
+from .exceptions import ConvertError, InvalidArgumentError
+from .utils import from_sdk_dec, to_sdk_dec
 
 
 class TestDecimals(unittest.TestCase):

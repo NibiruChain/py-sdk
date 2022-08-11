@@ -3,7 +3,7 @@ from typing import Any, Callable, Union
 
 from google.protobuf.timestamp_pb2 import Timestamp
 
-from nibiru.exceptions import ConvertError, InvalidArgumentError
+from .exceptions import ConvertError, InvalidArgumentError
 
 # number of decimal places
 PRECISION = 18

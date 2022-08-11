@@ -3,10 +3,6 @@ from typing import List, Optional, Tuple, Union
 
 import grpc
 
-from nibiru.clients import DexQueryClient as DexClient
-from nibiru.clients import PerpQueryClient as PerpClient
-from nibiru.clients import PricefeedQueryClient as PricefeedClient
-from nibiru.clients import VpoolQueryClient as VPoolClient
 from nibiru.exceptions import NotFoundError
 from nibiru.network import Network
 from nibiru.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
@@ -23,6 +19,13 @@ from nibiru.proto.cosmos.base.tendermint.v1beta1 import (
 )
 from nibiru.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
+
+from .query import (
+    DexQueryClient,
+    PerpQueryClient,
+    PricefeedQueryClient,
+    VpoolQueryClient,
+)
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 
@@ -55,10 +58,10 @@ class GrpcClient:
         self.timeout_height = 1
 
         # Query services
-        self.dex = DexClient(self.chain_channel)
-        self.pricefeed = PricefeedClient(self.chain_channel)
-        self.perp = PerpClient(self.chain_channel)
-        self.vpool = VPoolClient(self.chain_channel)
+        self.dex = DexQueryClient(self.chain_channel)
+        self.pricefeed = PricefeedQueryClient(self.chain_channel)
+        self.perp = PerpQueryClient(self.chain_channel)
+        self.vpool = VpoolQueryClient(self.chain_channel)
 
     def close_chain_channel(self):
         self.chain_channel.close()

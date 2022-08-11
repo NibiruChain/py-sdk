@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from google.protobuf import any_pb2, message
 
-from .client import GrpcClient
+from .clients.grpc import GrpcClient
 from .constant import MAX_MEMO_CHARACTERS
 from .exceptions import EmptyMsgError, NotFoundError, UndefinedError, ValueTooLargeError
 from .proto.cosmos.base.v1beta1.coin_pb2 import Coin

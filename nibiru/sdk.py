@@ -1,9 +1,9 @@
 import logging
 
-from .client import GrpcClient
+from .clients.grpc import GrpcClient
+from .clients.tx import TxClient
 from .common import TxConfig
 from .network import Network
-from .sdks.tx import TxClient
 from .wallet import PrivateKey
 
 

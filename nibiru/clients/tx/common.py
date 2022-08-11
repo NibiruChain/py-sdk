@@ -5,7 +5,7 @@ from copy import deepcopy
 from google.protobuf import message
 from google.protobuf.json_format import MessageToDict
 
-from nibiru.client import GrpcClient
+from nibiru.clients.grpc import GrpcClient
 from nibiru.common import TxConfig, TxType
 from nibiru.composer import Composer
 from nibiru.constant import GAS_PRICE

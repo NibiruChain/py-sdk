@@ -39,6 +39,8 @@ for dir in $proto_dirs; do \
     -I "$cosmos_sdk_dir/proto" \
     --python_out=nibiru/proto \
     --grpc_python_out=nibiru/proto \
+    --mypy_out=nibiru/proto \
+    --mypy_grpc_out=nibiru/proto \
     $(find "${dir}" -type f -name '*.proto')
 done; \
 

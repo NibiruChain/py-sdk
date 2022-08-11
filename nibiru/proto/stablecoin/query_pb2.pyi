@@ -42,7 +42,7 @@ global___QueryParamsResponse = QueryParamsResponse
 class QueryModuleAccountBalances(google.protobuf.message.Message):
     """---------------------------------------- ModuleAccountBalances
 
-    QueryModuleAccountBalances is the request type for the balance of the
+    QueryModuleAccountBalances is the request type for the balance of the 
     x/stablecoin module account.
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor

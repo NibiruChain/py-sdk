@@ -17,7 +17,7 @@ protoc_gen_gocosmos() {
 # refresh existing proto files
 rm -rf nibiru/proto proto/
 mkdir -p nibiru/proto/ proto/
-cp -r ../nibiru/proto/ ./
+cp -r ../nibiru/proto/ ./proto/
 
 # grab the cosmos-sdk proto file locations from disk
 cd ../nibiru;

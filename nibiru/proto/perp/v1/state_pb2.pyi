@@ -90,17 +90,15 @@ global___MarginCalculationPriceOption = MarginCalculationPriceOption
 class Params(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     STOPPED_FIELD_NUMBER: builtins.int
-    MAINTENANCE_MARGIN_RATIO_FIELD_NUMBER: builtins.int
     FEE_POOL_FEE_RATIO_FIELD_NUMBER: builtins.int
     ECOSYSTEM_FUND_FEE_RATIO_FIELD_NUMBER: builtins.int
     LIQUIDATION_FEE_RATIO_FIELD_NUMBER: builtins.int
     PARTIAL_LIQUIDATION_RATIO_FIELD_NUMBER: builtins.int
-    EPOCH_IDENTIFIER_FIELD_NUMBER: builtins.int
+    FUNDING_RATE_INTERVAL_FIELD_NUMBER: builtins.int
     TWAP_LOOKBACK_WINDOW_FIELD_NUMBER: builtins.int
     stopped: builtins.bool
     """stopped identifies if the perp exchange is stopped or not"""
 
-    maintenance_margin_ratio: typing.Text
     fee_pool_fee_ratio: typing.Text
     """FeePoolFeeRatio is the ratio transferred to the the fee pool"""
 
@@ -116,8 +114,8 @@ class Params(google.protobuf.message.Message):
     partial_liquidation_ratio: typing.Text
     """PartialLiquidationRatio is the share we try to liquidate if the margin is higher than liquidation fee"""
 
-    epoch_identifier: typing.Text
-    """specifies the interval on which the fundingPayment is being updated"""
+    funding_rate_interval: typing.Text
+    """specifies the interval on which the funding rate is updated"""
 
     @property
     def twap_lookback_window(self) -> google.protobuf.duration_pb2.Duration:
@@ -126,16 +124,15 @@ class Params(google.protobuf.message.Message):
     def __init__(self,
         *,
         stopped: builtins.bool = ...,
-        maintenance_margin_ratio: typing.Text = ...,
         fee_pool_fee_ratio: typing.Text = ...,
         ecosystem_fund_fee_ratio: typing.Text = ...,
         liquidation_fee_ratio: typing.Text = ...,
         partial_liquidation_ratio: typing.Text = ...,
-        epoch_identifier: typing.Text = ...,
+        funding_rate_interval: typing.Text = ...,
         twap_lookback_window: typing.Optional[google.protobuf.duration_pb2.Duration] = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["twap_lookback_window",b"twap_lookback_window"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["ecosystem_fund_fee_ratio",b"ecosystem_fund_fee_ratio","epoch_identifier",b"epoch_identifier","fee_pool_fee_ratio",b"fee_pool_fee_ratio","liquidation_fee_ratio",b"liquidation_fee_ratio","maintenance_margin_ratio",b"maintenance_margin_ratio","partial_liquidation_ratio",b"partial_liquidation_ratio","stopped",b"stopped","twap_lookback_window",b"twap_lookback_window"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["ecosystem_fund_fee_ratio",b"ecosystem_fund_fee_ratio","fee_pool_fee_ratio",b"fee_pool_fee_ratio","funding_rate_interval",b"funding_rate_interval","liquidation_fee_ratio",b"liquidation_fee_ratio","partial_liquidation_ratio",b"partial_liquidation_ratio","stopped",b"stopped","twap_lookback_window",b"twap_lookback_window"]) -> None: ...
 global___Params = Params
 
 class GenesisState(google.protobuf.message.Message):

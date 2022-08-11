@@ -61,7 +61,9 @@ class QueryTraderPositionResponse(google.protobuf.message.Message):
     POSITION_FIELD_NUMBER: builtins.int
     POSITION_NOTIONAL_FIELD_NUMBER: builtins.int
     UNREALIZED_PNL_FIELD_NUMBER: builtins.int
-    MARGIN_RATIO_FIELD_NUMBER: builtins.int
+    MARGIN_RATIO_MARK_FIELD_NUMBER: builtins.int
+    MARGIN_RATIO_INDEX_FIELD_NUMBER: builtins.int
+    BLOCK_NUMBER_FIELD_NUMBER: builtins.int
     @property
     def position(self) -> perp.v1.state_pb2.Position:
         """The position as it exists in the blockchain state"""
@@ -72,16 +74,29 @@ class QueryTraderPositionResponse(google.protobuf.message.Message):
     unrealized_pnl: typing.Text
     """The position's unrealized PnL."""
 
-    margin_ratio: typing.Text
-    """The position's margin ratio, calculated from margin, unrealized PnL, and position notional."""
+    margin_ratio_mark: typing.Text
+    """margin ratio of the position based on the mark price, mark TWAP. The higher
+    value of the possible margin ratios (TWAP and instantaneous) is taken to be 
+    'marginRatioMark'. Calculated from margin, unrealized PnL, and position notional.
+    """
+
+    margin_ratio_index: typing.Text
+    """margin ratio of the position based on the index price. Calculated from margin, 
+    unrealized PnL, and position notional.
+    """
+
+    block_number: builtins.int
+    """BlockNumber is current block number at the time of query."""
 
     def __init__(self,
         *,
         position: typing.Optional[perp.v1.state_pb2.Position] = ...,
         position_notional: typing.Text = ...,
         unrealized_pnl: typing.Text = ...,
-        margin_ratio: typing.Text = ...,
+        margin_ratio_mark: typing.Text = ...,
+        margin_ratio_index: typing.Text = ...,
+        block_number: builtins.int = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["position",b"position"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["margin_ratio",b"margin_ratio","position",b"position","position_notional",b"position_notional","unrealized_pnl",b"unrealized_pnl"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["block_number",b"block_number","margin_ratio_index",b"margin_ratio_index","margin_ratio_mark",b"margin_ratio_mark","position",b"position","position_notional",b"position_notional","unrealized_pnl",b"unrealized_pnl"]) -> None: ...
 global___QueryTraderPositionResponse = QueryTraderPositionResponse

@@ -20,8 +20,8 @@ class QueryStub(object):
                 request_serializer=perp_dot_v1_dot_query__pb2.QueryParamsRequest.SerializeToString,
                 response_deserializer=perp_dot_v1_dot_query__pb2.QueryParamsResponse.FromString,
                 )
-        self.TraderPosition = channel.unary_unary(
-                '/nibiru.perp.v1.Query/TraderPosition',
+        self.QueryTraderPosition = channel.unary_unary(
+                '/nibiru.perp.v1.Query/QueryTraderPosition',
                 request_serializer=perp_dot_v1_dot_query__pb2.QueryTraderPositionRequest.SerializeToString,
                 response_deserializer=perp_dot_v1_dot_query__pb2.QueryTraderPositionResponse.FromString,
                 )
@@ -38,7 +38,7 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def TraderPosition(self, request, context):
+    def QueryTraderPosition(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -52,8 +52,8 @@ def add_QueryServicer_to_server(servicer, server):
                     request_deserializer=perp_dot_v1_dot_query__pb2.QueryParamsRequest.FromString,
                     response_serializer=perp_dot_v1_dot_query__pb2.QueryParamsResponse.SerializeToString,
             ),
-            'TraderPosition': grpc.unary_unary_rpc_method_handler(
-                    servicer.TraderPosition,
+            'QueryTraderPosition': grpc.unary_unary_rpc_method_handler(
+                    servicer.QueryTraderPosition,
                     request_deserializer=perp_dot_v1_dot_query__pb2.QueryTraderPositionRequest.FromString,
                     response_serializer=perp_dot_v1_dot_query__pb2.QueryTraderPositionResponse.SerializeToString,
             ),
@@ -86,7 +86,7 @@ class Query(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def TraderPosition(request,
+    def QueryTraderPosition(request,
             target,
             options=(),
             channel_credentials=None,
@@ -96,7 +96,7 @@ class Query(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/nibiru.perp.v1.Query/TraderPosition',
+        return grpc.experimental.unary_unary(request, target, '/nibiru.perp.v1.Query/QueryTraderPosition',
             perp_dot_v1_dot_query__pb2.QueryTraderPositionRequest.SerializeToString,
             perp_dot_v1_dot_query__pb2.QueryTraderPositionResponse.FromString,
             options, channel_credentials,

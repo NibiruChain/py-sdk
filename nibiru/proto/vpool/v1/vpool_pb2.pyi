@@ -97,6 +97,8 @@ class Pool(google.protobuf.message.Message):
     TRADE_LIMIT_RATIO_FIELD_NUMBER: builtins.int
     FLUCTUATION_LIMIT_RATIO_FIELD_NUMBER: builtins.int
     MAX_ORACLE_SPREAD_RATIO_FIELD_NUMBER: builtins.int
+    MAINTENANCE_MARGIN_RATIO_FIELD_NUMBER: builtins.int
+    MAX_LEVERAGE_FIELD_NUMBER: builtins.int
     @property
     def pair(self) -> common.common_pb2.AssetPair:
         """always BASE:QUOTE, e.g. BTC:NUSD or ETH:NUSD"""
@@ -116,6 +118,12 @@ class Pool(google.protobuf.message.Message):
     max_oracle_spread_ratio: typing.Text
     """max_oracle_spread_ratio"""
 
+    maintenance_margin_ratio: typing.Text
+    """maintenance_margin_ratio"""
+
+    max_leverage: typing.Text
+    """max_leverage"""
+
     def __init__(self,
         *,
         pair: typing.Optional[common.common_pb2.AssetPair] = ...,
@@ -124,7 +132,44 @@ class Pool(google.protobuf.message.Message):
         trade_limit_ratio: typing.Text = ...,
         fluctuation_limit_ratio: typing.Text = ...,
         max_oracle_spread_ratio: typing.Text = ...,
+        maintenance_margin_ratio: typing.Text = ...,
+        max_leverage: typing.Text = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["pair",b"pair"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["base_asset_reserve",b"base_asset_reserve","fluctuation_limit_ratio",b"fluctuation_limit_ratio","max_oracle_spread_ratio",b"max_oracle_spread_ratio","pair",b"pair","quote_asset_reserve",b"quote_asset_reserve","trade_limit_ratio",b"trade_limit_ratio"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["base_asset_reserve",b"base_asset_reserve","fluctuation_limit_ratio",b"fluctuation_limit_ratio","maintenance_margin_ratio",b"maintenance_margin_ratio","max_leverage",b"max_leverage","max_oracle_spread_ratio",b"max_oracle_spread_ratio","pair",b"pair","quote_asset_reserve",b"quote_asset_reserve","trade_limit_ratio",b"trade_limit_ratio"]) -> None: ...
 global___Pool = Pool
+
+class PoolPrices(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    MARK_PRICE_FIELD_NUMBER: builtins.int
+    INDEX_PRICE_FIELD_NUMBER: builtins.int
+    TWAP_MARK_FIELD_NUMBER: builtins.int
+    SWAP_INVARIANT_FIELD_NUMBER: builtins.int
+    BLOCK_NUMBER_FIELD_NUMBER: builtins.int
+    mark_price: typing.Text
+    """MarkPrice is the instantaneous price of the perp. 
+    Equivalent to quoteAssetReserve / baseAssetReserve.
+    """
+
+    index_price: typing.Text
+    """IndexPrice is the price of the "underlying" for the perp"""
+
+    twap_mark: typing.Text
+    """TwapMark is the time-weighted average (mark) price."""
+
+    swap_invariant: typing.Text
+    """SwapInvariant is the product of the reserves, commonly referred to as "k"."""
+
+    block_number: builtins.int
+    """The block number corresponding to each price"""
+
+    def __init__(self,
+        *,
+        mark_price: typing.Text = ...,
+        index_price: typing.Text = ...,
+        twap_mark: typing.Text = ...,
+        swap_invariant: typing.Text = ...,
+        block_number: builtins.int = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["block_number",b"block_number","index_price",b"index_price","mark_price",b"mark_price","swap_invariant",b"swap_invariant","twap_mark",b"twap_mark"]) -> None: ...
+global___PoolPrices = PoolPrices

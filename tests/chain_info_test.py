@@ -61,7 +61,7 @@ def test_query_perp_params(val_node: nibiru.Sdk):
 
     perp_param_names: List[str] = [
         "ecosystemFundFeeRatio",
-        "epochIdentifier",
+        # "epochIdentifier",
         "feePoolFeeRatio",
         "liquidationFeeRatio",
         "partialLiquidationRatio",

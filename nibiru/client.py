@@ -3,10 +3,10 @@ from typing import List, Optional, Tuple, Union
 
 import grpc
 
-from nibiru.clients import Dex as DexClient
-from nibiru.clients import Perp as PerpClient
-from nibiru.clients import Pricefeed as PricefeedClient
-from nibiru.clients import VPool as VPoolClient
+from nibiru.clients import DexQueryClient as DexClient
+from nibiru.clients import PerpQueryClient as PerpClient
+from nibiru.clients import PricefeedQueryClient as PricefeedClient
+from nibiru.clients import VpoolQueryClient as VPoolClient
 from nibiru.exceptions import NotFoundError
 from nibiru.network import Network
 from nibiru.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type

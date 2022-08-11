@@ -8,7 +8,7 @@ from nibiru.proto.vpool.v1.vpool_pb2 import Direction as pbDirection
 from .util import deserialize
 
 
-class VPool:
+class VpoolQueryClient:
     """
     VPool allows to query the endpoints made available by the Nibiru Chain's VPOOL module.
     """

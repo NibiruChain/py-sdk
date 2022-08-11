@@ -16,8 +16,8 @@ protoc_gen_gocosmos() {
 
 # refresh existing proto files
 rm -rf nibiru/proto proto/
-mkdir -p nibiru/proto/ proto/
-cp -r ../nibiru/proto/ ./proto/
+mkdir -p nibiru/proto/
+cp -r ../nibiru/proto/ proto/
 
 # grab the cosmos-sdk proto file locations from disk
 cd ../nibiru;
@@ -39,8 +39,6 @@ for dir in $proto_dirs; do \
     -I "$cosmos_sdk_dir/proto" \
     --python_out=nibiru/proto \
     --grpc_python_out=nibiru/proto \
-    --mypy_out=nibiru/proto \
-    --mypy_grpc_out=nibiru/proto \
     $(find "${dir}" -type f -name '*.proto')
 done; \
 

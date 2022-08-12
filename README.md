@@ -30,6 +30,9 @@ It is intended to be used by coders, developers, technically-skilled traders, da
   - [Python dependencies](#python-dependencies)
   - [Running the tests](#running-the-tests)
   - [Other dependencies](#other-dependencies)
+  - [Generating types wth protobuf](#generating-types-wth-protobuf)
+- [Linting](#linting)
+- [Gotchas](#gotchas)
 
 ## Documentation Website
 
@@ -90,6 +93,8 @@ Set up a `.env` file to set environment variables for the tests.
 # Example configuration for the Nibiry Python SDK
 HOST="..."
 VALIDATOR_MNEMONIC="..."
+GRPC_PORT="..."
+LCD_PORT="..."
 CHAIN_ID="..."
 ```
 
@@ -133,14 +138,35 @@ To run shell scripts and commands in the `Makefile`, you'll need to install the 
   sudo dnf install python3-devel autoconf automake gcc gcc-c++ libffi-devel libtool make pkgconfig
   ```
 
-#### Generate proto binding & build
+### Generating types wth protobuf 
 
-  ```sh
-  make proto-gen
-  python -m build     # Run `pip install build` in case this fails
-  ```
+The objective is to run `make proto-gen`, which simply executes `scripts/protocgen.sh`.
 
-#### Linting
+In order to do this, you'll need to install a few packages on your system.
+```sh
+python -m pip install --user grpcio-tools
+pip install mypy-protobuf
+```
+
+If you get a permissions error such as 
+```
+rm: cannot remove 'proto/proto/epochs/query.proto': Permission denied
+```
+call `sudo chown -R [USER-NAME] proto` using the name of user directory. 
+You can find the value for `[USER-NAME]` quickly by running `whoami`. In other words, this should work: 
+
+```sh
+sudo chown -R $(whoami) proto
+```
+
+You're done generating types once you've successfully called
+
+```sh
+make proto-gen
+poetry build # equivalently, you can run `python -m build`
+```
+
+## Linting
 
 Enable git hook which will perform linting before each commit:
 
@@ -149,3 +175,30 @@ pre-commit install
 ```
 
 This will keep your code clean.
+
+
+## Gotchas
+
+The `protobuf` package must be version 3.20.x or lower. Otherwise, the following error appears at runtime.
+
+```
+nibiru/clients/__init__.py:1: in <module>
+    from .dex import Dex  # noqa
+nibiru/clients/dex.py:8: in <module>
+    from nibiru.proto.dex.v1 import query_pb2 as dex_type
+nibiru/proto/dex/v1/query_pb2.py:16: in <module>
+    from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
+../../../anaconda3/envs/divine/lib/python3.9/site-packages/google/api/annotations_pb2.py:30: in <module>
+    from google.api import http_pb2 as google_dot_api_dot_http__pb2
+../../../anaconda3/envs/divine/lib/python3.9/site-packages/google/api/http_pb2.py:48: in <module>
+    _descriptor.FieldDescriptor(
+../../../anaconda3/envs/divine/lib/python3.9/site-packages/google/protobuf/descriptor.py:560: in __new__
+    _message.Message._CheckCalledFromGeneratedFile()
+E   TypeError: Descriptors cannot not be created directly.
+E   If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc >= 3.19.0.
+E   If you cannot immediately regenerate your protos, some other possible workarounds are:
+E    1. Downgrade the protobuf package to 3.20.x or lower.
+E    2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
+E
+E   More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+```

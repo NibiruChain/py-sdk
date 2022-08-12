@@ -37,7 +37,7 @@ def get_val_node(network: nibiru.Network) -> nibiru.Sdk:
     tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK)
     newtork_insecure: bool = True
     return (
-        nibiru.Sdk.authorize(CONFIG.VALIDATOR_MNEMONIC).with_config(tx_config).with_network(network, newtork_insecure)
+        nibiru.Sdk.authorize(CONFIG.VALIDATOR_MNEMONIC).with_config(tx_config).with_network(network, newtwork_insecure)
     )
 
 

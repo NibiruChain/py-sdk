@@ -2,9 +2,9 @@ name: Run tests
 
 on: 
   pull_request:
-    branches: ["master", "release/*"]
+    branches: ["master"]
   push: 
-    branches: ["master", "release/*"]
+    branches: ["master"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
@@ -57,22 +57,5 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
-
-
-
-    # - name: Install pipenv with pip
-    #   run: pip install pipenv
-
-    # - id: cache-pipenv
-    #   uses: actions/cache@v1
-    #   with:
-    #     path: ~/.local/share/virtualenvs
-    #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
-    # - name: Install dependencies
-    #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
-    #   run: |
-    #     pipenv install --dev
-
     - name: Run Python SDK tests
       run: poetry run pytest -p no:warnings

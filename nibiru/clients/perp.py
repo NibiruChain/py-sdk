@@ -34,7 +34,6 @@ class Perp:
         """
         proto_output: perp_type.QueryParamsResponse = self.api.Params(perp_type.QueryParamsRequest())
         output = MessageToDict(proto_output)["params"]
-        breakpoint()
 
         sdk_dec_fields = [
             # "maintenanceMarginRatio",

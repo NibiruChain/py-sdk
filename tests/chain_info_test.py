@@ -24,18 +24,18 @@ def test_genesis_block_ping():
 
 
 @pytest.fixture
-def devnet() -> nibiru.Network:
+def network() -> nibiru.Network:
     return nibiru.Network.devnet()
 
 
 @pytest.fixture
-def val_node(devnet: nibiru.Network) -> nibiru.Sdk:
+def val_node(network: nibiru.Network) -> nibiru.Sdk:
     tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK)
     newtork_insecure: bool = True
     return (
         nibiru.Sdk.authorize(VALIDATOR_MNEMONIC)
         .with_config(tx_config)
-        .with_network(devnet, newtork_insecure)
+        .with_network(network, newtork_insecure)
     )
 
 

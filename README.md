@@ -93,9 +93,11 @@ Set up a `.env` file to set environment variables for the tests.
 # Example configuration for the Nibiry Python SDK
 HOST="..."
 VALIDATOR_MNEMONIC="..."
+ORACLE_MNEMONIC="..."
 GRPC_PORT="..."
 LCD_PORT="..."
 CHAIN_ID="..."
+NETWORK_INSECURE=true
 ```
 
 There's currently a "devnet" running in GCP that the CI workflows use. You can find these secrets at [this notion page](https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0) if you have access to it or contact @Unique-Divine or @matthiasmatt. 

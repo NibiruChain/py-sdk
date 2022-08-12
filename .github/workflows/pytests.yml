@@ -1,6 +1,14 @@
 name: Run tests
 
-on: [push]
+on: 
+  pull_request:
+    branches: ["main", "release/*"]
+  push: 
+    branches: ["main", "release/*"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
+  cancel-in-progress: ${{ ! (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')) }}
 
 jobs:
   tests:
@@ -10,9 +18,11 @@ jobs:
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       HOST: ${{ secrets.HOST }}
     steps:
+    # ----------------------------------------------
+    # check-out repo and set-up python
+    # ----------------------------------------------
     - name: Check out the repo
       uses: actions/checkout@v3
-
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
@@ -20,20 +30,46 @@ jobs:
 
     - name: Run python
       run: python --version && python -c "print('hello')"
-
-    - name: Install pipenv with pip
-      run: pip install pipenv
-
-    - id: cache-pipenv
-      uses: actions/cache@v1
+    # ----------------------------------------------
+    # Install & configure poetry
+    # ----------------------------------------------
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
       with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+    #----------------------------------------------
+    #       load cached venv if cache exists
+    #----------------------------------------------
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+    #----------------------------------------------
+    # install dependencies if cache does not exist
+    #----------------------------------------------
     - name: Install dependencies
-      if: steps.cache-pipenv.outputs.cache-hit != 'true'
-      run: |
-        pipenv install --dev
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+
+
+
+    # - name: Install pipenv with pip
+    #   run: pip install pipenv
+
+    # - id: cache-pipenv
+    #   uses: actions/cache@v1
+    #   with:
+    #     path: ~/.local/share/virtualenvs
+    #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+    # - name: Install dependencies
+    #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
+    #   run: |
+    #     pipenv install --dev
 
     - name: Run Python SDK tests
-      run: pipenv run pytest -p no:warnings
+      run: poetry run pytest -p no:warnings

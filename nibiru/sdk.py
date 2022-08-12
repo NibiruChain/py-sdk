@@ -14,7 +14,7 @@ class Sdk:
             raise TypeError("Please use PrivateKey.from_mnemonic() to construct me")
         self.priv_key: PrivateKey = None
         self.query = None
-        self.tx_client = None
+        self.tx = None
         self.network = None
         self.tx_config = TxConfig()
 
@@ -46,7 +46,7 @@ class Sdk:
         return self
 
     def with_tx_client(self, tx_client: TxClient) -> "Sdk":
-        self.tx_client = tx_client
+        self.tx = tx_client
         return self
 
     def with_priv_key(self, priv_key: PrivateKey) -> "Sdk":

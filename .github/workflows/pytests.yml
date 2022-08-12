@@ -18,6 +18,7 @@ jobs:
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
       HOST: ${{ secrets.HOST }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+      ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
       GRPC_PORT: ${{ secrets.GRPC_PORT }}
       LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}

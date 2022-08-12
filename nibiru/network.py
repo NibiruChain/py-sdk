@@ -20,8 +20,8 @@ class Network:
         }
         for name, env_var in chain_config.items():
             if env_var is None: 
-                raise Exception("".join([
-                    f"Envrionment variable {name} is needed for devnet", 
+                raise Exception("\n".join([
+                    f"Environment variable {name} is needed for devnet.", 
                     f"Please set {name} in your .env file."
                     ]))
         return cls(

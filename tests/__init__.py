@@ -1,6 +1,7 @@
 """Tests for the nibiru-py package"""
 import dataclasses
 import os
+import unittest
 
 import dotenv
 import pytest
@@ -16,12 +17,39 @@ class TestConfig:
     LCD_PORT = "1317"
     GRPC_PORT = "9090"
     VALIDATOR_MNEMONIC = os.environ["VALIDATOR_MNEMONIC"]
+    ORACLE_MNEMONIC = os.environ["ORACLE_MNEMONIC"]
     NETWORK_INSECURE = os.environ["NETWORK_INSECURE"]
     CHAIN_ID = os.environ["CHAIN_ID"]
     HOST = os.environ["HOST"]
 
 
 CONFIG = TestConfig()
+
+
+class ModuleTest(unittest.TestCase):
+    def validate_tx_output(self, tx_output: dict):
+        """
+        Ensure the output of a transaction have the fields required and that the raw logs are properly parsed
+
+        Args:
+            tx_output (dict): The output of a transaction in a dictionary
+        """
+
+        self.assertIsInstance(tx_output, dict)
+        self.assertCountEqual(
+            tx_output.keys(),
+            [
+                'height',
+                'txhash',
+                'data',
+                'rawLog',
+                'logs',
+                'gasWanted',
+                'gasUsed',
+                'events',
+            ],
+        )
+        self.assertIsInstance(tx_output["rawLog"], list)
 
 
 def get_network() -> nibiru.Network:
@@ -38,6 +66,15 @@ def get_val_node(network: nibiru.Network) -> nibiru.Sdk:
     tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK)
     return (
         nibiru.Sdk.authorize(CONFIG.VALIDATOR_MNEMONIC)
+        .with_config(tx_config)
+        .with_network(network, CONFIG.NETWORK_INSECURE)
+    )
+
+
+def get_oracle_node(network: nibiru.Network) -> nibiru.Sdk:
+    tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK, gas_multiplier=3)
+    return (
+        nibiru.Sdk.authorize(CONFIG.ORACLE_MNEMONIC)
         .with_config(tx_config)
         .with_network(network, CONFIG.NETWORK_INSECURE)
     )

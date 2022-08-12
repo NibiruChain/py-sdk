@@ -16,6 +16,7 @@ class TestConfig:
     LCD_PORT = "1317"
     GRPC_PORT = "9090"
     VALIDATOR_MNEMONIC = os.environ["VALIDATOR_MNEMONIC"]
+    NETWORK_INSECURE = os.environ["NETWORK_INSECURE"]
     CHAIN_ID = os.environ["CHAIN_ID"]
     HOST = os.environ["HOST"]
 
@@ -35,9 +36,10 @@ def get_network() -> nibiru.Network:
 
 def get_val_node(network: nibiru.Network) -> nibiru.Sdk:
     tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK)
-    newtork_insecure: bool = True
     return (
-        nibiru.Sdk.authorize(CONFIG.VALIDATOR_MNEMONIC).with_config(tx_config).with_network(network, newtwork_insecure)
+        nibiru.Sdk.authorize(CONFIG.VALIDATOR_MNEMONIC)
+        .with_config(tx_config)
+        .with_network(network, CONFIG.NETWORK_INSECURE)
     )
 
 

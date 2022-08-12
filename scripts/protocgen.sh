@@ -20,9 +20,10 @@ then
   echo "Refreshing proto files"
   rm -rf nibiru/proto 
   mkdir -p nibiru/proto/ 
-  # if the nibiru-py/proto directory already exists, it messes up the script.
+  # if the nibiru-py/proto directory already exists, 
   if [ -d proto ]
   then 
+    # it will mess up the script, so we preemptively remove it.
     rm -rf proto 
   fi 
   cp -r ../nibiru/proto/ proto/

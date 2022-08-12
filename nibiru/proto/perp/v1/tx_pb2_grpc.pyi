@@ -20,7 +20,7 @@ class MsgStub:
     Liquidate: grpc.UnaryUnaryMultiCallable[
         perp.v1.tx_pb2.MsgLiquidate,
         perp.v1.tx_pb2.MsgLiquidateResponse]
-    """Liquidate is a transaction that allows the caller to fully or partially
+    """Liquidate is a transaction that allows the caller to fully or partially 
     liquidate an existing position.
     """
 
@@ -52,7 +52,7 @@ class MsgServicer(metaclass=abc.ABCMeta):
         request: perp.v1.tx_pb2.MsgLiquidate,
         context: grpc.ServicerContext,
     ) -> perp.v1.tx_pb2.MsgLiquidateResponse:
-        """Liquidate is a transaction that allows the caller to fully or partially
+        """Liquidate is a transaction that allows the caller to fully or partially 
         liquidate an existing position.
         """
         pass

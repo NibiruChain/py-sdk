@@ -17,19 +17,18 @@ def test_genesis_block_ping():
     """
     host = CONFIG.HOST
     block_number = 1
-    port = 26657
-    url = f"http://{host}:{port}/block?height={block_number}"
+    tm_rpc_port = 26657
+    url = f"http://{host}:{tm_rpc_port}/block?height={block_number}"
     query_resp: Dict[str, Any] = requests.get(url).json()
     assert all([key in query_resp.keys() for key in ["jsonrpc", "id", "result"]])
 
 
 def test_get_chain_id(val_node: nibiru.Sdk):
-    assert CONFIG.CHAIN_ID == val_node.query.get_chain_id()
+    assert val_node._network.chain_id == val_node.query.get_chain_id()
 
 
 def test_query_perp_params(val_node: nibiru.Sdk):
     params: Dict[str, Union[float, str]] = val_node.query.perp.params()
-
     perp_param_names: List[str] = [
         "ecosystemFundFeeRatio",
         "feePoolFeeRatio",
@@ -38,3 +37,12 @@ def test_query_perp_params(val_node: nibiru.Sdk):
         "twapLookbackWindow",
     ]
     assert all([(param_name in params) for param_name in perp_param_names])
+
+
+def test_query_vpool_reserve_assets(val_node: nibiru.Sdk):
+    expected_pairs: List[str] = ["ubtc:unusd", "ueth:unusd"]
+    for pair in expected_pairs:
+        queryResp: dict = val_node.query.vpool.reserve_assets(pair)
+        assert isinstance(queryResp, dict)
+        assert queryResp["base_asset_reserve"] > 0
+        assert queryResp["quote_asset_reserve"] > 0

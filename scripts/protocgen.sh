@@ -14,17 +14,25 @@ protoc_gen_gocosmos() {
   go get github.com/cosmos/cosmos-sdk@v0.45.6 2>/dev/null
 }
 
-# refresh existing proto files
-rm -rf nibiru/proto proto/
-mkdir -p nibiru/proto/
-cp -r ../nibiru/proto/ proto/
+echo "refresh existing proto files"
+if [ $(basename $(pwd)) = nibiru-py ]
+then 
+  echo "Refreshing proto files"
+  rm -rf nibiru/proto proto # if the nibiru-py/proto directory already exists, 
+  mkdir -p nibiru/proto/ 
+  cp -r ../nibiru/proto/ proto/
+else 
+  echo "Ran protocgen.sh from the wrong directory"
+  exit 1
+fi
 
-# grab the cosmos-sdk proto file locations from disk
+echo "grabbing cosmos-sdk proto file locations from disk"
+echo "current dir: $(pwd)"
 cd ../nibiru;
 protoc_gen_gocosmos
 cosmos_sdk_dir=$(go list -f '{{ .Dir }}' -m github.com/cosmos/cosmos-sdk)
 
-# grab all of the proto directories
+echo "grab all of the proto directories"
 cd -;
 proto_dirs=$(find $cosmos_sdk_dir/proto $cosmos_sdk_dir/third_party/proto ./proto -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
 echo $proto_dirs
@@ -33,6 +41,7 @@ echo $proto_dirs
 for dir in $proto_dirs; do \
   echo "generating $dir"
   # echo "$cosmos_sdk_dir"
+  mkdir -p ./nibiru/${dir};
   python3 -m grpc_tools.protoc \
     -I proto \
     -I "$cosmos_sdk_dir/third_party/proto" \

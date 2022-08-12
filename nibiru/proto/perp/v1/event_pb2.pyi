@@ -72,10 +72,10 @@ class PositionChangedEvent(google.protobuf.message.Message):
     """vPrice defined as yRes / xRes for a vpool, where yRes is the quote reserves and xRes is the base reserves."""
 
     funding_payment: typing.Text
-    """A funding payment made or received by the trader on the current position.
+    """A funding payment made or received by the trader on the current position. 
     'fundingPayment' is positive if 'owner' is the sender and negative if 'owner'
-    is the receiver of the payment. Its magnitude is abs(vSize * fundingRate).
-    Funding payments act to converge the mark price (vPrice) and index price
+    is the receiver of the payment. Its magnitude is abs(vSize * fundingRate). 
+    Funding payments act to converge the mark price (vPrice) and index price 
     (average price on major exchanges).
     """
 

@@ -14,7 +14,7 @@ protoc_gen_gocosmos() {
   go get github.com/cosmos/cosmos-sdk@v0.45.6 2>/dev/null
 }
 
-# refresh existing proto files
+echo "refresh existing proto files"
 if [ $(basename $(pwd)) = nibiru-py ]
 then 
   echo "Refreshing proto files"

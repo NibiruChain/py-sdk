@@ -36,7 +36,6 @@ class Perp:
         output = MessageToDict(proto_output)["params"]
 
         sdk_dec_fields = [
-            # "maintenanceMarginRatio",
             "feePoolFeeRatio",
             "ecosystemFundFeeRatio",
             "liquidationFeeRatio",

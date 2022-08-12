@@ -70,6 +70,17 @@ class TestPerp(tests.ModuleTest):
         print(tx_output)
         self.validate_tx_output(tx_output)
 
+        # Post price price again so we are sure we waited 1 block for price to be set before next queries.
+        tx_output = self.oracle.tx.pricefeed.post_price(
+            self.oracle.address,
+            token0="unibi",
+            token1="unusd",
+            price=10,
+            expiry=datetime.utcnow() + timedelta(hours=1),
+        )
+        print(tx_output)
+        self.validate_tx_output(tx_output)
+
         # Query raw prices
         raw_prices = self.oracle.query.pricefeed.raw_prices("unibi:unusd")["raw_prices"]
 

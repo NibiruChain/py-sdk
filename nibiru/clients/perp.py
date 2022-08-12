@@ -32,11 +32,12 @@ class Perp:
         Returns:
             dict: The current parameters for the perpetual module
         """
-        proto_output: perp_type.QueryParamsResponse = self.api.Params(perp_type.QueryParamsRequest())
+        proto_output: perp_type.QueryParamsResponse = self.api.Params(
+            perp_type.QueryParamsRequest()
+        )
         output = MessageToDict(proto_output)["params"]
 
         sdk_dec_fields = [
-            # "maintenanceMarginRatio",
             "feePoolFeeRatio",
             "ecosystemFundFeeRatio",
             "liquidationFeeRatio",
@@ -86,7 +87,9 @@ class Perp:
             trader=trader,
         )
 
-        proto_output: perp_type.QueryTraderPositionResponse = self.api.QueryTraderPosition(req)
+        proto_output: perp_type.QueryTraderPositionResponse = (
+            self.api.QueryTraderPosition(req)
+        )
         output = MessageToDict(proto_output)
 
         position_sdk_dec_fields = [

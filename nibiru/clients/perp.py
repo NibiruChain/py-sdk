@@ -1,11 +1,9 @@
+from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 
 from nibiru.proto.perp.v1 import query_pb2 as perp_type
 from nibiru.proto.perp.v1 import query_pb2_grpc as perp_query
-from google.protobuf.json_format import MessageToDict
 from nibiru.utils import from_sdk_dec, from_sdk_dec_24
-
-from .util import deserialize
 
 
 class Perp:
@@ -23,7 +21,6 @@ class Perp:
         Output sample::
 
             {
-                "maintenanceMarginRatio": 0.0625,
                 "feePoolFeeRatio": 0.001,
                 "ecosystemFundFeeRatio": 0.001,
                 "liquidationFeeRatio": 0.025,
@@ -78,7 +75,8 @@ class Perp:
                 },
                 "positionNotional": 230000.0,
                 "unrealizedPnl": 1.024e-20,
-                "marginRatio": 0.2
+                "marginRatioMark": 0.2,
+                "marginRatioIndex": 0.2
             }
 
         Returns:
@@ -89,7 +87,7 @@ class Perp:
             trader=trader,
         )
 
-        proto_output: perp_type.QueryTraderPositionResponse = self.api.TraderPosition(req)
+        proto_output: perp_type.QueryTraderPositionResponse = self.api.QueryTraderPosition(req)
         output = MessageToDict(proto_output)
 
         position_sdk_dec_fields = [
@@ -108,6 +106,7 @@ class Perp:
         for field in sdk_dec_fields:
             output[field] = from_sdk_dec_24(output[field])
 
-        output["marginRatio"] = from_sdk_dec(output["marginRatio"])
+        output["marginRatioMark"] = from_sdk_dec(output["marginRatioMark"])
+        output["marginRatioIndex"] = from_sdk_dec(output["marginRatioIndex"])
 
         return output

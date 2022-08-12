@@ -267,21 +267,39 @@ class Address:
             f"{lcd_endpoint}/cosmos/auth/v1beta1/accounts/{self.to_acc_bech32()}",
             headers={'Accept-Encoding': 'application/json'},
         )
-        if response.status_code != 200:
+        if response.status_code == 404:
+            self.sequence = 0
+        elif response.status_code != 200:
             raise ValueError("HTTP response status", response.status_code)
-        resp = json.loads(response.text)
-        acc = resp['account']
-        self.number = int(acc['account_number'])
-        self.sequence = int(acc['sequence'])
+        else:
+            resp = json.loads(response.text)
+            acc = resp['account']
+            self.number = int(acc['account_number'])
+            self.sequence = int(acc['sequence'])
         return self
 
     def decrease_sequence(self):
         """If a tx failed the sequence should not increase"""
         self.sequence -= 1
 
-    def get_sequence(self):
+    def get_sequence(self, from_node=False, lcd_endpoint: str = None) -> int:
+        """
+        Get the sequence number from the module. If from node is set to true, update our local indice with a query to
+        the node.
+
+        Args:
+            from_node (bool, optional): Wether to query or not from the node. Defaults to False.
+            lcd_endpoint (str, optional): The lcd endoint, needed for when from_node is set to true. Defaults to None.
+
+        Returns:
+            int: the current sequence number
+        """
+        if from_node:
+            self.init_num_seq(lcd_endpoint)
+
         current_seq = self.sequence
         self.sequence += 1
+
         return current_seq
 
     def get_number(self):

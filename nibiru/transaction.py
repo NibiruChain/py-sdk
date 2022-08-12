@@ -1,20 +1,21 @@
-from typing import List, Tuple
 from numbers import Number
+from typing import List, Tuple
 
 from google.protobuf import any_pb2, message
-from .proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from .proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
-from .proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
 
 from .client import Client
 from .constant import MAX_MEMO_CHARACTERS
 from .exceptions import EmptyMsgError, NotFoundError, UndefinedError, ValueTooLargeError
-from .wallet import PublicKey, PrivateKey
+from .proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from .proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
+from .proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
+from .wallet import PrivateKey, PublicKey
+
 
 class Transaction:
     def __init__(
         self,
-        msgs: Tuple[message.Message,...] = None,
+        msgs: Tuple[message.Message, ...] = None,
         account_num: int = None,
         priv_key: PrivateKey = None,
         sequence: int = None,
@@ -22,7 +23,7 @@ class Transaction:
         fee: List[Coin] = None,
         gas: int = 0,
         memo: str = "",
-        timeout_height: int = 0
+        timeout_height: int = 0,
     ):
         self.msgs = self.__convert_msgs(msgs) if msgs is not None else []
         self.account_num = account_num
@@ -35,7 +36,7 @@ class Transaction:
         self.timeout_height = timeout_height
 
     @staticmethod
-    def __convert_msgs(msgs: Tuple[message.Message,...]) -> List[any_pb2.Any]:
+    def __convert_msgs(msgs: Tuple[message.Message, ...]) -> List[any_pb2.Any]:
         any_msgs: List[any_pb2.Any] = []
         for msg in msgs:
             any_msg = any_pb2.Any()
@@ -92,11 +93,7 @@ class Transaction:
         return self
 
     def __generate_info(self, public_key: PublicKey = None) -> Tuple[str, str]:
-        body = cosmos_tx_type.TxBody(
-            messages=self.msgs,
-            memo=self.memo,
-            timeout_height=self.timeout_height
-        )
+        body = cosmos_tx_type.TxBody(messages=self.msgs, memo=self.memo, timeout_height=self.timeout_height)
 
         body_bytes = body.SerializeToString()
         mode_info = cosmos_tx_type.ModeInfo(single=cosmos_tx_type.ModeInfo.Single(mode=tx_sign.SIGN_MODE_DIRECT))
@@ -142,7 +139,6 @@ class Transaction:
 
         tx_raw = cosmos_tx_type.TxRaw(body_bytes=body_bytes, auth_info_bytes=auth_info_bytes, signatures=[signature])
         return tx_raw.SerializeToString()
-
 
     def get_signed_tx_data(self) -> bytes:
         if self.priv_key is None:

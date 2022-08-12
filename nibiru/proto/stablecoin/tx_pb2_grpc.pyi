@@ -12,31 +12,31 @@ class MsgStub:
     MintStable: grpc.UnaryUnaryMultiCallable[
         stablecoin.tx_pb2.MsgMintStable,
         stablecoin.tx_pb2.MsgMintStableResponse]
-    """MintStable defines a method for trading a mixture of GOV and COLL to mint an 
+    """MintStable defines a method for trading a mixture of GOV and COLL to mint an
     equivalent value of stablecoins.
     """
 
     BurnStable: grpc.UnaryUnaryMultiCallable[
         stablecoin.tx_pb2.MsgBurnStable,
         stablecoin.tx_pb2.MsgBurnStableResponse]
-    """BurnStable defines a method for redeeming/burning stablecoins to receive an 
+    """BurnStable defines a method for redeeming/burning stablecoins to receive an
     equivalent value as a mixture of governance and collateral tokens.
     """
 
     Recollateralize: grpc.UnaryUnaryMultiCallable[
         stablecoin.tx_pb2.MsgRecollateralize,
         stablecoin.tx_pb2.MsgRecollateralizeResponse]
-    """Recollateralize defines a method for manually adding collateral to the 
-    protocol in exchange for an equivalent stablecoin value in governance tokens 
+    """Recollateralize defines a method for manually adding collateral to the
+    protocol in exchange for an equivalent stablecoin value in governance tokens
     plus a small bonus.
     """
 
     Buyback: grpc.UnaryUnaryMultiCallable[
         stablecoin.tx_pb2.MsgBuyback,
         stablecoin.tx_pb2.MsgBuybackResponse]
-    """Buyback defines a method for manually adding NIBI to the protocol 
-    in exchange for an equivalent stablecoin value in collateral, effectively 
-    executing a share buyback for Nibiru Chain. The NIBI purchased by the protocol 
+    """Buyback defines a method for manually adding NIBI to the protocol
+    in exchange for an equivalent stablecoin value in collateral, effectively
+    executing a share buyback for Nibiru Chain. The NIBI purchased by the protocol
     is then burned, distributing value to all NIBI hodlers.
     """
 
@@ -48,7 +48,7 @@ class MsgServicer(metaclass=abc.ABCMeta):
         request: stablecoin.tx_pb2.MsgMintStable,
         context: grpc.ServicerContext,
     ) -> stablecoin.tx_pb2.MsgMintStableResponse:
-        """MintStable defines a method for trading a mixture of GOV and COLL to mint an 
+        """MintStable defines a method for trading a mixture of GOV and COLL to mint an
         equivalent value of stablecoins.
         """
         pass
@@ -58,7 +58,7 @@ class MsgServicer(metaclass=abc.ABCMeta):
         request: stablecoin.tx_pb2.MsgBurnStable,
         context: grpc.ServicerContext,
     ) -> stablecoin.tx_pb2.MsgBurnStableResponse:
-        """BurnStable defines a method for redeeming/burning stablecoins to receive an 
+        """BurnStable defines a method for redeeming/burning stablecoins to receive an
         equivalent value as a mixture of governance and collateral tokens.
         """
         pass
@@ -68,8 +68,8 @@ class MsgServicer(metaclass=abc.ABCMeta):
         request: stablecoin.tx_pb2.MsgRecollateralize,
         context: grpc.ServicerContext,
     ) -> stablecoin.tx_pb2.MsgRecollateralizeResponse:
-        """Recollateralize defines a method for manually adding collateral to the 
-        protocol in exchange for an equivalent stablecoin value in governance tokens 
+        """Recollateralize defines a method for manually adding collateral to the
+        protocol in exchange for an equivalent stablecoin value in governance tokens
         plus a small bonus.
         """
         pass
@@ -79,9 +79,9 @@ class MsgServicer(metaclass=abc.ABCMeta):
         request: stablecoin.tx_pb2.MsgBuyback,
         context: grpc.ServicerContext,
     ) -> stablecoin.tx_pb2.MsgBuybackResponse:
-        """Buyback defines a method for manually adding NIBI to the protocol 
-        in exchange for an equivalent stablecoin value in collateral, effectively 
-        executing a share buyback for Nibiru Chain. The NIBI purchased by the protocol 
+        """Buyback defines a method for manually adding NIBI to the protocol
+        in exchange for an equivalent stablecoin value in collateral, effectively
+        executing a share buyback for Nibiru Chain. The NIBI purchased by the protocol
         is then burned, distributing value to all NIBI hodlers.
         """
         pass

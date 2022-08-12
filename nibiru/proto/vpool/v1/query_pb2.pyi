@@ -58,13 +58,17 @@ global___QueryAllPoolsRequest = QueryAllPoolsRequest
 class QueryAllPoolsResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     POOLS_FIELD_NUMBER: builtins.int
+    PRICES_FIELD_NUMBER: builtins.int
     @property
     def pools(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[vpool.v1.vpool_pb2.Pool]: ...
+    @property
+    def prices(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[vpool.v1.vpool_pb2.PoolPrices]: ...
     def __init__(self,
         *,
         pools: typing.Optional[typing.Iterable[vpool.v1.vpool_pb2.Pool]] = ...,
+        prices: typing.Optional[typing.Iterable[vpool.v1.vpool_pb2.PoolPrices]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["pools",b"pools"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["pools",b"pools","prices",b"prices"]) -> None: ...
 global___QueryAllPoolsResponse = QueryAllPoolsResponse
 
 class QueryBaseAssetPriceRequest(google.protobuf.message.Message):

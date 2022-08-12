@@ -21,6 +21,7 @@ coincurve = "*"
 aiocron = "*"
 python-dotenv = "*"
 
+
 [dev-packages]
 mypy-protobuf = "*"
 black = "*"

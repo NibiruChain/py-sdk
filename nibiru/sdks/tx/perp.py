@@ -8,9 +8,7 @@ from .common import Tx
 
 
 class Perp(Tx):
-    def remove_margin(
-        self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs
-    ):
+    def remove_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
         """
         Remove margin for the position (token_pair + trader)
 
@@ -86,7 +84,7 @@ class Perp(Tx):
             token_pair (str): The token pair
             side (Side): The side, either Side.BUY or Side.SELL
             quote_asset_amount (float): The quote amount you want to use to buy base
-            leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance 
+            leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
                 margin ratio of the pool.
             base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
                 quote.
@@ -100,14 +98,14 @@ class Perp(Tx):
         base_asset_amount_limit_pb = to_sdk_int(base_asset_amount_limit)
         leverage_pb = to_sdk_dec(leverage)
 
-        msg= tx.MsgOpenPosition(
+        msg = tx.MsgOpenPosition(
             sender=sender,
             token_pair=token_pair,
             side=pb_side,
             quote_asset_amount=quote_asset_amount_pb,
             leverage=leverage_pb,
             base_asset_amount_limit=base_asset_amount_limit_pb,
-        )        
+        )
         return super().execute_msg(msg, **kwargs)
 
     def close_position(self, sender: str, token_pair: str, **kwargs):

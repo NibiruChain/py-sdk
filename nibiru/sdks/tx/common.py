@@ -1,8 +1,9 @@
+import json
 import logging
 from copy import deepcopy
 
 from google.protobuf import message
-from grpc import RpcError
+from google.protobuf.json_format import MessageToDict
 
 from nibiru.client import Client
 from nibiru.common import TxConfig, TxType
@@ -10,6 +11,7 @@ from nibiru.composer import Composer
 from nibiru.constant import GAS_PRICE
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.network import Network
+from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
 
@@ -32,33 +34,70 @@ class Tx:
             res = self.execute_msg(*self.msgs, **kwargs)
         except SimulationError as err:
             raise err
+        except TxError as err:
+            raise err
         else:
             self.msgs = []
 
         return res
 
-    def execute_msg(self, *msg: message.Message, **kwargs):
+    def execute_msg(
+        self, *msg: message.Message, get_sequence_from_node: bool = False, **kwargs
+    ) -> abci_type.TxResponse:
+        """
+        Execute a message to broadcast a transaction to the node.
+        Simulate the message to generate the gas estimate and send it to the node.
+        If the transaction fail because of account sequence mismatch, we try to send it again once more with the
+        sequence coming from a query to the lcd endpoint.
+
+        Args:
+            get_sequence_from_node (bool, optional): Wether to get the sequence from the local value or the lcd
+                endpoint. Defaults to False.
+
+        Raises:
+            TxError: Will log the error to the
+
+        Returns:
+            abci_type.TxResponse: _description_
+        """
         address = None
+        sequence_args = {}
+        if get_sequence_from_node:
+            sequence_args = {"from_node": True, "lcd_endpoint": self.network.lcd_endpoint}
+
         try:
-            # TODO: It shouldn't be necessary to resync the block height for every tx, use bgTask instead
             self.client.sync_timeout_height()
             address = self.get_address_info()
             tx = (
                 Transaction()
                 .with_messages(*msg)
-                .with_sequence(address.get_sequence())
+                .with_sequence(address.get_sequence(**sequence_args))
                 .with_account_num(address.get_number())
                 .with_chain_id(self.network.chain_id)
                 .with_signer(self.priv_key)
             )
             sim_res = self.simulate(tx)
             gas_estimate = sim_res.gas_info.gas_used
-            return self.execute_tx(tx, gas_estimate, **kwargs)
-        except (RpcError, SimulationError) as err:
-            logging.error("Failed tx execution: %s", err)
+            tx_output = self.execute_tx(tx, gas_estimate, **kwargs)
+
+            if tx_output.code != 0:
+                address.decrease_sequence()
+                raise TxError(tx_output.raw_log)
+
+            tx_output = MessageToDict(tx_output)
+
+            # Convert raw log into a dictionary
+            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
+            return tx_output
+
+        except SimulationError as err:
+            if "account sequence mismatch, expected" in str(err) and not get_sequence_from_node:
+                return self.execute_msg(*msg, get_sequence_from_node=True, **kwargs)
+
             if address:
                 address.decrease_sequence()
-            raise TxError("Failed to execute transaction") from err
+
+            raise TxError(f"Failed to execute transaction: {err}") from err
 
     def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):
         conf = self.get_config(**kwargs)
@@ -94,14 +133,15 @@ class Tx:
 
         (sim_res, success) = self.client.simulate_tx(sim_tx_raw_bytes)
         if not success:
-            raise SimulationError("failed to simulate tx : {}".format(sim_res))
+            raise SimulationError(sim_res)
 
         return sim_res
 
     def get_address_info(self):
         if self.address is None:
             pub_key = self.priv_key.to_public_key()
-            self.address = pub_key.to_address().init_num_seq(self.network.lcd_endpoint)
+            self.address = pub_key.to_address()
+            self.address.init_num_seq(self.network.lcd_endpoint)
 
         return self.address
 

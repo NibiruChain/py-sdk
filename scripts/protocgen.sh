@@ -18,14 +18,8 @@ echo "refresh existing proto files"
 if [ $(basename $(pwd)) = nibiru-py ]
 then 
   echo "Refreshing proto files"
-  rm -rf nibiru/proto 
+  rm -rf nibiru/proto proto # if the nibiru-py/proto directory already exists, 
   mkdir -p nibiru/proto/ 
-  # if the nibiru-py/proto directory already exists, 
-  if [ -d proto ]
-  then 
-    # it will mess up the script, so we preemptively remove it.
-    rm -rf proto 
-  fi 
   cp -r ../nibiru/proto/ proto/
 else 
   echo "Ran protocgen.sh from the wrong directory"

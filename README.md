@@ -1,4 +1,4 @@
-# Nibiru Python SDK - `nibiru-py`                           <!-- omit in toc -->
+# Nibiru Python SDK - `nibiru`                           <!-- omit in toc -->
 
 > Python-based client for interacting with the Nibiru blockchain.
 
@@ -14,8 +14,8 @@
 <!-- Badges links -->
 
 <!-- pypi -->
-[pypi-image]: https://img.shields.io/pypi/v/nibiru-py
-[pypi-url]: https://pypi.org/project/nibiru-py/
+[pypi-image]: https://img.shields.io/pypi/v/nibiru
+[pypi-url]: https://pypi.org/project/nibiru/
 [stars-image]: https://img.shields.io/github/stars/NibiruChain?style=social
 [stars-url]: https://github.com/NibiruChain
 [documentation-image]: https://readthedocs.org/projects/nibiru-py/badge/?version=latest

@@ -40,7 +40,7 @@ def val_node(network: nibiru.Network) -> nibiru.Sdk:
 
 
 def test_get_chain_id(val_node: nibiru.Sdk):
-    assert val_node._network.chain_id == val_node.query.get_chain_id()
+    assert val_node.network.chain_id == val_node.query.get_chain_id()
 
 
 def test_query_perp_params(val_node: nibiru.Sdk):

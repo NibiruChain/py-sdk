@@ -1,24 +1,24 @@
 from typing import List
 
-from nibiru.client import Client
+from nibiru.client import GrpcClient
 from nibiru.common import TxConfig
 from nibiru.composer import Composer
 from nibiru.network import Network
 from nibiru.proto.cosmos.base.v1beta1.coin_pb2 import Coin
 from nibiru.wallet import PrivateKey
 
-from .common import Tx
-from .dex import Dex
-from .perp import Perp
-from .pricefeed import Pricefeed
+from .common import BaseTxClient
+from .dex import DexTxClient
+from .perp import PerpTxClient
+from .pricefeed import PricefeedTxClient
 
 
-class TxClient(Tx):
-    def __init__(self, client: Client, network: Network, priv_key: PrivateKey, config: TxConfig):
+class TxClient(BaseTxClient):
+    def __init__(self, client: GrpcClient, network: Network, priv_key: PrivateKey, config: TxConfig):
         super().__init__(client=client, network=network, priv_key=priv_key, config=config)
-        self.dex = Dex(client=client, network=network, priv_key=priv_key, config=config)
-        self.perp = Perp(client=client, network=network, priv_key=priv_key, config=config)
-        self.pricefeed = Pricefeed(client=client, network=network, priv_key=priv_key, config=config)
+        self.dex = DexTxClient(client=client, network=network, priv_key=priv_key, config=config)
+        self.perp = PerpTxClient(client=client, network=network, priv_key=priv_key, config=config)
+        self.pricefeed = PricefeedTxClient(client=client, network=network, priv_key=priv_key, config=config)
 
     def msg_send(self, from_address: str, to_address: str, coins: List[Coin], **kwargs):
         msg = Composer.msg_send(from_address, to_address, coins=coins)

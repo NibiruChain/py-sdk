@@ -1,4 +1,4 @@
-from .client import Client  # noqa
+from .client import GrpcClient  # noqa
 from .common import Coin, Direction, PoolAsset, Side, TxConfig  # noqa
 from .composer import Composer  # noqa
 from .network import Network  # noqa

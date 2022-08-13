@@ -4,10 +4,10 @@ from nibiru.proto.perp.v1 import state_pb2 as state_pb
 from nibiru.proto.perp.v1 import tx_pb2 as tx
 from nibiru.utils import to_sdk_dec, to_sdk_int
 
-from .common import Tx
+from .common import BaseTxClient
 
 
-class Perp(Tx):
+class PerpTxClient(BaseTxClient):
     def remove_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
         """
         Remove margin for the position (token_pair + trader)

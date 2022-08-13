@@ -42,6 +42,7 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: true
         installer-parallel: true
+      run: poetry check
     #----------------------------------------------
     #       load cached venv if cache exists
     #----------------------------------------------

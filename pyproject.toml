@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nibiru"
-version = "0.1.0"
+version = "0.0.14.a1"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <you@example.com>"]
 license = "MIT"
@@ -11,7 +11,7 @@ grpcio = "^1.48.0"
 asyncio = "^3.4.3"
 bech32 = "^1.2.0"
 python-dotenv = "^0.20.0"
-protobuf = "3.20.1" # see README 
+protobuf = "3.20.1" # see README
 requests = "^2.28.1"
 aiohttp = "^3.8.1"
 ecdsa = "^0.18.0"

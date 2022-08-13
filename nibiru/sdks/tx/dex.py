@@ -4,12 +4,11 @@ from nibiru.common import Coin, PoolAsset
 from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru.proto.dex.v1 import tx_pb2 as dex_tx_pb
-from nibiru.utils import to_sdk_dec
 
-from .common import Tx
+from .common import BaseTxClient
 
 
-class Dex(Tx):
+class DexTxClient(BaseTxClient):
     def create_pool(
         self, creator: str, swap_fee: float, exit_fee: float, assets: List[PoolAsset], **kwargs
     ) -> abci_type.TxResponse:

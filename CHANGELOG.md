@@ -1,6 +1,13 @@
 
 # Change Log
+
 All notable changes to this project will be documented in this file.
+
+## v0.0.15 - 2022-08-12
+
+### Improvements
+
+* [#50](https://github.com/NibiruChain/nibiru-py/pull/50) - Rename classnames and variables
 
 ## v0.0.14.a1 - 2022-08-13
 

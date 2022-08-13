@@ -10,7 +10,7 @@ from nibiru.proto.dex.v1 import query_pb2_grpc as dex_query
 from nibiru.utils import format_fields_nested, from_sdk_dec_n
 
 
-class Dex:
+class DexQueryClient:
     """
     Dex allows to query the endpoints made available by the Nibiru Chain's DEX module.
     """

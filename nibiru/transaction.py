@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from google.protobuf import any_pb2, message
 
-from .client import Client
+from .client import GrpcClient
 from .constant import MAX_MEMO_CHARACTERS
 from .exceptions import EmptyMsgError, NotFoundError, UndefinedError, ValueTooLargeError
 from .proto.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -48,7 +48,7 @@ class Transaction:
         self.msgs.extend(self.__convert_msgs(msgs))
         return self
 
-    def with_sender(self, client: Client, sender: str) -> "Transaction":
+    def with_sender(self, client: GrpcClient, sender: str) -> "Transaction":
         if len(self.msgs) == 0:
             raise EmptyMsgError("messsage is empty, please use with_messages at least 1 message")
         account = client.get_account(sender)

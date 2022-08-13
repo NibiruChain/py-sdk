@@ -14,7 +14,7 @@
 
 import logging
 
-from nibiru import Client, Composer, Network, PrivateKey, Transaction
+from nibiru import Composer, GrpcClient, Network, PrivateKey, Transaction
 from nibiru.constant import GAS_PRICE
 
 
@@ -23,7 +23,7 @@ def main() -> None:
     network = Network.local()
 
     # initialize grpc client
-    client = Client(network, insecure=True)
+    client = GrpcClient(network, insecure=True)
     client.sync_timeout_height()
 
     # load account

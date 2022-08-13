@@ -6,7 +6,7 @@ from nibiru.proto.perp.v1 import query_pb2_grpc as perp_query
 from nibiru.utils import from_sdk_dec, from_sdk_dec_24
 
 
-class Perp:
+class PerpQueryClient:
     """
     Perp allows to query the endpoints made available by the Nibiru Chain's PERP module.
     """

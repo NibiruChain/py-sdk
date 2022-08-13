@@ -3,10 +3,10 @@ from typing import List, Optional, Tuple, Union
 
 import grpc
 
-from nibiru.clients import Dex as DexClient
-from nibiru.clients import Perp as PerpClient
-from nibiru.clients import Pricefeed as PricefeedClient
-from nibiru.clients import VPool as VPoolClient
+from nibiru.clients import DexQueryClient as DexClient
+from nibiru.clients import PerpQueryClient as PerpClient
+from nibiru.clients import PricefeedQueryClient as PricefeedClient
+from nibiru.clients import VpoolQueryClient as VPoolClient
 from nibiru.exceptions import NotFoundError
 from nibiru.network import Network
 from nibiru.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
@@ -27,7 +27,7 @@ from nibiru.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 
 
-class Client:
+class GrpcClient:
     def __init__(
         self,
         network: Network,

@@ -6,7 +6,7 @@ from nibiru.proto.pricefeed import query_pb2_grpc as pf_query
 from .util import deserialize
 
 
-class Pricefeed:
+class PricefeedQueryClient:
     """
     Pricefeed allows to query the endpoints made available by the Nibiru Chain's Pricefeed module.
     """

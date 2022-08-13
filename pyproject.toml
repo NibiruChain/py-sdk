@@ -1,12 +1,29 @@
 [tool.poetry]
+# --------------------------------------- required fields
 name = "nibiru"
 version = "0.0.14.a1"
+# packages: A list of packages to include in the final distribution. The 'name'
+#   specifies the PyPI project name, wherase 'packages' specifies what a user 
+#   will import in a Python module. 
+packages = [ 
+  { include = "nibiru" },
+] 
+# --------------------------------------- optional fields
 description = "Python SDK for interacting with Nibiru."
-authors = ["Nibiru Chain <you@example.com>"]
+authors = ["Nibiru Chain (dev@nibiru.fi)"]
+maintainers = ["@matthiasmat", "Unique-Divine", "@NibiruHeisenberg"]
 license = "MIT"
+readme = ["README.md"] # similar to long_description in setuptools
+repository = "https://github.com/NibiruChain/nibiru-py"
+documentation = "https://nibiru-py.readthedocs.io/"
+keywords = ["nibiru", "blockchain", "sdk", "python", "cosmos"]
+classifiers = [
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Intended Audience :: Developers"
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
+[tool.poetry.dependencies] 
+python = "^3.9" 
 grpcio = "^1.48.0"
 asyncio = "^3.4.3"
 bech32 = "^1.2.0"

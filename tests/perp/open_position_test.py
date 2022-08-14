@@ -1,10 +1,12 @@
 from nibiru import Composer, Sdk, Side
+from nibiru.common import TxConfig, TxType
 
 
-def test_perp_open_position(val_node: Sdk):
+def test_perp_open_position(network, val_node: Sdk):
 
     # Register new trader account
-    trader = Sdk.authorize()
+    tx_config = TxConfig(tx_type=TxType.BLOCK)
+    trader = Sdk.authorize().with_config(tx_config).with_network(network, insecure=True)
 
     # Fund trader
     val_node.tx.msg_send(
@@ -36,5 +38,4 @@ def test_perp_open_position(val_node: Sdk):
     assert res["position_notional"] == 100.0
     assert res["position"]["open_notional"] == 100.0
     assert res["unrealized_pnl"] == 0.0
-    assert res["margin_ratio_index"] == 1.0
     assert res["margin_ratio_mark"] == 1.0

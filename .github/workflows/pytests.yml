@@ -58,4 +58,4 @@ jobs:
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
     - name: Run Python SDK tests
-      run: poetry run pytest -p no:warnings
+      run: poetry run pytest -p no:warnings -s

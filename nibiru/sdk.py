@@ -6,8 +6,18 @@ from .network import Network
 from .sdks.tx import TxClient
 from .wallet import PrivateKey
 
-
 class Sdk:
+    """TODO docs
+    
+    Example:
+    ```python
+    sdk = ( 
+        Sdk.authorize(val_mnemonic)
+        .with_config(tx_config)
+        .with_network(network, network_insecure) 
+    )
+    ```
+    """
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
         """Unsupported, please use from_mnemonic to initialize."""
         if not _error_do_not_use_init_directly:

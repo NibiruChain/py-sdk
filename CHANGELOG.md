@@ -3,9 +3,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## v0.0.15 - 2022-08-12
+## v0.0.16 - 2022-08-14
 
-### Improvements
+For NibiruChain/nibiru binary version v0.12.1-alpha
+
+* [#65](https://github.com/NibiruChain/nibiru-py/pull/65) - fix: open/get position deserialization
+
+## v0.0.15 - 2022-08-12
 
 * [#50](https://github.com/NibiruChain/nibiru-py/pull/50) - Rename classnames and variables
 

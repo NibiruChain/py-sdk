@@ -1,10 +1,10 @@
-# perp_test.py
+# pricefeed_test.py
 from datetime import datetime, timedelta
 
 import tests
 
 
-class TestPerp(tests.ModuleTest):
+class TestPricefeed(tests.ModuleTest):
     def setUp(self):
         self.oracle = tests.get_oracle_node(tests.get_network())
         self.market = "ubtc:unusd"

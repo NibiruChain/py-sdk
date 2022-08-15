@@ -1,38 +1,55 @@
-# Nibiru Python SDK                           <!-- omit in toc -->
+# Nibiru Python SDK - `nibiru`                           <!-- omit in toc -->
 
-> Interact with the Nibiru protocol using Python.
+> Python-based client for interacting with the Nibiru blockchain.
 
+<!-- Badges -->
+
+[![Nibiru Test workflow][tests-badge]][tests-workflow]
 [![PyPI Version][pypi-image]][pypi-url]
 [![][documentation-image]][documentation-url]
-[![][discord-image]][discord-url]
+[![][discord-badge]][discord-url]
 [![][stars-image]][stars-url]
+[![MIT license][license-badge]][license-link]
 
-<!-- Badges: -->
+<!-- Badges links -->
 
-[pypi-image]: https://img.shields.io/pypi/v/nibiru-py
-[pypi-url]: https://pypi.org/project/nibiru-py/
+<!-- pypi -->
+[pypi-image]: https://img.shields.io/pypi/v/nibiru
+[pypi-url]: https://pypi.org/project/nibiru/
 [stars-image]: https://img.shields.io/github/stars/NibiruChain?style=social
 [stars-url]: https://github.com/NibiruChain
 [documentation-image]: https://readthedocs.org/projects/nibiru-py/badge/?version=latest
 [documentation-url]: https://nibiru-py.readthedocs.io/en/latest/?badge=latest
-[discord-image]: https://img.shields.io/discord/947911971515293759
-[discord-url]: https://discord.gg/
+[discord-badge]: https://img.shields.io/badge/Nibiru%20Chain-%237289DA.svg?style=&logo=discord&logoColor=white
+[discord-url]: https://discord.gg/sgPw8ZYfpQ
+[license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+[license-link]: https://github.com/NibiruChain/nibiru-py/blob/master/LICENSE
+[tests-badge]: https://github.com/NibiruChain/nibiru-py/actions/workflows/pytests.yml/badge.svg
+[tests-workflow]: https://github.com/NibiruChain/nibiru-py/actions/workflows/pytests.yml
 
-The nibiru-py allows you to connect and trade with the Nibiru Protocol. It provides quick access to market data for storage, analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
+The `nibiru-py` package allows you to index, query, and send transactions on the Nibiru Blockchain using Python. It provides access to market data for analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
 
-It is intended to be used by coders, developers, technically-skilled traders, data-scientists and financial analysts for building trading algorithms.
+The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
 #### README Contents
-- [Documentation Website](#documentation-website)
-- [Quick Start](#quick-start)
-- [Usage Instructions](#usage-instructions)
+
+- [User Guidelines](#user-guidelines)
+  - [Documentation Website](#documentation-website)
+  - [Installation from `PyPI`](#installation-from-pypi)
 - [Development Guidelines](#development-guidelines)
-  - [Python dependencies](#python-dependencies)
-  - [Running the tests](#running-the-tests)
-  - [Other dependencies](#other-dependencies)
-  - [Generating types wth protobuf](#generating-types-wth-protobuf)
-- [Linting](#linting)
-- [Gotchas](#gotchas)
+  - [Setting up a professional dev environment with `pyenv` and `poetry`](#setting-up-a-professional-dev-environment-with-pyenv-and-poetry)
+    - [Pyenv for managing multiple Python interpreters](#pyenv-for-managing-multiple-python-interpreters)
+  - [Installing `poetry` for dependency resolution and publishing packages](#installing-poetry-for-dependency-resolution-and-publishing-packages)
+  - [Installing external dependencies](#installing-external-dependencies)
+  - [Running tests](#running-tests)
+  - [Makefile and Protocol Buffers](#makefile-and-protocol-buffers)
+    - [Other dependencies](#other-dependencies)
+    - [Generating types wth protobuf](#generating-types-wth-protobuf)
+  - [Linting](#linting)
+  - [Gotchas](#gotchas)
+
+
+# User Guidelines
 
 ## Documentation Website
 
@@ -41,15 +58,18 @@ Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.rea
 - Learn more about opening and managing your spot and perp positions [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.sdks.tx.html#nibiru-sdks-tx-package)
 - Learn about querying the chain using the Sdk [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.clients.html#nibiru-clients-package)
 
-## Quick Start
+## Installation from `PyPI`
 
-Installation
-
-```bash
-pip install nibiru-py
+```sh
+pip install nibiru-py  # requires Python 3.9
 ```
 
----
+You may need to update `pip` to get this to run:
+```sh
+python -m pip install --upgrade pip
+```
+
+<!-- NOTE --------- Deperecating this section as the examples don't work.
 
 ## Usage Instructions
 
@@ -61,7 +81,9 @@ The [examples directory](https://github.com/NibiruChain/nibiru-py/tree/master/ex
 ```bash
 $ pipenv shell
 $ pipenv install
+```
 
+```sh
 # connecting to Nibiru Exchange API and create a new pool
 $ python examples/chain_client/dex/create_pool.py
 
@@ -73,22 +95,128 @@ Upgrade `pip` to the latest version, if you see these warnings:
   ```
   WARNING: Value for scheme.platlib does not match. Please report this to <https://github.com/pypa/pip/issues/10151>
   WARNING: Additional context:   user = True   home = None   root = None   prefix = None
-  ```
+  ``` 
+-->
 
 ---
 
-## Development Guidelines
+# Development Guidelines
 
-### Python dependencies
+Our recommended setup is `pyenv` in combination with `poetry`.
+- `pyenv` is a tool for installing and managing Python interpreters. This will let you seamlessly switch between Python versions.
+- `poetry` is used for managing virtual environments, dependency resolution, package installations, package building, and package publishing.   
+- We assume you're on a Unix machine such as WSL2 Ubuntu, MacOS, or a common Linux distro.
 
-#### 1 (option A). Install the `nibiru-py` package from source
+Currently, `nibiru-py` is created with Python 3.9.13. It may be compatible with higher versions, but we only run end-to-end tests in 3.9.13.
 
-  ```sh
-  pipenv shell
-  pipenv install --dev
-  ```
+## Setting up a professional dev environment with `pyenv` and `poetry`
+
+### Pyenv for managing multiple Python interpreters
+
+If you're on MacOS or a common Linux distro, you can install `pyenv` with brew.
+
+```sh
+brew install pyenv
+```
+
+You'll then need to add the following snippet to your shell config, e.g. your `.bash_profile`, `.bashrc`, or `.zshrc`.
+```sh
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
+```
+
+After using `source` on your config or restarting the shell, you should have the `pyenv` root command.
+
+
+The command use to install any version of python is `pyenv install`. Display additional info for this command with `pyenv install --help`.
+
+```sh
+pyenv install 3.9.13 # example for nibiru-py
+```
+
+Once you have a version installed, you can print out the versions on your machine with:
+```sh
+pyenv versions
+```
+
+```
+# example output
+  system
+* 3.9.13 (set by /home/realu/.python-version)
+  3.10.4
+```
+
+In this example, I have 2 different interpreters installed on my machine. The one with the `*` is currently set as my **global interpreter**. This is set manually using the `pyenv global` command.
+
+```sh
+pyenv global 3.10.4   # switches the global interpreter to 3.10.4
+```
+
+You can verify this works as expected using `python --version`. You may be familiar with using `python3` as the command instead of `python`. With `pyenv`, this is not necessary.
+
+Additional usage and installation instructions can be found in the [pyenv repo](https://github.com/pyenv/pyenv). 
+
+## Installing `poetry` for dependency resolution and publishing packages
+
+Reference: [Poetry docs](https://python-poetry.org/docs/)
+
+Poetry can be installed with both `curl` and `pip`. We recommended using `curl` so that it will be global to your machine. 
+
+NOTE We highly, highly, highly recommend that you DO NOT use `brew` to install `poetry`. 
+If you use `brew`, it's going to install directly to your system, which prevents you from being able to leverage `pyenv` to seamlessly switch between Python interpreters.
+
+```sh 
+# installation with pip: recommended option in tandem with pyenv
+pip install poetry
+```
+
+```sh
+# For UNIX systems - installation with curl 
+curl -sSL https://install.python-poetry.org/ | python -
+```
+
+After this installation command, add the `poetry` binary to the path in your shell config (if it's not done automatically).
+
+```sh
+export PATH=$PATH:$HOME/.poetry/bin
+```
+
+## Installing external dependencies
+
+The `nibiru-py` project is defined by its `pyproject.toml`. At the root of the repo, simply call:
+
+```sh
+poetry install
+```
+
+This will resolve dependencies between each of the project's packages and install them into a virtual environment.
+
+## Running tests
+
+#### Setting environment variables
+
+There's currently a "devnet" running in GCP that the CI workflows use. You can find these secrets at [this notion page](https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0) if you have access to it or contact one of the `CODEOWNERS` (@Unique-Divine, @matthiasmatt, @nibiruheisenberg).
+This is useful so that you can run every part of the package code without needing to visit other repositories.
 
 Set up a `.env` file to set environment variables for the tests.
+The variables used in the CI build can be found in the `env` section of the [`pytests.yml` workflow](.github/workflows/pytests.yml):
+
+```yaml
+jobs:
+  tests:
+    env: 
+      # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
+      CHAIN_ID: ${{ secrets.CHAIN_ID }}
+      HOST: ${{ secrets.HOST }}
+      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+      GRPC_PORT: ${{ secrets.GRPC_PORT }}
+      LCD_PORT: ${{ secrets.LCD_PORT }}
+```
+
+You'll need an `.env` configuration like this.
+
 ```sh
 # Example configuration for the Nibiry Python SDK
 HOST="..."
@@ -100,10 +228,14 @@ CHAIN_ID="..."
 NETWORK_INSECURE=true
 ```
 
-There's currently a "devnet" running in GCP that the CI workflows use. You can find these secrets at [this notion page](https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0) if you have access to it or contact @Unique-Divine or @matthiasmatt. 
-This is useful so that you can run every part of the package code without needing to visit other repositories.
+#### Running the tests with `poetry` + `pytest`
 
-#### 1 (option B). Install the `nibiru-py` package with `pip`
+After following the instructions for setting up `poetry`, you can run the tests with `poetry run pytest`:
+```sh
+poetry run pytest -p no:warnings # silences warnings
+```
+
+#### (option B). Install the `nibiru-py` package with `pip`
 
   ```sh
   # from local
@@ -119,9 +251,7 @@ This is useful so that you can run every part of the package code without needin
   pip install nibiru-py
   ```
 
-### Running the tests
-
-Package tests are written `pytest`. To run and edit them, follow the instructions for installation from source and use `pipenv run pytest`. 
+## Makefile and Protocol Buffers
 
 ### Other dependencies
 

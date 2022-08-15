@@ -1,22 +1,32 @@
 import logging
 
-from .client import Client
+from .client import GrpcClient
 from .common import TxConfig
 from .network import Network
 from .sdks.tx import TxClient
 from .wallet import PrivateKey
 
-
 class Sdk:
+    """TODO docs
+    
+    Example:
+    ```python
+    sdk = ( 
+        Sdk.authorize(val_mnemonic)
+        .with_config(tx_config)
+        .with_network(network, network_insecure) 
+    )
+    ```
+    """
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
         """Unsupported, please use from_mnemonic to initialize."""
         if not _error_do_not_use_init_directly:
             raise TypeError("Please use PrivateKey.from_mnemonic() to construct me")
-        self._priv_key: PrivateKey = None
+        self.priv_key: PrivateKey = None
         self.query = None
         self.tx = None
-        self._network = None
-        self.config = TxConfig()
+        self.network = None
+        self.tx_config = TxConfig()
 
     @classmethod
     def authorize(cls, key: str = "") -> "Sdk":
@@ -35,32 +45,32 @@ class Sdk:
         return self
 
     def with_network(self, network: Network, insecure=False) -> "Sdk":
-        self._network = network
-        self.with_query_client(Client(self._network, insecure))
+        self.network = network
+        self.with_query_client(GrpcClient(self.network, insecure))
         return self
 
-    def with_query_client(self, client: Client) -> "Sdk":
+    def with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
-        tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
+        tx_client = TxClient(client=self.query, network=self.network, priv_key=self.priv_key, config=self.tx_config)
         self.with_tx_client(tx_client)
         return self
 
-    def with_tx_client(self, client: TxClient) -> "Sdk":
-        self.tx = client
+    def with_tx_client(self, tx_client: TxClient) -> "Sdk":
+        self.tx = tx_client
         return self
 
     def with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
-        self._priv_key = priv_key
+        self.priv_key = priv_key
         self.with_network(Network.local(), True)
         return self
 
     def with_config(self, config: TxConfig) -> "Sdk":
-        self.config = config
-        tx_client = TxClient(client=self.query, network=self._network, priv_key=self._priv_key, config=self.config)
+        self.tx_config = config
+        tx_client = TxClient(client=self.query, network=self.network, priv_key=self.priv_key, config=self.tx_config)
         self.with_tx_client(tx_client)
         return self
 
     @property
-    def address(self):
-        pub_key = self._priv_key.to_public_key()
+    def address(self) -> str:
+        pub_key = self.priv_key.to_public_key()
         return pub_key.to_address().to_acc_bech32()

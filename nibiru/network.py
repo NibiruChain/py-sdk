@@ -1,6 +1,7 @@
-import  dataclasses
+import dataclasses
 import os
-from typing import Dict, Optional 
+from typing import Dict, Optional
+
 
 @dataclasses.dataclass
 class Network:
@@ -19,13 +20,17 @@ class Network:
             "CHAIN_ID": os.getenv("CHAIN_ID"),
         }
         for name, env_var in chain_config.items():
-            if env_var is None: 
-                raise Exception("\n".join([
-                    f"Environment variable {name} is needed for devnet.", 
-                    f"Please set {name} in your .env file."
-                    ]))
+            if env_var is None:
+                raise Exception(
+                    "\n".join(
+                        [
+                            f"Environment variable {name} is needed for devnet.",
+                            f"Please set {name} in your .env file.",
+                        ]
+                    )
+                )
         return cls(
-            lcd_endpoint=f'http://{chain_config["HOST"]}.:{chain_config["LCD_PORT"]}',
+            lcd_endpoint=f'http://{chain_config["HOST"]}:{chain_config["LCD_PORT"]}',
             grpc_endpoint=f'{chain_config["HOST"]}:{chain_config["GRPC_PORT"]}',
             chain_id=chain_config["CHAIN_ID"],
             fee_denom='unibi',

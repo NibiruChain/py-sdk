@@ -6,7 +6,7 @@ from .proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 
 class TxType(Enum):
     """
-    The TxType allwos you to chose what type of synchronization you want to use to send transaction
+    The TxType allows you to chose what type of synchronization you want to use to send transaction
     """
 
     SYNC = 1

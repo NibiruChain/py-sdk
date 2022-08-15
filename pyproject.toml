@@ -26,6 +26,7 @@ pytest = "^7.1.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
+flake8 = "^5.0.4"
 
 [tool.black]
 line-length = 88

@@ -4,6 +4,8 @@ from grpc._channel import _InactiveRpcError
 import tests
 from nibiru import common
 
+PRECISION = 6
+
 
 class TestPerp(tests.ModuleTest):
     def setUp(self):
@@ -14,6 +16,26 @@ class TestPerp(tests.ModuleTest):
         """
         Open a position and ensure output is correct
         """
+
+        # test query closed position
+        try:
+            self.validator.query.perp.trader_position(
+                **{"trader": self.validator.address, "token_pair": self.market}
+            )
+            result = self.validator.tx.perp.close_position(
+                sender=self.validator.address, token_pair=self.market
+            )
+            self.validate_tx_output(result)
+        except _InactiveRpcError:
+            # No position open, no need to close it
+            pass
+
+        self.assertRaises(
+            _InactiveRpcError,
+            self.validator.query.perp.trader_position,
+            **{"trader": self.validator.address, "token_pair": self.market},
+        )
+
         tx_output = self.validator.tx.perp.open_position(
             sender=self.validator.address,
             token_pair=self.market,
@@ -30,17 +52,25 @@ class TestPerp(tests.ModuleTest):
         )
 
         self.assertIsInstance(result, dict)
+        print(result)
         self.assertCountEqual(
             result.keys(),
             [
-                'blockNumber',
-                'marginRatioIndex',
-                'marginRatioMark',
-                'position',
-                'positionNotional',
-                'unrealizedPnl',
+                "block_number",
+                "margin_ratio_index",
+                "margin_ratio_mark",
+                "position",
+                "position_notional",
+                "unrealized_pnl",
             ],
         )
+
+        self.assertAlmostEqual(result["margin_ratio_index"], 0.1, PRECISION)
+
+        position = result["position"]
+        self.assertEqual(position["margin"], 1)
+        self.assertEqual(position["open_notional"], 10)
+        self.assertAlmostEqual(position["size"], 0.0005, PRECISION)
 
         # Test add and remove margin
         tx_output = self.validator.tx.perp.add_margin(

@@ -1,4 +1,5 @@
 # chain_info_test.py
+import os
 from typing import Any, Dict, List, Union
 
 import requests
@@ -10,7 +11,7 @@ def test_genesis_block_ping():
     """Manually query block info from the chain using a get request. This verifies that
     the configuration is valid.
     """
-    host = CONFIG.HOST
+    host = os.environ["HOST"]
     block_number = 1
     tm_rpc_port = 26657
     url = f"http://{host}:{tm_rpc_port}/block?height={block_number}"

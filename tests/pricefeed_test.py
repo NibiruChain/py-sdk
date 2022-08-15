@@ -9,30 +9,6 @@ class TestPricefeed(tests.ModuleTest):
         self.oracle = tests.get_oracle_node(tests.get_network())
         self.market = "ubtc:unusd"
 
-    def validate_tx_output(self, tx_output: dict):
-        """
-        Ensure the output of a transaction have the fields required and that the raw logs are properly parsed
-
-        Args:
-            tx_output (dict): The output of a transaction in a dictionary
-        """
-
-        self.assertIsInstance(tx_output, dict)
-        self.assertCountEqual(
-            tx_output.keys(),
-            [
-                'height',
-                'txhash',
-                'data',
-                'rawLog',
-                'logs',
-                'gasWanted',
-                'gasUsed',
-                'events',
-            ],
-        )
-        self.assertIsInstance(tx_output["rawLog"], list)
-
     def test_post_prices(self):
         """
         Open a position and ensure output is correct

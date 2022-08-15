@@ -2,12 +2,14 @@
 import dataclasses
 import os
 import unittest
+from typing import List
 
 import dotenv
 import pytest
 
 import nibiru
 from nibiru import common
+from nibiru.common import Coin
 
 dotenv.load_dotenv()
 
@@ -27,6 +29,10 @@ CONFIG = TestConfig()
 
 
 class ModuleTest(unittest.TestCase):
+    def setUp(self):
+        self.validator = get_val_node(get_network())
+        self.market = "ubtc:unusd"
+
     def validate_tx_output(self, tx_output: dict):
         """
         Ensure the output of a transaction have the fields required and that the raw logs are properly parsed
@@ -50,6 +56,30 @@ class ModuleTest(unittest.TestCase):
             ],
         )
         self.assertIsInstance(tx_output["rawLog"], list)
+
+    def create_new_agent_with_funds(self, coins: List[Coin]) -> nibiru.Sdk:
+        """
+        Create a new agent and fund it from the validator with some funds
+
+        Args:
+            coins (List[Coin]): A list of coins to fund
+
+        Returns:
+            (nibiru.Sdk): The new agent
+        """
+        tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK)
+        agent = (
+            nibiru.Sdk.authorize()
+            .with_config(tx_config)
+            .with_network(get_network(), CONFIG.NETWORK_INSECURE)
+        )
+
+        result = self.validator.tx.msg_send(
+            self.validator.address, agent.address, coins
+        )
+        self.validate_tx_output(result)
+
+        return agent
 
 
 def get_network() -> nibiru.Network:

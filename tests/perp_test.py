@@ -8,36 +8,23 @@ PRECISION = 6
 
 
 class TestPerp(tests.ModuleTest):
-    def setUp(self):
-        self.validator = tests.get_val_node(tests.get_network())
-        self.market = "ubtc:unusd"
-
     def test_open_close_position(self):
         """
         Open a position and ensure output is correct
         """
 
-        # test query closed position
-        try:
-            self.validator.query.perp.trader_position(
-                **{"trader": self.validator.address, "token_pair": self.market}
-            )
-            result = self.validator.tx.perp.close_position(
-                sender=self.validator.address, token_pair=self.market
-            )
-            self.validate_tx_output(result)
-        except _InactiveRpcError:
-            # No position open, no need to close it
-            pass
+        self.agent = self.create_new_agent_with_funds(
+            [common.Coin(1000, "unibi"), common.Coin(1000, "unusd")]
+        )
 
         self.assertRaises(
             _InactiveRpcError,
             self.validator.query.perp.trader_position,
-            **{"trader": self.validator.address, "token_pair": self.market},
+            **{"trader": self.agent.address, "token_pair": self.market},
         )
 
-        tx_output = self.validator.tx.perp.open_position(
-            sender=self.validator.address,
+        tx_output = self.agent.tx.perp.open_position(
+            sender=self.agent.address,
             token_pair=self.market,
             side=common.Side.BUY,
             quote_asset_amount=1,
@@ -47,8 +34,8 @@ class TestPerp(tests.ModuleTest):
         self.validate_tx_output(tx_output)
 
         # test query position open
-        result = self.validator.query.perp.trader_position(
-            trader=self.validator.address, token_pair=self.market
+        result = self.agent.query.perp.trader_position(
+            trader=self.agent.address, token_pair=self.market
         )
 
         self.assertIsInstance(result, dict)
@@ -73,29 +60,29 @@ class TestPerp(tests.ModuleTest):
         self.assertAlmostEqual(position["size"], 0.0005, PRECISION)
 
         # Test add and remove margin
-        tx_output = self.validator.tx.perp.add_margin(
-            sender=self.validator.address,
+        tx_output = self.agent.tx.perp.add_margin(
+            sender=self.agent.address,
             token_pair="ubtc:unusd",
             margin=common.Coin(100, self.market.split(":")[1]),
         )
         self.validate_tx_output(tx_output)
 
-        tx_output = self.validator.tx.perp.remove_margin(
-            sender=self.validator.address,
+        tx_output = self.agent.tx.perp.remove_margin(
+            sender=self.agent.address,
             token_pair="ubtc:unusd",
             margin=common.Coin(100, self.market.split(":")[1]),
         )
         self.validate_tx_output(tx_output)
 
         # test close position
-        result = self.validator.tx.perp.close_position(
-            sender=self.validator.address, token_pair=self.market
+        result = self.agent.tx.perp.close_position(
+            sender=self.agent.address, token_pair=self.market
         )
         self.validate_tx_output(result)
 
         # test query closed position
         self.assertRaises(
             _InactiveRpcError,
-            self.validator.query.perp.trader_position,
-            **{"trader": self.validator.address, "token_pair": self.market},
+            self.agent.query.perp.trader_position,
+            **{"trader": self.agent.address, "token_pair": self.market},
         )

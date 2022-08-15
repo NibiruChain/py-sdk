@@ -52,7 +52,7 @@ class TestPerp(tests.ModuleTest):
             ],
         )
 
-        self.assertAlmostEqual(result["margin_ratio_index"], 0.1, PRECISION)
+        self.assertAlmostEqual(result["margin_ratio_mark"], 0.1, PRECISION)
 
         position = result["position"]
         self.assertEqual(position["margin"], 1)

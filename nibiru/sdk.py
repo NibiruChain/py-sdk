@@ -6,18 +6,20 @@ from .network import Network
 from .sdks.tx import TxClient
 from .wallet import PrivateKey
 
+
 class Sdk:
     """TODO docs
-    
+
     Example:
     ```python
-    sdk = ( 
+    sdk = (
         Sdk.authorize(val_mnemonic)
         .with_config(tx_config)
-        .with_network(network, network_insecure) 
+        .with_network(network, network_insecure)
     )
     ```
     """
+
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
         """Unsupported, please use from_mnemonic to initialize."""
         if not _error_do_not_use_init_directly:
@@ -33,8 +35,12 @@ class Sdk:
         self = cls(_error_do_not_use_init_directly=True)
         if key == "":
             (mnemonic, pk) = PrivateKey.generate()
-            logging.warning("The mnemonic used for the newly generated key is: \n%s", mnemonic)
-            logging.warning("Please write down this key, it will NOT be recoverable otherwise")
+            logging.warning(
+                "The mnemonic used for the newly generated key is: \n%s", mnemonic
+            )
+            logging.warning(
+                "Please write down this key, it will NOT be recoverable otherwise"
+            )
         if len(key.split(" ")) > 1:
             pk = PrivateKey.from_mnemonic(key)
         elif len(key) > 0:
@@ -51,7 +57,12 @@ class Sdk:
 
     def with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
-        tx_client = TxClient(client=self.query, network=self.network, priv_key=self.priv_key, config=self.tx_config)
+        tx_client = TxClient(
+            client=self.query,
+            network=self.network,
+            priv_key=self.priv_key,
+            config=self.tx_config,
+        )
         self.with_tx_client(tx_client)
         return self
 
@@ -66,7 +77,12 @@ class Sdk:
 
     def with_config(self, config: TxConfig) -> "Sdk":
         self.tx_config = config
-        tx_client = TxClient(client=self.query, network=self.network, priv_key=self.priv_key, config=self.tx_config)
+        tx_client = TxClient(
+            client=self.query,
+            network=self.network,
+            priv_key=self.priv_key,
+            config=self.tx_config,
+        )
         self.with_tx_client(tx_client)
         return self
 

@@ -69,7 +69,7 @@ class Sdk:
             logging.warning(
                 "Please write down this key, it will NOT be recoverable otherwise"
             )
-        if len(key.split(" ")) > 1:
+        elif len(key.split(" ")) > 1:
             pk = PrivateKey.from_mnemonic(key)
         elif len(key) > 0:
             pk = PrivateKey.from_hex(key)

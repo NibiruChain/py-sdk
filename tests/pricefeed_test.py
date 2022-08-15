@@ -67,7 +67,6 @@ class TestPerp(tests.ModuleTest):
             price=10,
             expiry=datetime.utcnow() + timedelta(hours=1),
         )
-        print(tx_output)
         self.validate_tx_output(tx_output)
 
         # Post price price again so we are sure we waited 1 block for price to be set before next queries.
@@ -78,7 +77,6 @@ class TestPerp(tests.ModuleTest):
             price=10,
             expiry=datetime.utcnow() + timedelta(hours=1),
         )
-        print(tx_output)
         self.validate_tx_output(tx_output)
 
         # Query raw prices

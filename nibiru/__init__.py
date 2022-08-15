@@ -1,7 +1,7 @@
-from .client import GrpcClient  # noqa
-from .common import Coin, Direction, PoolAsset, Side, TxConfig  # noqa
-from .composer import Composer  # noqa
-from .network import Network  # noqa
-from .sdk import Sdk  # noqa
-from .transaction import Transaction  # noqa
-from .wallet import Address, PrivateKey, PublicKey  # noqa
+from nibiru.client import GrpcClient  # noqa
+from nibiru.common import Coin, Direction, PoolAsset, Side, TxConfig  # noqa
+from nibiru.composer import Composer  # noqa
+from nibiru.network import Network  # noqa
+from nibiru.sdk import Sdk  # noqa
+from nibiru.transaction import Transaction  # noqa
+from nibiru.wallet import Address, PrivateKey, PublicKey  # noqa

@@ -315,7 +315,7 @@ The `protobuf` package must be version 3.20.x or lower. Otherwise, the following
 
 ```
 nibiru/clients/__init__.py:1: in <module>
-    from .dex import Dex  # noqa
+    from nibiru.clients.dex import Dex  # noqa
 nibiru/clients/dex.py:8: in <module>
     from nibiru.proto.dex.v1 import query_pb2 as dex_type
 nibiru/proto/dex/v1/query_pb2.py:16: in <module>

@@ -4,12 +4,11 @@ from nibiru.client import GrpcClient
 from nibiru.common import Coin, TxConfig
 from nibiru.composer import Composer
 from nibiru.network import Network
+from nibiru.sdks.tx.common import BaseTxClient
+from nibiru.sdks.tx.dex import DexTxClient
+from nibiru.sdks.tx.perp import PerpTxClient
+from nibiru.sdks.tx.pricefeed import PricefeedTxClient
 from nibiru.wallet import PrivateKey
-
-from .common import BaseTxClient
-from .dex import DexTxClient
-from .perp import PerpTxClient
-from .pricefeed import PricefeedTxClient
 
 
 class TxClient(BaseTxClient):

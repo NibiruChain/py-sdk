@@ -2,17 +2,19 @@
 from datetime import datetime, timedelta
 
 import tests
+from nibiru import common
+
+from . import CONFIG
 
 
 class TestPricefeed(tests.ModuleTest):
-    def setUp(self):
-        self.oracle = tests.get_oracle_node(tests.get_network())
-        self.market = "ubtc:unusd"
-
     def test_post_prices(self):
         """
         Open a position and ensure output is correct
         """
+        self.oracle = self.create_new_agent_with_funds(
+            [common.Coin(10000, "unibi")], CONFIG.ORACLE_MNEMONIC
+        )
 
         # Check queries
         markets_output = self.oracle.query.pricefeed.markets()

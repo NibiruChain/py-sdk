@@ -57,7 +57,9 @@ class ModuleTest(unittest.TestCase):
         )
         self.assertIsInstance(tx_output["rawLog"], list)
 
-    def create_new_agent_with_funds(self, coins: List[Coin]) -> nibiru.Sdk:
+    def create_new_agent_with_funds(
+        self, coins: List[Coin], mnemonic: str = None
+    ) -> nibiru.Sdk:
         """
         Create a new agent and fund it from the validator with some funds
 
@@ -67,9 +69,9 @@ class ModuleTest(unittest.TestCase):
         Returns:
             (nibiru.Sdk): The new agent
         """
-        tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK)
+        tx_config = nibiru.TxConfig(tx_type=common.TxType.BLOCK, gas_multiplier=3)
         agent = (
-            nibiru.Sdk.authorize()
+            nibiru.Sdk.authorize(mnemonic)
             .with_config(tx_config)
             .with_network(get_network(), CONFIG.NETWORK_INSECURE)
         )

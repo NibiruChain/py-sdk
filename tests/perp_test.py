@@ -14,7 +14,7 @@ class TestPerp(tests.ModuleTest):
         """
 
         self.agent = self.create_new_agent_with_funds(
-            [common.Coin(1000, "unibi"), common.Coin(1000, "unusd")]
+            [common.Coin(10000, "unibi"), common.Coin(10000, "unusd")]
         )
 
         self.assertRaises(

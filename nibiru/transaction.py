@@ -3,13 +3,18 @@ from typing import List, Tuple
 
 from google.protobuf import any_pb2, message
 
-from .client import GrpcClient
-from .constant import MAX_MEMO_CHARACTERS
-from .exceptions import EmptyMsgError, NotFoundError, UndefinedError, ValueTooLargeError
-from .proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from .proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
-from .proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
-from .wallet import PrivateKey, PublicKey
+from nibiru.client import GrpcClient
+from nibiru.constant import MAX_MEMO_CHARACTERS
+from nibiru.exceptions import (
+    EmptyMsgError,
+    NotFoundError,
+    UndefinedError,
+    ValueTooLargeError,
+)
+from nibiru.proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from nibiru.proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
+from nibiru.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
+from nibiru.wallet import PrivateKey, PublicKey
 
 
 class Transaction:
@@ -50,7 +55,9 @@ class Transaction:
 
     def with_sender(self, client: GrpcClient, sender: str) -> "Transaction":
         if len(self.msgs) == 0:
-            raise EmptyMsgError("messsage is empty, please use with_messages at least 1 message")
+            raise EmptyMsgError(
+                "messsage is empty, please use with_messages at least 1 message"
+            )
         account = client.get_account(sender)
         if account:
             self.account_num = account.account_number
@@ -93,10 +100,14 @@ class Transaction:
         return self
 
     def __generate_info(self, public_key: PublicKey = None) -> Tuple[str, str]:
-        body = cosmos_tx_type.TxBody(messages=self.msgs, memo=self.memo, timeout_height=self.timeout_height)
+        body = cosmos_tx_type.TxBody(
+            messages=self.msgs, memo=self.memo, timeout_height=self.timeout_height
+        )
 
         body_bytes = body.SerializeToString()
-        mode_info = cosmos_tx_type.ModeInfo(single=cosmos_tx_type.ModeInfo.Single(mode=tx_sign.SIGN_MODE_DIRECT))
+        mode_info = cosmos_tx_type.ModeInfo(
+            single=cosmos_tx_type.ModeInfo.Single(mode=tx_sign.SIGN_MODE_DIRECT)
+        )
 
         if public_key:
             any_public_key = any_pb2.Any()
@@ -105,7 +116,9 @@ class Transaction:
                 mode_info=mode_info, sequence=self.sequence, public_key=any_public_key
             )
         else:
-            signer_info = cosmos_tx_type.SignerInfo(mode_info=mode_info, sequence=self.sequence)
+            signer_info = cosmos_tx_type.SignerInfo(
+                mode_info=mode_info, sequence=self.sequence
+            )
 
         auth_info = cosmos_tx_type.AuthInfo(signer_infos=[signer_info], fee=self.fee)
         auth_info_bytes = auth_info.SerializeToString()
@@ -137,7 +150,11 @@ class Transaction:
     def get_tx_data(self, signature: bytes, public_key: PublicKey = None) -> bytes:
         body_bytes, auth_info_bytes = self.__generate_info(public_key)
 
-        tx_raw = cosmos_tx_type.TxRaw(body_bytes=body_bytes, auth_info_bytes=auth_info_bytes, signatures=[signature])
+        tx_raw = cosmos_tx_type.TxRaw(
+            body_bytes=body_bytes,
+            auth_info_bytes=auth_info_bytes,
+            signatures=[signature],
+        )
         return tx_raw.SerializeToString()
 
     def get_signed_tx_data(self) -> bytes:

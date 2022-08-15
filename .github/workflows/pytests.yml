@@ -1,9 +1,9 @@
 name: E2E 🐍 tests
 
-on: 
+on:
   pull_request:
     branches: ["master"]
-  push: 
+  push:
     branches: ["master"]
 
 concurrency:
@@ -13,49 +13,51 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    env: 
+    env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
       HOST: ${{ secrets.HOST }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+      ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
       GRPC_PORT: ${{ secrets.GRPC_PORT }}
       LCD_PORT: ${{ secrets.LCD_PORT }}
+      NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
     steps:
-    # ----------------------------------------------
-    # check-out repo and set-up python
-    # ----------------------------------------------
-    - name: Check out the repo
-      uses: actions/checkout@v3
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9.13
+      # ----------------------------------------------
+      # check-out repo and set-up python
+      # ----------------------------------------------
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.13
 
-    - name: Run python
-      run: python --version && python -c "print('hello')"
-    # ----------------------------------------------
-    # Install & configure poetry
-    # ----------------------------------------------
-    - name: Install Poetry
-      uses: snok/install-poetry@v1
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-        installer-parallel: true
-    #----------------------------------------------
-    #       load cached venv if cache exists
-    #----------------------------------------------
-    - name: Load cached venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v2
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-    #----------------------------------------------
-    # install dependencies if cache does not exist
-    #----------------------------------------------
-    - name: Install dependencies
-      # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      run: poetry install --no-interaction --no-root
-    - name: Run Python SDK tests
-      run: poetry run pytest -s
+      - name: Run python
+        run: python --version && python -c "print('hello')"
+      # ----------------------------------------------
+      # Install & configure poetry
+      # ----------------------------------------------
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies
+        # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Run Python SDK tests
+        run: poetry run pytest -s

@@ -1,21 +1,19 @@
-from nibiru.common import Side
-from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as coin_pb
+from nibiru.common import Coin, Side
 from nibiru.proto.perp.v1 import state_pb2 as state_pb
 from nibiru.proto.perp.v1 import tx_pb2 as tx
+from nibiru.sdks.tx.common import BaseTxClient
 from nibiru.utils import to_sdk_dec, to_sdk_int
-
-from .common import BaseTxClient
 
 
 class PerpTxClient(BaseTxClient):
-    def remove_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
+    def remove_margin(self, sender: str, token_pair: str, margin: Coin, **kwargs):
         """
         Remove margin for the position (token_pair + trader)
 
         Args:
             sender (str): The trader address
             token_pair (str): The token pair
-            margin (coin_pb.Coin): The margin to remove in a coin format
+            margin (Coin): The margin to remove in a coin format
 
         Returns:
             str: The output of the transaction
@@ -23,18 +21,18 @@ class PerpTxClient(BaseTxClient):
         msg = tx.MsgRemoveMargin(
             sender=sender,
             token_pair=token_pair,
-            margin=margin,
+            margin=margin._generate_proto_object(),
         )
         return super().execute_msg(msg, **kwargs)
 
-    def add_margin(self, sender: str, token_pair: str, margin: coin_pb.Coin, **kwargs):
+    def add_margin(self, sender: str, token_pair: str, margin: Coin, **kwargs):
         """
         Add margin for the position (token_pair + trader)
 
         Args:
             sender (str): The trader address
             token_pair (str): The token pair
-            margin (coin_pb.Coin): The margin to add in a coin format
+            margin (Coin): The margin to add in a coin format
 
         Returns:
             str: The output of the transaction
@@ -42,7 +40,7 @@ class PerpTxClient(BaseTxClient):
         msg = tx.MsgAddMargin(
             sender=sender,
             token_pair=token_pair,
-            margin=margin,
+            margin=margin._generate_proto_object(),
         )
         return super().execute_msg(msg, **kwargs)
 

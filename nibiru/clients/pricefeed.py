@@ -1,9 +1,8 @@
 from grpc import Channel
 
+from nibiru.clients.util import deserialize
 from nibiru.proto.pricefeed import query_pb2 as pf_type
 from nibiru.proto.pricefeed import query_pb2_grpc as pf_query
-
-from .util import deserialize
 
 
 class PricefeedQueryClient:

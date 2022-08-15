@@ -9,8 +9,8 @@ from ecdsa import BadSignatureError, SECP256k1, SigningKey, VerifyingKey
 from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
 
-from .exceptions import ConvertError, DecodeError
-from .proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
+from nibiru.exceptions import ConvertError, DecodeError
+from nibiru.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 BECH32_PUBKEY_ACC_PREFIX = "nibipub"
 BECH32_PUBKEY_VAL_PREFIX = "nibivaloperpub"
@@ -98,7 +98,9 @@ class PrivateKey:
 
         :return: a signature of this private key over the given message
         """
-        return self.signing_key.sign_deterministic(msg, hashfunc=hashlib.sha256, sigencode=sigencode_string_canonize)
+        return self.signing_key.sign_deterministic(
+            msg, hashfunc=hashlib.sha256, sigencode=sigencode_string_canonize
+        )
         # return self.signing_key.sign_deterministic(msg, hashfunc=sha3.keccak_256, sigencode=sigencode_string_canonize)
 
 
@@ -125,7 +127,9 @@ class PublicKey:
             raise DecodeError("Cannot decode bech32")
         bz = convertbits(bz, 5, 8, False)
         self = cls(_error_do_not_use_init_directly=True)
-        self.verify_key = VerifyingKey.from_string(bytes(bz[5:]), curve=SECP256k1, hashfunc=hashlib.sha256)
+        self.verify_key = VerifyingKey.from_string(
+            bytes(bz[5:]), curve=SECP256k1, hashfunc=hashlib.sha256
+        )
         return self
 
     @classmethod

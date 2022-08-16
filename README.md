@@ -303,7 +303,7 @@ poetry build # equivalently, you can run `python -m build`
 Enable git hook which will perform linting before each commit:
 
 ```shell
-pre-commit install
+poetry run pre-commit install
 ```
 
 This will keep your code clean.

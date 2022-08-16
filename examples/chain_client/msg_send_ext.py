@@ -66,7 +66,12 @@ def main() -> None:
             denom=network.fee_denom,
         )
     ]
-    tx = tx.with_gas(gas_limit).with_fee(fee).with_memo("").with_timeout_height(client.timeout_height)
+    tx = (
+        tx.with_gas(gas_limit)
+        .with_fee(fee)
+        .with_memo("")
+        .with_timeout_height(client.timeout_height)
+    )
     tx_raw_bytes = tx.get_signed_tx_data()
 
     # broadcast tx: send_tx_async_mode, send_tx_sync_mode, send_tx_block_mode

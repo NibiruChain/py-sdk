@@ -23,6 +23,7 @@ eip712-structs = "^1.1.0"
 coincurve = "^17.0.0"
 aiocron = "^1.8"
 pytest = "^7.1.2"
+pre-commit = "^2.20.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

@@ -17,7 +17,13 @@ from nibiru.wallet import PrivateKey
 
 
 class BaseTxClient:
-    def __init__(self, priv_key: PrivateKey, network: Network, client: GrpcClient, config: TxConfig):
+    def __init__(
+        self,
+        priv_key: PrivateKey,
+        network: Network,
+        client: GrpcClient,
+        config: TxConfig,
+    ):
         self.priv_key = priv_key
         self.network = network
         self.client = client
@@ -63,7 +69,10 @@ class BaseTxClient:
         address = None
         sequence_args = {}
         if get_sequence_from_node:
-            sequence_args = {"from_node": True, "lcd_endpoint": self.network.lcd_endpoint}
+            sequence_args = {
+                "from_node": True,
+                "lcd_endpoint": self.network.lcd_endpoint,
+            }
 
         try:
             self.client.sync_timeout_height()
@@ -91,7 +100,10 @@ class BaseTxClient:
             return tx_output
 
         except SimulationError as err:
-            if "account sequence mismatch, expected" in str(err) and not get_sequence_from_node:
+            if (
+                "account sequence mismatch, expected" in str(err)
+                and not get_sequence_from_node
+            ):
                 return self.execute_msg(*msg, get_sequence_from_node=True, **kwargs)
 
             if address:
@@ -114,8 +126,15 @@ class BaseTxClient:
                 denom=self.network.fee_denom,
             )
         ]
-        logging.info("Executing transaction with fee: %s and gas_wanted: %d", fee, gas_wanted)
-        tx = tx.with_gas(gas_wanted).with_fee(fee).with_memo("").with_timeout_height(self.client.timeout_height)
+        logging.info(
+            "Executing transaction with fee: %s and gas_wanted: %d", fee, gas_wanted
+        )
+        tx = (
+            tx.with_gas(gas_wanted)
+            .with_fee(fee)
+            .with_memo("")
+            .with_timeout_height(self.client.timeout_height)
+        )
         tx_raw_bytes = tx.get_signed_tx_data()
 
         return self._send_tx(tx_raw_bytes, conf.tx_type)

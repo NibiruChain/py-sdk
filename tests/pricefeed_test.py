@@ -1,81 +1,74 @@
 # pricefeed_test.py
 from datetime import datetime, timedelta
 
-import tests
-from nibiru import common
-
-from . import CONFIG
+from tests import dict_keys_must_match, transaction_must_succeed
 
 
-class TestPricefeed(tests.ModuleTest):
-    def test_post_prices(self):
-        """
-        Open a position and ensure output is correct
-        """
-        self.oracle = self.create_new_agent_with_funds(
-            [common.Coin(10000, "unibi")], CONFIG.ORACLE_MNEMONIC
+class TestPricefeed:
+    def test_post_prices(self, oracle_agent):
+
+        # Market unibi:unusd must be in the list of pricefeed markets
+        markets_output = oracle_agent.query.pricefeed.markets()
+        assert isinstance(markets_output, dict)
+        assert any(
+            [market["pair_id"] == "unibi:unusd" for market in markets_output["markets"]]
         )
 
-        # Check queries
-        markets_output = self.oracle.query.pricefeed.markets()
-
-        self.assertIsInstance(markets_output, dict)
-        self.assertTrue(
-            any(
-                [
-                    market["pair_id"] == "unibi:unusd"
-                    for market in markets_output["markets"]
-                ]
-            )
-        )
-
-        unibiunusd_pair = [
+        # Oracle must be in the list of unibi:unusd market oracles
+        unibi_unusd_market = next(
             market
             for market in markets_output["markets"]
             if market["pair_id"] == "unibi:unusd"
-        ][0]
+        )
+        assert oracle_agent.address in unibi_unusd_market["oracles"]
 
-        self.assertIn(self.oracle.address, unibiunusd_pair["oracles"])
-
-        # Post price
-        tx_output = self.oracle.tx.pricefeed.post_price(
-            self.oracle.address,
+        # Transaction post_price must succeed
+        tx_output = oracle_agent.tx.pricefeed.post_price(
+            oracle_agent.address,
             token0="unibi",
             token1="unusd",
             price=10,
             expiry=datetime.utcnow() + timedelta(hours=1),
         )
-        self.validate_tx_output(tx_output)
+        transaction_must_succeed(tx_output)
 
-        # Post price price again so we are sure we waited 1 block for price to be set before next queries.
-        tx_output = self.oracle.tx.pricefeed.post_price(
-            self.oracle.address,
+        # Repeating post_price transaction.
+        # Otherwise, getting "All input prices are expired" on query.pricefeed.price()
+        tx_output = oracle_agent.tx.pricefeed.post_price(
+            oracle_agent.address,
             token0="unibi",
             token1="unusd",
             price=10,
             expiry=datetime.utcnow() + timedelta(hours=1),
         )
-        self.validate_tx_output(tx_output)
+        transaction_must_succeed(tx_output)
 
-        # Query raw prices
-        raw_prices = self.oracle.query.pricefeed.raw_prices("unibi:unusd")["raw_prices"]
+        # Raw prices must exist after post_price transaction
+        raw_prices = oracle_agent.query.pricefeed.raw_prices("unibi:unusd")[
+            "raw_prices"
+        ]
+        assert len(raw_prices) >= 1
 
-        self.assertGreaterEqual(len(raw_prices), 1)
-        self.assertCountEqual(
-            raw_prices[0].keys(), ['expiry', 'oracle_address', 'pair_id', 'price']
+        # Raw price must be a dict with specific keys
+        raw_price = raw_prices[0]
+        dict_keys_must_match(
+            raw_price, ['expiry', 'oracle_address', 'pair_id', 'price']
         )
 
-        # Query pricefeed params
-        params = self.oracle.query.pricefeed.params()["params"]
-        self.assertCountEqual(params.keys(), ['pairs', 'twap_lookback_window'])
+        # Price feed params must be a dict with specific keys
+        price_feed_params = oracle_agent.query.pricefeed.params()["params"]
+        dict_keys_must_match(price_feed_params, ['pairs', 'twap_lookback_window'])
 
-        # Query price for unibi:unusd
-        price = self.oracle.query.pricefeed.price("unibi:unusd")["price"]
-        self.assertCountEqual(price.keys(), ["pair_id", "price"])
+        # Unibi price object must be a dict with specific keys
+        unibi_price = oracle_agent.query.pricefeed.price("unibi:unusd")["price"]
+        dict_keys_must_match(unibi_price, ["pair_id", "price"])
 
-        # Query prices
-        prices = self.oracle.query.pricefeed.prices()["prices"]
-        self.assertTrue(any([price["pair_id"] == "unibi:unusd" for price in prices]))
+        # At least one pair in prices must be unibi:unusd
+        prices = oracle_agent.query.pricefeed.prices()["prices"]
+        assert any([price["pair_id"] == "unibi:unusd" for price in prices])
 
-        unibiprice = [price for price in prices if price["pair_id"] == "unibi:unusd"][0]
-        self.assertCountEqual(unibiprice.keys(), ["pair_id", "price"])
+        # Unibi price object must be a dict with specific keys
+        unibi_price = next(
+            price for price in prices if price["pair_id"] == "unibi:unusd"
+        )
+        dict_keys_must_match(unibi_price, ["pair_id", "price"])

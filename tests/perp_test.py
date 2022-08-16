@@ -1,47 +1,47 @@
 # perp_test.py
+from _pytest.python_api import approx
 from grpc._channel import _InactiveRpcError
+from pytest import raises
 
-import tests
-from nibiru import common
+from nibiru import Coin, common
+from tests import dict_keys_must_match, transaction_must_succeed
 
 PRECISION = 6
 
 
-class TestPerp(tests.ModuleTest):
-    def test_open_close_position(self):
+class TestPerp:
+    def test_open_close_position(self, val_node, agent):
         """
         Open a position and ensure output is correct
         """
+        pair = "ubtc:unusd"
 
-        self.agent = self.create_new_agent_with_funds(
-            [common.Coin(10000, "unibi"), common.Coin(10000, "unusd")]
+        # Funding agent
+        val_node.tx.msg_send(
+            val_node.address, agent.address, [Coin(10000, "unibi"), Coin(100, "unusd")]
         )
 
-        self.assertRaises(
-            _InactiveRpcError,
-            self.validator.query.perp.trader_position,
-            **{"trader": self.agent.address, "token_pair": self.market},
-        )
+        # Exception must be raised when requesting not existing position
+        with raises(_InactiveRpcError, match="no position found"):
+            agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
 
-        tx_output = self.agent.tx.perp.open_position(
-            sender=self.agent.address,
-            token_pair=self.market,
+        # Transaction open_position must succeed
+        tx_output = agent.tx.perp.open_position(
+            sender=agent.address,
+            token_pair=pair,
             side=common.Side.BUY,
-            quote_asset_amount=1,
+            quote_asset_amount=10,
             leverage=10,
             base_asset_amount_limit=0,
         )
-        self.validate_tx_output(tx_output)
+        transaction_must_succeed(tx_output)
 
-        # test query position open
-        result = self.agent.query.perp.trader_position(
-            trader=self.agent.address, token_pair=self.market
+        # Trader position must be a dict with specific keys
+        position_res = agent.query.perp.trader_position(
+            trader=agent.address, token_pair=pair
         )
-
-        self.assertIsInstance(result, dict)
-        print(result)
-        self.assertCountEqual(
-            result.keys(),
+        dict_keys_must_match(
+            position_res,
             [
                 "block_number",
                 "margin_ratio_index",
@@ -51,38 +51,46 @@ class TestPerp(tests.ModuleTest):
                 "unrealized_pnl",
             ],
         )
+        # Margin ratio must be ~10%
+        assert position_res["margin_ratio_mark"] == approx(0.1, PRECISION)
 
-        self.assertAlmostEqual(result["margin_ratio_mark"], 0.1, PRECISION)
+        position = position_res["position"]
+        assert position["margin"] == 10.0
+        assert position["open_notional"] == 100.0
+        assert position["size"] == approx(0.005, PRECISION)
 
-        position = result["position"]
-        self.assertEqual(position["margin"], 1)
-        self.assertEqual(position["open_notional"], 10)
-        self.assertAlmostEqual(position["size"], 0.0005, PRECISION)
-
-        # Test add and remove margin
-        tx_output = self.agent.tx.perp.add_margin(
-            sender=self.agent.address,
-            token_pair="ubtc:unusd",
-            margin=common.Coin(100, self.market.split(":")[1]),
+        # Transaction add_margin must succeed
+        tx_output = agent.tx.perp.add_margin(
+            sender=agent.address,
+            token_pair=pair,
+            margin=Coin(10, "unusd"),
         )
-        self.validate_tx_output(tx_output)
+        transaction_must_succeed(tx_output)
 
-        tx_output = self.agent.tx.perp.remove_margin(
-            sender=self.agent.address,
-            token_pair="ubtc:unusd",
-            margin=common.Coin(100, self.market.split(":")[1]),
-        )
-        self.validate_tx_output(tx_output)
+        # Margin must increase. 10 + 10 = 20
+        position = agent.query.perp.trader_position(
+            trader=agent.address, token_pair=pair
+        )["position"]
+        assert position["margin"] == 20.0
 
-        # test close position
-        result = self.agent.tx.perp.close_position(
-            sender=self.agent.address, token_pair=self.market
+        # Transaction remove_margin must succeed
+        tx_output = agent.tx.perp.remove_margin(
+            sender=agent.address,
+            token_pair=pair,
+            margin=common.Coin(5, "unusd"),
         )
-        self.validate_tx_output(result)
+        transaction_must_succeed(tx_output)
 
-        # test query closed position
-        self.assertRaises(
-            _InactiveRpcError,
-            self.agent.query.perp.trader_position,
-            **{"trader": self.agent.address, "token_pair": self.market},
-        )
+        # Margin must decrease. 20 - 5 = 15
+        position = agent.query.perp.trader_position(
+            trader=agent.address, token_pair=pair
+        )["position"]
+        assert position["margin"] == 15.0
+
+        # Transaction close_position must succeed
+        tx_output = agent.tx.perp.close_position(sender=agent.address, token_pair=pair)
+        transaction_must_succeed(tx_output)
+
+        # Exception must be raised when querying closed position
+        with raises(_InactiveRpcError, match="no position found"):
+            agent.query.perp.trader_position(trader=agent.address, token_pair=pair)

@@ -4,6 +4,7 @@ import sys
 
 logging.basicConfig()
 
+
 def init_test_logger() -> logging.Logger:
     test_logger = logging.getLogger("test-logger")
     test_logger.setLevel(logging.DEBUG)
@@ -12,13 +13,17 @@ def init_test_logger() -> logging.Logger:
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
     handler.setFormatter(formatter)
     test_logger.addHandler(handler)
     return test_logger
 
+
 LOGGER = init_test_logger()
 """Simple logger to use throughout the test suite."""
+
 
 def dict_keys_must_match(dict_: dict, keys: list[str]):
     assert len(dict_.keys()) == len(keys)

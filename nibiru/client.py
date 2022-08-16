@@ -1,4 +1,3 @@
-import json
 from typing import List, Optional, Tuple, Union
 
 import grpc
@@ -112,7 +111,7 @@ class GrpcClient:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
             return self.stubTx.Simulate.__call__(req), True
         except grpc.RpcError as err:
-            return json.loads(err._state.debug_error_string)["grpc_message"], False
+            return err._state.debug_error_string, False
 
     def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(

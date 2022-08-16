@@ -62,7 +62,8 @@ BASE_ATTRS = [
 
 def deserialize(obj: object) -> dict:
     custom_dtypes = {
-        str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None) for field in obj.ListFields()
+        str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
+        for field in obj.ListFields()
     }
 
     serialized_output = {}
@@ -77,7 +78,9 @@ def deserialize(obj: object) -> dict:
             if custom_dtype is not None:
 
                 if "cosmos/cosmos-sdk/types.Dec" in str(custom_dtype):
-                    serialized_output[str(attr)] = from_sdk_dec(obj.__getattribute__(attr))
+                    serialized_output[str(attr)] = from_sdk_dec(
+                        obj.__getattribute__(attr)
+                    )
 
                 else:
                     try:

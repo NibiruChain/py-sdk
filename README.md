@@ -95,7 +95,7 @@ Upgrade `pip` to the latest version, if you see these warnings:
   ```
   WARNING: Value for scheme.platlib does not match. Please report this to <https://github.com/pypa/pip/issues/10151>
   WARNING: Additional context:   user = True   home = None   root = None   prefix = None
-  ``` 
+  ```
 -->
 
 ---
@@ -104,7 +104,7 @@ Upgrade `pip` to the latest version, if you see these warnings:
 
 Our recommended setup is `pyenv` in combination with `poetry`.
 - `pyenv` is a tool for installing and managing Python interpreters. This will let you seamlessly switch between Python versions.
-- `poetry` is used for managing virtual environments, dependency resolution, package installations, package building, and package publishing.   
+- `poetry` is used for managing virtual environments, dependency resolution, package installations, package building, and package publishing.
 - We assume you're on a Unix machine such as WSL2 Ubuntu, MacOS, or a common Linux distro.
 
 Currently, `nibiru-py` is created with Python 3.9.13. It may be compatible with higher versions, but we only run end-to-end tests in 3.9.13.
@@ -156,24 +156,24 @@ pyenv global 3.10.4   # switches the global interpreter to 3.10.4
 
 You can verify this works as expected using `python --version`. You may be familiar with using `python3` as the command instead of `python`. With `pyenv`, this is not necessary.
 
-Additional usage and installation instructions can be found in the [pyenv repo](https://github.com/pyenv/pyenv). 
+Additional usage and installation instructions can be found in the [pyenv repo](https://github.com/pyenv/pyenv).
 
 ## Installing `poetry` for dependency resolution and publishing packages
 
 Reference: [Poetry docs](https://python-poetry.org/docs/)
 
-Poetry can be installed with both `curl` and `pip`. We recommended using `curl` so that it will be global to your machine. 
+Poetry can be installed with both `curl` and `pip`. We recommended using `curl` so that it will be global to your machine.
 
-NOTE We highly, highly, highly recommend that you DO NOT use `brew` to install `poetry`. 
+NOTE We highly, highly, highly recommend that you DO NOT use `brew` to install `poetry`.
 If you use `brew`, it's going to install directly to your system, which prevents you from being able to leverage `pyenv` to seamlessly switch between Python interpreters.
 
-```sh 
+```sh
 # installation with pip: recommended option in tandem with pyenv
 pip install poetry
 ```
 
 ```sh
-# For UNIX systems - installation with curl 
+# For UNIX systems - installation with curl
 curl -sSL https://install.python-poetry.org/ | python -
 ```
 
@@ -206,7 +206,7 @@ The variables used in the CI build can be found in the `env` section of the [`py
 ```yaml
 jobs:
   tests:
-    env: 
+    env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
       HOST: ${{ secrets.HOST }}
@@ -270,7 +270,7 @@ To run shell scripts and commands in the `Makefile`, you'll need to install the 
   sudo dnf install python3-devel autoconf automake gcc gcc-c++ libffi-devel libtool make pkgconfig
   ```
 
-### Generating types wth protobuf 
+### Generating types wth protobuf
 
 The objective is to run `make proto-gen`, which simply executes `scripts/protocgen.sh`.
 
@@ -280,12 +280,12 @@ python -m pip install --user grpcio-tools
 pip install mypy-protobuf
 ```
 
-If you get a permissions error such as 
+If you get a permissions error such as
 ```
 rm: cannot remove 'proto/proto/epochs/query.proto': Permission denied
 ```
-call `sudo chown -R [USER-NAME] proto` using the name of user directory. 
-You can find the value for `[USER-NAME]` quickly by running `whoami`. In other words, this should work: 
+call `sudo chown -R [USER-NAME] proto` using the name of user directory.
+You can find the value for `[USER-NAME]` quickly by running `whoami`. In other words, this should work:
 
 ```sh
 sudo chown -R $(whoami) proto
@@ -303,7 +303,7 @@ poetry build # equivalently, you can run `python -m build`
 Enable git hook which will perform linting before each commit:
 
 ```shell
-pre-commit install
+poetry run pre-commit install
 ```
 
 This will keep your code clean.

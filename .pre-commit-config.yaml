@@ -3,21 +3,10 @@ repos:
       rev: v3.1.0
       hooks:
         -   id: end-of-file-fixer
-            exclude: >
-              (?x)^(
-                  .+\.md|
-                  .+\.txt|
-                  .+\.ini|
-                  nibiru/proto/.+
-              )$
+            exclude: nibiru/proto/.+
+
         -   id: trailing-whitespace
-            exclude: >
-              (?x)^(
-                  .+\.md|
-                  .+\.txt|
-                  .+\.ini|
-                  nibiru/proto/.+
-              )$
+            exclude: nibiru/proto/.+
 
   -   repo: https://github.com/psf/black
       rev: 22.3.0

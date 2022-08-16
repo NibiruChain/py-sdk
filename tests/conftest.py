@@ -40,7 +40,6 @@ def pytest_configure(config):
     pytest.ORACLE_MNEMONIC = os.getenv("ORACLE_MNEMONIC")
     pytest.NETWORK_INSECURE = os.getenv("NETWORK_INSECURE") != "false"
 
-
 @pytest.fixture
 def network() -> Network:
     return Network.devnet()

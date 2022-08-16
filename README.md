@@ -23,11 +23,11 @@
 [discord-badge]: https://img.shields.io/badge/Nibiru%20Chain-%237289DA.svg?style=&logo=discord&logoColor=white
 [discord-url]: https://discord.gg/sgPw8ZYfpQ
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
-[license-link]: https://github.com/NibiruChain/nibiru-py/blob/master/LICENSE
-[tests-badge]: https://github.com/NibiruChain/nibiru-py/actions/workflows/pytests.yml/badge.svg
-[tests-workflow]: https://github.com/NibiruChain/nibiru-py/actions/workflows/pytests.yml
+[license-link]: https://github.com/NibiruChain/py-sdk/blob/master/LICENSE
+[tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml/badge.svg
+[tests-workflow]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml
 
-The `nibiru-py` package allows you to index, query, and send transactions on the Nibiru Blockchain using Python. It provides access to market data for analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
+The `nibiru` package allows you to index, query, and send transactions on the Nibiru Blockchain using Python. It provides access to market data for analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
 
 The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
@@ -61,7 +61,7 @@ Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.rea
 ## Installation from `PyPI`
 
 ```sh
-pip install nibiru-py  # requires Python 3.9
+pip install nibiru  # requires Python 3.9
 ```
 
 You may need to update `pip` to get this to run:
@@ -73,7 +73,7 @@ python -m pip install --upgrade pip
 
 ## Usage Instructions
 
-The [examples directory](https://github.com/NibiruChain/nibiru-py/tree/master/examples) contains runnable examples that showcase how to use the package.
+The [examples directory](https://github.com/NibiruChain/py-sdk/tree/master/examples) contains runnable examples that showcase how to use the package.
 - Requires Python 3.9+
 - Requires a running instance of the Nibiru blockchain
 
@@ -107,7 +107,7 @@ Our recommended setup is `pyenv` in combination with `poetry`.
 - `poetry` is used for managing virtual environments, dependency resolution, package installations, package building, and package publishing.
 - We assume you're on a Unix machine such as WSL2 Ubuntu, MacOS, or a common Linux distro.
 
-Currently, `nibiru-py` is created with Python 3.9.13. It may be compatible with higher versions, but we only run end-to-end tests in 3.9.13.
+Currently, `nibiru` is created with Python 3.9.13. It may be compatible with higher versions, but we only run end-to-end tests in 3.9.13.
 
 ## Setting up a professional dev environment with `pyenv` and `poetry`
 
@@ -133,7 +133,7 @@ After using `source` on your config or restarting the shell, you should have the
 The command use to install any version of python is `pyenv install`. Display additional info for this command with `pyenv install --help`.
 
 ```sh
-pyenv install 3.9.13 # example for nibiru-py
+pyenv install 3.9.13 # example for nibiru
 ```
 
 Once you have a version installed, you can print out the versions on your machine with:
@@ -185,7 +185,7 @@ export PATH=$PATH:$HOME/.poetry/bin
 
 ## Installing external dependencies
 
-The `nibiru-py` project is defined by its `pyproject.toml`. At the root of the repo, simply call:
+The `nibiru` project is defined by its `pyproject.toml`. At the root of the repo, simply call:
 
 ```sh
 poetry install
@@ -235,7 +235,7 @@ After following the instructions for setting up `poetry`, you can run the tests 
 poetry run pytest -p no:warnings # silences warnings
 ```
 
-#### (option B). Install the `nibiru-py` package with `pip`
+#### (option B). Install the `nibiru` package with `pip`
 
   ```sh
   # from local
@@ -243,12 +243,12 @@ poetry run pytest -p no:warnings # silences warnings
   pip install .
 
   # from local build
-  pip uninstall nibiru-py
-  pip install nibiru-py --no-index --find-links /path/to/nibiru/nibiru-py/dist
+  pip uninstall nibiru
+  pip install nibiru --no-index --find-links /path/to/nibiru/py-sdk/dist
 
   # from pypi
-  pip uninstall nibiru-py
-  pip install nibiru-py
+  pip uninstall nibiru
+  pip install nibiru
   ```
 
 ## Makefile and Protocol Buffers

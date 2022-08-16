@@ -1,13 +1,13 @@
 # pricefeed_test.py
 from datetime import datetime, timedelta
-from typing import Callable, List, Optional, Union
+from typing import List, Optional
+
+import pytest
 
 import nibiru
-from nibiru.proto.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
-import pytest
-from tests import dict_keys_must_match
-from tests import transaction_must_succeed
 import tests
+from nibiru.proto.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
+from tests import dict_keys_must_match, transaction_must_succeed
 
 WHITELISTED_ORACLES: List[str] = [
     "nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl",
@@ -15,8 +15,11 @@ WHITELISTED_ORACLES: List[str] = [
     "nibi1qqx5reauy4glpskmppy88pz25qp2py5yxvpxdt",
 ]
 
-def post_price_test_tx(sdk: nibiru.Sdk, from_oracle: Optional[str] = None) -> TxResponse:
-    if from_oracle is None: 
+
+def post_price_test_tx(
+    sdk: nibiru.Sdk, from_oracle: Optional[str] = None
+) -> TxResponse:
+    if from_oracle is None:
         from_oracle = sdk.address
     tests.LOGGER.info(f"sending 'nibid tx post price' from {from_oracle}")
     return sdk.tx.pricefeed.post_price(
@@ -27,17 +30,49 @@ def post_price_test_tx(sdk: nibiru.Sdk, from_oracle: Optional[str] = None) -> Tx
         expiry=datetime.utcnow() + timedelta(hours=1),
     )
 
+
 def test_post_price_unwhitelisted(agent: nibiru.Sdk):
     tests.LOGGER.info("'test_post_price_unwhitelisted' - should error")
     unwhitested_address = "nibi1pzd5e402eld9kcc3h78tmfrm5rpzlzk6hnxkvu"
     queryResp = agent.query.pricefeed.oracles("unibi:unusd")
 
-    assert unwhitested_address not in queryResp["oracles"] # TODO
+    assert unwhitested_address not in queryResp["oracles"]  # TODO
     tests.LOGGER.info(f"oracle address not whitelisted: {unwhitested_address}")
-    with pytest.raises(Exception) as err:
-        tx_output = post_price_test_tx(unwhitested_address)
+
+    with pytest.raises(
+        nibiru.exceptions.TxError, match="Oracle does not exist or not authorized"
+    ) as err:
+        tx_output = post_price_test_tx(sdk=agent, from_oracle=unwhitested_address)
         err_msg = str(err)
         assert transaction_must_succeed(tx_output) is None, err_msg
+
+
+def test_grpc_error(oracle_agent):
+    # Market unibi:unusd must be in the list of pricefeed markets
+    markets_output = oracle_agent.query.pricefeed.markets()
+    assert isinstance(markets_output, dict)
+    assert any(
+        [market["pair_id"] == "unibi:unusd" for market in markets_output["markets"]]
+    )
+
+    # Oracle must be in the list of unibi:unusd market oracles
+    unibi_unusd_market = next(
+        market
+        for market in markets_output["markets"]
+        if market["pair_id"] == "unibi:unusd"
+    )
+    assert oracle_agent.address in unibi_unusd_market["oracles"]
+
+    # Transaction post_price in the past must raise proper error
+    with pytest.raises(nibiru.exceptions.TxError, match="Price is expired"):
+        oracle_agent.tx.pricefeed.post_price(
+            oracle_agent.address,
+            token0="unibi",
+            token1="unusd",
+            price=10,
+            expiry=datetime.utcnow() - timedelta(hours=1),  # Price expired
+        )
+
 
 def test_post_prices(oracle_agent: nibiru.Sdk):
 

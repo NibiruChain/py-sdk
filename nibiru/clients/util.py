@@ -74,8 +74,6 @@ BASE_ATTRS = [
 
 
 def deserialize(obj: object) -> dict:
-    # breakpoint()
-
     if isinstance(obj, (float, int, str)):
         return obj
 
@@ -85,36 +83,33 @@ def deserialize(obj: object) -> dict:
     }
     serialized_output = {}
 
-    for attr in dir(obj):
-        if attr not in BASE_ATTRS and "_FIELD_NUMBER" not in attr:
-            try:
-                attr_search = obj.__getattribute__(attr)
-            except AttributeError:
-                continue
+    for attr in [field.name for field in obj._fields.keys()]:
+        try:
+            attr_search = obj.__getattribute__(attr)
+        except AttributeError:
+            continue
 
-            custom_dtype = custom_dtypes.get(str(attr_search))
+        custom_dtype = custom_dtypes.get(str(attr_search))
 
-            if custom_dtype is not None:
+        if custom_dtype is not None:
 
-                if "cosmos/cosmos-sdk/types.Dec" in str(custom_dtype):
-                    serialized_output[str(attr)] = from_sdk_dec(
-                        obj.__getattribute__(attr)
-                    )
+            if "cosmos/cosmos-sdk/types.Dec" in str(custom_dtype):
+                serialized_output[str(attr)] = from_sdk_dec(obj.__getattribute__(attr))
 
-                else:
-                    try:
-                        val = obj.__getattribute__(attr)
-                        if hasattr(val, '__len__') and not isinstance(val, str):
-                            updated_vals = []
-                            for v in val:
-                                updated_vals.append(deserialize(v))
-                            serialized_output[str(attr)] = updated_vals
-                        else:
-                            serialized_output[str(attr)] = deserialize(val)
-                    except:
-                        serialized_output[str(attr)] = obj.__getattribute__(attr)
             else:
-                print(attr)
-                serialized_output[str(attr)] = deserialize(obj.__getattribute__(attr))
+                try:
+                    val = obj.__getattribute__(attr)
+                    if hasattr(val, '__len__') and not isinstance(val, str):
+                        updated_vals = []
+                        for v in val:
+                            updated_vals.append(deserialize(v))
+                        serialized_output[str(attr)] = updated_vals
+                    else:
+                        serialized_output[str(attr)] = deserialize(val)
+                except:
+                    serialized_output[str(attr)] = obj.__getattribute__(attr)
+        else:
+            print(attr)
+            serialized_output[str(attr)] = deserialize(obj.__getattribute__(attr))
 
     return serialized_output

@@ -1,7 +1,3 @@
-import google.protobuf.message
-
-ProtobufMessage = google.protobuf.message.Message
-
 from nibiru.client import GrpcClient  # noqa
 from nibiru.common import Coin, Direction, PoolAsset, Side, TxConfig  # noqa
 from nibiru.composer import Composer  # noqa

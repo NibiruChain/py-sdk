@@ -9,6 +9,7 @@ from tests import dict_keys_must_match, transaction_must_succeed
 
 PRECISION = 6
 
+
 def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     """
     Open a position and ensure output is correct

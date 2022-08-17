@@ -49,7 +49,10 @@ class BaseTxClient:
         return res
 
     def execute_msgs(
-        self, msgs: List[message.Message], get_sequence_from_node: bool = False, **kwargs
+        self,
+        msgs: List[message.Message],
+        get_sequence_from_node: bool = False,
+        **kwargs,
     ) -> abci_type.TxResponse:
         """
         Execute a message to broadcast a transaction to the node.

@@ -38,7 +38,7 @@ class BaseTxClient:
 
     def execute(self, **kwargs):
         try:
-            res = self.execute_msg(*self.msgs, **kwargs)
+            res = self.execute_msgs(*self.msgs, **kwargs)
         except SimulationError as err:
             raise err
         except TxError as err:
@@ -105,7 +105,7 @@ class BaseTxClient:
                 "account sequence mismatch, expected" in str(err)
                 and not get_sequence_from_node
             ):
-                return self.execute_msg(*msg, get_sequence_from_node=True, **kwargs)
+                return self.execute_msgs(*msgs, get_sequence_from_node=True, **kwargs)
 
             if address:
                 address.decrease_sequence()

@@ -1,12 +1,6 @@
 from typing import List, Optional, Tuple, Union
 
 import grpc
-
-# auth_type = auth.auth_pb2
-# auth_query = auth.query_pb2
-# from nibiru_proto.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
-# from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
-# from nibiru_proto.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
 from nibiru_proto.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
 from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
 from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc

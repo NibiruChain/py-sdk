@@ -7,6 +7,7 @@ from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_
 from nibiru_proto.proto.cosmos.distribution.v1beta1 import tx_pb2 as tx_pb
 from nibiru_proto.proto.cosmos.staking.v1beta1 import tx_pb2 as cosmos_staking_tx_pb
 
+
 class Composer:
     @staticmethod
     def coin(amount: float, denom: str):

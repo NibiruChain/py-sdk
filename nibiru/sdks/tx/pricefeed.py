@@ -1,19 +1,18 @@
+import dataclasses
 from datetime import datetime
+from typing import List, Union
 
 from nibiru_proto.proto.pricefeed import tx_pb2 as pb
 
 import nibiru
-from nibiru import utils
 from nibiru.sdks.tx.common import BaseTxClient
-import dataclasses
-from typing import Any, List, Sequence, Union
-from nibiru.utils import toPbTimestamp, to_sdk_dec
+from nibiru.utils import to_sdk_dec, toPbTimestamp
 
 
 @dataclasses.dataclass
 class MsgPostPrice(nibiru.sdks.PythonMsg):
     """
-    Attributes: 
+    Attributes:
         oracle (str): address of the msg sender
 
         token0 (str): base asset denomination, e.g. ATOM
@@ -24,6 +23,7 @@ class MsgPostPrice(nibiru.sdks.PythonMsg):
 
         expiry (datetime):
     """
+
     oracle: str
     token0: str
     token1: str
@@ -43,7 +43,7 @@ class MsgPostPrice(nibiru.sdks.PythonMsg):
 class PricefeedTxClient(BaseTxClient):
     """
     Methods:
-        post_price (Callable[[msgs, **kwargs], TxResponse]) 
+        post_price (Callable[[msgs, **kwargs], TxResponse])
     """
 
     def post_price(

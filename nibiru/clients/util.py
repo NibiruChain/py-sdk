@@ -8,7 +8,6 @@ BASE_ATTRS = [
     'CopyFrom',
     'DESCRIPTOR',
     'DiscardUnknownFields',
-    'Extensions',
     'FindInitializationErrors',
     'FromString',
     'HasExtension',
@@ -24,8 +23,11 @@ BASE_ATTRS = [
     'SetInParent',
     'UnknownFields',
     'WhichOneof',
-    '_CheckCalledFromGeneratedFile',
+    '_InternalParse',
+    '_InternalSerialize',
+    '_Modified',
     '_SetListener',
+    '_UpdateOneofState',
     '__class__',
     '__deepcopy__',
     '__delattr__',
@@ -55,21 +57,36 @@ BASE_ATTRS = [
     '__str__',
     '__subclasshook__',
     '__unicode__',
+    '__weakref__',
+    '_cached_byte_size',
+    '_cached_byte_size_dirty',
+    '_decoders_by_tag',
     '_extensions_by_name',
     '_extensions_by_number',
+    '_fields',
+    '_is_present_in_parent',
+    '_listener',
+    '_listener_for_children',
+    '_oneofs',
+    '_unknown_field_set',
+    '_unknown_fields',
 ]
 
 
 def deserialize(obj: object) -> dict:
+    # breakpoint()
+
+    if isinstance(obj, (float, int, str)):
+        return obj
+
     custom_dtypes = {
         str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
         for field in obj.ListFields()
     }
-
     serialized_output = {}
 
     for attr in dir(obj):
-        if attr not in BASE_ATTRS:
+        if attr not in BASE_ATTRS and "_FIELD_NUMBER" not in attr:
 
             attr_search = obj.__getattribute__(attr)
 
@@ -95,6 +112,7 @@ def deserialize(obj: object) -> dict:
                     except:
                         serialized_output[str(attr)] = obj.__getattribute__(attr)
             else:
+                print(attr)
                 serialized_output[str(attr)] = deserialize(obj.__getattribute__(attr))
 
     return serialized_output

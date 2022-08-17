@@ -111,7 +111,7 @@ class GrpcClient:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
             return self.stubTx.Simulate.__call__(req), True
         except grpc.RpcError as err:
-            return err._state.details, False
+            return err.args[0].details if err.args else "Unknown error"
 
     def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
         req = tx_service.BroadcastTxRequest(

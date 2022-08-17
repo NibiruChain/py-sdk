@@ -3,13 +3,13 @@ from _pytest.python_api import approx
 from grpc._channel import _InactiveRpcError
 from pytest import raises
 
+import nibiru
 from nibiru import Coin, common
 from tests import dict_keys_must_match, transaction_must_succeed
 
 PRECISION = 6
 
-
-def test_open_close_position(val_node, agent):
+def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     """
     Open a position and ensure output is correct
     """

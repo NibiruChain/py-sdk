@@ -1,10 +1,10 @@
 from grpc import Channel
+from nibiru_proto.proto.vpool.v1 import query_pb2 as vpool_type
+from nibiru_proto.proto.vpool.v1 import query_pb2_grpc as vpool_query
+from nibiru_proto.proto.vpool.v1.vpool_pb2 import Direction as pbDirection
 
 from nibiru.clients.util import deserialize
 from nibiru.common import Direction
-from nibiru.proto.vpool.v1 import query_pb2 as vpool_type
-from nibiru.proto.vpool.v1 import query_pb2_grpc as vpool_query
-from nibiru.proto.vpool.v1.vpool_pb2 import Direction as pbDirection
 
 
 class VpoolQueryClient:

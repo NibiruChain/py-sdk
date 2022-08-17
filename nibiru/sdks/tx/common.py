@@ -4,6 +4,7 @@ from copy import deepcopy
 
 from google.protobuf import message
 from google.protobuf.json_format import MessageToDict
+from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 
 from nibiru.client import GrpcClient
 from nibiru.common import TxConfig, TxType
@@ -11,7 +12,6 @@ from nibiru.composer import Composer
 from nibiru.constant import GAS_PRICE
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.network import Network
-from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
 

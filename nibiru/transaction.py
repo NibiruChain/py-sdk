@@ -45,8 +45,9 @@ class Transaction:
         any_msgs: List[any_pb2.Any] = []
         for msg in msgs:
             any_msg = any_pb2.Any()
-            any_msg.Pack(msg, type_url_prefix="")
+            any_msg.Pack(*msg, type_url_prefix="")
             any_msgs.append(any_msg)
+        breakpoint()
         return any_msgs
 
     def with_messages(self, *msgs: message.Message) -> "Transaction":

@@ -1,9 +1,10 @@
 from typing import List
 
+from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
+from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
+from nibiru_proto.proto.dex.v1 import tx_pb2 as dex_tx_pb
+
 from nibiru.common import Coin, PoolAsset
-from nibiru.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-from nibiru.proto.dex.v1 import pool_pb2 as pool_tx_pb
-from nibiru.proto.dex.v1 import tx_pb2 as dex_tx_pb
 from nibiru.sdks.tx.common import BaseTxClient
 
 

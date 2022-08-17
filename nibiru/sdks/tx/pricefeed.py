@@ -1,7 +1,8 @@
 from datetime import datetime
 
+from nibiru_proto.proto.pricefeed import tx_pb2 as pb
+
 from nibiru import utils
-from nibiru.proto.pricefeed import tx_pb2 as pb
 from nibiru.sdks.tx.common import BaseTxClient
 
 

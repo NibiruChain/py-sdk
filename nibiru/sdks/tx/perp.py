@@ -1,6 +1,7 @@
+from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
+from nibiru_proto.proto.perp.v1 import tx_pb2 as tx
+
 from nibiru.common import Coin, Side
-from nibiru.proto.perp.v1 import state_pb2 as state_pb
-from nibiru.proto.perp.v1 import tx_pb2 as tx
 from nibiru.sdks.tx.common import BaseTxClient
 from nibiru.utils import to_sdk_dec, to_sdk_int
 

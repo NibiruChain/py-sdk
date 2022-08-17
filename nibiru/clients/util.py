@@ -29,7 +29,12 @@ def deserialize(proto_message: object) -> dict:
     """
     output = MessageToDict(proto_message)
 
-    for field in proto_message._fields.keys():
+    is_sdk_dec = {
+        field.camelcase_name: "types.Dec" in str(field.GetOptions())
+        for field in proto_message.DESCRIPTOR.fields
+    }
+
+    for field in proto_message.DESCRIPTOR.fields:
         if field.message_type is not None:
             # This is another proto object
             try:
@@ -39,7 +44,7 @@ def deserialize(proto_message: object) -> dict:
             except AttributeError:
                 output[field.camelcase_name] = output[field.camelcase_name]
 
-        if "types.Dec" in str(field._serialized_options):
+        elif is_sdk_dec[field.camelcase_name]:
             output[field.camelcase_name] = from_sdk_dec(output[field.camelcase_name])
 
     return t_dict(output)

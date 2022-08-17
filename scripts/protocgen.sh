@@ -15,7 +15,7 @@ protoc_gen_gocosmos() {
 }
 
 echo "refresh existing proto files"
-if [ $(basename $(pwd)) = nibiru-py ]
+if [ $(basename $(pwd)) = py-sdk ]
 then
   echo "Refreshing proto files"
   rm -rf nibiru/proto proto # if the nibiru-py/proto directory already exists,

@@ -140,12 +140,21 @@ class Pool(google.protobuf.message.Message):
 global___Pool = Pool
 
 class PoolPrices(google.protobuf.message.Message):
+    """PoolPrices is a simple structure that displays a snapshot of the mark and index
+    prices for an asset.
+    NOTE: The fields of PoolPrices should be pointers (nullable) so that we can 
+    tell whether a field (e.g. the index price) is missing.
+    """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    PAIR_FIELD_NUMBER: builtins.int
     MARK_PRICE_FIELD_NUMBER: builtins.int
     INDEX_PRICE_FIELD_NUMBER: builtins.int
     TWAP_MARK_FIELD_NUMBER: builtins.int
     SWAP_INVARIANT_FIELD_NUMBER: builtins.int
     BLOCK_NUMBER_FIELD_NUMBER: builtins.int
+    pair: typing.Text
+    """Pair identifier for the two assets. Always in format 'base:quote'"""
+
     mark_price: typing.Text
     """MarkPrice is the instantaneous price of the perp. 
     Equivalent to quoteAssetReserve / baseAssetReserve.
@@ -165,11 +174,12 @@ class PoolPrices(google.protobuf.message.Message):
 
     def __init__(self,
         *,
+        pair: typing.Text = ...,
         mark_price: typing.Text = ...,
         index_price: typing.Text = ...,
         twap_mark: typing.Text = ...,
         swap_invariant: typing.Text = ...,
         block_number: builtins.int = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["block_number",b"block_number","index_price",b"index_price","mark_price",b"mark_price","swap_invariant",b"swap_invariant","twap_mark",b"twap_mark"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["block_number",b"block_number","index_price",b"index_price","mark_price",b"mark_price","pair",b"pair","swap_invariant",b"swap_invariant","twap_mark",b"twap_mark"]) -> None: ...
 global___PoolPrices = PoolPrices

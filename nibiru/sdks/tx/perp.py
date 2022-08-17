@@ -24,7 +24,7 @@ class PerpTxClient(BaseTxClient):
             token_pair=token_pair,
             margin=margin._generate_proto_object(),
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def add_margin(self, sender: str, token_pair: str, margin: Coin, **kwargs):
         """
@@ -43,7 +43,7 @@ class PerpTxClient(BaseTxClient):
             token_pair=token_pair,
             margin=margin._generate_proto_object(),
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def liquidate(self, sender: str, token_pair: str, trader: str, **kwargs):
         """
@@ -63,7 +63,7 @@ class PerpTxClient(BaseTxClient):
             token_pair=token_pair,
             trader=trader,
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def open_position(
         self,
@@ -105,7 +105,7 @@ class PerpTxClient(BaseTxClient):
             leverage=leverage_pb,
             base_asset_amount_limit=base_asset_amount_limit_pb,
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def close_position(self, sender: str, token_pair: str, **kwargs):
         """
@@ -122,4 +122,4 @@ class PerpTxClient(BaseTxClient):
             sender=sender,
             token_pair=token_pair,
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)

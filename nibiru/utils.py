@@ -175,7 +175,7 @@ def from_sdk_int(int_str: str) -> float:
     return float(int_str)
 
 
-def toTsPb(dt: datetime):
+def toPbTimestamp(dt: datetime):
     ts = Timestamp()
     ts.FromDatetime(dt)
     return ts

@@ -38,21 +38,21 @@ class TxClient(BaseTxClient):
             to_address,
             coins=[coin._generate_proto_object() for coin in coins],
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def msg_exec(self, grantee: str, msgs: List, **kwargs):
         msg = Composer.msg_exec(grantee, msgs)
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def msg_revoke(self, granter: str, grantee: str, msg_type: str, **kwargs):
         msg = Composer.msg_revoke(granter, grantee, msg_type)
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def msg_delegate(
         self, delegator_address: str, validator_address: str, amount: float, **kwargs
     ):
         msg = Composer.msg_delegate(delegator_address, validator_address, amount)
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)
 
     def msg_withdraw_delegator_reward(
         self, delegator_address: str, validator_address: str, **kwargs
@@ -60,4 +60,4 @@ class TxClient(BaseTxClient):
         msg = Composer.msg_withdraw_delegator_reward(
             delegator_address, validator_address
         )
-        return super().execute_msg(msg, **kwargs)
+        return super().execute_msgs(msgs=[msg], **kwargs)

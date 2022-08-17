@@ -7,6 +7,7 @@ from nibiru_proto.proto.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
 
 import nibiru
 import tests
+from nibiru.sdks.tx.pricefeed import MsgPostPrice
 from tests import dict_keys_must_match, transaction_must_succeed
 
 WHITELISTED_ORACLES: List[str] = [
@@ -22,13 +23,14 @@ def post_price_test_tx(
     if from_oracle is None:
         from_oracle = sdk.address
     tests.LOGGER.info(f"sending 'nibid tx post price' from {from_oracle}")
-    return sdk.tx.pricefeed.post_price(
-        from_oracle,
+    msg = MsgPostPrice(
+        oracle=from_oracle,
         token0="unibi",
         token1="unusd",
         price=10,
         expiry=datetime.utcnow() + timedelta(hours=1),
     )
+    return sdk.tx.pricefeed.post_price(msg)
 
 
 def test_post_price_unwhitelisted(agent: nibiru.Sdk):
@@ -47,7 +49,7 @@ def test_post_price_unwhitelisted(agent: nibiru.Sdk):
         assert transaction_must_succeed(tx_output) is None, err_msg
 
 
-def test_grpc_error(oracle_agent):
+def test_grpc_error(oracle_agent: nibiru.Sdk):
     # Market unibi:unusd must be in the list of pricefeed markets
     markets_output = oracle_agent.query.pricefeed.markets()
     assert isinstance(markets_output, dict)
@@ -65,12 +67,14 @@ def test_grpc_error(oracle_agent):
 
     # Transaction post_price in the past must raise proper error
     with pytest.raises(nibiru.exceptions.TxError, match="Price is expired"):
-        oracle_agent.tx.pricefeed.post_price(
-            oracle_agent.address,
-            token0="unibi",
-            token1="unusd",
-            price=10,
-            expiry=datetime.utcnow() - timedelta(hours=1),  # Price expired
+        _ = oracle_agent.tx.pricefeed.post_price(
+            msgs=MsgPostPrice(
+                oracle_agent.address,
+                token0="unibi",
+                token1="unusd",
+                price=10,
+                expiry=datetime.utcnow() - timedelta(hours=1),  # Price expired
+            )
         )
 
 

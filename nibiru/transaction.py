@@ -2,6 +2,9 @@ from numbers import Number
 from typing import List, Tuple
 
 from google.protobuf import any_pb2, message
+from nibiru_proto.proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from nibiru_proto.proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
+from nibiru_proto.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
 from nibiru.client import GrpcClient
 from nibiru.constant import MAX_MEMO_CHARACTERS
@@ -11,9 +14,6 @@ from nibiru.exceptions import (
     UndefinedError,
     ValueTooLargeError,
 )
-from nibiru.proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from nibiru.proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
-from nibiru.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 from nibiru.wallet import PrivateKey, PublicKey
 
 

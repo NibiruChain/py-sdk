@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 
 import pytest
+from nibiru_proto.proto.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
 
 import nibiru
 import tests
-from nibiru.proto.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
 from tests import dict_keys_must_match, transaction_must_succeed
 
 WHITELISTED_ORACLES: List[str] = [

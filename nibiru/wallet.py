@@ -8,9 +8,9 @@ from bip32 import BIP32
 from ecdsa import BadSignatureError, SECP256k1, SigningKey, VerifyingKey
 from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
+from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 from nibiru.exceptions import ConvertError, DecodeError
-from nibiru.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 BECH32_PUBKEY_ACC_PREFIX = "nibipub"
 BECH32_PUBKEY_VAL_PREFIX = "nibivaloperpub"

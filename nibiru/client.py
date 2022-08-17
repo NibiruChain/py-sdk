@@ -10,6 +10,11 @@ from nibiru.exceptions import NotFoundError
 from nibiru.network import Network
 from nibiru.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
 from nibiru.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
+
+# auth_type = auth.auth_pb2
+# auth_query = auth.query_pb2
+# from nibiru.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
+# from nibiru.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
 from nibiru.proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
 from nibiru.proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
 from nibiru.proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc

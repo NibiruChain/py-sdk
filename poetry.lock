@@ -465,7 +465,7 @@ types-protobuf = ">=3.19.5"
 
 [[package]]
 name = "nibiru-proto"
-version = "0.13.0a2"
+version = "0.0.0"
 description = ""
 category = "main"
 optional = false
@@ -802,7 +802,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "329b104266e8188642a8b4ea65f10971e66107ad61cda8f13e6a112b48b0411c"
+content-hash = "2c38d77d2bba42121ecaaba2de86d381afa1ba0ff3b094ba9e6dc5254161fb06"
 
 [metadata.files]
 aiocron = [
@@ -1439,8 +1439,8 @@ mypy-protobuf = [
     {file = "mypy_protobuf-3.2.0-py3-none-any.whl", hash = "sha256:65fc0492165f4a3c0aff69b03e34096fc1453e4dac8f14b4e9c2306cdde06010"},
 ]
 nibiru-proto = [
-    {file = "nibiru-proto-0.13.0a2.tar.gz", hash = "sha256:0d856b3114d982dd79bbaeb858a976fe70430485905454a6c608667cc47256af"},
-    {file = "nibiru_proto-0.13.0a2-py3-none-any.whl", hash = "sha256:b34df30b9e0b755bd817ca54084a9c781337a3713ba6a98c03ea8e7426bd5efa"},
+    {file = "nibiru-proto-0.0.0.tar.gz", hash = "sha256:ed9ed8d52e763a5aad1a930c33cf9af55ccd949915880bc0cc90453abe20cf89"},
+    {file = "nibiru_proto-0.0.0-py3-none-any.whl", hash = "sha256:9ddf0310e8932597261286886bd7d9927f9ee247fd85ecae959b1d1c8697a181"},
 ]
 nodeenv = [
     {file = "nodeenv-1.7.0-py2.py3-none-any.whl", hash = "sha256:27083a7b96a25f2f5e1d8cb4b6317ee8aeda3bdd121394e5ac54e498028a042e"},

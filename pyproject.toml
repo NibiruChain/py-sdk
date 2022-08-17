@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nibiru"
-version = "0.0.17"
+version = "0.0.18-alpha.0"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <dev@nibiru.fi>"]
 license = "MIT"
@@ -23,7 +23,7 @@ coincurve = "^17.0.0"
 aiocron = "^1.8"
 pytest = "^7.1.2"
 pre-commit = "^2.20.0"
-nibiru-proto = "^0.13.0-alpha.2"
+nibiru-proto = "^0.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

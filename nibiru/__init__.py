@@ -5,9 +5,3 @@ from nibiru.network import Network  # noqa
 from nibiru.sdk import Sdk  # noqa
 from nibiru.transaction import Transaction  # noqa
 from nibiru.wallet import Address, PrivateKey, PublicKey  # noqa
-
-
-import nibiru_proto.proto as proto
-
-proto = proto
-

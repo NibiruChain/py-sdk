@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from nibiru.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+
 
 class TxType(Enum):
     """

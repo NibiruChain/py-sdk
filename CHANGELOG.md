@@ -3,6 +3,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- feat(proto): use external proto pkg `nibiru_proto` for versioned types [#81](https://github.com/NibiruChain/py-sdk/pull/81)
+
 ## v0.0.17 - 2022-08-16
 
 - hotfix: fix the json parse for grpc error by @matthiasmatt in [#75](https://github.com/NibiruChain/py-sdk/pull/75)

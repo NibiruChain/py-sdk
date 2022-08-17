@@ -3,6 +3,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.0.17 - 2022-08-16
+
+- hotfix: fix the json parse for grpc error by @matthiasmatt in [#75](https://github.com/NibiruChain/py-sdk/pull/75)
+- fix: Revert "Lint github action" by @Unique-Divine in [#68](https://github.com/NibiruChain/py-sdk/pull/68)
+- test: refactored perp and price feed tests by @onikonychev in [#73](https://github.com/NibiruChain/py-sdk/pull/73)
+- test: Add unit tests for perp queries and txs by @matthiasmatt in [#54](https://github.com/NibiruChain/py-sdk/pull/54)
+- dev: Lint github action by @onikonychev in [#66](https://github.com/NibiruChain/py-sdk/pull/66)
+- dev: Linting action and pre-commit by @onikonychev in [#72](https://github.com/NibiruChain/py-sdk/pull/72)
+- docs: Add sdk doc (network, txconfig and sdk) by @matthiasmatt in [#69](https://github.com/NibiruChain/py-sdk/pull/69)
+- docs: README update by @onikonychev in [#74](https://github.com/NibiruChain/py-sdk/pull/74)
+
 ## v0.0.16 - 2022-08-14
 
 For NibiruChain/nibiru binary version v0.12.1-alpha

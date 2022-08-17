@@ -87,8 +87,10 @@ def deserialize(obj: object) -> dict:
 
     for attr in dir(obj):
         if attr not in BASE_ATTRS and "_FIELD_NUMBER" not in attr:
-
-            attr_search = obj.__getattribute__(attr)
+            try:
+                attr_search = obj.__getattribute__(attr)
+            except AttributeError:
+                continue
 
             custom_dtype = custom_dtypes.get(str(attr_search))
 

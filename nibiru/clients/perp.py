@@ -1,9 +1,10 @@
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 
+from nibiru.clients.util import deserialize
 from nibiru.proto.perp.v1 import query_pb2 as perp_type
 from nibiru.proto.perp.v1 import query_pb2_grpc as perp_query
-from nibiru.utils import from_sdk_dec, from_sdk_dec_24
+from nibiru.utils import from_sdk_dec
 
 
 class PerpQueryClient:
@@ -90,25 +91,5 @@ class PerpQueryClient:
         proto_output: perp_type.QueryTraderPositionResponse = (
             self.api.QueryTraderPosition(req)
         )
-        output = MessageToDict(proto_output)
 
-        position_sdk_dec_fields = [
-            "size",
-            "margin",
-            "openNotional",
-        ]
-
-        sdk_dec_fields = [
-            "positionNotional",
-            "unrealizedPnl",
-        ]
-        for field in position_sdk_dec_fields:
-            output["position"][field] = from_sdk_dec_24(output["position"][field])
-
-        for field in sdk_dec_fields:
-            output[field] = from_sdk_dec_24(output[field])
-
-        output["marginRatioMark"] = from_sdk_dec(output["marginRatioMark"])
-        output["marginRatioIndex"] = from_sdk_dec(output["marginRatioIndex"])
-
-        return output
+        return deserialize(proto_output)

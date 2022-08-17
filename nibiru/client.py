@@ -1,4 +1,3 @@
-import json
 from typing import List, Optional, Tuple, Union
 
 import grpc
@@ -46,7 +45,9 @@ class GrpcClient:
             else grpc.secure_channel(network.grpc_endpoint, credentials)
         )
         self.insecure = insecure
-        self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(self.chain_channel)
+        self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(
+            self.chain_channel
+        )
         self.stubAuth = auth_query_grpc.QueryStub(self.chain_channel)
         self.stubAuthz = authz_query_grpc.QueryStub(self.chain_channel)
         self.stubBank = bank_query_grpc.QueryStub(self.chain_channel)
@@ -74,7 +75,9 @@ class GrpcClient:
 
     def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
         try:
-            account_any = self.stubAuth.Account(auth_query.QueryAccountRequest(address=address)).account
+            account_any = self.stubAuth.Account(
+                auth_query.QueryAccountRequest(address=address)
+            ).account
             account = auth_type.BaseAccount()
             if account_any.Is(account.DESCRIPTOR):
                 account_any.Unpack(account)
@@ -86,7 +89,11 @@ class GrpcClient:
         tx = self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
         request_ids = []
         for tx in tx.tx_response.logs:
-            request_event = [event for event in tx.events if event.type == "request" or event.type == "report"]
+            request_event = [
+                event
+                for event in tx.events
+                if event.type == "request" or event.type == "report"
+            ]
             if len(request_event) == 1:
                 attrs = request_event[0].attributes
                 attr_id = [attr for attr in attrs if attr.key == "id"]
@@ -97,25 +104,33 @@ class GrpcClient:
             raise NotFoundError("Request Id is not found")
         return request_ids
 
-    def simulate_tx(self, tx_byte: bytes) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
+    def simulate_tx(
+        self, tx_byte: bytes
+    ) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
         try:
             req = tx_service.SimulateRequest(tx_bytes=tx_byte)
             return self.stubTx.Simulate.__call__(req), True
         except grpc.RpcError as err:
-            return json.loads(err._state.debug_error_string)["grpc_message"], False
+            return err._state.debug_error_string, False
 
     def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
-        req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC)
+        req = tx_service.BroadcastTxRequest(
+            tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC
+        )
         result = self.stubTx.BroadcastTx.__call__(req)
         return result.tx_response
 
     def send_tx_async_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
-        req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_ASYNC)
+        req = tx_service.BroadcastTxRequest(
+            tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_ASYNC
+        )
         result = self.stubTx.BroadcastTx.__call__(req)
         return result.tx_response
 
     def send_tx_block_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
-        req = tx_service.BroadcastTxRequest(tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_BLOCK)
+        req = tx_service.BroadcastTxRequest(
+            tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_BLOCK
+        )
         result = self.stubTx.BroadcastTx.__call__(req)
         return result.tx_response
 
@@ -133,7 +148,11 @@ class GrpcClient:
         )
 
     def get_bank_balances(self, address: str):
-        return self.stubBank.AllBalances(bank_query.QueryAllBalancesRequest(address=address))
+        return self.stubBank.AllBalances(
+            bank_query.QueryAllBalancesRequest(address=address)
+        )
 
     def get_bank_balance(self, address: str, denom: str):
-        return self.stubBank.Balance(bank_query.QueryBalanceRequest(address=address, denom=denom))
+        return self.stubBank.Balance(
+            bank_query.QueryBalanceRequest(address=address, denom=denom)
+        )

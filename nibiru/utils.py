@@ -7,7 +7,6 @@ from nibiru.exceptions import ConvertError, InvalidArgumentError
 
 # number of decimal places
 PRECISION = 18
-INT_MULT = 1e6
 
 
 # reimplementation of cosmos-sdk/types/decimal.go
@@ -66,7 +65,9 @@ def to_sdk_dec(dec: float) -> str:
     try:
         int(combined_str, 10)
     except ValueError as err:
-        raise ConvertError(f'failed to set decimal string with base 10: {combined_str}') from err
+        raise ConvertError(
+            f'failed to set decimal string with base 10: {combined_str}'
+        ) from err
 
     if neg:
         return '-' + combined_str
@@ -82,7 +83,9 @@ def from_sdk_dec_n(dec_str: str, n: int = 6) -> float:
     return float(dec_str) * 10 ** (-n)
 
 
-def format_fields_nested(object: Union[list, dict], fn: Callable[[Any], Any], fields: list[str]) -> Union[list, dict]:
+def format_fields_nested(
+    object: Union[list, dict], fn: Callable[[Any], Any], fields: list[str]
+) -> Union[list, dict]:
     """
     Format the fields inside a nested dictionary with the function provided
 
@@ -124,7 +127,9 @@ def from_sdk_dec(dec_str: str) -> float:
         return 0
 
     if '.' in dec_str:
-        raise InvalidArgumentError(f'expected a decimal string but got {dec_str} containing \'.\'')
+        raise InvalidArgumentError(
+            f'expected a decimal string but got {dec_str} containing \'.\''
+        )
 
     try:
         int(dec_str)
@@ -163,11 +168,11 @@ def from_sdk_dec(dec_str: str) -> float:
 
 
 def to_sdk_int(i: float) -> str:
-    return str(int(i * INT_MULT))
+    return str(int(i))
 
 
 def from_sdk_int(int_str: str) -> float:
-    return float(int_str) / INT_MULT
+    return float(int_str)
 
 
 def toTsPb(dt: datetime):

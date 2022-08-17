@@ -3,45 +3,24 @@ repos:
       rev: v3.1.0
       hooks:
         -   id: end-of-file-fixer
-            exclude: >
-              (?x)^(
-                  .+\.svg|
-                  .+\.min.js|
-                  .+\.xsd|
-                  .+\.md|
-                  .+\.tsx|
-                  .+\.ts|
-                  .+\.xsd|
-                  .+\.html|
-                  .+\.txt|
-                  .+\.ini|
-              )$
+            exclude: nibiru/proto/.+
+
         -   id: trailing-whitespace
-            exclude: >
-              (?x)^(
-                  .+\.svg|
-                  .+\.min.js|
-                  .+\.xsd|
-                  .+\.md|
-                  .+\.tsx|
-                  .+\.ts|
-                  .+\.xsd|
-                  .+\.html|
-                  .+\.txt|
-                  .+\.ini|
-              )$
+            exclude: nibiru/proto/.+
 
   -   repo: https://github.com/psf/black
       rev: 22.3.0
       hooks:
         - id: black
           files: \.py$
+          exclude: nibiru/proto/.+
 
   -   repo: https://github.com/PyCQA/isort
       rev: 5.10.1
       hooks:
         - id: isort
           files: \.py$
+          exclude: nibiru/proto/.+
           args: ["--profile", "black"]
 
   -   repo: https://github.com/pycqa/flake8

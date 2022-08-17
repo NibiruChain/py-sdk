@@ -16,12 +16,12 @@ protoc_gen_gocosmos() {
 
 echo "refresh existing proto files"
 if [ $(basename $(pwd)) = nibiru-py ]
-then 
+then
   echo "Refreshing proto files"
-  rm -rf nibiru/proto proto # if the nibiru-py/proto directory already exists, 
-  mkdir -p nibiru/proto/ 
+  rm -rf nibiru/proto proto # if the nibiru-py/proto directory already exists,
+  mkdir -p nibiru/proto/
   cp -r ../nibiru/proto/ proto/
-else 
+else
   echo "Ran protocgen.sh from the wrong directory"
   exit 1
 fi

@@ -46,7 +46,8 @@ class DexQueryClient:
         output = MessageToDict(self.api.Params(dex_type.QueryParamsRequest()))["params"]
 
         output["poolCreationFee"] = [
-            {"denom": item["denom"], "amount": from_sdk_dec_n(item["amount"])} for item in output["poolCreationFee"]
+            {"denom": item["denom"], "amount": from_sdk_dec_n(item["amount"])}
+            for item in output["poolCreationFee"]
         ]
         return output
 
@@ -145,8 +146,12 @@ class DexQueryClient:
         Returns:
             dict: The total liquidity of the protocol
         """
-        output = MessageToDict(self.api.TotalLiquidity(dex_type.QueryTotalLiquidityRequest()))
-        return format_fields_nested(object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"])
+        output = MessageToDict(
+            self.api.TotalLiquidity(dex_type.QueryTotalLiquidityRequest())
+        )
+        return format_fields_nested(
+            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
+        )
 
     def total_pool_liquidity(self, pool_id: int) -> dict:
         """
@@ -173,8 +178,14 @@ class DexQueryClient:
         Returns:
             dict: The total liquidity for the pool
         """
-        output = MessageToDict(self.api.TotalPoolLiquidity(dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id)))
-        return format_fields_nested(object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"])
+        output = MessageToDict(
+            self.api.TotalPoolLiquidity(
+                dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id)
+            )
+        )
+        return format_fields_nested(
+            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
+        )
 
     def total_shares(self, pool_id: int) -> dict:
         """
@@ -195,10 +206,16 @@ class DexQueryClient:
         Returns:
             dict: The amount of shares for the pool
         """
-        output = MessageToDict(self.api.TotalShares(dex_type.QueryTotalSharesRequest(pool_id=pool_id)))
-        return format_fields_nested(object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"])
+        output = MessageToDict(
+            self.api.TotalShares(dex_type.QueryTotalSharesRequest(pool_id=pool_id))
+        )
+        return format_fields_nested(
+            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
+        )
 
-    def spot_price(self, pool_id: int, token_in_denom: str, token_out_denom: str) -> dict:
+    def spot_price(
+        self, pool_id: int, token_in_denom: str, token_out_denom: str
+    ) -> dict:
         """
         Returns the spot price of the pool using token in as base and token out as quote
 
@@ -221,7 +238,9 @@ class DexQueryClient:
         )
         return format_fields_nested(object=output, fn=float, fields=["spotPrice"])
 
-    def estimate_swap_exact_amount_in(self, pool_id: int, token_in: Coin, token_out_denom: str) -> dict:
+    def estimate_swap_exact_amount_in(
+        self, pool_id: int, token_in: Coin, token_out_denom: str
+    ) -> dict:
         """
         Estimate the output of the swap with the current reserves
 
@@ -251,9 +270,13 @@ class DexQueryClient:
                 )
             )
         )
-        return format_fields_nested(object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"])
+        return format_fields_nested(
+            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
+        )
 
-    def estimate_join_exact_amount_in(self, pool_id: int, tokens_ins: List[Coin]) -> dict:
+    def estimate_join_exact_amount_in(
+        self, pool_id: int, tokens_ins: List[Coin]
+    ) -> dict:
         """
         Estimate the number of share given for a join pool operation
 
@@ -280,12 +303,16 @@ class DexQueryClient:
             self.api.EstimateJoinExactAmountIn(
                 dex_type.QueryJoinExactAmountInRequest(
                     pool_id=pool_id,
-                    tokens_in=[tokens_in._generate_proto_object() for tokens_in in tokens_ins],
+                    tokens_in=[
+                        tokens_in._generate_proto_object() for tokens_in in tokens_ins
+                    ],
                 )
             )
         )
         return format_fields_nested(
-            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount", "poolSharesOut"]
+            object=output,
+            fn=lambda x: from_sdk_dec_n(x, 6),
+            fields=["amount", "poolSharesOut"],
         )
 
     def estimate_exit_exact_amount_in(self, pool_id: int, num_shares: int) -> dict:
@@ -316,7 +343,11 @@ class DexQueryClient:
         """
         output = MessageToDict(
             self.api.EstimateExitExactAmountIn(
-                dex_type.QueryExitExactAmountInRequest(pool_id=pool_id, pool_shares_in=str(num_shares * 1e6))
+                dex_type.QueryExitExactAmountInRequest(
+                    pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
+                )
             )
         )
-        return format_fields_nested(object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"])
+        return format_fields_nested(
+            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
+        )

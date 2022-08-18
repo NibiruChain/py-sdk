@@ -38,26 +38,3 @@ class MsgPostPrice(nibiru.sdks.PythonMsg):
             price=to_sdk_dec(self.price),
             expiry=toPbTimestamp(self.expiry),
         )
-
-
-class PricefeedTxClient(BaseTxClient):
-    """
-    Methods:
-        post_price (Callable[[msgs, **kwargs], TxResponse])
-    """
-
-    def post_price(
-        self,
-        msgs: Union[MsgPostPrice, List[MsgPostPrice]],
-        **kwargs,
-    ):
-        if not isinstance(msgs, list):
-            msgs = [msgs]
-
-        pb_msgs: List[MsgPostPrice] = []
-        for msg in msgs:
-            if not isinstance(msg, MsgPostPrice):
-                raise TypeError(f"Invalid type for msgs: {type(msg)}")
-            pb_msgs.append(msg.to_pb())
-        # return super(PricefeedTxClient, self).execute_msg(pb_msgs, **kwargs)
-        return super().execute_msgs(pb_msgs, **kwargs)

@@ -16,6 +16,9 @@ from nibiru.network import Network
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
 
+from nibiru.sdks import PythonMsg
+import nibiru.sdks.tx as pythonTxTypes
+
 
 class BaseTxClient:
     def __init__(
@@ -47,6 +50,25 @@ class BaseTxClient:
             self.msgs = []
 
         return res
+
+    def create(self, msgs: List[PythonMsg], **kwargs) -> abci_type.TxResponse:
+        """
+        Create a transaction
+
+        Args:
+            msgs (List[PythonMsg]): The message or list of python message to be transformed
+
+        Returns:
+            abci_type.TxResponse: Execute a list of transactions
+        """
+        if not isinstance(msgs, list):
+            msgs = [msgs]
+
+        pb_msgs: List[message.Message] = []
+
+        for msg in msgs:
+            pb_msgs.append(msg.to_pb())
+        return self.execute_msgs(pb_msgs, **kwargs)
 
     def execute_msgs(
         self,

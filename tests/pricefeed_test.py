@@ -41,9 +41,7 @@ def test_post_price_unwhitelisted(agent: nibiru.Sdk):
     assert unwhitested_address not in queryResp["oracles"]  # TODO
     tests.LOGGER.info(f"oracle address not whitelisted: {unwhitested_address}")
 
-    with pytest.raises(
-        nibiru.exceptions.TxError, match="Oracle does not exist or not authorized"
-    ) as err:
+    with pytest.raises(nibiru.exceptions.TxError, match="unknown address") as err:
         tx_output = post_price_test_tx(sdk=agent, from_oracle=unwhitested_address)
         err_msg = str(err)
         assert transaction_must_succeed(tx_output) is None, err_msg

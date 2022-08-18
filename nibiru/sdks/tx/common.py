@@ -1,6 +1,7 @@
 import json
 import logging
 from copy import deepcopy
+from typing import List
 
 from google.protobuf import message
 from google.protobuf.json_format import MessageToDict
@@ -37,7 +38,7 @@ class BaseTxClient:
 
     def execute(self, **kwargs):
         try:
-            res = self.execute_msg(*self.msgs, **kwargs)
+            res = self.execute_msgs(*self.msgs, **kwargs)
         except SimulationError as err:
             raise err
         except TxError as err:
@@ -47,8 +48,11 @@ class BaseTxClient:
 
         return res
 
-    def execute_msg(
-        self, *msg: message.Message, get_sequence_from_node: bool = False, **kwargs
+    def execute_msgs(
+        self,
+        msgs: List[message.Message],
+        get_sequence_from_node: bool = False,
+        **kwargs,
     ) -> abci_type.TxResponse:
         """
         Execute a message to broadcast a transaction to the node.
@@ -79,7 +83,7 @@ class BaseTxClient:
             address = self.get_address_info()
             tx = (
                 Transaction()
-                .with_messages(*msg)
+                .with_messages(msgs)
                 .with_sequence(address.get_sequence(**sequence_args))
                 .with_account_num(address.get_number())
                 .with_chain_id(self.network.chain_id)
@@ -104,7 +108,7 @@ class BaseTxClient:
                 "account sequence mismatch, expected" in str(err)
                 and not get_sequence_from_node
             ):
-                return self.execute_msg(*msg, get_sequence_from_node=True, **kwargs)
+                return self.execute_msgs(*msgs, get_sequence_from_node=True, **kwargs)
 
             if address:
                 address.decrease_sequence()

@@ -54,7 +54,7 @@ class BaseTxClient:
         if not isinstance(msgs, list):
             msgs = [msgs]
 
-        msgs = [msg.to_pb() for msg in msgs]
+        pb_msgs = [msg.to_pb() for msg in msgs]
 
         address = None
         sequence_args = {}
@@ -69,7 +69,7 @@ class BaseTxClient:
             address = self.get_address_info()
             tx = (
                 Transaction()
-                .with_messages(msgs)
+                .with_messages(pb_msgs)
                 .with_sequence(address.get_sequence(**sequence_args))
                 .with_account_num(address.get_number())
                 .with_chain_id(self.network.chain_id)

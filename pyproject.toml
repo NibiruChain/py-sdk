@@ -42,6 +42,11 @@ extend-exclude = '''
 )$
 '''
 
+[tool.isort]
+profile = "black"
+py_version = 39
+skip_glob = ["nibiru/proto/*"]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

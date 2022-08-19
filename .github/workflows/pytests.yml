@@ -35,6 +35,16 @@ jobs:
 
       - name: Run python
         run: python --version && python -c "print('hello')"
+
+      # ----------------------------------------------
+      # Try to load a cached poetry binary
+      # See https://github.com/snok/install-poetry#caching-the-poetry-installation for the source
+      # ----------------------------------------------
+      - name: Load cached Poetry installation
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-0 # increment to reset cache
       # ----------------------------------------------
       # Install & configure poetry
       # ----------------------------------------------

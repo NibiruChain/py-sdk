@@ -5,7 +5,7 @@ on:
     branches: ["master"]
 
 jobs:
-  deploy:
+  publish:
     # ref: on conditional GHA steps - https://docs.github.com/en/actions/using-jobs/using-conditions-to-control-job-execution
     # When a GitHub push event contains several commits,
     # ${{ github.event.commits[0].message }} is the oldest commit

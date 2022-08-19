@@ -5,7 +5,8 @@ from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as dex_tx_pb
 
 from nibiru.common import Coin, PoolAsset
-from nibiru.sdks.tx.common import BaseTxClient
+
+from .common import BaseTxClient
 
 
 class DexTxClient(BaseTxClient):

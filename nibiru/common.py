@@ -1,7 +1,10 @@
+import abc
 from dataclasses import dataclass
 from enum import Enum
 
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+
+import nibiru
 
 
 class TxType(Enum):
@@ -83,3 +86,14 @@ class TxConfig:
         self.gas_wanted = gas_wanted
         self.gas_price = gas_price
         self.tx_type = tx_type
+
+
+class PythonMsg(abc.ABC):
+    @abc.abstractmethod
+    def to_pb(self) -> nibiru.ProtobufMessage:
+        """
+        Generate the protobuf message
+
+        Returns:
+            Any: The protobuff mesage
+        """

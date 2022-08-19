@@ -5,12 +5,13 @@ from typing import List, Union
 from nibiru_proto.proto.pricefeed import tx_pb2 as pb
 
 import nibiru
-from nibiru.sdks.tx.common import BaseTxClient
 from nibiru.utils import to_sdk_dec, toPbTimestamp
+
+from .common import BaseTxClient
 
 
 @dataclasses.dataclass
-class MsgPostPrice(nibiru.sdks.PythonMsg):
+class MsgPostPrice(nibiru.common.PythonMsg):
     """
     Attributes:
         oracle (str): address of the msg sender

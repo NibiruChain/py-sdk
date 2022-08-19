@@ -3,6 +3,9 @@ from enum import Enum
 
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 
+MAX_MEMO_CHARACTERS = 256
+GAS_PRICE = 1 * pow(10, -3)
+
 
 class TxType(Enum):
     """

@@ -1,9 +1,8 @@
 import json
 import logging
 from copy import deepcopy
-from typing import List
+from typing import List, Union
 
-from google.protobuf import message
 from google.protobuf.json_format import MessageToDict
 from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
@@ -11,6 +10,7 @@ from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_
 from nibiru.client import GrpcClient
 from nibiru.common import GAS_PRICE, TxConfig, TxType
 from nibiru.exceptions import SimulationError, TxError
+from nibiru.msg import PythonMsg
 from nibiru.network import Network
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
@@ -29,27 +29,10 @@ class BaseTxClient:
         self.client = client
         self.address = None
         self.config = config
-        self.msgs = []
-
-    def add_messages(self, *msgs: message.Message):
-        self.msgs.extend(msgs)
-        return self
-
-    def execute(self, **kwargs):
-        try:
-            res = self.execute_msgs(*self.msgs, **kwargs)
-        except SimulationError as err:
-            raise err
-        except TxError as err:
-            raise err
-        else:
-            self.msgs = []
-
-        return res
 
     def execute_msgs(
         self,
-        msgs: List[message.Message],
+        msgs: Union[PythonMsg, List[PythonMsg]],
         get_sequence_from_node: bool = False,
         **kwargs,
     ) -> abci_type.TxResponse:
@@ -69,6 +52,11 @@ class BaseTxClient:
         Returns:
             abci_type.TxResponse: _description_
         """
+        if not isinstance(msgs, list):
+            msgs = [msgs]
+
+        msgs = [msg.to_pb() for msg in msgs]
+
         address = None
         sequence_args = {}
         if get_sequence_from_node:
@@ -112,7 +100,7 @@ class BaseTxClient:
             if address:
                 address.decrease_sequence()
 
-            raise TxError(f"Failed to execute transaction: {err}") from err
+            raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
     def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):
         conf = self.get_config(**kwargs)
@@ -125,7 +113,7 @@ class BaseTxClient:
 
         fee = [
             cosmos_base_coin_pb.Coin(
-                amount=int(gas_price * gas_wanted),
+                amount=str(int(gas_price * gas_wanted)),
                 denom=self.network.fee_denom,
             )
         ]

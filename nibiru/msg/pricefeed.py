@@ -3,12 +3,12 @@ from datetime import datetime
 
 from nibiru_proto.proto.pricefeed import tx_pb2 as pb
 
-import nibiru
+from nibiru.msg import PythonMsg
 from nibiru.utils import to_sdk_dec, toPbTimestamp
 
 
 @dataclasses.dataclass
-class MsgPostPrice(nibiru.msg.PythonMsg):
+class MsgPostPrice(PythonMsg):
     """
     Attributes:
         oracle (str): address of the msg sender

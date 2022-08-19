@@ -1,10 +1,6 @@
 import abc
 
 import nibiru
-import nibiru.msg.bank
-import nibiru.msg.dex
-import nibiru.msg.perp
-import nibiru.msg.pricefeed
 
 
 class PythonMsg(abc.ABC):
@@ -16,3 +12,20 @@ class PythonMsg(abc.ABC):
         Returns:
             Any: The protobuff mesage
         """
+
+
+from nibiru.msg.bank import MsgDelegate, MsgSend, MsgWithdrawDelegatorReward  # noqa
+from nibiru.msg.dex import (  # noqa
+    MsgCreatePool,
+    MsgExitPool,
+    MsgJoinPool,
+    MsgSwapAssets,
+)
+from nibiru.msg.perp import (  # noqa
+    MsgAddMargin,
+    MsgClosePosition,
+    MsgLiquidate,
+    MsgOpenPosition,
+    MsgRemoveMargin,
+)
+from nibiru.msg.pricefeed import MsgPostPrice  # noqa

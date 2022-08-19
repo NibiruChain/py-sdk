@@ -15,7 +15,7 @@
 import logging
 
 from nibiru import Composer, GrpcClient, Network, PrivateKey, Transaction
-from nibiru.constant import GAS_PRICE
+from nibiru.common import GAS_PRICE
 
 
 def main() -> None:

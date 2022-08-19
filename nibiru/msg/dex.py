@@ -4,12 +4,12 @@ from typing import List
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
 
-import nibiru
 from nibiru.common import Coin, PoolAsset
+from nibiru.msg import PythonMsg
 
 
 @dataclasses.dataclass
-class MsgCreatePool(nibiru.msg.PythonMsg):
+class MsgCreatePool(PythonMsg):
     """
     Create a pool using the assets specified
 
@@ -46,7 +46,7 @@ class MsgCreatePool(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgJoinPool(nibiru.msg.PythonMsg):
+class MsgJoinPool(PythonMsg):
     """
     Join a pool using the specified tokens
 
@@ -69,7 +69,7 @@ class MsgJoinPool(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgExitPool(nibiru.msg.PythonMsg):
+class MsgExitPool(PythonMsg):
     """
     Exit a pool using the specified pool shares
 
@@ -92,7 +92,7 @@ class MsgExitPool(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgSwapAssets(nibiru.msg.PythonMsg):
+class MsgSwapAssets(PythonMsg):
     """
     Swap the assets provided for the denom specified
 

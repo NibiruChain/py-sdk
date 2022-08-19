@@ -17,7 +17,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from nibiru import Network, Sdk
+from nibiru import Network, Sdk, msg
 from nibiru.common import Coin, TxConfig, TxType
 
 
@@ -65,15 +65,18 @@ def oracle_agent(network: Network, val_node: Sdk) -> Sdk:
         .with_config(tx_config)
         .with_network(network, pytest.NETWORK_INSECURE)
     )
-    val_node.tx.msg_send(val_node.address, agent.address, [Coin(10000, "unibi")])
+    val_node.tx.execute_msgs(
+        msg.MsgSend(val_node.address, agent.address, [Coin(10000, "unibi")])
+    )
     return agent
 
 
 @pytest.fixture
 def agent(network: Network) -> Sdk:
     tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
-    return (
+    agent = (
         Sdk.authorize()
         .with_config(tx_config)
         .with_network(network, pytest.NETWORK_INSECURE)
     )
+    return agent

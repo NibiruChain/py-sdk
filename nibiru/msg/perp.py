@@ -3,13 +3,13 @@ import dataclasses
 from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
 from nibiru_proto.proto.perp.v1 import tx_pb2 as pb
 
-import nibiru
 from nibiru.common import Coin, Side
+from nibiru.msg import PythonMsg
 from nibiru.utils import to_sdk_dec, to_sdk_int
 
 
 @dataclasses.dataclass
-class MsgRemoveMargin(nibiru.msg.PythonMsg):
+class MsgRemoveMargin(PythonMsg):
     """
     Remove margin for the position (token_pair + trader)
 
@@ -32,7 +32,7 @@ class MsgRemoveMargin(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgAddMargin(nibiru.msg.PythonMsg):
+class MsgAddMargin(PythonMsg):
     """
     Add margin for the position (token_pair + trader)
 
@@ -55,7 +55,7 @@ class MsgAddMargin(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgOpenPosition(nibiru.msg.PythonMsg):
+class MsgOpenPosition(PythonMsg):
     """
     Open a posiiton using the specified parameters.
 
@@ -94,7 +94,7 @@ class MsgOpenPosition(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgClosePosition(nibiru.msg.PythonMsg):
+class MsgClosePosition(PythonMsg):
     """
     Close the position.
 
@@ -114,7 +114,7 @@ class MsgClosePosition(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgLiquidate(nibiru.msg.PythonMsg):
+class MsgLiquidate(PythonMsg):
     """
     Close the position.
 

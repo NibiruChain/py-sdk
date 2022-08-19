@@ -5,12 +5,12 @@ from nibiru_proto.proto.cosmos.bank.v1beta1 import tx_pb2 as pb
 from nibiru_proto.proto.cosmos.distribution.v1beta1 import tx_pb2 as tx_pb
 from nibiru_proto.proto.cosmos.staking.v1beta1 import tx_pb2 as staking_pb
 
-import nibiru.msg
 from nibiru.common import Coin
+from nibiru.msg import PythonMsg
 
 
 @dataclasses.dataclass
-class MsgSend(nibiru.msg.PythonMsg):
+class MsgSend(PythonMsg):
     """
     Send tokens from one account to another
 
@@ -28,12 +28,12 @@ class MsgSend(nibiru.msg.PythonMsg):
         return pb.MsgSend(
             from_address=self.from_address,
             to_address=self.to_address,
-            amount=self.coins._generate_proto_object(),
+            amount=[coin._generate_proto_object() for coin in self.coins],
         )
 
 
 @dataclasses.dataclass
-class MsgDelegate(nibiru.msg.PythonMsg):
+class MsgDelegate(PythonMsg):
     """
     Delegate tokens to a validator
 
@@ -56,7 +56,7 @@ class MsgDelegate(nibiru.msg.PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgWithdrawDelegatorReward(nibiru.msg.PythonMsg):
+class MsgWithdrawDelegatorReward(PythonMsg):
     """
     Withdraw the reward from a validator
 

@@ -4,6 +4,7 @@ from grpc._channel import _InactiveRpcError
 from pytest import raises
 
 import nibiru
+import nibiru.msg
 from nibiru import Coin, common
 from tests import dict_keys_must_match, transaction_must_succeed
 
@@ -17,8 +18,11 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     pair = "ubtc:unusd"
 
     # Funding agent
-    val_node.tx.msg_send(
-        val_node.address, agent.address, [Coin(10000, "unibi"), Coin(100, "unusd")]
+
+    val_node.tx.execute_msgs(
+        nibiru.msg.MsgSend(
+            val_node.address, agent.address, [Coin(10000, "unibi"), Coin(100, "unusd")]
+        )
     )
 
     # Exception must be raised when requesting not existing position
@@ -26,13 +30,15 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
 
     # Transaction open_position must succeed
-    tx_output = agent.tx.perp.open_position(
-        sender=agent.address,
-        token_pair=pair,
-        side=common.Side.BUY,
-        quote_asset_amount=10,
-        leverage=10,
-        base_asset_amount_limit=0,
+    tx_output = agent.tx.execute_msgs(
+        nibiru.msg.MsgOpenPosition(
+            sender=agent.address,
+            token_pair=pair,
+            side=common.Side.BUY,
+            quote_asset_amount=10,
+            leverage=10,
+            base_asset_amount_limit=0,
+        )
     )
     transaction_must_succeed(tx_output)
 
@@ -60,10 +66,12 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     assert position["size"] == approx(0.005, PRECISION)
 
     # Transaction add_margin must succeed
-    tx_output = agent.tx.perp.add_margin(
-        sender=agent.address,
-        token_pair=pair,
-        margin=Coin(10, "unusd"),
+    tx_output = agent.tx.execute_msgs(
+        nibiru.msg.MsgAddMargin(
+            sender=agent.address,
+            token_pair=pair,
+            margin=Coin(10, "unusd"),
+        )
     )
     transaction_must_succeed(tx_output)
 
@@ -74,10 +82,12 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     assert position["margin"] == 20.0
 
     # Transaction remove_margin must succeed
-    tx_output = agent.tx.perp.remove_margin(
-        sender=agent.address,
-        token_pair=pair,
-        margin=common.Coin(5, "unusd"),
+    tx_output = agent.tx.execute_msgs(
+        nibiru.msg.MsgRemoveMargin(
+            sender=agent.address,
+            token_pair=pair,
+            margin=common.Coin(5, "unusd"),
+        )
     )
     transaction_must_succeed(tx_output)
 
@@ -88,7 +98,9 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     assert position["margin"] == 15.0
 
     # Transaction close_position must succeed
-    tx_output = agent.tx.perp.close_position(sender=agent.address, token_pair=pair)
+    tx_output = agent.tx.execute_msgs(
+        nibiru.msg.MsgClosePosition(sender=agent.address, token_pair=pair)
+    )
     transaction_must_succeed(tx_output)
 
     # Exception must be raised when querying closed position

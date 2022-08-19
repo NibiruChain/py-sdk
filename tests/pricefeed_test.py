@@ -66,7 +66,7 @@ def test_grpc_error(oracle_agent: nibiru.Sdk):
     assert oracle_agent.address in unibi_unusd_market["oracles"]
 
     # Transaction post_price in the past must raise proper error
-    with pytest.raises(nibiru.exceptions.TxError, match="Price is expired"):
+    with pytest.raises(nibiru.exceptions.SimulationError, match="Price is expired"):
         _ = oracle_agent.tx.execute_msgs(
             msgs=MsgPostPrice(
                 oracle_agent.address,

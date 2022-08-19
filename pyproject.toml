@@ -4,6 +4,17 @@ version = "0.0.17"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <dev@nibiru.fi>"]
 license = "MIT"
+maintainers = ["@NibiruHeisenberg", "@matthiasmat", "@onikonychev", "Unique-Divine"]
+readme = ["README.md"] # similar to long_description in setuptools
+repository = "https://github.com/NibiruChain/sdk-py"
+keywords = ["nibiru", "blockchain", "sdk", "python", "cosmos"]
+classifiers = [
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Intended Audience :: Developers"
+]
+packages = [
+    { include = "nibiru" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"

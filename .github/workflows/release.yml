@@ -14,6 +14,7 @@ jobs:
     # bump-minor: 0.0.* → 0.1.0
     # bump-major: 0.*.* → 1.0.0
     # bump-prepatch: 0.0.0 → 0.0.1-alpha0
+    # bump-prerelease = bump-prepatch
     # bump-preminor: 0.0.* → 0.1.0-alpha0
     # bump-premajor: 0.*.* → 1.0.0-alpha0
     if: |
@@ -22,7 +23,8 @@ jobs:
       contains(github.event.head_commit.message, 'bump-major')  ||
       contains(github.event.head_commit.message, 'bump-prepatch') ||
       contains(github.event.head_commit.message, 'bump-preminor') ||
-      contains(github.event.head_commit.message, 'bump-premajor')
+      contains(github.event.head_commit.message, 'bump-premajor') ||
+      contains(github.event.head_commit.message, 'bump-prelease')
     runs-on: ubuntu-20.04
     env:
       HEAD_COMMIT_MESSAGE: $${{ github.event.head_commit.message }}
@@ -31,21 +33,19 @@ jobs:
         run: |
           echo "head commit msg: $HEAD_COMMIT_MESSAGE"
           if grep -q "bump-patch" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
-          elif grep -q "bump-patch" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
+            echo "VERSION=bump-patch" >> "$GITHUB_ENV"
           elif grep -q "bump-minor" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
+            echo "VERSION=bump-patch" >> "$GITHUB_ENV"
           elif grep -q "bump-major" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
+            echo "VERSION=bump-major" >> "$GITHUB_ENV"
           elif grep -q "bump-prepatch" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
+            echo "VERSION=bump-prepatch" >> "$GITHUB_ENV"
           elif grep -q "bump-preminor" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
+            echo "VERSION=bump-preminor" >> "$GITHUB_ENV"
           elif grep -q "bump-premajor" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
-          elif grep -q "" <<< $HEAD_COMMIT_MESSAGE; then
-            cmds
+            echo "VERSION=bump-premajor" >> "$GITHUB_ENV"
+          elif grep -q "bump-prerelease" <<< $HEAD_COMMIT_MESSAGE; then
+            echo "VERSION=bump-prerelease" >> "$GITHUB_ENV"
           fi
           echo "version bump type from commit msg: $VERSION"
       # ----------------------------------------------

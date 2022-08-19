@@ -3,8 +3,6 @@ from typing import Any, Callable, Union
 
 from google.protobuf.timestamp_pb2 import Timestamp
 
-from nibiru.exceptions import ConvertError, InvalidArgumentError
-
 # number of decimal places
 PRECISION = 18
 
@@ -29,7 +27,7 @@ def to_sdk_dec(dec: float) -> str:
     dec_str = str(dec)
 
     if len(dec_str) == 0:
-        raise InvalidArgumentError(f'Expected decimal string but got: {dec_str}')
+        raise TypeError(f'Expected decimal string but got: {dec_str}')
 
     # first extract any negative symbol
     neg = False
@@ -38,7 +36,7 @@ def to_sdk_dec(dec: float) -> str:
         dec_str = dec_str[1:]
 
     if len(dec_str) == 0:
-        raise InvalidArgumentError(f'Expected decimal string but got: {dec_str}')
+        raise TypeError(f'Expected decimal string but got: {dec_str}')
 
     strs = dec_str.split('.')
     len_decs = 0
@@ -47,13 +45,13 @@ def to_sdk_dec(dec: float) -> str:
     if len(strs) == 2:  # has a decimal place
         len_decs = len(strs[1])
         if len_decs == 0 or len(combined_str) == 0:
-            raise InvalidArgumentError(f'Expected decimal string but got: {dec_str}')
+            raise TypeError(f'Expected decimal string but got: {dec_str}')
         combined_str += strs[1]
     elif len(strs) > 2:
-        raise InvalidArgumentError(f'Expected decimal string but got: {dec_str}')
+        raise TypeError(f'Expected decimal string but got: {dec_str}')
 
     if len_decs > PRECISION:
-        raise InvalidArgumentError(
+        raise TypeError(
             f'value \'{dec_str}\' exceeds max precision by {PRECISION-len_decs} decimal places: max precision {PRECISION}'
         )
 
@@ -65,7 +63,7 @@ def to_sdk_dec(dec: float) -> str:
     try:
         int(combined_str, 10)
     except ValueError as err:
-        raise ConvertError(
+        raise ValueError(
             f'failed to set decimal string with base 10: {combined_str}'
         ) from err
 
@@ -127,14 +125,12 @@ def from_sdk_dec(dec_str: str) -> float:
         return 0
 
     if '.' in dec_str:
-        raise InvalidArgumentError(
-            f'expected a decimal string but got {dec_str} containing \'.\''
-        )
+        raise TypeError(f'expected a decimal string but got {dec_str} containing \'.\'')
 
     try:
         int(dec_str)
     except ValueError as err:
-        raise ConvertError(f'failed to convert {dec_str} to a number') from err
+        raise ValueError(f'failed to convert {dec_str} to a number') from err
 
     neg = False
     if dec_str[0] == '-':

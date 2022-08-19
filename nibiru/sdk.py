@@ -11,9 +11,9 @@ Network and TxConfig classes respectively inside the nibiru/network.py and nibir
 import logging
 
 from nibiru.client import GrpcClient
-from nibiru.clients.tx import TxClient
 from nibiru.common import TxConfig
 from nibiru.network import Network
+from nibiru.tx import BaseTxClient
 from nibiru.wallet import PrivateKey
 
 
@@ -104,7 +104,7 @@ class Sdk:
             Sdk: The updated sdk object
         """
         self.tx_config = config
-        tx_client = TxClient(
+        tx_client = BaseTxClient(
             client=self.query,
             network=self.network,
             priv_key=self.priv_key,
@@ -127,7 +127,7 @@ class Sdk:
     # Private methods
     def _with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
-        tx_client = TxClient(
+        tx_client = BaseTxClient(
             client=self.query,
             network=self.network,
             priv_key=self.priv_key,
@@ -136,7 +136,7 @@ class Sdk:
         self._with_tx_client(tx_client)
         return self
 
-    def _with_tx_client(self, tx_client: TxClient) -> "Sdk":
+    def _with_tx_client(self, tx_client: BaseTxClient) -> "Sdk":
         self.tx = tx_client
         return self
 

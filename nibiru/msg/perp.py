@@ -3,8 +3,7 @@ import dataclasses
 from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
 from nibiru_proto.proto.perp.v1 import tx_pb2 as pb
 
-from nibiru.common import Coin, Side
-from nibiru.msg import PythonMsg
+from nibiru.common import Coin, PythonMsg, Side
 from nibiru.utils import to_sdk_dec, to_sdk_int
 
 

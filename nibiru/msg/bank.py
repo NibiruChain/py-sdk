@@ -5,8 +5,7 @@ from nibiru_proto.proto.cosmos.bank.v1beta1 import tx_pb2 as pb
 from nibiru_proto.proto.cosmos.distribution.v1beta1 import tx_pb2 as tx_pb
 from nibiru_proto.proto.cosmos.staking.v1beta1 import tx_pb2 as staking_pb
 
-from nibiru.common import Coin
-from nibiru.msg import PythonMsg
+from nibiru.common import Coin, PythonMsg
 
 
 @dataclasses.dataclass

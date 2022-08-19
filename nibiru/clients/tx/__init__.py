@@ -1,1 +1,1 @@
-from .tx_client import TxClient  # noqa
+from nibiru.clients.tx.tx_client import TxClient  # noqa

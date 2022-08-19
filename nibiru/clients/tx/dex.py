@@ -4,9 +4,8 @@ from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as dex_tx_pb
 
+from nibiru.clients.tx.common import BaseTxClient
 from nibiru.common import Coin, PoolAsset
-
-from .common import BaseTxClient
 
 
 class DexTxClient(BaseTxClient):

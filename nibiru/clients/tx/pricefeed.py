@@ -5,9 +5,8 @@ from typing import List, Union
 from nibiru_proto.proto.pricefeed import tx_pb2 as pb
 
 import nibiru
+from nibiru.clients.tx.common import BaseTxClient
 from nibiru.utils import to_sdk_dec, toPbTimestamp
-
-from .common import BaseTxClient
 
 
 @dataclasses.dataclass

@@ -1,15 +1,14 @@
 from typing import List
 
 from nibiru.client import GrpcClient
+from nibiru.clients.tx.common import BaseTxClient
+from nibiru.clients.tx.dex import DexTxClient
+from nibiru.clients.tx.perp import PerpTxClient
+from nibiru.clients.tx.pricefeed import PricefeedTxClient
 from nibiru.common import Coin, TxConfig
 from nibiru.composer import Composer
 from nibiru.network import Network
 from nibiru.wallet import PrivateKey
-
-from .common import BaseTxClient
-from .dex import DexTxClient
-from .perp import PerpTxClient
-from .pricefeed import PricefeedTxClient
 
 
 class TxClient(BaseTxClient):

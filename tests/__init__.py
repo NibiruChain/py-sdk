@@ -2,7 +2,9 @@
 import logging
 import sys
 
-logging.basicConfig()
+import shutup
+
+shutup.please()
 
 
 def init_test_logger() -> logging.Logger:
@@ -13,9 +15,7 @@ def init_test_logger() -> logging.Logger:
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    formatter = logging.Formatter('%(asctime)s|%(levelname)s| %(message)s')
     handler.setFormatter(formatter)
     test_logger.addHandler(handler)
     return test_logger

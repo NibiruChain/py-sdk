@@ -7,10 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 6
 
-   nibiru.clients
-   nibiru.composers
-   nibiru.proto
-   nibiru.sdks
+   nibiru.msg
+   nibiru.query_clients
 
 Submodules
 ----------
@@ -27,22 +25,6 @@ nibiru.common module
 --------------------
 
 .. automodule:: nibiru.common
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nibiru.composer module
-----------------------
-
-.. automodule:: nibiru.composer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nibiru.constant module
-----------------------
-
-.. automodule:: nibiru.constant
    :members:
    :undoc-members:
    :show-inheritance:
@@ -71,18 +53,18 @@ nibiru.sdk module
    :undoc-members:
    :show-inheritance:
 
-nibiru.test\_utils module
--------------------------
-
-.. automodule:: nibiru.test_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 nibiru.transaction module
 -------------------------
 
 .. automodule:: nibiru.transaction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nibiru.tx module
+----------------
+
+.. automodule:: nibiru.tx
    :members:
    :undoc-members:
    :show-inheritance:

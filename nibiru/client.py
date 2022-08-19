@@ -18,13 +18,7 @@ from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 
-from nibiru.clients.query import (
-    DexQueryClient,
-    PerpQueryClient,
-    PricefeedQueryClient,
-    VpoolQueryClient,
-)
-from nibiru.exceptions import NotFoundError
+import nibiru.query_clients
 from nibiru.network import Network
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -60,10 +54,10 @@ class GrpcClient:
         self.timeout_height = 1
 
         # Query services
-        self.dex = DexQueryClient(self.chain_channel)
-        self.pricefeed = PricefeedQueryClient(self.chain_channel)
-        self.perp = PerpQueryClient(self.chain_channel)
-        self.vpool = VpoolQueryClient(self.chain_channel)
+        self.dex = nibiru.query_clients.DexQueryClient(self.chain_channel)
+        self.pricefeed = nibiru.query_clients.PricefeedQueryClient(self.chain_channel)
+        self.perp = nibiru.query_clients.PerpQueryClient(self.chain_channel)
+        self.vpool = nibiru.query_clients.VpoolQueryClient(self.chain_channel)
 
     def close_chain_channel(self):
         self.chain_channel.close()
@@ -105,7 +99,7 @@ class GrpcClient:
                     request_id = attr_id[0].value
                     request_ids.append(int(request_id))
         if len(request_ids) == 0:
-            raise NotFoundError("Request Id is not found")
+            raise KeyError("Request Id is not found")
         return request_ids
 
     def simulate_tx(

@@ -1,7 +1,6 @@
 import unittest
 from collections import namedtuple
 
-from nibiru.exceptions import ConvertError, InvalidArgumentError
 from nibiru.utils import from_sdk_dec, to_sdk_dec
 
 
@@ -29,7 +28,7 @@ class TestDecimals(unittest.TestCase):
                     res = to_sdk_dec(tt.arg)
                     self.assertEqual(tt.exp, res)
                     self.assertFalse(tt.fail)
-                except (InvalidArgumentError, ConvertError):
+                except (TypeError, ValueError):
                     self.assertTrue(tt.fail)
 
     def test_from_dec(self):
@@ -59,7 +58,7 @@ class TestDecimals(unittest.TestCase):
                 try:
                     res = from_sdk_dec(tt.arg)
                     self.assertEqual(tt.exp, res)
-                except (InvalidArgumentError, ConvertError):
+                except (TypeError, ValueError):
                     self.assertTrue(tt.fail)
 
 

@@ -35,6 +35,7 @@ aiocron = "^1.8"
 pytest = "^7.1.2"
 pre-commit = "^2.20.0"
 nibiru-proto = "^0.13.2"
+shutup = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
@@ -51,6 +52,11 @@ extend-exclude = '''
   | nibiru/proto
 )$
 '''
+
+[tool.isort]
+profile = "black"
+py_version = 39
+skip_glob = ["nibiru/proto/*"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

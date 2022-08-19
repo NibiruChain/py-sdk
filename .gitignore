@@ -146,3 +146,4 @@ cython_debug/
 .exchange_cookie
 *.ipynb
 .python-version
+test.py

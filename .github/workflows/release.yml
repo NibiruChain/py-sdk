@@ -91,4 +91,4 @@ jobs:
         env:
           PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
           PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: poetry publish --build --dry-run --username $PYPI_USERNAME --password $PYPI_PASSWORD
+        run: poetry publish --build --dry-run --username $PYPI_USERNAME --password $PYPI_PASSWORD -n

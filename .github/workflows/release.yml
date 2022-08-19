@@ -33,19 +33,19 @@ jobs:
         run: |
           echo "head commit msg: $HEAD_COMMIT_MESSAGE"
           if grep -q "bump-patch" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-patch" >> "$GITHUB_ENV"
+            echo "VERSION=patch" >> "$GITHUB_ENV"
           elif grep -q "bump-minor" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-patch" >> "$GITHUB_ENV"
+            echo "VERSION=minor" >> "$GITHUB_ENV"
           elif grep -q "bump-major" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-major" >> "$GITHUB_ENV"
+            echo "VERSION=major" >> "$GITHUB_ENV"
           elif grep -q "bump-prepatch" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-prepatch" >> "$GITHUB_ENV"
+            echo "VERSION=prepatch" >> "$GITHUB_ENV"
           elif grep -q "bump-preminor" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-preminor" >> "$GITHUB_ENV"
+            echo "VERSION=preminor" >> "$GITHUB_ENV"
           elif grep -q "bump-premajor" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-premajor" >> "$GITHUB_ENV"
+            echo "VERSION=premajor" >> "$GITHUB_ENV"
           elif grep -q "bump-prerelease" <<< $HEAD_COMMIT_MESSAGE; then
-            echo "VERSION=bump-prerelease" >> "$GITHUB_ENV"
+            echo "VERSION=prerelease" >> "$GITHUB_ENV"
           fi
           echo "version bump type from commit msg: $VERSION"
       # ----------------------------------------------

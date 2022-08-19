@@ -25,26 +25,28 @@ You can create a pool with the nibiru-py package with:
     tx_config = nib.TxConfig(tx_type=TxType.BLOCK)
     trader = nib.Sdk.authorize(MNEMONIC).with_config(tx_config)
 
-    trader.tx.dex.create_pool(
-        creator=trader.address,
-        swap_fee=0.02,
-        exit_fee=0.1,
-        assets=[
-            nib.PoolAsset(
-                token=nib.Coin(
-                    denom="unibi",
-                    amount=1000,
+    trader.tx.execute_msgs(
+        nib.msg.MsgCreatePool(
+            creator=trader.address,
+            swap_fee=0.02,
+            exit_fee=0.1,
+            assets=[
+                nib.PoolAsset(
+                    token=nib.Coin(
+                        denom="unibi",
+                        amount=1000,
+                    ),
+                    weight=50
                 ),
-                weight=50
-            ),
-            nib.PoolAsset(
-                token=nib.Coin(
-                    denom="unusd",
-                    amount=10000,
+                nib.PoolAsset(
+                    token=nib.Coin(
+                        denom="unusd",
+                        amount=10000,
+                    ),
+                    weight=50
                 ),
-                weight=50
-            ),
-        ]
+            ]
+        )
     )
 
 You can then query the pools with the dex queries:
@@ -72,19 +74,21 @@ provided.
 
 .. code:: python
 
-    trader.tx.dex.join_pool(
-        sender=trader.address,
-        pool_id=4,
-        tokens=[
-            nib.Coin(
-                denom="unibi",
-                amount=10000,
-            ),
-            nib.Coin(
-                denom="unusd",
-                amount=10000,
-            )
-        ]
+    trader.tx.execute_msgs(
+        nib.msg.JoinPool(
+            sender=trader.address,
+            pool_id=4,
+            tokens=[
+                nib.Coin(
+                    denom="unibi",
+                    amount=10000,
+                ),
+                nib.Coin(
+                    denom="unusd",
+                    amount=10000,
+                )
+            ]
+        )
     )
 
     trader.query.get_bank_balance(
@@ -154,11 +158,13 @@ be putting in is done through the following formula.
 
 .. code:: python
 
-    trader.tx.dex.swap_assets(
-        sender=trader.address,
-        pool_id=4,
-        token_in=nib.Coin(denom="unusd",amount=1000000000),
-        token_out_denom="unibi"
+    trader.tx.execute_msgs(
+        nib.msg.MsgSwapAssets(
+            sender=trader.address,
+            pool_id=4,
+            token_in=nib.Coin(denom="unusd",amount=1000000000),
+            token_out_denom="unibi"
+        )
     )
 
 The queries in the dex query module can give estimate of the output of this command

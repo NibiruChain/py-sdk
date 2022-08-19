@@ -30,6 +30,7 @@ The mark price can be accessed for any market using the vpool submodule queries.
 
     from nibiru import Sdk, TxConfig
     from nibiru.common import TxType
+    import nibiru as nib
 
     MNEMONIC = "guard cream ..."
 
@@ -130,13 +131,15 @@ The python package helps to create and open short and long positions.
 
 .. code:: python
 
-    trader.tx.perp.open_position(
-        trader.address,                 # The address of the trader
-        token_pair="axlwbtc:unusd",     # The market to interact with
-        side=Side.BUY,                  # Either Side.BUY or Side.SELL
-        quote_asset_amount=23000,       # Margin for the position
-        leverage=5,                     # Leverage of the position
-        base_asset_amount_limit=4.5,    # Minimum amount of base received for the transaction
+    trader.tx.execute_msgs(
+        nib.msg.MsgOpenPosition(
+            trader.address,                 # The address of the trader
+            token_pair="axlwbtc:unusd",     # The market to interact with
+            side=Side.BUY,                  # Either Side.BUY or Side.SELL
+            quote_asset_amount=23000,       # Margin for the position
+            leverage=5,                     # Leverage of the position
+            base_asset_amount_limit=4.5,    # Minimum amount of base received for the transaction
+        )
     )
 
 Margin and Margin Ratio

@@ -87,8 +87,8 @@ jobs:
         run: poetry version $VERSION
       - name: Build the assets
         run: poetry build
-      # - name: Publish package
-      #   env:
-      #     PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      #     PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      #   run: poetry publish --build --username $PYPI_USERNAME --password $PYPI_PASSWORD
+      - name: Publish package
+        env:
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: poetry publish --build --username $PYPI_USERNAME --password $PYPI_PASSWORD

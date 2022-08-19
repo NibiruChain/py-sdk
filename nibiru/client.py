@@ -18,10 +18,12 @@ from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 
-from nibiru.clients import DexQueryClient as DexClient
-from nibiru.clients import PerpQueryClient as PerpClient
-from nibiru.clients import PricefeedQueryClient as PricefeedClient
-from nibiru.clients import VpoolQueryClient as VPoolClient
+from nibiru.clients.query import (
+    DexQueryClient,
+    PerpQueryClient,
+    PricefeedQueryClient,
+    VpoolQueryClient,
+)
 from nibiru.exceptions import NotFoundError
 from nibiru.network import Network
 
@@ -58,10 +60,10 @@ class GrpcClient:
         self.timeout_height = 1
 
         # Query services
-        self.dex = DexClient(self.chain_channel)
-        self.pricefeed = PricefeedClient(self.chain_channel)
-        self.perp = PerpClient(self.chain_channel)
-        self.vpool = VPoolClient(self.chain_channel)
+        self.dex = DexQueryClient(self.chain_channel)
+        self.pricefeed = PricefeedQueryClient(self.chain_channel)
+        self.perp = PerpQueryClient(self.chain_channel)
+        self.vpool = VpoolQueryClient(self.chain_channel)
 
     def close_chain_channel(self):
         self.chain_channel.close()

@@ -8,12 +8,6 @@ from nibiru_proto.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
 from nibiru.client import GrpcClient
 from nibiru.common import MAX_MEMO_CHARACTERS
-from nibiru.exceptions import (
-    EmptyMsgError,
-    NotFoundError,
-    UndefinedError,
-    ValueTooLargeError,
-)
 from nibiru.wallet import PrivateKey, PublicKey
 
 
@@ -55,7 +49,7 @@ class Transaction:
 
     def with_sender(self, client: GrpcClient, sender: str) -> "Transaction":
         if len(self.msgs) == 0:
-            raise EmptyMsgError(
+            raise IndexError(
                 "messsage is empty, please use with_messages at least 1 message"
             )
         account = client.get_account(sender)
@@ -63,7 +57,7 @@ class Transaction:
             self.account_num = account.account_number
             self.sequence = account.sequence
             return self
-        raise NotFoundError("Account doesn't exist")
+        raise KeyError("Account doesn't exist")
 
     def with_signer(self, priv_key: PrivateKey):
         self.priv_key = priv_key
@@ -91,7 +85,7 @@ class Transaction:
 
     def with_memo(self, memo: str) -> "Transaction":
         if len(memo) > MAX_MEMO_CHARACTERS:
-            raise ValueTooLargeError("memo is too large")
+            raise ValueError("memo is too large")
         self.memo = memo
         return self
 
@@ -127,16 +121,16 @@ class Transaction:
 
     def get_sign_doc(self, public_key: PublicKey = None) -> cosmos_tx_type.SignDoc:
         if len(self.msgs) == 0:
-            raise EmptyMsgError("message is empty")
+            raise ValueError("message is empty")
 
         if self.account_num is None:
-            raise UndefinedError("account_num should be defined")
+            raise RuntimeError("account_num should be defined")
 
         if self.sequence is None:
-            raise UndefinedError("sequence should be defined")
+            raise RuntimeError("sequence should be defined")
 
         if self.chain_id is None:
-            raise UndefinedError("chain_id should be defined")
+            raise RuntimeError("chain_id should be defined")
 
         body_bytes, auth_info_bytes = self.__generate_info(public_key)
 
@@ -159,7 +153,7 @@ class Transaction:
 
     def get_signed_tx_data(self) -> bytes:
         if self.priv_key is None:
-            raise UndefinedError("priv_key should be defined")
+            raise RuntimeError("priv_key should be defined")
 
         pub_key = self.priv_key.to_public_key()
         sign_doc = self.get_sign_doc(pub_key)

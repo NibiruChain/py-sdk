@@ -19,7 +19,6 @@ from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 
 import nibiru.query_clients
-from nibiru.exceptions import NotFoundError
 from nibiru.network import Network
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -100,7 +99,7 @@ class GrpcClient:
                     request_id = attr_id[0].value
                     request_ids.append(int(request_id))
         if len(request_ids) == 0:
-            raise NotFoundError("Request Id is not found")
+            raise KeyError("Request Id is not found")
         return request_ids
 
     def simulate_tx(

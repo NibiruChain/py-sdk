@@ -10,8 +10,6 @@ from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
 from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
-from nibiru.exceptions import ConvertError, DecodeError
-
 BECH32_PUBKEY_ACC_PREFIX = "nibipub"
 BECH32_PUBKEY_VAL_PREFIX = "nibivaloperpub"
 BECH32_PUBKEY_CONS_PREFIX = "nibivalconspub"
@@ -124,7 +122,7 @@ class PublicKey:
         hrp, bz = bech32_decode(bech)
         assert hrp == prefix, "Invalid bech32 prefix"
         if bz is None:
-            raise DecodeError("Cannot decode bech32")
+            raise ValueError("Cannot decode bech32")
         bz = convertbits(bz, 5, 8, False)
         self = cls(_error_do_not_use_init_directly=True)
         self.verify_key = VerifyingKey.from_string(
@@ -218,10 +216,10 @@ class Address:
         hrp, bz = bech32_decode(bech)
         assert hrp == prefix, "Invalid bech32 prefix"
         if bz is None:
-            raise DecodeError("Cannot decode bech32")
+            raise ValueError("Cannot decode bech32")
         eight_bit_r = convertbits(bz, 5, 8, False)
         if eight_bit_r is None:
-            raise ConvertError("Cannot convert to 8 bit")
+            raise ValueError("Cannot convert to 8 bit")
 
         return cls(bytes(eight_bit_r))
 

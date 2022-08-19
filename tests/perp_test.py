@@ -1,7 +1,6 @@
 # perp_test.py
-from _pytest.python_api import approx
 from grpc._channel import _InactiveRpcError
-from pytest import raises
+from pytest import approx, raises
 
 import nibiru
 from nibiru import Coin, common

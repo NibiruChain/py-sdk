@@ -11,9 +11,9 @@ Network and TxConfig classes respectively inside the nibiru/network.py and nibir
 import logging
 
 from nibiru.client import GrpcClient
+from nibiru.clients.tx import TxClient
 from nibiru.common import TxConfig
 from nibiru.network import Network
-from nibiru.sdks.tx import TxClient
 from nibiru.wallet import PrivateKey
 
 

@@ -42,12 +42,14 @@ The package is intended to be used by coders, developers, technically-skilled tr
   - [Installing `poetry` for dependency resolution and publishing packages](#installing-poetry-for-dependency-resolution-and-publishing-packages)
   - [Installing external dependencies](#installing-external-dependencies)
   - [Running tests](#running-tests)
+      - [Setting environment variables](#setting-environment-variables)
+      - [Running the tests with `poetry` + `pytest`](#running-the-tests-with-poetry--pytest)
+      - [(option B). Install the `nibiru` package with `pip`](#option-b-install-the-nibiru-package-with-pip)
   - [Makefile and Protocol Buffers](#makefile-and-protocol-buffers)
     - [Other dependencies](#other-dependencies)
     - [Generating types wth protobuf](#generating-types-wth-protobuf)
   - [Linting](#linting)
   - [Gotchas](#gotchas)
-
 
 # User Guidelines
 
@@ -65,6 +67,7 @@ pip install nibiru  # requires Python 3.9
 ```
 
 You may need to update `pip` to get this to run:
+
 ```sh
 python -m pip install --upgrade pip
 ```
@@ -76,7 +79,6 @@ python -m pip install --upgrade pip
 The [examples directory](https://github.com/NibiruChain/py-sdk/tree/master/examples) contains runnable examples that showcase how to use the package.
 - Requires Python 3.9+
 - Requires a running instance of the Nibiru blockchain
-
 
 ```bash
 $ pipenv shell
@@ -103,6 +105,7 @@ Upgrade `pip` to the latest version, if you see these warnings:
 # Development Guidelines
 
 Our recommended setup is `pyenv` in combination with `poetry`.
+
 - `pyenv` is a tool for installing and managing Python interpreters. This will let you seamlessly switch between Python versions.
 - `poetry` is used for managing virtual environments, dependency resolution, package installations, package building, and package publishing.
 - We assume you're on a Unix machine such as WSL2 Ubuntu, MacOS, or a common Linux distro.
@@ -120,6 +123,7 @@ brew install pyenv
 ```
 
 You'll then need to add the following snippet to your shell config, e.g. your `.bash_profile`, `.bashrc`, or `.zshrc`.
+
 ```sh
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
@@ -129,7 +133,6 @@ eval "$(pyenv init --path)"
 
 After using `source` on your config or restarting the shell, you should have the `pyenv` root command.
 
-
 The command use to install any version of python is `pyenv install`. Display additional info for this command with `pyenv install --help`.
 
 ```sh
@@ -137,6 +140,7 @@ pyenv install 3.9.13 # example for nibiru
 ```
 
 Once you have a version installed, you can print out the versions on your machine with:
+
 ```sh
 pyenv versions
 ```
@@ -231,6 +235,7 @@ NETWORK_INSECURE=true
 #### Running the tests with `poetry` + `pytest`
 
 After following the instructions for setting up `poetry`, you can run the tests with `poetry run pytest`:
+
 ```sh
 poetry run pytest -p no:warnings # silences warnings
 ```
@@ -258,14 +263,19 @@ poetry run pytest -p no:warnings # silences warnings
 To run shell scripts and commands in the `Makefile`, you'll need to install the following tools depending on your operating system.
 
 - **Ubuntu**
+
   ```bash
   sudo apt install python3.X-dev autoconf automake build-essential libffi-dev libtool pkg-config
   ```
+
 - **macOS**
+
   ```bash
   brew install autoconf automake libtool
   ```
+
 - **Fedora**
+
   ```bash
   sudo dnf install python3-devel autoconf automake gcc gcc-c++ libffi-devel libtool make pkgconfig
   ```
@@ -275,15 +285,18 @@ To run shell scripts and commands in the `Makefile`, you'll need to install the 
 The objective is to run `make proto-gen`, which simply executes `scripts/protocgen.sh`.
 
 In order to do this, you'll need to install a few packages on your system.
+
 ```sh
 python -m pip install --user grpcio-tools
 pip install mypy-protobuf
 ```
 
 If you get a permissions error such as
+
 ```
 rm: cannot remove 'proto/proto/epochs/query.proto': Permission denied
 ```
+
 call `sudo chown -R [USER-NAME] proto` using the name of user directory.
 You can find the value for `[USER-NAME]` quickly by running `whoami`. In other words, this should work:
 
@@ -307,7 +320,6 @@ poetry run pre-commit install
 ```
 
 This will keep your code clean.
-
 
 ## Gotchas
 

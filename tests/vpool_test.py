@@ -3,6 +3,7 @@ from typing import Dict, List
 
 import nibiru
 import tests
+from nibiru import common
 
 
 def test_query_vpool_reserve_assets(val_node: nibiru.Sdk):
@@ -54,3 +55,12 @@ def test_query_vpool_all_pools(agent: nibiru.Sdk):
     assert isinstance(vpool_prices["twap_mark"], float), "twap_mark"
     assert isinstance(vpool_prices["pair"], str), "pair"
     tests.LOGGER.info(f"vpool_prices: {pprint.pformat(vpool_prices, indent=3)}")
+
+
+def test_query_vpool_base_asset_price(agent: nibiru.Sdk):
+    query_resp: Dict[str, List[dict]] = agent.query.vpool.base_asset_price(
+        pair="ueth:unusd", direction=common.Direction.ADD, base_asset_amount="15"
+    )
+    tests.dict_keys_must_match(query_resp, keys=["price_in_quote_denom"])
+    assert isinstance(query_resp["price_in_quote_denom"], float)
+    assert query_resp["price_in_quote_denom"] > 0

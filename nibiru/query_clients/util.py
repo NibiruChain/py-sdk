@@ -5,25 +5,20 @@ from google.protobuf.json_format import MessageToDict
 
 from nibiru.utils import from_sdk_dec, from_sdk_int
 
-BASE_ATTRS = (
-    ["ByteSize", "Clear", "ClearExtension", "ClearField", "CopyFrom", "DESCRIPTOR"]
-    + ["DiscardUnknownFields", "Extensions", "FindInitializationErrors", "FromString"]
-    + ["HasExtension", "HasField", "IsInitialized", "ListFields", "MergeFrom"]
-    + ["MergeFromString", "ParseFromString", "RegisterExtension"]
-    + ["SerializePartialToString", "SerializeToString", "SetInParent"]
-    + ["UnknownFields", "WhichOneof", "_CheckCalledFromGeneratedFile", "_SetListener"]
-    + ["__class__", "__deepcopy__", "__delattr__", "__dir__", "__doc__"]
-    + ["__eq__", "__format__", "__ge__", "__getattribute__", "__getstate__"]
-    + ["__gt__", "__hash__", "__init__", "__init_subclass__", "__le__", "__lt__"]
-    + ["__module__", "__ne__", "__new__", "__reduce__", "__reduce_ex__", "__repr__"]
-    + ["__setattr__", "__setstate__", "__sizeof__", "__slots__", "__str__"]
-    + ["__subclasshook__", "__unicode__", "_extensions_by_name"]
-    + ["_extensions_by_number"]
+PROTOBUF_MSG_BASE_ATTRS: List[str] = (
+    dir(protobuf_message.Message)
+    + ['Extensions', 'FindInitializationErrors', '_CheckCalledFromGeneratedFile']
+    + ['_extensions_by_name', '_extensions_by_number']
 )
+"""PROTOBUF_MSG_BASE_ATTRS (List[str]): The default attributes and methods of
+an instance of the 'protobuf.message.Message' class.
+"""
 
 
-def camel_to_snake(s):
-    return ''.join(['_' + c.lower() if c.isupper() else c for c in s]).lstrip('_')
+def camel_to_snake(camel: str):
+    return ''.join(
+        ['_' + char.lower() if char.isupper() else char for char in camel]
+    ).lstrip('_')
 
 
 def t_dict(d):
@@ -36,13 +31,27 @@ def t_dict(d):
 
 
 def deserialize(pb_msg: protobuf_message.Message) -> dict:
+    """Deserializes a proto message into a dictionary.
+
+    - sdk.Dec values are converted to floats.
+    - sdk.Int values are converted to ints.
+    - Missing fields become blank strings.
+
+    Args:
+        pb_msg (protobuf.message.Message)
+
+    Returns:
+        dict: 'pb_msg' as a JSON-able dictionary.
+    """
+    if not isinstance(pb_msg, protobuf_message.Message):
+        raise TypeError(f"expted protobuf Message for 'pb_msg', not {type(pb_msg)}")
     custom_dtypes: Dict[str, bytes] = {
         str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
         for field in pb_msg.ListFields()
     }
     serialized_output = {}
     expected_fields: List[str] = [
-        attr for attr in dir(pb_msg) if attr not in BASE_ATTRS
+        attr for attr in dir(pb_msg) if attr not in PROTOBUF_MSG_BASE_ATTRS
     ]
 
     for _, attr in enumerate(expected_fields):
@@ -80,16 +89,16 @@ def deserialize(pb_msg: protobuf_message.Message) -> dict:
     return serialized_output
 
 
-def deserialize_exp(proto_message: object) -> dict:
+def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
     """
     Take a proto message and convert it into a dictionnary.
     sdk.Dec values are converted to be consistent with txs.
 
     Args:
-        proto_message (object): The proto message
+        proto_message (protobuf.message.Message)
 
     Returns:
-        dict: The dictionary
+        dict
     """
     output = MessageToDict(proto_message)
 

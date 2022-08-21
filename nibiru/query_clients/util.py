@@ -8,13 +8,7 @@ from nibiru.utils import from_sdk_dec, from_sdk_int
 BASE_ATTRS = (
     ["ByteSize", "Clear", "ClearExtension", "ClearField", "CopyFrom", "DESCRIPTOR"]
     + ["DiscardUnknownFields", "Extensions", "FindInitializationErrors", "FromString"]
-    + [
-        "HasExtension",
-        "HasField",
-        "IsInitialized",
-        "ListFields",
-        "MergeFrom",
-    ]
+    + ["HasExtension", "HasField", "IsInitialized", "ListFields", "MergeFrom"]
     + ["MergeFromString", "ParseFromString", "RegisterExtension"]
     + ["SerializePartialToString", "SerializeToString", "SetInParent"]
     + ["UnknownFields", "WhichOneof", "_CheckCalledFromGeneratedFile", "_SetListener"]

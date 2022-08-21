@@ -1,6 +1,7 @@
 """Tests for the nibiru package"""
 import logging
 import sys
+from typing import Iterable
 
 import shutup
 
@@ -25,7 +26,10 @@ LOGGER = init_test_logger()
 """Simple logger to use throughout the test suite."""
 
 
-def dict_keys_must_match(dict_: dict, keys: list[str]):
+def dict_keys_must_match(dict_: dict, keys: Iterable[str]):
+    keys = list(keys)
+    if not isinstance(dict_, dict):
+        raise TypeError(f"'dict' must be a dicitonary, not {type(dict_)}")
     assert len(dict_.keys()) == len(keys)
     for key in dict_.keys():
         assert key in keys

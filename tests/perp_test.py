@@ -1,6 +1,6 @@
 # perp_test.py
+import pytest
 from grpc._channel import _InactiveRpcError
-from pytest import approx, raises
 
 import nibiru
 import nibiru.msg
@@ -25,7 +25,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     )
 
     # Exception must be raised when requesting not existing position
-    with raises(_InactiveRpcError, match="no position found"):
+    with pytest.raises(_InactiveRpcError, match="no position found"):
         agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
 
     # Transaction open_position must succeed
@@ -57,12 +57,12 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         ],
     )
     # Margin ratio must be ~10%
-    assert position_res["margin_ratio_mark"] == approx(0.1, PRECISION)
+    assert position_res["margin_ratio_mark"] == pytest.approx(0.1, PRECISION)
 
     position = position_res["position"]
     assert position["margin"] == 10.0
     assert position["open_notional"] == 100.0
-    assert position["size"] == approx(0.005, PRECISION)
+    assert position["size"] == pytest.approx(0.005, PRECISION)
 
     # Transaction add_margin must succeed
     tx_output = agent.tx.execute_msgs(
@@ -103,5 +103,5 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     transaction_must_succeed(tx_output)
 
     # Exception must be raised when querying closed position
-    with raises(_InactiveRpcError, match="no position found"):
+    with pytest.raises(_InactiveRpcError, match="no position found"):
         agent.query.perp.trader_position(trader=agent.address, token_pair=pair)

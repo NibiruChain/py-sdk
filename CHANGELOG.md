@@ -3,9 +3,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.1.0  2022-08-22
 
 - feat(proto): use external proto pkg `nibiru_proto` for versioned types [#81](https://github.com/NibiruChain/py-sdk/pull/81)
+- fix(query_clients): account for missing fields on the pb_msg in deserialize [#103](https://github.com/NibiruChain/py-sdk/pull/103)
+- test(vpool): test_query_vpool_base_asset_price [#103](https://github.com/NibiruChain/py-sdk/pull/103)
+- chore: Remove protogen script as we're pulling from `nibiru-proto` now [#98](https://github.com/NibiruChain/py-sdk/pull/98)
+- chore: Automate publishing with ci [#100](https://github.com/NibiruChain/py-sdk/pull/100)
+- refactor: Split the design of tx between message and execution [#92](https://github.com/NibiruChain/py-sdk/pull/92)
 
 ## v0.0.17 - 2022-08-16
 

@@ -132,7 +132,7 @@ class QueryClient:
         self,
         api_callable: UnaryUnaryMultiCallable,
         req: google.protobuf.message.Message,
-        deserialize: True,
+        deserialize: bool = True,
     ) -> Union[dict, google.protobuf.message.Message]:
 
         try:

@@ -47,7 +47,7 @@ class DexQueryClient(QueryClient):
         proto_output = self.query(
             api_callable=self.api.Params,
             req=dex_type.QueryParamsRequest(),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output: dict = MessageToDict(proto_output)["params"]
@@ -118,7 +118,7 @@ class DexQueryClient(QueryClient):
                     reverse=kwargs.get("reverse"),
                 ),
             ),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)["pools"]
@@ -158,7 +158,7 @@ class DexQueryClient(QueryClient):
         proto_output = self.query(
             api_callable=self.api.TotalLiquidity,
             req=dex_type.QueryTotalLiquidityRequest(),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)
@@ -194,7 +194,7 @@ class DexQueryClient(QueryClient):
         proto_output = self.query(
             api_callable=self.api.TotalPoolLiquidity,
             req=dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)
@@ -224,7 +224,7 @@ class DexQueryClient(QueryClient):
         proto_output = self.query(
             api_callable=self.api.TotalShares,
             req=dex_type.QueryTotalSharesRequest(pool_id=pool_id),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)
@@ -253,7 +253,7 @@ class DexQueryClient(QueryClient):
                 token_in_denom=token_in_denom,
                 token_out_denom=token_out_denom,
             ),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)
@@ -289,7 +289,7 @@ class DexQueryClient(QueryClient):
                 token_in=token_in._generate_proto_object(),
                 token_out_denom=token_out_denom,
             ),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)
@@ -330,7 +330,7 @@ class DexQueryClient(QueryClient):
                     tokens_in._generate_proto_object() for tokens_in in tokens_ins
                 ],
             ),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)
@@ -371,7 +371,7 @@ class DexQueryClient(QueryClient):
             req=dex_type.QueryExitExactAmountInRequest(
                 pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
             ),
-            deserialize=False,
+            should_deserialize=False,
         )
         output = MessageToDict(proto_output)
         return format_fields_nested(

@@ -103,5 +103,5 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     transaction_must_succeed(tx_output)
 
     # Exception must be raised when querying closed position
-    with pytest.raises(_InactiveRpcError, match="no position found"):
+    with pytest.raises(QueryError, match="no position found"):
         agent.query.perp.trader_position(trader=agent.address, token_pair=pair)

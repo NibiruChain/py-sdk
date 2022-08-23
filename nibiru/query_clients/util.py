@@ -132,12 +132,12 @@ class QueryClient:
         self,
         api_callable: UnaryUnaryMultiCallable,
         req: google.protobuf.message.Message,
-        deserialize: bool = True,
+        should_deserialize: bool = True,
     ) -> Union[dict, google.protobuf.message.Message]:
 
         try:
             output: google.protobuf.message.Message = api_callable(req)
-            if deserialize:
+            if should_deserialize:
                 return deserialize(output)
             return output
         except _InactiveRpcError as err:

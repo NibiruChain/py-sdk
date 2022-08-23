@@ -36,7 +36,7 @@ class PerpQueryClient(QueryClient):
         proto_output: perp_type.QueryParamsResponse = self.query(
             api_callable=self.api.Params,
             req=perp_type.QueryParamsRequest(),
-            deserialize=False,
+            should_deserialize=False,
         )
 
         output = MessageToDict(proto_output)["params"]
@@ -92,7 +92,7 @@ class PerpQueryClient(QueryClient):
         )
 
         proto_output: perp_type.QueryTraderPositionResponse = self.query(
-            api_callable=self.api.QueryTraderPosition, req=req, deserialize=False
+            api_callable=self.api.QueryTraderPosition, req=req, should_deserialize=False
         )
 
         return deserialize(proto_output)

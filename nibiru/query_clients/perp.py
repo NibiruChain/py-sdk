@@ -3,11 +3,11 @@ from grpc import Channel
 from nibiru_proto.proto.perp.v1 import query_pb2 as perp_type
 from nibiru_proto.proto.perp.v1 import query_pb2_grpc as perp_query
 
-from nibiru.query_clients.util import deserialize
+from nibiru.query_clients.util import QueryClient, deserialize
 from nibiru.utils import from_sdk_dec
 
 
-class PerpQueryClient:
+class PerpQueryClient(QueryClient):
     """
     Perp allows to query the endpoints made available by the Nibiru Chain's PERP module.
     """
@@ -33,9 +33,12 @@ class PerpQueryClient:
         Returns:
             dict: The current parameters for the perpetual module
         """
-        proto_output: perp_type.QueryParamsResponse = self.api.Params(
-            perp_type.QueryParamsRequest()
+        proto_output: perp_type.QueryParamsResponse = self.query(
+            api_callable=self.api.Params,
+            req=perp_type.QueryParamsRequest(),
+            should_deserialize=False,
         )
+
         output = MessageToDict(proto_output)["params"]
 
         sdk_dec_fields = [
@@ -88,8 +91,8 @@ class PerpQueryClient:
             trader=trader,
         )
 
-        proto_output: perp_type.QueryTraderPositionResponse = (
-            self.api.QueryTraderPosition(req)
+        proto_output: perp_type.QueryTraderPositionResponse = self.query(
+            api_callable=self.api.QueryTraderPosition, req=req, should_deserialize=False
         )
 
         return deserialize(proto_output)

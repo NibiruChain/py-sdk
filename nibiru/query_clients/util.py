@@ -1,8 +1,12 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
+import google.protobuf.message
 from google.protobuf import message as protobuf_message
 from google.protobuf.json_format import MessageToDict
+from grpc import UnaryUnaryMultiCallable
+from grpc._channel import _InactiveRpcError
 
+from nibiru.exceptions import QueryError
 from nibiru.utils import from_sdk_dec, from_sdk_int
 
 PROTOBUF_MSG_BASE_ATTRS: List[str] = (
@@ -121,3 +125,22 @@ def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
             output[field.camelcase_name] = from_sdk_dec(output[field.camelcase_name])
 
     return t_dict(output)
+
+
+class QueryClient:
+    def query(
+        self,
+        api_callable: UnaryUnaryMultiCallable,
+        req: google.protobuf.message.Message,
+        should_deserialize: bool = True,
+    ) -> Union[dict, google.protobuf.message.Message]:
+
+        try:
+            output: google.protobuf.message.Message = api_callable(req)
+            if should_deserialize:
+                return deserialize(output)
+            return output
+        except _InactiveRpcError as err:
+            raise QueryError(
+                f"Error on {str(api_callable._method).split('/')[-1][:-1]}: {err._state.details}"
+            ) from None

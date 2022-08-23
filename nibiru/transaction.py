@@ -1,5 +1,5 @@
 from numbers import Number
-from typing import List, Tuple
+from typing import Iterable, List, Tuple
 
 from google.protobuf import any_pb2, message
 from nibiru_proto.proto.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -35,15 +35,15 @@ class Transaction:
         self.timeout_height = timeout_height
 
     @staticmethod
-    def __convert_msgs(msgs: Tuple[message.Message, ...]) -> List[any_pb2.Any]:
+    def __convert_msgs(msgs: List[message.Message]) -> List[any_pb2.Any]:
         any_msgs: List[any_pb2.Any] = []
         for msg in msgs:
             any_msg = any_pb2.Any()
-            any_msg.Pack(*msg, type_url_prefix="")
+            any_msg.Pack(msg, type_url_prefix="")
             any_msgs.append(any_msg)
         return any_msgs
 
-    def with_messages(self, *msgs: message.Message) -> "Transaction":
+    def with_messages(self, msgs: Iterable[message.Message]) -> "Transaction":
         self.msgs.extend(self.__convert_msgs(msgs))
         return self
 

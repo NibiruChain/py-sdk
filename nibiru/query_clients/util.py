@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import google.protobuf.message
 from google.protobuf import message as protobuf_message
@@ -132,10 +132,14 @@ class QueryClient:
         self,
         api_callable: UnaryUnaryMultiCallable,
         req: google.protobuf.message.Message,
-    ) -> dict:
+        deserialize: True,
+    ) -> Union[dict, google.protobuf.message.Message]:
 
         try:
-            return deserialize(api_callable(req))
+            output: google.protobuf.message.Message = api_callable(req)
+            if deserialize:
+                return deserialize(output)
+            return output
         except _InactiveRpcError as err:
             raise QueryError(
                 f"Error on {str(api_callable._method).split('/')[-1][:-1]}: {err._state.details}"

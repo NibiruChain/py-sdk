@@ -1,10 +1,10 @@
 # perp_test.py
 import pytest
-from grpc._channel import _InactiveRpcError
 
 import nibiru
 import nibiru.msg
 from nibiru import Coin, common
+from nibiru.exceptions import QueryError
 from tests import dict_keys_must_match, transaction_must_succeed
 
 PRECISION = 6
@@ -25,7 +25,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     )
 
     # Exception must be raised when requesting not existing position
-    with pytest.raises(_InactiveRpcError, match="no position found"):
+    with pytest.raises(QueryError, match="no position found"):
         agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
 
     # Transaction open_position must succeed

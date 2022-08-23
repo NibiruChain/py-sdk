@@ -8,3 +8,7 @@ class SimulationError(NibiruError):
 
 class TxError(NibiruError):
     pass
+
+
+class QueryError(NibiruError):
+    pass

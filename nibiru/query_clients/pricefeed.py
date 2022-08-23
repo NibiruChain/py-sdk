@@ -2,10 +2,10 @@ from grpc import Channel
 from nibiru_proto.proto.pricefeed import query_pb2 as pf_type
 from nibiru_proto.proto.pricefeed import query_pb2_grpc as pf_query
 
-from nibiru.query_clients.util import deserialize
+from nibiru.query_clients.util import QueryClient
 
 
-class PricefeedQueryClient:
+class PricefeedQueryClient(QueryClient):
     """
     Pricefeed allows to query the endpoints made available by the Nibiru Chain's Pricefeed module.
     """
@@ -15,30 +15,30 @@ class PricefeedQueryClient:
 
     def params(self):
         req = pf_type.QueryParamsRequest()
-        return deserialize(self.api.QueryParams(req))
+        return self.query(self.api.QueryParams, req)
 
     def price(self, pair_id: str):
         req = pf_type.QueryPriceRequest(
             pair_id=pair_id,
         )
-        return deserialize(self.api.QueryPrice(req))
+        return self.query(self.api.QueryPrice, req)
 
     def prices(self):
         req = pf_type.QueryPricesRequest()
-        return deserialize(self.api.QueryPrices(req))
+        return self.query(self.api.QueryPrices, req)
 
     def raw_prices(self, pair_id: str):
         req = pf_type.QueryRawPricesRequest(
             pair_id=pair_id,
         )
-        return deserialize(self.api.QueryRawPrices(req))
+        return self.query(self.api.QueryRawPrices, req)
 
     def oracles(self, pair_id: str):
         req = pf_type.QueryOraclesRequest(
             pair_id=pair_id,
         )
-        return deserialize(self.api.QueryOracles(req))
+        return self.query(self.api.QueryOracles, req)
 
     def markets(self):
         req = pf_type.QueryMarketsRequest()
-        return deserialize(self.api.QueryMarkets(req))
+        return self.query(self.api.QueryMarkets, req)

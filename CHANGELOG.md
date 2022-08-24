@@ -3,6 +3,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.0 2022-08-24
+
+### Breaking Changes
+
+- Improve query error handling [#108](https://github.com/NibiruChain/py-sdk/pull/108)
+- feat: Split the design of txs between message and execution. [#96](https://github.com/NibiruChain/py-sdk/pull/96)
+- hotfix/test(query_clients): Test vpool.query.all_pools fn. Account for deserialize edge case #102. [#103](https://github.com/NibiruChain/py-sdk/pull/103)
+
+### Improvements
+
+- refactor(ci-cd): Update linter workflow. Cache poetry installation. [#96](https://github.com/NibiruChain/py-sdk/pull/96)
+- Remove legacy run-examples.sh [#97](https://github.com/NibiruChain/py-sdk/pull/97)
+- test: Add back utils_test file  [#96](https://github.com/NibiruChain/py-sdk/pull/96)
+- docs: Update README.md [#104](https://github.com/NibiruChain/py-sdk/pull/104)
+
 ## v0.1.0  2022-08-22
 
 - feat(proto): use external proto pkg `nibiru_proto` for versioned types [#81](https://github.com/NibiruChain/py-sdk/pull/81)

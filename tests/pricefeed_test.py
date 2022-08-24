@@ -124,7 +124,7 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
 
     # Unibi price object must be a dict with specific keys
     unibi_price = oracle_agent.query.pricefeed.price("unibi:unusd")["price"]
-    dict_keys_must_match(unibi_price, ["pair_id", "price"])
+    dict_keys_must_match(unibi_price, ["pair_id", "price", "twap"])
 
     # At least one pair in prices must be unibi:unusd
     prices = oracle_agent.query.pricefeed.prices()["prices"]
@@ -132,4 +132,4 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
 
     # Unibi price object must be a dict with specific keys
     unibi_price = next(price for price in prices if price["pair_id"] == "unibi:unusd")
-    dict_keys_must_match(unibi_price, ["pair_id", "price"])
+    dict_keys_must_match(unibi_price, ["pair_id", "price", "twap"])

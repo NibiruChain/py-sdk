@@ -21,7 +21,8 @@ class VpoolQueryClient(QueryClient):
 
     def all_pools(self):
         req = vpool_type.QueryAllPoolsRequest()
-        return self.query(self.api.AllPools, req)
+        resp = self.query(self.api.AllPools, req)
+        return resp
 
     def base_asset_price(self, pair: str, direction: Direction, base_asset_amount: str):
         dir_pb = pbDirection.DIRECTION_UNSPECIFIED

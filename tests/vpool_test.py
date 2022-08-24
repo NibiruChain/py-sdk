@@ -49,10 +49,10 @@ def test_query_vpool_all_pools(agent: nibiru.Sdk):
 
     vpool_prices = all_vpool_prices[0]
     assert isinstance(vpool_prices["block_number"], int), "block_number"
-    assert isinstance(vpool_prices["index_price"], float), "index_price"
+    assert isinstance(vpool_prices["index_price"], str), "index_price"
     assert isinstance(vpool_prices["mark_price"], float), "mark_price"
     assert isinstance(vpool_prices["swap_invariant"], int), "swap_invariant"
-    assert isinstance(vpool_prices["twap_mark"], float), "twap_mark"
+    assert isinstance(vpool_prices["twap_mark"], str), "twap_mark"
     assert isinstance(vpool_prices["pair"], str), "pair"
     tests.LOGGER.info(f"vpool_prices: {pprint.pformat(vpool_prices, indent=3)}")
 

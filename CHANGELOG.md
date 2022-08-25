@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [Unreleased](https://github.com/NibiruChain/py-sdk/compare/v0.3.0...HEAD)
 
 - ...
 

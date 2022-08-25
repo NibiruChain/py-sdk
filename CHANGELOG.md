@@ -3,13 +3,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## v0.2.0 2022-08-24
+## Unreleased
+
+- ...
+
+## v0.3.0 2022-08-25
+
+- [[#111]](https://github.com/NibiruChain/nibiru-py/pull/111) case str to float safely in the vpool module's all pools query.
+
+## v0.2.0 [2022-08-24](https://github.com/NibiruChain/py-sdk/pull/109)
 
 ### Breaking Changes
 
-- Improve query error handling [#108](https://github.com/NibiruChain/py-sdk/pull/108)
-- feat: Split the design of txs between message and execution. [#96](https://github.com/NibiruChain/py-sdk/pull/96)
-- hotfix/test(query_clients): Test vpool.query.all_pools fn. Account for deserialize edge case #102. [#103](https://github.com/NibiruChain/py-sdk/pull/103)
+- [[#109]](https://github.com/NibiruChain/nibiru-py/pull/109) Update nibiru-proto dependency for v0.14.0 binary.
+- [[#108]](https://github.com/NibiruChain/py-sdk/pull/108) Improve query error handling
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) hotfix/test(query_clients): Test vpool.query.all_pools fn. Account for deserialize edge case #102.
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) feat: Split the design of txs between message and execution.
 
 ### Improvements
 

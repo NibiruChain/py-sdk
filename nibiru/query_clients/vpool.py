@@ -22,6 +22,9 @@ class VpoolQueryClient(QueryClient):
     def all_pools(self):
         req = vpool_type.QueryAllPoolsRequest()
         resp = self.query(self.api.AllPools, req)
+        for _, prices in enumerate(resp["prices"]):
+            prices["index_price"] = cast_str_to_float_safely(prices["index_price"])
+            prices["twap_mark"] = cast_str_to_float_safely(prices["twap_mark"])
         return resp
 
     def base_asset_price(self, pair: str, direction: Direction, base_asset_amount: str):
@@ -35,3 +38,11 @@ class VpoolQueryClient(QueryClient):
             pair=pair, direction=dir_pb, base_asset_amount=base_asset_amount
         )
         return self.query(self.api.BaseAssetPrice, req)
+
+
+def cast_str_to_float_safely(number_str: str) -> float:
+    try:
+        number = float(number_str)
+    except:
+        number = float(0)
+    return number

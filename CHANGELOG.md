@@ -7,13 +7,13 @@ All notable changes to this project will be documented in this file.
 
 - ...
 
-## v0.3.0 2022-08-25
+## [v0.3.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.3.0) 2022-08-25
 
 ### API Breaking Changes
 
 - [[#111]](https://github.com/NibiruChain/nibiru-py/pull/111) case str to float safely in the vpool module's all pools query.
 
-## v0.2.0 [2022-08-24](https://github.com/NibiruChain/py-sdk/pull/109)
+## [v0.2.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.2.0) [2022-08-24](https://github.com/NibiruChain/py-sdk/pull/109)
 
 ### API Breaking Changes
 
@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file.
 - [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) refactor(ci-cd): Update linter workflow. Cache poetry installation.
 - [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) test: Add back utils_test file
 
-## v0.1.0  2022-08-22
+## [v0.1.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.1.0)  2022-08-22
 
 - [[#81]](https://github.com/NibiruChain/py-sdk/pull/81) feat(proto): use external proto pkg `nibiru_proto` for versioned types
 - [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) fix(query_clients): account for missing fields on the pb_msg in deserialize

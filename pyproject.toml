@@ -23,7 +23,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-grpcio = "^1.48.0"
+grpcio = "^1.47.0"
 asyncio = "^3.4.3"
 bech32 = "^1.2.0"
 python-dotenv = "^0.20.0"

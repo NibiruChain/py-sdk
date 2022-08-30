@@ -1,7 +1,7 @@
 import json
 import logging
 from copy import deepcopy
-from typing import List, Union
+from typing import Any, List, Union
 
 from google.protobuf.json_format import MessageToDict
 from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
@@ -34,22 +34,22 @@ class BaseTxClient:
         msgs: Union[PythonMsg, List[PythonMsg]],
         get_sequence_from_node: bool = False,
         **kwargs,
-    ) -> abci_type.TxResponse:
+    ) -> dict[str, Any]:
         """
         Execute a message to broadcast a transaction to the node.
         Simulate the message to generate the gas estimate and send it to the node.
-        If the transaction fail because of account sequence mismatch, we try to send it again once more with the
-        sequence coming from a query to the lcd endpoint.
+        If the transaction fail because of account sequence mismatch, we try to send it
+        again once more with the sequence coming from a query to the lcd endpoint.
 
         Args:
-            get_sequence_from_node (bool, optional): Wether to get the sequence from the local value or the lcd
-                endpoint. Defaults to False.
+            get_sequence_from_node (bool, optional): Specifies whether the sequence
+                comes from the local value or the lcd endpoint. Defaults to False.
 
         Raises:
-            TxError: Will log the error to the
+            TxError: Raw error log from the blockchain if the response code is nonzero.
 
         Returns:
-            abci_type.TxResponse: _description_
+            dict[str, Any]: The transaction response as a dict in proto3 JSON format.
         """
         if not isinstance(msgs, list):
             msgs = [msgs]
@@ -77,13 +77,15 @@ class BaseTxClient:
             )
             sim_res = self.simulate(tx)
             gas_estimate = sim_res.gas_info.gas_used
-            tx_output = self.execute_tx(tx, gas_estimate, **kwargs)
+            tx_output: abci_type.TxResponse = self.execute_tx(
+                tx, gas_estimate, **kwargs
+            )
 
             if tx_output.code != 0:
                 address.decrease_sequence()
                 raise TxError(tx_output.raw_log)
 
-            tx_output = MessageToDict(tx_output)
+            tx_output: dict[str, Any] = MessageToDict(tx_output)
 
             # Convert raw log into a dictionary
             tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
@@ -101,7 +103,9 @@ class BaseTxClient:
 
             raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
-    def execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs):
+    def execute_tx(
+        self, tx: Transaction, gas_estimate: float, **kwargs
+    ) -> abci_type.TxResponse:
         conf = self.get_config(**kwargs)
         gas_wanted = gas_estimate * 1.25
         if conf.gas_wanted > 0:
@@ -129,7 +133,7 @@ class BaseTxClient:
 
         return self._send_tx(tx_raw_bytes, conf.tx_type)
 
-    def _send_tx(self, tx_raw_bytes, tx_type: TxType):
+    def _send_tx(self, tx_raw_bytes, tx_type: TxType) -> abci_type.TxResponse:
         if tx_type == TxType.SYNC:
             return self.client.send_tx_sync_mode(tx_raw_bytes)
         elif tx_type == TxType.ASYNC:

@@ -2,18 +2,14 @@
 
 import nibiru
 import nibiru.msg
+import tests
 from nibiru import Coin
-from tests import transaction_must_succeed
 
 PRECISION = 6
 
 
-def test_send_multiple_txs(val_node: nibiru.Sdk, agent: nibiru.Sdk):
-    """
-    Open a position and ensure output is correct
-    """
-
-    # Funding agent
+def test_send_multiple_msgs(val_node: nibiru.Sdk, agent: nibiru.Sdk):
+    """Tests the transfer of funds for a transaction with a multiple 'MsgSend' messages."""
 
     tx_output = val_node.tx.execute_msgs(
         [
@@ -30,15 +26,14 @@ def test_send_multiple_txs(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         ]
     )
 
-    transaction_must_succeed(tx_output)
+    tests.LOGGER.info(
+        "nibid tx bank send - multiple msgs:\n" + tests.format_response(tx_output)
+    )
+    tests.transaction_must_succeed(tx_output)
 
 
-def test_send_single_tx(val_node: nibiru.Sdk, agent: nibiru.Sdk):
-    """
-    Open a position and ensure output is correct
-    """
-
-    # Funding agent
+def test_send_single_msg(val_node: nibiru.Sdk, agent: nibiru.Sdk):
+    """Tests the transfer of funds for a transaction with a single 'MsgSend' message."""
 
     tx_output = val_node.tx.execute_msgs(
         [
@@ -50,4 +45,7 @@ def test_send_single_tx(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         ]
     )
 
-    transaction_must_succeed(tx_output)
+    tests.LOGGER.info(
+        "nibid tx bank send - single msgs:\n" + tests.format_response(tx_output)
+    )
+    tests.transaction_must_succeed(tx_output)

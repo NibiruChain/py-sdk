@@ -97,6 +97,9 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
 
     tests.LOGGER.info("Transaction post_price must succeed")
     tx_output = post_price_test_tx(sdk=oracle_agent)
+    tests.LOGGER.info(
+        f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
+    )
     transaction_must_succeed(tx_output)
 
     # Repeating post_price transaction.
@@ -108,6 +111,9 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
             err_msg = str(err)
             assert transaction_must_succeed(tx_output) is None, err_msg
     tx_output = post_price_test_tx(sdk=oracle_agent)
+    tests.LOGGER.info(
+        f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
+    )
     assert transaction_must_succeed(tx_output) is None
 
     # Raw prices must exist after post_price transaction
@@ -120,14 +126,21 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
 
     # Price feed params must be a dict with specific keys
     price_feed_params = oracle_agent.query.pricefeed.params()["params"]
+    tests.LOGGER.info(
+        f"nibid query pricefeed params:\n{tests.format_response(price_feed_params)}"
+    )
     dict_keys_must_match(price_feed_params, ['pairs', 'twap_lookback_window'])
 
     # Unibi price object must be a dict with specific keys
     unibi_price = oracle_agent.query.pricefeed.price("unibi:unusd")["price"]
+    tests.LOGGER.info(
+        f"nibid query pricefeed price:\n{tests.format_response(unibi_price)}"
+    )
     dict_keys_must_match(unibi_price, ["pair_id", "price", "twap"])
 
     # At least one pair in prices must be unibi:unusd
     prices = oracle_agent.query.pricefeed.prices()["prices"]
+    tests.LOGGER.info(f"nibid query pricefeed prices:\n{tests.format_response(prices)}")
     assert any([price["pair_id"] == "unibi:unusd" for price in prices])
 
     # Unibi price object must be a dict with specific keys

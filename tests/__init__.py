@@ -57,7 +57,17 @@ def init_test_logger() -> logging.Logger:
 
 
 LOGGER: logging.Logger = init_test_logger()
-"""Simple logger to use throughout the test suite."""
+"""Simple logger to use throughout the test suite.
+
+Examples:
+```python
+from tests import LOGGER
+LOGGER.info("successfully executed tx staking command")
+LOGGER.debug("debugging error message")
+```
+
+Log levels include: [debug, info, warning, error, critical]
+"""
 
 
 def format_response(resp: Union[dict, list, str]) -> str:

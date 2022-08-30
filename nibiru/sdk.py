@@ -18,15 +18,24 @@ from nibiru.wallet import PrivateKey
 
 
 class Sdk:
-    """
-    The Sdk class creates an interface to sign and send transactions or execute queries from a node.
+    """The Sdk class creates an interface to sign and send transactions or execute
+    queries from a node.
+
     It is associated to:
-        - a wallet, which can be either created or recovered from an existing mnemonic.
-        - a network, defining the node to connect to
-        - optionally a configuration defining how to behave and the gas configuration for each transaction
+    - a wallet, which can be either created or recovered from an existing mnemonic.
+    - a network, defining the node to connect to
+    - optionally a configuration defining how to behave and the gas configuration
+        for each transaction
 
     Each method starting with `with_` will replace the existing Sdk object with a new version having the defined
     behavior.
+
+    Attributes:
+        priv_key
+        query
+        tx
+        network
+        tx_config
 
 
     Example ::
@@ -37,6 +46,11 @@ class Sdk:
             .with_network(network, network_insecure)
         )
     """
+
+    query: GrpcClient
+    network: Network
+    tx: BaseTxClient
+    tx_config: TxConfig
 
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
         """Unsupported, please use from_mnemonic to initialize."""

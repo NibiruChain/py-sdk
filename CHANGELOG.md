@@ -3,9 +3,40 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [Unreleased](https://github.com/NibiruChain/py-sdk/compare/v0.3.0...HEAD)
 
-- feat(proto): use external proto pkg `nibiru_proto` for versioned types [#81](https://github.com/NibiruChain/py-sdk/pull/81)
+- ...
+
+## [v0.3.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.3.0) 2022-08-25
+
+### API Breaking Changes
+
+- [[#111]](https://github.com/NibiruChain/nibiru-py/pull/111) case str to float safely in the vpool module's all pools query.
+
+## [v0.2.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.2.0) [2022-08-24](https://github.com/NibiruChain/py-sdk/pull/109)
+
+### API Breaking Changes
+
+- [[#109]](https://github.com/NibiruChain/nibiru-py/pull/109) Update nibiru-proto dependency for v0.14.0 binary.
+- [[#108]](https://github.com/NibiruChain/py-sdk/pull/108) Improve query error handling
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) hotfix/test(query_clients): Test vpool.query.all_pools fn. Account for deserialize edge case #102.
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) feat: Split the design of txs between message and execution.
+
+### Improvements
+
+- [[#104]](https://github.com/NibiruChain/py-sdk/pull/104) docs: Update README.md
+- [[#97]](https://github.com/NibiruChain/py-sdk/pull/97) Remove legacy run-examples.sh
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) refactor(ci-cd): Update linter workflow. Cache poetry installation.
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) test: Add back utils_test file
+
+## [v0.1.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.1.0)  2022-08-22
+
+- [[#81]](https://github.com/NibiruChain/py-sdk/pull/81) feat(proto): use external proto pkg `nibiru_proto` for versioned types
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) fix(query_clients): account for missing fields on the pb_msg in deserialize
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) test(vpool): test_query_vpool_base_asset_price
+- [[#98]](https://github.com/NibiruChain/py-sdk/pull/98) chore: Remove protogen script as we're pulling from `nibiru-proto` now
+- [[#100]](https://github.com/NibiruChain/py-sdk/pull/100) chore: Automate publishing with ci
+- [[#92]](https://github.com/NibiruChain/py-sdk/pull/92) refactor: Split the design of tx between message and execution
 
 ## v0.0.17 - 2022-08-16
 

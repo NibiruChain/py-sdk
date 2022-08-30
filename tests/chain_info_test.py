@@ -33,12 +33,3 @@ def test_query_perp_params(val_node: Sdk):
         "twapLookbackWindow",
     ]
     assert all([(param_name in params) for param_name in perp_param_names])
-
-
-def test_query_vpool_reserve_assets(val_node: Sdk):
-    expected_pairs: List[str] = ["ubtc:unusd", "ueth:unusd"]
-    for pair in expected_pairs:
-        query_resp: dict = val_node.query.vpool.reserve_assets(pair)
-        assert isinstance(query_resp, dict)
-        assert query_resp["base_asset_reserve"] > 0
-        assert query_resp["quote_asset_reserve"] > 0

@@ -346,3 +346,28 @@ E    2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pur
 E
 E   More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
 ```
+
+## Usage instructions for publishing.
+
+You specify updates to publish using the commit (or PR) title with `bump-[version-keyword]`.
+For the `poetry version` command, ysing any bump rule with a valid semver string will change the version inside `pyproject.toml`. For example, 
+
+```
+poetry version patch # moves from x.y.14 to x.y.15
+poetry version minor # moves from x.5.z to x.6.0
+poetry version major # moves from 3.y.z to 4.0.0
+```
+The list of bump rules includes:
+patch, minor, major, prepatch, preminor, premajor, prerelease. 
+
+So the list of available keywords you an put in a PR includes 
+- `bump-patch`:
+- `bump-patch`: 0.0.0 → 0.0.1
+- `bump-minor`: 0.0.* → 0.1.0
+- `bump-major`: 0.*.* → 1.0.0
+- `bump-prepatch`: 0.0.0 → 0.0.1-alpha0
+- `bump-prerelease`: equivalent to `bump-prepatch`
+- `bump-preminor`: 0.0.* → 0.1.0-alpha0
+- `bump-premajor`: 0.*.* → 1.0.0-alpha0
+
+These guidelines are in the release.yml for future reference.

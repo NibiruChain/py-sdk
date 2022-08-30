@@ -167,8 +167,8 @@ def to_sdk_int(i: float) -> str:
     return str(int(i))
 
 
-def from_sdk_int(int_str: str) -> float:
-    return float(int_str)
+def from_sdk_int(int_str: str) -> int:
+    return int(int_str)
 
 
 def toPbTimestamp(dt: datetime):

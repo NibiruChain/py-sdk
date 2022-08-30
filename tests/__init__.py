@@ -107,8 +107,8 @@ def element_counts_are_equal(
     times, without regard to order.
 
     Args:
-        first (Iterable[Any]): _description_
-        second (Iterable[Any]): _description_
+        first (Iterable[Any])
+        second (Iterable[Any])
 
     Returns:
         Optional[bool]: "passed" status. If this is True, first and second share

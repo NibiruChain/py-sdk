@@ -1,13 +1,29 @@
 [tool.poetry]
 name = "nibiru"
-version = "0.0.17"
+version = "0.3.1"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <dev@nibiru.fi>"]
 license = "MIT"
+maintainers = [
+  "NibiruHeisenberg <dev@nibiru.fi>",
+  "matthiasmat <dev@nibiru.fi>",
+  "onikonychev <dev@nibiru.fi>",
+  "Unique-Divine <dev@nibiru.fi>"
+]
+readme = "README.md" # similar to long_description in setuptools
+repository = "https://github.com/NibiruChain/sdk-py"
+keywords = ["nibiru", "blockchain", "sdk", "python", "cosmos"]
+classifiers = [
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Intended Audience :: Developers"
+]
+packages = [
+    { include = "nibiru" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-grpcio = "^1.48.0"
+grpcio = "^1.47.0"
 asyncio = "^3.4.3"
 bech32 = "^1.2.0"
 python-dotenv = "^0.20.0"
@@ -23,7 +39,7 @@ coincurve = "^17.0.0"
 aiocron = "^1.8"
 pytest = "^7.1.2"
 pre-commit = "^2.20.0"
-nibiru-proto = "^0.13.2"
+nibiru-proto = "^0.14.1"
 shutup = "^0.2.0"
 
 [tool.poetry.dev-dependencies]

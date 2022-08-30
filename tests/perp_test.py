@@ -3,9 +3,10 @@ import pytest
 
 import nibiru
 import nibiru.msg
+import tests
 from nibiru import Coin, common
 from nibiru.exceptions import QueryError
-from tests import dict_keys_must_match, transaction_must_succeed
+from tests import LOGGER, dict_keys_must_match, transaction_must_succeed
 
 PRECISION = 6
 
@@ -17,7 +18,6 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     pair = "ubtc:unusd"
 
     # Funding agent
-
     val_node.tx.execute_msgs(
         nibiru.msg.MsgSend(
             val_node.address, agent.address, [Coin(10000, "unibi"), Coin(100, "unusd")]
@@ -29,7 +29,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
 
     # Transaction open_position must succeed
-    tx_output = agent.tx.execute_msgs(
+    tx_output: dict = agent.tx.execute_msgs(
         nibiru.msg.MsgOpenPosition(
             sender=agent.address,
             token_pair=pair,
@@ -39,6 +39,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
             base_asset_amount_limit=0,
         )
     )
+    LOGGER.info(f"nibid tx perp open-position: {tests.format_response(tx_output)}")
     transaction_must_succeed(tx_output)
 
     # Trader position must be a dict with specific keys
@@ -56,6 +57,9 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
             "unrealized_pnl",
         ],
     )
+    LOGGER.info(
+        f"nibid query perp trader-position: \n{tests.format_response(position_res)}"
+    )
     # Margin ratio must be ~10%
     assert position_res["margin_ratio_mark"] == pytest.approx(0.1, PRECISION)
 
@@ -72,6 +76,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
             margin=Coin(10, "unusd"),
         )
     )
+    LOGGER.info(f"nibid tx perp add-margin: \n{tests.format_response(tx_output)}")
     transaction_must_succeed(tx_output)
 
     # Margin must increase. 10 + 10 = 20
@@ -88,6 +93,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
             margin=common.Coin(5, "unusd"),
         )
     )
+    LOGGER.info(f"nibid tx perp remove-margin: \n{tests.format_response(tx_output)}")
     transaction_must_succeed(tx_output)
 
     # Margin must decrease. 20 - 5 = 15
@@ -100,6 +106,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     tx_output = agent.tx.execute_msgs(
         nibiru.msg.MsgClosePosition(sender=agent.address, token_pair=pair)
     )
+    LOGGER.info(f"nibid tx perp close-position: \n{tests.format_response(tx_output)}")
     transaction_must_succeed(tx_output)
 
     # Exception must be raised when querying closed position

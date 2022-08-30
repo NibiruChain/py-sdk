@@ -1,6 +1,7 @@
 """Tests package for the Nibiru Python SDK"""
 import collections
 import logging
+import pprint
 import sys
 from typing import Any, Iterable, Optional, Union
 
@@ -57,6 +58,27 @@ def init_test_logger() -> logging.Logger:
 
 LOGGER: logging.Logger = init_test_logger()
 """Simple logger to use throughout the test suite."""
+
+
+def format_response(resp: Union[dict, list, str]) -> str:
+    """Pretty formats a query or transaction response
+
+    Args:
+        resp (Union[dict, list, str]): A query or transaction response.
+
+    Raises:
+        TypeError: If 'resp' is not a dict or list.
+
+    Returns:
+        str: pretty version of the response
+    """
+    if not isinstance(resp, (list, dict, str)):
+        raise TypeError(f"'resp' has invalid type {type(resp)}")
+
+    if isinstance(resp, dict) and "logs" in resp:
+        return pprint.pformat(resp.get("logs"), indent=3)
+    else:
+        return pprint.pformat(resp, indent=3)
 
 
 def dict_keys_must_match(dict_: dict, keys: list[str]):

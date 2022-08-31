@@ -238,6 +238,14 @@ toolz = ">=0.8.0"
 cython = ["cython"]
 
 [[package]]
+name = "deepmerge"
+version = "1.0.1"
+description = "a toolset to deeply merge python dictionaries."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
@@ -823,7 +831,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "9de97a705b2b8b01d03d1492f167d66cd378da3357f01fa832a8d0a0722a7119"
+content-hash = "0dd53b6f3c5fefed5d63cdbeab5517580a776007da9b9b04b66dc5ff80f04a4a"
 
 [metadata.files]
 aiocron = [
@@ -1177,6 +1185,10 @@ cytoolz = [
     {file = "cytoolz-0.12.0-pp39-pypy39_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f909760f89a54d860cf960b4cd828f9f6301fb104cd0de5b15b16822c9c4828b"},
     {file = "cytoolz-0.12.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:a8e69c9f3a32e0f9331cf6707a0f159c6dec0ff2a9f41507f6b2d06cd423f0d0"},
     {file = "cytoolz-0.12.0.tar.gz", hash = "sha256:c105b05f85e03fbcd60244375968e62e44fe798c15a3531c922d531018d22412"},
+]
+deepmerge = [
+    {file = "deepmerge-1.0.1-py3-none-any.whl", hash = "sha256:f851fff957697cb8f4580b465acf5c2d35841695306ff0abb9cb9c273ad76112"},
+    {file = "deepmerge-1.0.1.tar.gz", hash = "sha256:4b44779ed3d2fb791bb181fc2683423496fea428abb7af37feb23286de7f0a1a"},
 ]
 distlib = [
     {file = "distlib-0.3.6-py2.py3-none-any.whl", hash = "sha256:f35c4b692542ca110de7ef0bea44d73981caeb34ca0b9b6b2e6d7790dda8f80e"},

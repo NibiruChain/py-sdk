@@ -17,6 +17,7 @@ class Network:
     chain_id: str
     fee_denom: str
     env: str
+    websocket_endpoint: str = None
 
     def __post_init__(self):
         """
@@ -55,6 +56,7 @@ class Network:
         return cls(
             lcd_endpoint=f'http://{chain_config["HOST"]}:{chain_config["LCD_PORT"]}',
             grpc_endpoint=f'{chain_config["HOST"]}:{chain_config["GRPC_PORT"]}',
+            websocket_endpoint=os.getenv("WEBSOCKET_ENDPOINT"),
             chain_id=chain_config["CHAIN_ID"],
             fee_denom='unibi',
             env="devnet",

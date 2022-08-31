@@ -1,10 +1,13 @@
 from datetime import datetime
-from typing import Any, Callable, Union
+from functools import reduce
+from typing import Any, Callable, Dict, Iterable, List, Union
 
+from deepmerge import Merger
 from google.protobuf.timestamp_pb2 import Timestamp
 
 # number of decimal places
 PRECISION = 18
+MERGER = Merger([(list, "override"), (dict, "merge")], ["override"], ["override"])
 
 
 # reimplementation of cosmos-sdk/types/decimal.go
@@ -175,3 +178,73 @@ def toPbTimestamp(dt: datetime):
     ts = Timestamp()
     ts.FromDatetime(dt)
     return ts
+
+
+def merge_list(list_of_dict: Iterable[Dict]) -> Dict:
+    """
+    Merge a list of dictionnary together.
+
+    ```
+    >>> d1 = dict(x=0, y=dict(a=0, b=1), z=dict(x=1))
+    >>> d2 = dict(y=dict(c=2), z=dict(y=1))
+    >>> merge_list(d1, d2)
+
+    {
+        "x": 0,
+        "y": {"a": 0, "b": 1, "c": 2},
+        "z": {
+            "x": 1,
+            "y": 1,
+        },
+    }
+    ```
+
+    Args:
+        list_of_dict (Iterable[Dict]): The list of dictionaries to merge
+
+    Returns:
+        Dict: Dictionaries merged together.
+    """
+
+    return reduce(
+        lambda x, y: MERGER.merge(x, y),
+        list_of_dict,
+    )
+
+
+def transform_java_dict_to_list(events: Dict) -> List[Dict]:
+    """
+    Transfrom a java type dictionary to a python dictionary.
+
+    For example:
+
+        {
+            'nibiru.vpool.v1.SwapQuoteForBaseEvent.pair': ['ubtc:unusd'],
+            'tx.fee': ['170unibi'],
+        }
+
+    becomes:
+
+        [
+            {'nibiru': {'vpool': {'v1': {'MarkPriceChanged': {'pair': 'ubtc:unusd'}}}}},
+            {'tx': {'fee': '170unibi'}},
+        ]
+
+    Args:
+        events (Dict): Events coming from nibiru
+
+    Returns:
+        List[Dict]: List of nested dictionaries
+    """
+    return [
+        reduce(
+            lambda x, y: {y: x},
+            [
+                [value.strip('"') for value in payload]
+                if len(payload) > 1
+                else payload[0].strip('"')  # single element list is starred
+            ]
+            + event.split(".")[::-1],
+        )
+        for event, payload in events.items()
+    ]

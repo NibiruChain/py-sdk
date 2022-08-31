@@ -41,6 +41,7 @@ pytest = "^7.1.2"
 pre-commit = "^2.20.0"
 nibiru-proto = "^0.14.1"
 shutup = "^0.2.0"
+websocket-client = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

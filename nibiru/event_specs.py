@@ -18,6 +18,9 @@ class Events(Enum):
     SwapQuoteForBaseEvent = "nibiru.vpool.v1.SwapQuoteForBaseEvent"
     MarkPriceChanged = "nibiru.vpool.v1.MarkPriceChanged"
 
+    # Bank
+    Transfer = "transfer"
+
 
 @dataclass
 class EventCaptured:

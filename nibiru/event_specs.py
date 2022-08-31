@@ -7,8 +7,16 @@ class Events(Enum):
     The events enum type shows the type of events available to parse from the nibiruwebsocket object.
     """
 
-    MarkPriceChanged = "nibiru.vpool.v1.MarkPriceChanged"
+    # Perp events
     PositionChangedEvent = "nibiru.perp.v1.PositionChangedEvent"
+    PositionLiquidatedEvent = "nibiru.perp.v1.PositionLiquidatedEvent"
+    FundingRateChangedEvent = "nibiru.perp.v1.FundingRateChangedEvent"
+    PositionSettledEvent = "nibiru.perp.v1.PositionSettledEvent"
+
+    # Vpool events
+    ReserveSnapshotSavedEvent = "nibiru.vpool.v1.ReserveSnapshotSavedEvent"
+    SwapQuoteForBaseEvent = "nibiru.vpool.v1.SwapQuoteForBaseEvent"
+    MarkPriceChanged = "nibiru.vpool.v1.MarkPriceChanged"
 
 
 @dataclass

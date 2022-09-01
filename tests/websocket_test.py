@@ -5,7 +5,7 @@ import nibiru
 import nibiru.msg
 from nibiru import Network, common
 from nibiru.event_specs import EventCaptured
-from nibiru.websocket import Events, NibiruWebsocket
+from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER, element_counts_are_equal
 
 
@@ -18,8 +18,8 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     nibiru_websocket = NibiruWebsocket(
         network,
         [
-            Events.MarkPriceChanged,
-            Events.PositionChangedEvent,
+            EventType.MarkPriceChanged,
+            EventType.PositionChangedEvent,
         ],
     )
     nibiru_websocket.start()
@@ -52,6 +52,6 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
         events.append(event)
 
     element_counts_are_equal(
-        [Events.MarkPriceChanged.value, Events.PositionChangedEvent.value],
+        [EventType.MarkPriceChanged.value, EventType.PositionChangedEvent.value],
         [event.event_type for event in events],
     )

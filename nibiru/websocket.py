@@ -7,7 +7,7 @@ from typing import List
 from websocket import WebSocketApp
 
 from nibiru import Network
-from nibiru.event_specs import EventCaptured, Events
+from nibiru.event_specs import EventCaptured, EventType
 
 ERROR_TIMEOUT_SLEEP = 3
 
@@ -17,7 +17,9 @@ class NibiruWebsocket:
     captured_events_type: List[List[str]]
 
     def __init__(
-        self, network: Network, captured_events_type: List[Events] = [], verbose=False
+        self,
+        network: Network,
+        captured_events_type: List[EventType] = [],
     ):
         """
         The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru

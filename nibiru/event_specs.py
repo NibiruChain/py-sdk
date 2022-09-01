@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class Events(Enum):
+class EventType(Enum):
     """
     The events enum type shows the type of events available to parse from the nibiruwebsocket object.
     """
@@ -24,5 +24,5 @@ class Events(Enum):
 
 @dataclass
 class EventCaptured:
-    event_type: Events
+    event_type: EventType
     payload: dict

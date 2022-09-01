@@ -1,6 +1,4 @@
-import functools
 import json
-import operator
 import threading
 import time
 from multiprocessing import Queue
@@ -8,7 +6,6 @@ from typing import List
 
 from websocket import WebSocketApp
 
-import nibiru.utils
 from nibiru import Network
 from nibiru.event_specs import EventCaptured, Events
 
@@ -28,9 +25,10 @@ class NibiruWebsocket:
         """
 
         self.websocket_url = network.websocket_endpoint
-        self.captured_events_type = [
-            captured_event.value.split(".") for captured_event in captured_events_type
-        ]
+        self.captured_events_type: dict = {
+            captured_event.value: captured_event
+            for captured_event in captured_events_type
+        }
         self.queue = Queue()
 
     def start(self):
@@ -69,6 +67,7 @@ class NibiruWebsocket:
             _ (WebSocketApp): No idea what this is
             message (str): The message in a utf-8 data received from the server
         """
+        message_time = time.time_ns()
         log = json.loads(message).get("result")
         if log is None:
             return
@@ -79,25 +78,18 @@ class NibiruWebsocket:
 
         block_height = log["data"]["value"]["TxResult"]["height"]
 
-        events = nibiru.utils.merge_list(
-            nibiru.utils.transform_java_dict_to_list(events)
-        )
+        events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
 
-        for event_type in self.captured_events_type:
-            try:
-                event_payload = functools.reduce(operator.getitem, event_type, events)
-            except KeyError:
-                pass
-            else:  # if no KeyError
+        for event in events["events"]:
+            if event["type"] in self.captured_events_type:
+                event_payload = {
+                    attribute["key"]: attribute["value"].strip('"')
+                    for attribute in event["attributes"]
+                }
                 event_payload["block_height"] = block_height
-                event_payload["timestamp"] = time.time_ns()
+                event_payload["timestamp"] = message_time
 
-                self.queue.put(
-                    EventCaptured(
-                        event_type=".".join(event_type),
-                        payload=event_payload,
-                    )
-                )
+                self.queue.put(EventCaptured(event["type"], event_payload))
 
     def _subscribe(self):
         self._ws.send(

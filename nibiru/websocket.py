@@ -8,6 +8,7 @@ from websocket import WebSocketApp
 
 from nibiru import Network
 from nibiru.event_specs import EventCaptured, EventType
+from nibiru.utils import init_logger
 
 ERROR_TIMEOUT_SLEEP = 3
 
@@ -32,6 +33,7 @@ class NibiruWebsocket:
             for captured_event in captured_events_type
         }
         self.queue = Queue()
+        self.logger = init_logger("ws-logger")
 
     def start(self):
         """
@@ -51,11 +53,11 @@ class NibiruWebsocket:
         ).start()
 
     def _on_open(self, _: WebSocketApp):
-        print("WebSocket starting")
+        self.logger.info("WebSocket starting")
         self._subscribe()
 
     def _on_error(self, ws: WebSocketApp, error: Exception):
-        print(f"Closing websocket, error {error}")
+        self.logger.error(f"Closing websocket, error {error}")
         ws.close()
         time.sleep(ERROR_TIMEOUT_SLEEP)
         ws.run_forever()
@@ -69,7 +71,6 @@ class NibiruWebsocket:
             _ (WebSocketApp): No idea what this is
             message (str): The message in a utf-8 data received from the server
         """
-        message_time = time.time_ns()
         log = json.loads(message).get("result")
         if log is None:
             return
@@ -78,7 +79,8 @@ class NibiruWebsocket:
         if events is None:
             return
 
-        block_height = log["data"]["value"]["TxResult"]["height"]
+        block_height = int(log["data"]["value"]["TxResult"]["height"])
+        tx_hash = events["tx.hash"][0]
 
         events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
 
@@ -89,7 +91,7 @@ class NibiruWebsocket:
                     for attribute in event["attributes"]
                 }
                 event_payload["block_height"] = block_height
-                event_payload["timestamp"] = message_time
+                event_payload["tx_hash"] = tx_hash
 
                 self.queue.put(EventCaptured(event["type"], event_payload))
 

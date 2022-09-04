@@ -49,8 +49,3 @@ def test_send_single_msg(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         "nibid tx bank send - single msgs:\n" + tests.format_response(tx_output)
     )
     tests.transaction_must_succeed(tx_output)
-
-
-def test_send_single_msg(val_node: nibiru.Sdk, agent: nibiru.Sdk):
-    val_node.query.stubCosmosTendermint.GetBlockByHeight()
-    ...

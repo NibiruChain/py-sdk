@@ -66,6 +66,12 @@ class GrpcClient:
         block = self.get_latest_block()
         self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
 
+    def get_block_by_height(
+        self, height: int
+    ) -> tendermint_query.GetBlockByHeightResponse:
+        req = tendermint_query.GetBlockByHeightRequest(height=height)
+        return self.stubCosmosTendermint.GetBlockByHeight(req)
+
     # default client methods
     def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:
         req = tendermint_query.GetLatestBlockRequest()

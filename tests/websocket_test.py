@@ -6,7 +6,7 @@ import nibiru.msg
 from nibiru import Network, common
 from nibiru.event_specs import EventCaptured
 from nibiru.websocket import EventType, NibiruWebsocket
-from tests import LOGGER, element_counts_are_equal
+from tests import LOGGER
 
 
 def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
@@ -51,7 +51,12 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
             break
         events.append(event)
 
-    element_counts_are_equal(
-        [EventType.MarkPriceChanged.value, EventType.PositionChangedEvent.value],
-        [event.event_type for event in events],
+    # Asserting for truth because test are running in parallel in the same chain and might result in
+    # duplication of markpricechanged events.
+    assert all(
+        event in [event.event_type for event in events]
+        for event in [
+            EventType.MarkPriceChanged.value,
+            EventType.PositionChangedEvent.value,
+        ]
     )

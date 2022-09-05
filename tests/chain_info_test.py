@@ -58,5 +58,5 @@ def test_query(val_node: Sdk):
     """
     Open a position and ensure output is correct
     """
-    assert isinstance(val_node.query.get_version(), int)
+    assert isinstance(val_node.query.get_latest_block_height(), int)
     assert isinstance(val_node.query.get_version(), str)

@@ -37,6 +37,7 @@ def pytest_configure(config):
             raise ValueError(f"Environment variable {var} is missing!")
 
     pytest.VALIDATOR_MNEMONIC = os.getenv("VALIDATOR_MNEMONIC")
+    pytest.WEBSOCKET_ENDPOINT = os.getenv("WEBSOCKET_ENDPOINT")
     pytest.ORACLE_MNEMONIC = os.getenv("ORACLE_MNEMONIC")
     pytest.NETWORK_INSECURE = os.getenv("NETWORK_INSECURE") != "false"
 

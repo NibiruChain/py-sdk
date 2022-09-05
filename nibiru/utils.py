@@ -1,3 +1,5 @@
+import logging
+import sys
 from datetime import datetime
 from typing import Any, Callable, Union
 
@@ -175,3 +177,68 @@ def toPbTimestamp(dt: datetime):
     ts = Timestamp()
     ts.FromDatetime(dt)
     return ts
+
+
+class ColoredFormatter(logging.Formatter):
+
+    fmt = "%(asctime)s|%(levelname)s|%(funcName)s| %(message)s"
+
+    white = "\x1b[97;20m"
+    grey = "\x1b[38;20m"
+    green = "\x1b[32;20m"
+    cyan = "\x1b[36;20m"
+    yellow = "\x1b[33;20m"
+    red = "\x1b[31;20m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+
+    FORMATS = {
+        logging.DEBUG: fmt.format(green, reset),
+        logging.INFO: fmt.format(cyan, reset),
+        logging.WARNING: fmt.format(yellow, reset),
+        logging.ERROR: fmt.format(red, reset),
+        logging.CRITICAL: fmt.format(bold_red, reset),
+    }
+
+    def format(self, record: logging.LogRecord):
+        """Formats a record for the logging handler.
+
+        Args:
+            record (logging.LogRecord): Represents an instance of an event being
+                logged.
+        """
+        log_format = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_format, datefmt="%H:%M:%S")
+        return formatter.format(record=record)
+
+
+def init_logger(name: str) -> logging.Logger:
+    """
+    Simple logger to use throughout the test suite.
+
+    Examples:
+    ```python
+    from nibiru.utils import init_logger
+    LOGGER = init_logger("test-logger")
+    LOGGER.info("successfully executed tx staking command")
+    LOGGER.debug("debugging error message")
+    ```
+
+    Log levels include: [debug, info, warning, error, critical]
+
+    Args:
+        name (str): Name of the logger
+
+    Returns:
+        logging.Logger: The logger object
+    """
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+
+    # Logs to stdout so we can at least see logs in GHA.
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+
+    handler.setFormatter(fmt=ColoredFormatter())
+    logger.addHandler(handler)
+    return logger

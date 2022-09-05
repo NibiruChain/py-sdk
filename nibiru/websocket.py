@@ -1,7 +1,6 @@
 import json
 import threading
 import time
-import traceback
 from multiprocessing import Queue
 from typing import List
 
@@ -59,7 +58,7 @@ class NibiruWebsocket:
 
     def _on_error(self, ws: WebSocketApp, error: Exception):
         self.logger.error(f"Closing websocket, error {error}")
-        self.logger.error(traceback.print_exc())
+        self.logger.exception(error)
         ws.close()
         time.sleep(ERROR_TIMEOUT_SLEEP)
         ws.run_forever()

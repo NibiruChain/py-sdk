@@ -61,13 +61,10 @@ class GrpcClient:
         self.perp = nibiru.query_clients.PerpQueryClient(self.chain_channel)
         self.vpool = nibiru.query_clients.VpoolQueryClient(self.chain_channel)
 
-        # RPC query services
-        self.chain = nibiru.query_clients.ChainQueryClient(network.rpc_endpoint)
-
         # Assert that we use the correct version of the chain
         nibiru_proto_version = importlib_metadata.version("nibiru_proto")
 
-        assert nibiru_proto_version.split(".") >= self.chain.version()[1:].split(".")
+        assert nibiru_proto_version.split(".") >= self.get_version()[1:].split(".")
 
     def close_chain_channel(self):
         self.chain_channel.close()
@@ -86,6 +83,18 @@ class GrpcClient:
     def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:
         req = tendermint_query.GetLatestBlockRequest()
         return self.stubCosmosTendermint.GetLatestBlock(req)
+
+    def get_version(self) -> tendermint_query.GetLatestBlockResponse:
+        req = tendermint_query.GetNodeInfoRequest()
+        version = self.stubCosmosTendermint.GetNodeInfo(req).application_version.version
+
+        if version[0] != "v":
+            version = "v" + version
+
+        return version
+
+    def get_latest_block_height(self) -> int:
+        return self.get_latest_block().block.header.height
 
     def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
         try:

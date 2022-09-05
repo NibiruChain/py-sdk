@@ -216,7 +216,6 @@ jobs:
       HOST: ${{ secrets.HOST }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       GRPC_PORT: ${{ secrets.GRPC_PORT }}
-      RPC_PORT: ${{ secrets.RPC_PORT }}
       LCD_PORT: ${{ secrets.LCD_PORT }}
 ```
 
@@ -228,7 +227,6 @@ HOST="..."
 VALIDATOR_MNEMONIC="..."
 ORACLE_MNEMONIC="..."
 GRPC_PORT="..."
-RPC_PORT="..."
 LCD_PORT="..."
 CHAIN_ID="..."
 NETWORK_INSECURE=true

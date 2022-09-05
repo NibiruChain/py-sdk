@@ -27,7 +27,6 @@ def pytest_configure(config):
     expected_env_vars = (
         "HOST",
         "GRPC_PORT",
-        "RPC_PORT",
         "LCD_PORT",
         "CHAIN_ID",
         "VALIDATOR_MNEMONIC",

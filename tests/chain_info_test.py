@@ -52,3 +52,11 @@ def test_block_getters(agent: Sdk):
         assert all(
             [hasattr(block_resp.block, attr) for attr in block_fields]
         ), "missing attributes on the 'block' field"
+
+
+def test_query(val_node: Sdk):
+    """
+    Open a position and ensure output is correct
+    """
+    assert isinstance(val_node.query.get_version(), int)
+    assert isinstance(val_node.query.get_version(), str)

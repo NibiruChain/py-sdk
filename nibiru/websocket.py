@@ -28,6 +28,12 @@ class NibiruWebsocket:
         """
 
         self.websocket_url = network.websocket_endpoint
+        if self.websocket_url is None:
+            raise ValueError(
+                "No websocket endpoint provided. Construct the network object setting up the "
+                "`websocket_endpoint` endpoint"
+            )
+
         self.captured_events_type: dict = {
             captured_event.value: captured_event
             for captured_event in captured_events_type

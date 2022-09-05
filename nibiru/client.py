@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Union
+from typing import Generator, List, Optional, Tuple, Union
 
 import grpc
 from nibiru_proto.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
@@ -71,6 +71,12 @@ class GrpcClient:
     ) -> tendermint_query.GetBlockByHeightResponse:
         req = tendermint_query.GetBlockByHeightRequest(height=height)
         return self.stubCosmosTendermint.GetBlockByHeight(req)
+
+    def get_blocks_by_height(
+        self, start_height: int, end_height: int
+    ) -> Generator[tendermint_query.GetBlockByHeightResponse, None, None]:
+        for height in range(start_height, end_height):
+            yield self.get_block_by_height(height)
 
     # default client methods
     def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:

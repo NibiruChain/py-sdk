@@ -52,3 +52,20 @@ def test_block_getters(agent: Sdk):
         assert all(
             [hasattr(block_resp.block, attr) for attr in block_fields]
         ), "missing attributes on the 'block' field"
+
+
+def test_blocks_getters(agent: Sdk):
+    """Tests queries from the Tendemint gRPC channel
+    - GetBlocksByHeight
+    """
+
+    block_by_height_resp = agent.query.get_blocks_by_height(2, 5)
+    block_id_fields: List[str] = ["hash", "part_set_header"]
+    block_fields: List[str] = ["data", "evidence", "header", "last_commit"]
+    for block_resp in block_by_height_resp:
+        assert all(
+            [hasattr(block_resp.block_id, attr) for attr in block_id_fields]
+        ), "missing attributes on the 'block_id' field"
+        assert all(
+            [hasattr(block_resp.block, attr) for attr in block_fields]
+        ), "missing attributes on the 'block' field"

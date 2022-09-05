@@ -4,13 +4,13 @@ Getting Started
 Installation
 ------------
 
-Requires Python 3.7+
-``nibiru-py`` is available on `PYPI <https://pypi.python.org/pypi/nibiru-py/>`_.
+Requires Python 3.9+
+``nibiru`` is available on `PYPI <https://pypi.python.org/pypi/nibiru/>`_.
 Install with ``pip``:
 
 .. code:: bash
 
-    pip install nibiru-py
+    pip install nibiru
 
 
 Quick start

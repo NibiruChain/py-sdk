@@ -1,3 +1,4 @@
+import importlib.metadata as importlib_metadata
 from typing import List, Optional, Tuple, Union
 
 import grpc
@@ -42,6 +43,7 @@ class GrpcClient:
             if insecure
             else grpc.secure_channel(network.grpc_endpoint, credentials)
         )
+
         self.insecure = insecure
         self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(
             self.chain_channel
@@ -58,6 +60,14 @@ class GrpcClient:
         self.pricefeed = nibiru.query_clients.PricefeedQueryClient(self.chain_channel)
         self.perp = nibiru.query_clients.PerpQueryClient(self.chain_channel)
         self.vpool = nibiru.query_clients.VpoolQueryClient(self.chain_channel)
+
+        # RPC query services
+        self.chain = nibiru.query_clients.ChainQueryClient(network.rpc_endpoint)
+
+        # Assert that we use the correct version of the chain
+        nibiru_proto_version = importlib_metadata.version("nibiru_proto")
+
+        assert nibiru_proto_version.split(".") >= self.chain.version()[1:].split(".")
 
     def close_chain_channel(self):
         self.chain_channel.close()

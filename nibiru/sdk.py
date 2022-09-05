@@ -156,5 +156,4 @@ class Sdk:
 
     def _with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
         self.priv_key = priv_key
-        self.with_network(Network.local(), True)
         return self

@@ -14,6 +14,7 @@ from typing import Dict, Optional
 class Network:
     lcd_endpoint: str
     grpc_endpoint: str
+    rpc_endpoint: str
     chain_id: str
     fee_denom: str
     env: str
@@ -40,6 +41,7 @@ class Network:
         chain_config: Dict[str, Optional[str]] = {
             "HOST": os.getenv("HOST"),
             "GRPC_PORT": os.getenv("GRPC_PORT"),
+            "RPC_PORT": os.getenv("RPC_PORT"),
             "LCD_PORT": os.getenv("LCD_PORT"),
             "CHAIN_ID": os.getenv("CHAIN_ID"),
         }
@@ -53,9 +55,11 @@ class Network:
                         ]
                     )
                 )
+
         return cls(
             lcd_endpoint=f'http://{chain_config["HOST"]}:{chain_config["LCD_PORT"]}',
             grpc_endpoint=f'{chain_config["HOST"]}:{chain_config["GRPC_PORT"]}',
+            rpc_endpoint=f'http://{chain_config["HOST"]}:{chain_config["RPC_PORT"]}',
             websocket_endpoint=os.getenv("WEBSOCKET_ENDPOINT"),
             chain_id=chain_config["CHAIN_ID"],
             fee_denom='unibi',
@@ -74,6 +78,7 @@ class Network:
         return cls(
             lcd_endpoint='https://lcd.testnet-3.nibiru.fi',
             grpc_endpoint='grpc.testnet-3.nibiru.fi',
+            rpc_endpoint='rpc.testnet-3.nibiru.fi',
             chain_id='nibiru-testnet-3',
             fee_denom='unibi',
             env='testnet',
@@ -99,6 +104,7 @@ class Network:
         return cls(
             lcd_endpoint='http://localhost:1317',
             grpc_endpoint='localhost:9090',
+            rpc_endpoint='http://localhost:26657',
             chain_id='nibiru-localnet-0',
             fee_denom='unibi',
             env='local',

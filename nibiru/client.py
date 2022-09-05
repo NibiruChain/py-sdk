@@ -89,7 +89,7 @@ class GrpcClient:
         version = self.stubCosmosTendermint.GetNodeInfo(req).application_version.version
 
         if version[0] != "v":
-            version = "v" + version
+            version = "v" + str(version)
 
         return version
 

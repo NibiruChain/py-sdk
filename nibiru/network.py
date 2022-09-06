@@ -53,6 +53,7 @@ class Network:
                         ]
                     )
                 )
+
         return cls(
             lcd_endpoint=f'http://{chain_config["HOST"]}:{chain_config["LCD_PORT"]}',
             grpc_endpoint=f'{chain_config["HOST"]}:{chain_config["GRPC_PORT"]}',

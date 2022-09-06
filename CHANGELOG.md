@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - [[#117]](https://github.com/NibiruChain/py-sdk/pull/117) https://github.com/NibiruChain/py-sdk/pull/117
 - [[#122]](https://github.com/NibiruChain/py-sdk/pull/122) feat: get block by height  enhancement
 - [[#126]](https://github.com/NibiruChain/py-sdk/pull/126) feat (rpc): add more chain info queries
+- [[#127]](https://github.com/NibiruChain/py-sdk/pull/127) feat: add generator for blocks queries
 
 ## [v0.3.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.3.0) 2022-08-25
 

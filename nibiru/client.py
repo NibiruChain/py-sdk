@@ -73,10 +73,30 @@ class GrpcClient:
         return self.stubCosmosTendermint.GetBlockByHeight(req)
 
     def get_blocks_by_height(
-        self, start_height: int, end_height: int
+        self, start_height: int, end_height: int = None
     ) -> Generator[tendermint_query.GetBlockByHeightResponse, None, None]:
-        for height in range(start_height, end_height):
-            yield self.get_block_by_height(height)
+        """
+        Iterate through all the blocks in the chain and yield the output of the block one by one.
+        If no end_height is specified, iterate until the current latest block is reached.
+
+        Args:
+            start_height (int): The starting block height
+            end_height (int, optional): The last block height to query. Defaults to None.
+
+        Yields:
+            Generator[tendermint_query.GetBlockByHeightResponse, None, None]
+        """
+        if end_height is None:
+            height = start_height
+            while True:
+                try:
+                    yield self.get_block_by_height(height)
+                    height += 1
+                except:
+                    break
+        else:
+            for height in range(start_height, end_height):
+                yield self.get_block_by_height(height)
 
     # default client methods
     def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:

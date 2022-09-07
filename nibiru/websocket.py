@@ -34,8 +34,9 @@ class NibiruWebsocket:
                 "`websocket_endpoint` endpoint"
             )
 
-        self.captured_events_type: dict = {
-            captured_event.value: captured_event
+        # We use a dictionary for faster search
+        self.captured_events_type: dict[str, EventType] = {
+            captured_event.get_full_path(): captured_event
             for captured_event in captured_events_type
         }
         self.queue = Queue()
@@ -92,6 +93,7 @@ class NibiruWebsocket:
         events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
 
         for event in events["events"]:
+            # This below is faster since self.captured_events_type.keys() are hashed
             if event["type"] in self.captured_events_type:
                 event_payload = {
                     attribute["key"]: attribute["value"].strip('"')

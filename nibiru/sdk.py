@@ -92,19 +92,26 @@ class Sdk:
 
         return self
 
-    def with_network(self, network: Network, insecure=False) -> "Sdk":
+    def with_network(
+        self, network: Network, insecure=False, bypass_version_check: bool = False
+    ) -> "Sdk":
         """
         Change the network of the sdk to the specified network.
 
         Args:
             network (Network): A network object
             insecure (bool, optional): Wether the connection should be insecure or not. Defaults to False.
+            bypass_version_check (bool, optional): Wether to bypass the check for correct version of the chain/py-sdk
 
         Returns:
             Sdk: The updated sdk object
         """
         self.network = network
-        self._with_query_client(GrpcClient(self.network, insecure))
+        self._with_query_client(
+            GrpcClient(
+                self.network, insecure, bypass_version_check=bypass_version_check
+            )
+        )
         return self
 
     def with_config(self, config: TxConfig) -> "Sdk":

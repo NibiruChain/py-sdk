@@ -34,7 +34,7 @@ jobs:
       - name: Checkout nibiru
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GIT_TOKEN }}
+          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
           repository: NibiruChain/nibiru
           ref: ${{ env.version }}
 

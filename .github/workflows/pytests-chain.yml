@@ -26,7 +26,6 @@ jobs:
       LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
-      token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
     steps:
 
       # ----------------------------------------------

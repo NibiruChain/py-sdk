@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: NibiruChain/nibiru
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
 
       # ----------------------------------------------
       # Try to load a cached poetry binary

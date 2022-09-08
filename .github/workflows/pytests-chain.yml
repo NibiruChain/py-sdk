@@ -34,6 +34,7 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: NibiruChain/nibiru
+          token: ${{ secrets.my_pat }}
       # ----------------------------------------------
       # check-out repo and set-up python
       # ----------------------------------------------

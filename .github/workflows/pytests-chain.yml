@@ -26,17 +26,19 @@ jobs:
       LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
+      token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
     steps:
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy
       # ----------------------------------------------
-      - name: Check out my other private repo
-        uses: actions/checkout@master
+      - name: Checkout nibiru
+        uses: actions/checkout@v2
         with:
+          token: ${{ secrets.GIT_TOKEN }}
           repository: NibiruChain/nibiru
-          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
-          
+          ref: ${{ env.version }}
+
       # ----------------------------------------------
       # check-out repo and set-up python
       # ----------------------------------------------

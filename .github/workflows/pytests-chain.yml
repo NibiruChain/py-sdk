@@ -34,6 +34,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: NibiruChain/nibiru
+      - name: master
+        run: echo ${{ env.default_branch }}
       # ----------------------------------------------
       # check-out repo and set-up python
       # ----------------------------------------------

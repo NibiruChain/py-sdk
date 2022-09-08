@@ -21,8 +21,10 @@ from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_
 
 import nibiru.query_clients
 from nibiru.network import Network
+from nibiru.utils import init_logger
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
+GITHUB_COMMIT_HASH_LEN = 40
 
 
 class GrpcClient:
@@ -63,8 +65,28 @@ class GrpcClient:
 
         # Assert that we use the correct version of the chain
         nibiru_proto_version = importlib_metadata.version("nibiru_proto")
+        chain_nibiru_version = str(self.get_version())
 
-        assert nibiru_proto_version.split(".") >= self.get_version()[1:].split(".")
+        # If you run localnet from master, the version will be something like
+        # master-6a315bab3db46f5fa1158199acc166ed2d192c2f. Otherwise, it should be for example `v0.14.0`
+        if len(chain_nibiru_version) >= GITHUB_COMMIT_HASH_LEN:
+            logger = init_logger("client-logger")
+            logger.warning(
+                f"The chain is running a custom release from branch/commit {chain_nibiru_version}. "
+                "We bypass the compatibility assertion"
+            )
+            logger.warning(
+                f"The chain is running a custom release from branch/commit {chain_nibiru_version}"
+            )
+        else:
+            nibiru_proto_version = map(int, nibiru_proto_version.split("."))
+            chain_nibiru_version = map(int, chain_nibiru_version.split("."))
+
+            error_string = (
+                f"Python sdk runs with nibiru protobuf version {nibiru_proto_version}, but the remote chain "
+                f"is running with version {chain_nibiru_version}"
+            )
+            assert nibiru_proto_version >= chain_nibiru_version, error_string
 
     def close_chain_channel(self):
         self.chain_channel.close()

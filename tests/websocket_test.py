@@ -54,14 +54,17 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
                 to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
                 coins=nibiru.Coin(amount=10, denom="unibi"),
             ),
-            nibiru.msg.MsgPostPrice(
-                oracle=val_node.address,
-                token0="unibi",
-                token1="unusd",
-                price=10,
-                expiry=datetime.utcnow() + timedelta(hours=1),
-            ),
         ]
+    )
+
+    val_node.tx.execute_msgs(
+        nibiru.msg.MsgPostPrice(
+            oracle=val_node.address,
+            token0="unibi",
+            token1="unusd",
+            price=10,
+            expiry=datetime.utcnow() + timedelta(hours=1),
+        ),
     )
 
     LOGGER.info("Closing position")
@@ -74,7 +77,7 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
 
     # Give time for events to come
     LOGGER.info("Sent txs, waiting for websocket to pick it up")
-    time.sleep(1)
+    time.sleep(3)
 
     nibiru_websocket.queue.put(None)
     events: List[EventCaptured] = []

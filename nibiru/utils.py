@@ -1,7 +1,8 @@
+import json
 import logging
 import sys
 from datetime import datetime
-from typing import Any, Callable, Union
+from typing import Any, Callable, Dict, List, Union
 
 from google.protobuf.timestamp_pb2 import Timestamp
 
@@ -242,3 +243,63 @@ def init_logger(name: str) -> logging.Logger:
     handler.setFormatter(fmt=ColoredFormatter())
     logger.addHandler(handler)
     return logger
+
+
+def clean_nested_dict(dictionary: Union[List, Dict, str]) -> Dict:
+    """
+    Takes a nested dictionnary with some values being string json values and convert it into a proper nested
+    dictionary.
+
+    Eg ::
+
+        {
+            "transaction_fee": "{\"denom\":\"unusd\",\"amount\":\"0\"}",
+            "funding_payment": "0.000000000000000000",
+            "realized_pnl": "0.000000000000000000",
+            "bad_debt": "{\"denom\":\"unusd\",\"amount\":\"0\"}",
+            "trader_address": "nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl",
+            "margin": "{\"denom\":\"unusd\",\"amount\":\"10\"}",
+            "exchanged_position_size": "0.004999999999999500",
+            "tx_hash": "12E496C996E39820B0807857CB7C19674BDD12DC8D789647D68C50BBB8C7D9CF"
+        }
+
+    becomes ::
+
+        {
+            "transaction_fee": {
+                "denom": "unusd",
+                "amount": "0"
+            },
+            "funding_payment": "0.000000000000000000",
+            "realized_pnl": "0.000000000000000000",
+            "bad_debt": {
+                "denom": "unusd",
+                "amount": "0"
+            },
+            "trader_address": "nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl",
+            "margin": {
+                "denom": "unusd",
+                "amount": "10"
+            },
+            "exchanged_position_size": "0.004999999999999500",
+            "tx_hash": "12E496C996E39820B0807857CB7C19674BDD12DC8D789647D68C50BBB8C7D9CF"
+        }
+
+    Args:
+        dictionary (Union[List, Dict, str]): The dictionary to be converted.
+
+    Returns:
+        Dict: A converted dictionary.
+    """
+
+    if isinstance(dictionary, str):
+        dictionary = json.loads(dictionary)
+
+    for key, value in dictionary.items():
+        if isinstance(value, str):
+            if value[0] == "{" and value[-1] == "}":
+                dictionary[key] = clean_nested_dict(value)
+            else:
+                dictionary[key] = value
+
+    return dictionary

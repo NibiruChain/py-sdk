@@ -63,12 +63,19 @@ class GrpcClient:
         self.perp = nibiru.query_clients.PerpQueryClient(self.chain_channel)
         self.vpool = nibiru.query_clients.VpoolQueryClient(self.chain_channel)
 
-        # Assert that we use the correct version of the chain
+        self.assert_compatible_versions()
+
+    def assert_compatible_versions(self):
+        """
+        Assert that this version of the python sdk is compatible with the chain.
+        If you run the chain from a non tagged release, the version query will be returning something like
+        master-6a315bab3db46f5fa1158199acc166ed2d192c2f. Otherwise, it should be for example `v0.14.0`.
+
+        If the chain is running a custom non tagged release, you are free to use the python sdk at your own risk.
+        """
         nibiru_proto_version = importlib_metadata.version("nibiru_proto")
         chain_nibiru_version = str(self.get_version())
 
-        # If you run localnet from master, the version will be something like
-        # master-6a315bab3db46f5fa1158199acc166ed2d192c2f. Otherwise, it should be for example `v0.14.0`
         if len(chain_nibiru_version) >= GITHUB_COMMIT_HASH_LEN:
             logger = init_logger("client-logger")
             logger.warning(

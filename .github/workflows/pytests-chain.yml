@@ -1,10 +1,13 @@
 name: E2E 🐍 tests
 
 on:
-  pull_request:
-    branches: ["master"]
   push:
-    branches: ["master"]
+    branches: [ "kirill/tests-temp-exp" ]
+  pull_request:
+    branches: ["kirill/tests-temp-exp"]
+    paths:
+      - ".github/workflows/pytests-chain.yaml"
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}

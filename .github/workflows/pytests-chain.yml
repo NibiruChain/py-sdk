@@ -52,6 +52,8 @@ jobs:
           go-version: 1.18
           cache: true
 
+      - name: Run all unit tests.
+        run: make build
 
       # ----------------------------------------------
       # Install server
@@ -59,7 +61,7 @@ jobs:
       #- name: Install Server
       #  uses: actions/install-server@v1
      #   with:
-          run: make build
+          #run: make build
           #build: make install
           #start: make localnet
 

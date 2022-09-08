@@ -38,6 +38,20 @@ jobs:
           repository: NibiruChain/nibiru
           ref: ${{ env.version }}
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+          #command: npm run tests
+          #build: npm run build
+          #start: npm run start
+           # quote the url to be safe against YML parsing surprises
+          #wait-on: 'http://localhost'
+
 
       # ----------------------------------------------
       # check-out repo and set-up python

@@ -64,7 +64,13 @@ class GrpcClient:
         # Assert that we use the correct version of the chain
         nibiru_proto_version = importlib_metadata.version("nibiru_proto")
 
-        assert nibiru_proto_version.split(".") >= self.get_version()[1:].split(".")
+        print(nibiru_proto_version)
+        print(self.get_version()[1:].split("."))
+
+        expected_version = self.get_version()[1:]
+
+        assert nibiru_proto_version.split(".") >= self.get_version()[1:].split("."), \
+            "Expected version " + nibiru_proto_version + " but we got " + expected_version
 
     def close_chain_channel(self):
         self.chain_channel.close()

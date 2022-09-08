@@ -2,6 +2,7 @@
 import os
 from typing import Any, Dict, List, Union
 
+import pytest
 import requests
 
 from nibiru import Sdk
@@ -21,6 +22,26 @@ def test_genesis_block_ping():
 
 def test_get_chain_id(val_node: Sdk):
     assert val_node.network.chain_id == val_node.query.get_chain_id()
+
+
+def test_version_works(val_node: Sdk):
+    tests = [
+        {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},
+        {"should_fail": True, "versions": ["0.3.2", "0.3.4"]},
+        {"should_fail": True, "versions": ["0.3.2", "0.4.1"]},
+        {"should_fail": True, "versions": ["0.3.2", "1.0.0"]},
+        {
+            "should_fail": False,
+            "versions": ["0.3.2", "master-6a315bab3db46f5fa1158199acc166ed2d192c2f"],
+        },
+    ]
+
+    for test in tests:
+        if test["should_fail"]:
+            with pytest.raises(AssertionError, match="Version error"):
+                val_node.query.assert_compatible_versions(*test["versions"])
+        else:
+            val_node.query.assert_compatible_versions(*test["versions"])
 
 
 def test_query_perp_params(val_node: Sdk):

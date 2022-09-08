@@ -87,6 +87,10 @@ class GrpcClient:
 
         If the chain is running a custom non tagged release, you are free to use the python sdk at your own risk.
         """
+        if nibiru_proto_version[0] == "v":
+            nibiru_proto_version = nibiru_proto_version[1:]
+        if chain_nibiru_version[0] == "v":
+            chain_nibiru_version = chain_nibiru_version[1:]
 
         if len(chain_nibiru_version) >= GITHUB_COMMIT_HASH_LEN:
             logger = init_logger("client-logger")
@@ -98,12 +102,12 @@ class GrpcClient:
                 f"The chain is running a custom release from branch/commit {chain_nibiru_version}"
             )
         else:
-            nibiru_proto_version = map(int, nibiru_proto_version.split("."))
-            chain_nibiru_version = map(int, chain_nibiru_version.split("."))
+            nibiru_proto_version = tuple(map(int, nibiru_proto_version.split(".")))
+            chain_nibiru_version = tuple(map(int, chain_nibiru_version.split(".")))
 
             error_string = (
-                f"Python sdk runs with nibiru protobuf version {nibiru_proto_version}, but the remote chain "
-                f"is running with version {chain_nibiru_version}"
+                f"Version error, Python sdk runs with nibiru protobuf version {nibiru_proto_version}, but the "
+                f"remote chain is running with version {chain_nibiru_version}"
             )
             assert nibiru_proto_version >= chain_nibiru_version, error_string
 

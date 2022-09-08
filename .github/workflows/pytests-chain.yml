@@ -28,14 +28,6 @@ jobs:
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
     steps:
       # ----------------------------------------------
-      # check-out nibiru repo and deploy
-      # ----------------------------------------------
-      - name: Check out my other private repo
-        uses: actions/checkout@master
-        with:
-          repository: NibiruChain/nibiru
-          token: ${{ secrets.my_pat }}
-      # ----------------------------------------------
       # check-out repo and set-up python
       # ----------------------------------------------
       - name: Check out the repo
@@ -48,6 +40,14 @@ jobs:
 
       - name: Run python
         run: python --version && python -c "print('hello')"
+
+      # ----------------------------------------------
+      # check-out nibiru repo and deploy
+      # ----------------------------------------------
+      - name: Check out my other private repo
+        uses: actions/checkout@master
+        with:
+          repository: NibiruChain/nibiru
 
       # ----------------------------------------------
       # Try to load a cached poetry binary

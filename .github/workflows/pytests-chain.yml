@@ -59,9 +59,10 @@ jobs:
           go-version: 1.18
           run: |
             make build &&
-            make install &
+            make install &&
             sleep 10 &&
             make localnet &
+            sleep 30 &&
 
 #      - name: Run the build process with Docker
 #        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -77,19 +78,21 @@ jobs:
 #            make install
 
 
-     # - name: Set up Go
-      #  uses: actions/setup-go@v3
-       # with:
-        #  go-version: 1.18
-         # cache: true
-
-    #  - name: Run make build
-     #   run: |
-      #    make build
-       #   make install
-
-      #- name: Run make localnet
-        #run: make localnet
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+          cache: true
+#
+      - name: Run make build
+        run: |
+          make build
+          make install
+#
+      - name: Run make localnet
+        run: |
+          make localnet &
+          sleep 30 &&
 
       - name: Run E2E Tests
         uses: actions/setup-go@v3

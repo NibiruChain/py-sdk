@@ -52,8 +52,14 @@ jobs:
           go-version: 1.18
           cache: true
 
-      - name: Run all unit tests.
+      - name: Run make build
         run: make build
+
+      - name: Run make install
+        run: make install
+
+      - name: Run make localnet
+        run: make localnet
 
       # ----------------------------------------------
       # Install server

@@ -59,9 +59,9 @@ jobs:
       #- name: Install Server
       #  uses: actions/install-server@v1
      #   with:
-          command: make build
-          build: make install
-          start: make localnet
+          run: make build
+          #build: make install
+          #start: make localnet
 
       #- name: Log in to the Container registry
         #build: make build

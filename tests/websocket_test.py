@@ -92,6 +92,10 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     # duplication of markpricechanged events.
 
     received_events = [event.event_type for event in events]
-    assert all(
-        [event.get_full_path() in received_events for event in expected_events]
-    ), f"Missing events: {[event for event in map(lambda x: x.get_full_path(), expected_events) if event not in received_events]}"
+    missing_events = [
+        event
+        for event in map(lambda x: x.get_full_path(), expected_events)
+        if event not in received_events
+    ]
+
+    assert not missing_events, f"Missing events: {missing_events}"

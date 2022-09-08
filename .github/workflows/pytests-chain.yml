@@ -45,12 +45,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+          command: make build
+          build: make install
+          start: make localnet
 
-          #command: npm run tests
-          #build: npm run build
-          #start: npm run start
-           # quote the url to be safe against YML parsing surprises
-          #wait-on: 'http://localhost'
+      #- name: Log in to the Container registry
+        #build: make build
+        #command: make install
+        #start: make localnet
+
 
 
       # ----------------------------------------------

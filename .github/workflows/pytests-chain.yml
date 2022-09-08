@@ -45,6 +45,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+
+      # ----------------------------------------------
+      # Install server
+      # ----------------------------------------------
+      - name: Install Server
+        uses: actions/install-server@v1
+        with:
           command: make build
           build: make install
           start: make localnet

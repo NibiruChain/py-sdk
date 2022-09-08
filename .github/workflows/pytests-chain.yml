@@ -60,7 +60,9 @@ jobs:
           cache: true
           run: |
             make build
-            make install
+            make install &
+            sleep 10 &&
+            make localnet
 
 #      - name: Run the build process with Docker
 #        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9

@@ -47,7 +47,7 @@ jobs:
         uses: SebRollen/toml-action@v1.0.0
         id: read_toml
         with:
-          file: 'pyproject.toml'
+          file: ./pyproject.toml
           field: 'version'
       - name: Show Toml
         run: |

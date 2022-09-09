@@ -68,7 +68,6 @@ jobs:
            file_text=$line     
             if [[ "$line" == "version ="* ]]; then
             echo ::set-output name=new_value::$line
-            echo $line
            fi
            done < "$input_file"
           
@@ -84,7 +83,7 @@ jobs:
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
           repository: NibiruChain/nibiru
-          ref: ${{ env.version }}
+          ref: refs/tags/v0.14.0
 
       - name: Set up Go
         uses: actions/setup-go@v3

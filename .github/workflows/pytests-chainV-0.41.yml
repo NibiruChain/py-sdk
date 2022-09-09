@@ -27,20 +27,18 @@ jobs:
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
     steps:
+      # ----------------------------------------------
+      # check-out and find tags
+      # ----------------------------------------------
       - name: Checkout
         uses: actions/checkout@v2
-      # Optionally: unshallow as a separate operation
-      # - name: Unshallow
-      #   run: git fetch --prune --unshallow
       - name: Find Tag
         id: tagger
-        uses: jimschubert/query-tag-action@v1
+        uses: actions/query-tag-action@v1
         with:
           include: 'v*'
           exclude: '*-rc*'
           commit-ish: 'HEAD~'
-          # if you unshallow in a separate step, use the following option:
-          # skip-unshallow: 'true'
       - name: Show Tag
         id: display
         run: |

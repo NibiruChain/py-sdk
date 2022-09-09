@@ -157,7 +157,7 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         run: poetry install --no-interaction --no-root
       #----------------------------------------------
       # run tests

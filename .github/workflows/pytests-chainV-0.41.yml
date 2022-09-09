@@ -27,14 +27,12 @@ jobs:
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
     steps:
-      # ----------------------------------------------
-      # check-out and find tags
-      # ----------------------------------------------
+
       - name: Checkout
         uses: actions/checkout@v2
       - name: Find Tag
         id: tagger
-        uses: actions/checkout@v2
+        uses: jimschubert/query-tag-action@v1
         with:
           include: 'v*'
           exclude: '*-rc*'
@@ -43,6 +41,7 @@ jobs:
         id: display
         run: |
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
+          echo 'Output from Find Tag: ${{self.get_version()[1:]}}'
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

@@ -58,23 +58,6 @@ jobs:
 
   # test to see if done correctly - should echo "value"
       - run: echo ${{steps.output_test.outputs.new_value }}
-        if: (steps.output_test.outputs.new_value == 'version = 0.3.0')
-          then
-          echo "Cache hit - skipping dependency installation"
-          else
-          echo ${{ steps.output_test.outputs.new_value }}
-          fi
-
-      # ----------------------------------------------
-      # check-out nibiru V0.4.0 repo and deploy
-      # ----------------------------------------------
-      - name: Checkout nibiru V0.4.0
-        if: (steps.output_test.outputs.new_value == 'version = "0.4.0"')
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
-          repository: NibiruChain/nibiru
-          ref: refs/tags/v0.14.0
 
       # ----------------------------------------------
       # check-out nibiru V0.3.0 repo and deploy

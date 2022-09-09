@@ -162,8 +162,8 @@ jobs:
       - name: Install dependencies
         if: (steps.output_test.outputs.new_value == 'version = "0.4.0"')
         run: poetry install --no-interaction --no-root
-        
-      - run: sleep 50s
+
+      - run: sleep 10s
       #----------------------------------------------
       # run tests
       #----------------------------------------------

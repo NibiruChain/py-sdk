@@ -88,17 +88,20 @@ jobs:
           ref: refs/tags/v0.14.0
 
       - name: Set up Go
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
           cache: true
 #
       - name: Run make build
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         run: |
           make build
           make install
 #
       - name: Run make localnet
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         run: |
           make localnet &
 
@@ -106,6 +109,7 @@ jobs:
       # check-out repo and set-up python
       # ----------------------------------------------
       - name: Check out the repo
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         uses: actions/checkout@v3
       - name: Set up Python 3.9
         id: setup-python
@@ -114,6 +118,7 @@ jobs:
           python-version: 3.9.13
 
       - name: Run python
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         run: python --version && python -c "print('hello')"
 
 
@@ -123,6 +128,7 @@ jobs:
       # See https://github.com/snok/install-poetry#caching-the-poetry-installation for the source
       # ----------------------------------------------
       - name: Load cached Poetry installation
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         uses: actions/cache@v2
         with:
           path: ~/.local
@@ -131,6 +137,7 @@ jobs:
       # Install & configure poetry
       # ----------------------------------------------
       - name: Install Poetry
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         uses: snok/install-poetry@v1
         with:
           virtualenvs-create: true
@@ -140,6 +147,7 @@ jobs:
       # load cached venv if cache exists
       #----------------------------------------------
       - name: Load cached venv
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         id: cached-poetry-dependencies
         uses: actions/cache@v2
         with:
@@ -155,4 +163,5 @@ jobs:
       # run tests
       #----------------------------------------------
       - name: Run Python SDK tests
+        if: (steps.output_test.outputs.new_value == 'version = "0.3.0"')
         run: poetry run pytest -s

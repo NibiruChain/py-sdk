@@ -42,14 +42,11 @@ jobs:
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
           echo ${{ steps.get_version.outputs.version }}
           echo ${{ steps.get_version.outputs.version-without-v }}
-          
 
-      - id: get_version
-        uses: battila7/get-version-action@v2
-
-      - run: echo ${{ steps.get_version.outputs.version }}
-
-      - run: echo ${{ steps.get_version.outputs.version-without-v }}
+      - name: Get current version
+        uses: dolittle/read-version-from-file-action@v2
+        with:
+          path: ./pyproject.toml
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

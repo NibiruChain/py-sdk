@@ -51,7 +51,8 @@ jobs:
           field: 'name'
       - name: Show Toml
         run: |
-         echo 'Output Toml Value: ${{steps.read_toml.outputs.value}}'
+         echo 'Output Toml Value: ${{steps.read_toml.outputs.content}}'
+          
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

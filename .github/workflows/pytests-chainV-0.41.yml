@@ -75,6 +75,9 @@ jobs:
   # test to see if done correctly - should echo "value"
       - run: echo ${{steps.output_test.outputs.new_value }}
 
+  # test to see if done correctly - should echo "value"
+      - run: echo ${{steps.output_test.outputs.new_value }}
+
       # ----------------------------------------------
       # check-out nibiru repo and deploy
       # ----------------------------------------------
@@ -83,7 +86,7 @@ jobs:
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
           repository: NibiruChain/nibiru
-          ref: refs/tags/v0.14.0
+          ref: refs/tags/${{ steps.output_test.outputs.new_value }}
 
       - name: Set up Go
         uses: actions/setup-go@v3

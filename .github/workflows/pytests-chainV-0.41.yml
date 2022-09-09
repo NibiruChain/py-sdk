@@ -67,7 +67,7 @@ jobs:
           do
            file_text=$line     
             if [[ "$line" == "version ="* ]]; then
-            current_version = $line
+            $current_version = $line
             echo $line
            fi
            done < "$input_file"

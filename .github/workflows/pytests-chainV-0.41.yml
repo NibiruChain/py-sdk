@@ -64,8 +64,10 @@ jobs:
           input_file="pyproject.toml"
           while read line
           do
-           file_text=$line
-           echo $line
+           file_text=$line     
+            if [[ "$line" == *"version"* ]]; then
+            echo $line
+           fi
            done < "$input_file"
           echo ::set-output name=new_value::$file_text
 

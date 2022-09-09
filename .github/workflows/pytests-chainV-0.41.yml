@@ -63,9 +63,9 @@ jobs:
         run: |
           input_file="pyproject.toml"
           while read line
-          do    
+          do
+           file_text=$line     
             if [[ "$line" == *"version ="* ]]; then
-              file_text = $line
             echo $line
            fi
            done < "$input_file"

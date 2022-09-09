@@ -68,15 +68,15 @@ jobs:
       # ----------------------------------------------
       - name: Checkout nibiru
         uses: actions/checkout@v2
+        if: steps.output_test.outputs.new_value == 'version = 0.3.0'
+          then
+          echo "Cache hit - skipping dependency installation"
+          else
+          echo ${{ steps.output_test.outputs.new_value }}
+          fi
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
           repository: NibiruChain/nibiru
-          if: steps.output_test.outputs.new_value == 'version = 0.3.0'
-            then
-            echo "Cache hit - skipping dependency installation"
-            else
-            echo ${{ steps.output_test.outputs.new_value }}
-            fi
           ref: refs/tags/v0.14.0
 
       - name: Set up Go

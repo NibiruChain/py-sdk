@@ -27,7 +27,6 @@ jobs:
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
       - name: Find Tag
@@ -42,9 +41,6 @@ jobs:
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
           echo ${{ steps.get_version.outputs.version }}
           echo ${{ steps.get_version.outputs.version-without-v }}
-
-  # write something in a file and create it
-      - run: echo "value" >> new.txt
 
   # read from file and assign to outputs object
       - name: Read and assign
@@ -62,18 +58,18 @@ jobs:
 
   # test to see if done correctly - should echo "value"
       - run: echo ${{steps.output_test.outputs.new_value }}
-
-      # ----------------------------------------------
-      # check-out nibiru repo and deploy
-      # ----------------------------------------------
-      - name: Checkout nibiru
-        uses: actions/checkout@v2
         if: steps.output_test.outputs.new_value == 'version = 0.3.0'
           then
           echo "Cache hit - skipping dependency installation"
           else
           echo ${{ steps.output_test.outputs.new_value }}
           fi
+
+      # ----------------------------------------------
+      # check-out nibiru repo and deploy
+      # ----------------------------------------------
+      - name: Checkout nibiru
+        uses: actions/checkout@v2
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
           repository: NibiruChain/nibiru

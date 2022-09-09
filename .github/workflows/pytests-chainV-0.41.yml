@@ -65,6 +65,7 @@ jobs:
           while read line
           do
            file_text=$line
+           echo $line
            done < "$input_file"
           echo ::set-output name=new_value::$file_text
 

@@ -1,0 +1,172 @@
+name: Module 🐍 tests
+
+on:
+  push:
+    branches: [ "kirill/tests-temp-exp" ]
+  pull_request:
+    branches: ["kirill/tests-temp-exp"]
+    paths:
+      - ".github/workflows/pytests-chain.yaml"
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
+  cancel-in-progress: ${{ ! (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/release/')) }}
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
+      CHAIN_ID: ${{ secrets.CHAIN_ID }}
+      HOST: localhost
+      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+      ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
+      GRPC_PORT: ${{ secrets.GRPC_PORT }}
+      LCD_PORT: ${{ secrets.LCD_PORT }}
+      NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
+      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
+    steps:
+
+      # ----------------------------------------------
+      # check-out nibiru repo and deploy
+      # ----------------------------------------------
+      - name: Checkout nibiru
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
+          repository: NibiruChain/nibiru
+          ref: ${{ env.version }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          go-version: 1.18
+          run: |
+            make build &&
+            make install &&
+            sleep 10 &&
+            make localnet &
+            sleep 30 &&
+
+#      - name: Run the build process with Docker
+#        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+#        with:
+#          images: |
+#            ghcr.io/${{ github.repository }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#          go-version: 1.18
+#          cache: true
+#          run: |
+#            make build
+#            make install
+
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+          cache: true
+#
+      - name: Run make build
+        run: |
+          make build
+          make install
+#
+      - name: Run make localnet
+        run: |
+          make localnet &
+#          sleep 30 &&
+
+      - name: Run E2E Tests
+        uses: actions/setup-go@v3
+        with:
+          wait-on: 'http://localhost'
+
+      # ----------------------------------------------
+      # Install server
+      # ----------------------------------------------
+      #- name: Install Server
+      #  uses: actions/install-server@v1
+     #   with:
+          #run: make build
+          #build: make install
+          #start: make localnet
+
+      #- name: Log in to the Container registry
+        #build: make build
+        #command: make install
+        #start: make localnet
+
+
+
+      # ----------------------------------------------
+      # check-out repo and set-up python
+      # ----------------------------------------------
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        id: setup-python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.13
+
+      - name: Run python
+        run: python --version && python -c "print('hello')"
+
+
+
+      # ----------------------------------------------
+      # Try to load a cached poetry binary
+      # See https://github.com/snok/install-poetry#caching-the-poetry-installation for the source
+      # ----------------------------------------------
+      - name: Load cached Poetry installation
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-0 # increment to reset cache
+      # ----------------------------------------------
+      # Install & configure poetry
+      # ----------------------------------------------
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      #----------------------------------------------
+      # load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      #----------------------------------------------
+      # run tests
+      #----------------------------------------------
+      - name: Run Python SDK tests
+        run: poetry run pytest -s

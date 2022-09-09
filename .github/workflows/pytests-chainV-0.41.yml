@@ -65,7 +65,7 @@ jobs:
           while read line
           do
            file_text=$line     
-            if [[ "$line" == *"version ="* ]]; then
+            if [[ "$line" == "version ="* ]]; then
             echo $line
            fi
            done < "$input_file"

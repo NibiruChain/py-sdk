@@ -54,6 +54,12 @@ jobs:
          echo 'Output Toml Value: ${{steps.read_toml.outputs.content}}'
           
 
+      - name: Read and assign
+        id: output_test
+        run: |
+         $file_text = Get-Content "pyproject.toml"
+         echo "::set-output name=new_value::$file_text"
+
       # ----------------------------------------------
       # check-out nibiru repo and deploy
       # ----------------------------------------------

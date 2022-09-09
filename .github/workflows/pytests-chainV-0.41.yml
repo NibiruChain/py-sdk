@@ -44,9 +44,10 @@ jobs:
           echo ${{ steps.get_version.outputs.version-without-v }}
 
       - name: Get current version
-        uses: dolittle/read-version-from-file-action@v2
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
         with:
-          path: ./pyproject.toml
+           file: pyproject.toml
+           bar: version
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

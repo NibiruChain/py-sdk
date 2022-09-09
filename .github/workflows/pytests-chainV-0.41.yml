@@ -62,14 +62,16 @@ jobs:
         id: output_test
         run: |
           input_file="pyproject.toml"
+          current_version=""
           while read line
           do
            file_text=$line     
             if [[ "$line" == "version ="* ]]; then
+            current_version = $line
             echo $line
            fi
            done < "$input_file"
-          echo ::set-output name=new_value::$file_text
+          echo ::set-output name=new_value::$current_version
 
   # test to see if done correctly - should echo "value"
       - run: echo ${{steps.output_test.outputs.new_value }}

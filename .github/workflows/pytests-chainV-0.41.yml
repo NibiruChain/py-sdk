@@ -87,7 +87,7 @@ jobs:
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
           repository: NibiruChain/nibiru
-          ref: refs/tags/${{ steps.output_test.outputs.new_value }}
+          ref: refs/tags/v0.14.0
 
       - name: Set up Go
         uses: actions/setup-go@v3

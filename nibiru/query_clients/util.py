@@ -34,7 +34,9 @@ def t_dict(d):
     }
 
 
-def deserialize(pb_msg: protobuf_message.Message) -> dict:
+def deserialize(
+    pb_msg: protobuf_message.Message, no_sdk_transformation: bool = False
+) -> dict:
     """Deserializes a proto message into a dictionary.
 
     - sdk.Dec values are converted to floats.
@@ -43,6 +45,7 @@ def deserialize(pb_msg: protobuf_message.Message) -> dict:
 
     Args:
         pb_msg (protobuf.message.Message)
+        no_sdk_transformation (bool): Wether to bypass the sdk transformation. Default to False
 
     Returns:
         dict: 'pb_msg' as a JSON-able dictionary.
@@ -66,13 +69,21 @@ def deserialize(pb_msg: protobuf_message.Message) -> dict:
         if custom_dtype is not None:
 
             if "sdk/types.Dec" in str(custom_dtype):
-                serialized_output[str(attr)] = from_sdk_dec(
-                    pb_msg.__getattribute__(attr)
-                )
+                if no_sdk_transformation:
+                    serialized_output[str(attr)] = float(pb_msg.__getattribute__(attr))
+                else:
+                    serialized_output[str(attr)] = from_sdk_dec(
+                        pb_msg.__getattribute__(attr)
+                    )
             elif "sdk/types.Int" in str(custom_dtype):
-                serialized_output[str(attr)] = from_sdk_int(
-                    pb_msg.__getattribute__(attr)
-                )
+                if no_sdk_transformation:
+                    serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
+                else:
+                    serialized_output[str(attr)] = from_sdk_int(
+                        pb_msg.__getattribute__(attr)
+                    )
+            elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
+                serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
             else:
                 try:
                     val = pb_msg.__getattribute__(attr)

@@ -4,11 +4,14 @@ import time
 from multiprocessing import Queue
 from typing import List
 
+import google.protobuf.json_format
+import google.protobuf.message
 from websocket import WebSocketApp
 
+import nibiru.query_clients.util
 from nibiru import Network
 from nibiru.event_specs import EventCaptured, EventType
-from nibiru.utils import init_logger
+from nibiru.utils import clean_nested_dict, init_logger
 
 ERROR_TIMEOUT_SLEEP = 3
 
@@ -34,8 +37,9 @@ class NibiruWebsocket:
                 "`websocket_endpoint` endpoint"
             )
 
-        self.captured_events_type: dict = {
-            captured_event.value: captured_event
+        # We use a dictionary for faster search
+        self.captured_events_type: dict[str, EventType] = {
+            captured_event.get_full_path(): captured_event
             for captured_event in captured_events_type
         }
         self.queue = Queue()
@@ -92,11 +96,28 @@ class NibiruWebsocket:
         events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
 
         for event in events["events"]:
+            # This below is faster since self.captured_events_type.keys() are hashed
             if event["type"] in self.captured_events_type:
                 event_payload = {
                     attribute["key"]: attribute["value"].strip('"')
                     for attribute in event["attributes"]
                 }
+
+                if not isinstance(
+                    self.captured_events_type[event["type"]].value,
+                    str,
+                ):
+                    proto_message = google.protobuf.json_format.Parse(
+                        json.dumps(clean_nested_dict(event_payload)),
+                        self.captured_events_type[event["type"]].value(),
+                        ignore_unknown_fields=True,
+                    )
+
+                    event_payload = nibiru.query_clients.util.deserialize(
+                        proto_message,
+                        no_sdk_transformation=True,
+                    )
+
                 event_payload["block_height"] = block_height
                 event_payload["tx_hash"] = tx_hash
 

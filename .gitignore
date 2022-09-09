@@ -147,3 +147,4 @@ cython_debug/
 /*.ipynb
 .python-version
 test.py
+test.pk

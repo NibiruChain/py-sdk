@@ -49,6 +49,9 @@ jobs:
         with:
           file: 'pyproject.toml'
           field: 'version'
+      - name: Show Toml
+        run: |
+         echo 'Output Toml Value: ${{steps.read_toml.outputs.value}}'
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

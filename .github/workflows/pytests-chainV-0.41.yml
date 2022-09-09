@@ -43,12 +43,12 @@ jobs:
           echo ${{ steps.get_version.outputs.version }}
           echo ${{ steps.get_version.outputs.version-without-v }}
 
-      - name: Edit Toml
-        uses: ciiiii/toml-editor@1.0.0
+      - name: Read Toml
+        uses: SebRollen/toml-action@v1.0.0
+        id: read_toml
         with:
-          file: "pyproject.toml"
-          key: "a.b.c"
-          value: "abc"
+          file: 'pyproject.toml'
+          field: 'version'
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

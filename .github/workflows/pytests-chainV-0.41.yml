@@ -65,11 +65,12 @@ jobs:
           while read line
           do
            file_text=$line     
-            if [[ "$line" == *"version"* ]]; then
+            if [[ "$line" == *"version ="* ]]; then
+            version_current = $line
             echo $line
            fi
            done < "$input_file"
-          echo ::set-output name=new_value::$file_text
+          echo ::set-output name=new_value::$version_current
 
   # test to see if done correctly - should echo "value"
       - run: echo ${{steps.output_test.outputs.new_value }}

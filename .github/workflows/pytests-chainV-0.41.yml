@@ -38,10 +38,13 @@ jobs:
           exclude: '*-rc*'
           commit-ish: 'HEAD~'
       - name: Show Tag
-        id: display
+        id: |
+          display
+          get_version
         run: |
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
-          echo 'Output from Find Tag: ${{self.get_version()[1:]}}'
+          echo ${{ steps.get_version.outputs.version }}
+          echo ${{ steps.get_version.outputs.version-without-v }}
 
       # ----------------------------------------------
       # check-out nibiru repo and deploy

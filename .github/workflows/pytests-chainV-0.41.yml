@@ -48,7 +48,7 @@ jobs:
         id: read_toml
         with:
           file: ./pyproject.toml
-          field: 'version'
+          field: name
       - name: Show Toml
         run: |
          echo 'Output Toml Value: ${{steps.read_toml.outputs.value}}'

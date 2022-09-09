@@ -38,7 +38,6 @@ jobs:
           exclude: '*-rc*'
           commit-ish: 'HEAD~'
       - name: Show Tag
-        id: get_version
         run: |
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
           echo ${{ steps.get_version.outputs.version }}

@@ -94,6 +94,7 @@ jobs:
         with:
           find: "sed -i ''"
           replace: "sed -i"
+          include: "scripts/localnet.sh"
           regex: false
 
       - name: Set up Go

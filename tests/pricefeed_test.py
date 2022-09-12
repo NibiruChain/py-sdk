@@ -49,9 +49,9 @@ def test_post_price_unwhitelisted(agent: nibiru.Sdk):
         assert transaction_must_succeed(tx_output) is None, err_msg
 
 
-def test_grpc_error(oracle_agent: nibiru.Sdk):
+def test_grpc_error(val_node: nibiru.Sdk):
     # Market unibi:unusd must be in the list of pricefeed markets
-    markets_output = oracle_agent.query.pricefeed.markets()
+    markets_output = val_node.query.pricefeed.markets()
     assert isinstance(markets_output, dict)
     assert any(
         [market["pair_id"] == "unibi:unusd" for market in markets_output["markets"]]
@@ -63,13 +63,13 @@ def test_grpc_error(oracle_agent: nibiru.Sdk):
         for market in markets_output["markets"]
         if market["pair_id"] == "unibi:unusd"
     )
-    assert oracle_agent.address in unibi_unusd_market["oracles"]
+    assert val_node.address in unibi_unusd_market["oracles"]
 
     # Transaction post_price in the past must raise proper error
     with pytest.raises(nibiru.exceptions.SimulationError, match="Price is expired"):
-        _ = oracle_agent.tx.execute_msgs(
+        _ = val_node.tx.execute_msgs(
             msgs=MsgPostPrice(
-                oracle_agent.address,
+                val_node.address,
                 token0="unibi",
                 token1="unusd",
                 price=10,
@@ -78,10 +78,10 @@ def test_grpc_error(oracle_agent: nibiru.Sdk):
         )
 
 
-def test_post_prices(oracle_agent: nibiru.Sdk):
+def test_post_prices(val_node: nibiru.Sdk):
 
     # Market unibi:unusd must be in the list of pricefeed markets
-    markets_output = oracle_agent.query.pricefeed.markets()
+    markets_output = val_node.query.pricefeed.markets()
     assert isinstance(markets_output, dict)
     assert any(
         [market["pair_id"] == "unibi:unusd" for market in markets_output["markets"]]
@@ -93,10 +93,10 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
         for market in markets_output["markets"]
         if market["pair_id"] == "unibi:unusd"
     )
-    assert oracle_agent.address in unibi_unusd_market["oracles"]
+    assert val_node.address in unibi_unusd_market["oracles"]
 
     tests.LOGGER.info("Transaction post_price must succeed")
-    tx_output = post_price_test_tx(sdk=oracle_agent)
+    tx_output = post_price_test_tx(sdk=val_node)
     tests.LOGGER.info(
         f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
     )
@@ -104,20 +104,20 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
 
     # Repeating post_price transaction.
     # Otherwise, getting "All input prices are expired" on query.pricefeed.price()
-    if oracle_agent.address not in WHITELISTED_ORACLES:
-        tests.LOGGER.info(f"oracle address not whitelisted: {oracle_agent.address}")
+    if val_node.address not in WHITELISTED_ORACLES:
+        tests.LOGGER.info(f"oracle address not whitelisted: {val_node.address}")
         with pytest.raises(Exception) as err:
-            tx_output = post_price_test_tx(sdk=oracle_agent)
+            tx_output = post_price_test_tx(sdk=val_node)
             err_msg = str(err)
             assert transaction_must_succeed(tx_output) is None, err_msg
-    tx_output = post_price_test_tx(sdk=oracle_agent)
+    tx_output = post_price_test_tx(sdk=val_node)
     tests.LOGGER.info(
         f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
     )
     assert transaction_must_succeed(tx_output) is None
 
     # Raw prices must exist after post_price transaction
-    raw_prices = oracle_agent.query.pricefeed.raw_prices("unibi:unusd")["raw_prices"]
+    raw_prices = val_node.query.pricefeed.raw_prices("unibi:unusd")["raw_prices"]
     assert len(raw_prices) >= 1
 
     # Raw price must be a dict with specific keys
@@ -125,21 +125,21 @@ def test_post_prices(oracle_agent: nibiru.Sdk):
     dict_keys_must_match(raw_price, ['expiry', 'oracle_address', 'pair_id', 'price'])
 
     # Price feed params must be a dict with specific keys
-    price_feed_params = oracle_agent.query.pricefeed.params()["params"]
+    price_feed_params = val_node.query.pricefeed.params()["params"]
     tests.LOGGER.info(
         f"nibid query pricefeed params:\n{tests.format_response(price_feed_params)}"
     )
     dict_keys_must_match(price_feed_params, ['pairs', 'twap_lookback_window'])
 
     # Unibi price object must be a dict with specific keys
-    unibi_price = oracle_agent.query.pricefeed.price("unibi:unusd")["price"]
+    unibi_price = val_node.query.pricefeed.price("unibi:unusd")["price"]
     tests.LOGGER.info(
         f"nibid query pricefeed price:\n{tests.format_response(unibi_price)}"
     )
     dict_keys_must_match(unibi_price, ["pair_id", "price", "twap"])
 
     # At least one pair in prices must be unibi:unusd
-    prices = oracle_agent.query.pricefeed.prices()["prices"]
+    prices = val_node.query.pricefeed.prices()["prices"]
     tests.LOGGER.info(f"nibid query pricefeed prices:\n{tests.format_response(prices)}")
     assert any([price["pair_id"] == "unibi:unusd" for price in prices])
 

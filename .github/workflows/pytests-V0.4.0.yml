@@ -25,7 +25,7 @@ jobs:
       LCD_PORT: 1317
       NETWORK_INSECURE: true
       WEBSOCKET_ENDPOINT: ws://localhost:26657/websocket
-      VERSION: 'version = "0.4.1"'
+      VERSION: version = "0.4.1"
     steps:
 
       - name: Checkout

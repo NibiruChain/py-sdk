@@ -147,6 +147,8 @@ cython_debug/
 /*.ipynb
 .python-version
 test.py
+<<<<<<< HEAD
 
 # Test reports
 /reports
+test.pk

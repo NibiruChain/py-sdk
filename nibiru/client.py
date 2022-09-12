@@ -37,7 +37,6 @@ class GrpcClient:
     ):
         """
         _summary_
-
         Args:
             network (Network): The network object
             insecure (bool, optional): Wether the network should use ssl or not. Defaults to False.
@@ -79,21 +78,11 @@ class GrpcClient:
                 chain_nibiru_version=str(self.get_version()),
             )
 
-<<<<<<< HEAD
-        print(nibiru_proto_version)
-        print(self.get_version()[1:].split("."))
-
-        expected_version = self.get_version()[1:]
-
-        assert nibiru_proto_version.split(".") >= self.get_version()[1:].split("."), \
-            "Expected version " + nibiru_proto_version + " but we got " + expected_version
-=======
     def assert_compatible_versions(self, nibiru_proto_version, chain_nibiru_version):
         """
         Assert that this version of the python sdk is compatible with the chain.
         If you run the chain from a non tagged release, the version query will be returning something like
         master-6a315bab3db46f5fa1158199acc166ed2d192c2f. Otherwise, it should be for example `v0.14.0`.
-
         If the chain is running a custom non tagged release, you are free to use the python sdk at your own risk.
         """
         if nibiru_proto_version[0] == "v":
@@ -119,7 +108,6 @@ class GrpcClient:
                 f"remote chain is running with version {chain_nibiru_version}"
             )
             assert nibiru_proto_version >= chain_nibiru_version, error_string
->>>>>>> origin/master
 
     def close_chain_channel(self):
         self.chain_channel.close()
@@ -140,11 +128,9 @@ class GrpcClient:
         """
         Iterate through all the blocks in the chain and yield the output of the block one by one.
         If no end_height is specified, iterate until the current latest block is reached.
-
         Args:
             start_height (int): The starting block height
             end_height (int, optional): The last block height to query. Defaults to None.
-
         Yields:
             Generator[tendermint_query.GetBlockByHeightResponse, None, None]
         """

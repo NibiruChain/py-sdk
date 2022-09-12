@@ -19,13 +19,13 @@ jobs:
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      HOST: http://app:8080
+      HOST: localhost
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
       GRPC_PORT: ${{ secrets.GRPC_PORT }}
       LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
-      WEBSOCKET_ENDPOINT: ws://app:8080/websocket
+      WEBSOCKET_ENDPOINT: ws://localhost:26657/websocket
     steps:
 
       - name: Checkout
@@ -181,4 +181,4 @@ jobs:
         if: ${{ always() }}
         with:
           name: code-coverage-report
-          path: reports/report-xml.html
+          path: reports/report.html

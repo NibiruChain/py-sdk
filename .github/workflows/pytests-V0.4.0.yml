@@ -19,13 +19,13 @@ jobs:
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      HOST: localhost
+      HOST: http://app:8080
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
       GRPC_PORT: ${{ secrets.GRPC_PORT }}
       LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
-      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
+      WEBSOCKET_ENDPOINT: ws://app:8080/websocket
     steps:
 
       - name: Checkout
@@ -169,7 +169,7 @@ jobs:
       #----------------------------------------------
       - name: Run Python SDK tests
         if: (steps.output_test.outputs.new_value == 'version = "0.4.0"')
-        run: poetry run pytest -s --html=./reports/report.html --junitxml=./reports/report-xml.xml
+        run: poetry run pytest -s --html=./reports/report.html
 
 
         #----------------------------------------------

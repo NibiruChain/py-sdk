@@ -149,5 +149,4 @@ cython_debug/
 test.py
 
 # Test reports
-report.html
-/assets
+/reports

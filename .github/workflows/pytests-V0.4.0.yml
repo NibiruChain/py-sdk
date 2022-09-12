@@ -169,4 +169,17 @@ jobs:
       #----------------------------------------------
       - name: Run Python SDK tests
         if: (steps.output_test.outputs.new_value == 'version = "0.4.0"')
-        run: poetry run pytest -s  --html=report.html
+        run: poetry run pytest -s --html=report.html --junitxml=./reports/report-xml.xml
+
+
+        #----------------------------------------------
+        # publish report xml
+        #----------------------------------------------
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: JEST Tests            # Name of the check run which will be created
+          path: reports/report-xml.xml    # Path to test results
+          reporter: jest-junit

@@ -79,15 +79,6 @@ class GrpcClient:
                 chain_nibiru_version=str(self.get_version()),
             )
 
-<<<<<<< HEAD
-        print(nibiru_proto_version)
-        print(self.get_version()[1:].split("."))
-
-        expected_version = self.get_version()[1:]
-
-        assert nibiru_proto_version.split(".") >= self.get_version()[1:].split("."), \
-            "Expected version " + nibiru_proto_version + " but we got " + expected_version
-=======
     def assert_compatible_versions(self, nibiru_proto_version, chain_nibiru_version):
         """
         Assert that this version of the python sdk is compatible with the chain.
@@ -119,7 +110,6 @@ class GrpcClient:
                 f"remote chain is running with version {chain_nibiru_version}"
             )
             assert nibiru_proto_version >= chain_nibiru_version, error_string
->>>>>>> origin/master
 
     def close_chain_channel(self):
         self.chain_channel.close()

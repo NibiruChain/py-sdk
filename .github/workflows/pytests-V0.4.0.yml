@@ -52,7 +52,7 @@ jobs:
       - name: Show Toml
         run: |
          echo 'Output Toml Value: ${{steps.read_toml.outputs.content}}'
-          
+
 
   # write something in a file and create it
       - run: echo "value" >> new.txt
@@ -65,12 +65,12 @@ jobs:
           current_version="1"
           while read line
           do
-           file_text=$line     
+           file_text=$line
             if [[ "$line" == "version ="* ]]; then
             echo ::set-output name=new_value::$line
            fi
            done < "$input_file"
-          
+
 
   # test to see if done correctly - should echo "value"
       - run: echo ${{steps.output_test.outputs.new_value }}
@@ -106,6 +106,7 @@ jobs:
         if: (steps.output_test.outputs.new_value == 'version = "0.4.1"')
         run: |
           make localnet &
+          sleep 10s
 
       # ----------------------------------------------
       # check-out repo and set-up python

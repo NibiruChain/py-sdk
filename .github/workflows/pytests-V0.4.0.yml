@@ -182,15 +182,8 @@ jobs:
         with:
           report_paths: '**/reports/test/report-*.xml'
 
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()    # run this step even if previous step failed
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
         with:
-          name: JEST Tests            # Name of the check run which will be created
-          path: ./reports/report-xml.xml    # Path to test results
-          reporter: jest-junit
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: reports/report-xml.html # or path/to/artifact
+          name: code-coverage-report
+          path: reports/report-xml.html

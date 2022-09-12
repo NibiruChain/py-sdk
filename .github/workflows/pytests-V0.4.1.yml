@@ -88,6 +88,14 @@ jobs:
           repository: NibiruChain/nibiru
           ref: refs/tags/v0.14.0
 
+      - name: Replace file in index.html
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'scripts/localnet.sh'
+          _output-file: 'scripts/localnet.sh'
+          _format-key: "sed -i ''"
+          files: "sed -i"
+
       - name: Set up Go
         if: (steps.output_test.outputs.new_value == ${{env.VERSION_SDK}})
         uses: actions/setup-go@v3

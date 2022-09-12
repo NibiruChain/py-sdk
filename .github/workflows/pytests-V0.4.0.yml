@@ -8,10 +8,6 @@ on:
     paths:
       - ".github/workflows/pytests-chain.yaml"
 
-env:
-  VERSION: 'version = "0.4.1"'
-
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
   cancel-in-progress: ${{ ! (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/release/')) }}
@@ -29,6 +25,7 @@ jobs:
       LCD_PORT: 1317
       NETWORK_INSECURE: true
       WEBSOCKET_ENDPOINT: ws://localhost:26657/websocket
+      VERSION: 'version = "0.4.1"'
     steps:
 
       - name: Checkout

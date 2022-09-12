@@ -24,7 +24,7 @@ jobs:
       ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
       GRPC_PORT: 9090
       LCD_PORT: 1317
-      NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
+      NETWORK_INSECURE: true
       WEBSOCKET_ENDPOINT: ws://localhost:26657/websocket
     steps:
 

@@ -147,3 +147,7 @@ cython_debug/
 /*.ipynb
 .python-version
 test.py
+
+# Test reports
+report.html
+/assets

@@ -7,13 +7,13 @@ on:
     branches: ["kirill/tests-temp-exp"]
     paths:
       - ".github/workflows/pytests-chain.yaml"
+env:
+  ## Sets environment variable
+    VERSION_SDK: version = "0.4.1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
   cancel-in-progress: ${{ ! (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/release/')) }}
-
-env:
-  VERSION_SDK: version = "0.4.1"
 
 jobs:
   tests:
@@ -28,7 +28,7 @@ jobs:
       LCD_PORT: 1317
       NETWORK_INSECURE: true
       WEBSOCKET_ENDPOINT: ws://localhost:26657/websocket
-      #VERSION: version = "0.4.1"
+
     steps:
 
       - name: Checkout
@@ -85,7 +85,7 @@ jobs:
       # check-out nibiru V0.4.0 repo and deploy
       # ----------------------------------------------
       - name: Checkout nibiru V0.4.0
-        if: (steps.output_test.outputs.new_value == $VERSION_SDK)
+        if: (steps.output_test.outputs.new_value == ${{env.VERSION_SDK}})
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
@@ -93,7 +93,7 @@ jobs:
           ref: refs/tags/v0.14.0
 
       - name: Set up Go
-        if: (steps.output_test.outputs.new_value == $VERSION)
+        if: (steps.output_test.outputs.new_value == ${{env.VERSION_SDK}})
         uses: actions/setup-go@v3
         with:
           go-version: 1.18

@@ -169,7 +169,7 @@ jobs:
       #----------------------------------------------
       - name: Run Python SDK tests
         if: (steps.output_test.outputs.new_value == 'version = "0.4.0"')
-        run: poetry run pytest -s --html=./reports/report.html
+        run: poetry run pytest tests/bank_test.py -s --html=./reports/report.html
 
 
         #----------------------------------------------

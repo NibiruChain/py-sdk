@@ -176,6 +176,15 @@ jobs:
         # publish report xml
         #----------------------------------------------
 
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          junit_files: "reports/**/*.xml"
+          nunit_files: "reports/**/*.xml"
+          xunit_files: "reports/**/*.xml"
+          trx_files: "reports/**/*.trx"
+
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed

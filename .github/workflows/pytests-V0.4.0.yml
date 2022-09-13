@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        VERSION_SDK: ['0.4.0', 'version = "0.4.1"', 'version = "0.3.0"']
+        VERSION_SDK: ['0.4.0', '0.4.1', '0.3.0']
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
@@ -93,20 +93,20 @@ jobs:
           _format-key: "sed -i ''"
 
       - name: Set up Go
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
           cache: true
 #
       - name: Run make build
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         run: |
           make build
           make install
 #
       - name: Run make localnet
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         run: |
           make localnet &
           sleep 10s
@@ -115,17 +115,17 @@ jobs:
       # check-out repo and set-up python
       # ----------------------------------------------
       - name: Check out the repo
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         uses: actions/checkout@v3
       - name: Set up Python 3.9
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         id: setup-python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.13
 
       - name: Run python
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         run: python --version && python -c "print('hello')"
 
 
@@ -135,7 +135,7 @@ jobs:
       # See https://github.com/snok/install-poetry#caching-the-poetry-installation for the source
       # ----------------------------------------------
       - name: Load cached Poetry installation
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         uses: actions/cache@v2
         with:
           path: ~/.local
@@ -144,7 +144,7 @@ jobs:
       # Install & configure poetry
       # ----------------------------------------------
       - name: Install Poetry
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         uses: snok/install-poetry@v1
         with:
           virtualenvs-create: true
@@ -154,7 +154,7 @@ jobs:
       # load cached venv if cache exists
       #----------------------------------------------
       - name: Load cached venv
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         id: cached-poetry-dependencies
         uses: actions/cache@v2
         with:
@@ -164,7 +164,7 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         run: poetry install --no-interaction --no-root
 
       - run: sleep 10s
@@ -172,7 +172,7 @@ jobs:
       # run tests
       #----------------------------------------------
       - name: Run Python SDK tests
-        if: (steps.output_test.outputs.new_value == ${{matrix.VERSION_SDK}})
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
         run: poetry run pytest -s --html=./reports/report.html
 
 

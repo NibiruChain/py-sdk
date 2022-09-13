@@ -103,7 +103,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "bip32"
-version = "3.1"
+version = "3.3"
 description = "Minimalistic implementation of the BIP32 key derivation scheme"
 category = "main"
 optional = false
@@ -137,7 +137,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "certifi"
-version = "2022.6.15"
+version = "2022.6.15.1"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -206,7 +206,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "croniter"
-version = "1.3.5"
+version = "1.3.7"
 description = "croniter provides iteration for datetime object with cron like format"
 category = "main"
 optional = false
@@ -386,7 +386,7 @@ ecdsa = ">=0.14.0"
 
 [[package]]
 name = "identify"
-version = "2.5.4"
+version = "2.5.5"
 description = "File identification library for Python"
 category = "main"
 optional = false
@@ -718,7 +718,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "types-protobuf"
-version = "3.20.1"
+version = "3.20.2"
 description = "Typing stubs for protobuf"
 category = "main"
 optional = false
@@ -771,7 +771,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "virtualenv"
-version = "20.16.4"
+version = "20.16.5"
 description = "Virtual Python Environment builder"
 category = "main"
 optional = false
@@ -926,8 +926,8 @@ bech32 = [
     {file = "bech32-1.2.0.tar.gz", hash = "sha256:7d6db8214603bd7871fcfa6c0826ef68b85b0abd90fa21c285a9c5e21d2bd899"},
 ]
 bip32 = [
-    {file = "bip32-3.1-py3-none-any.whl", hash = "sha256:af509c8310a175db749dbd62306558f2579c2c9dd10bd355c214ad262ba55c3b"},
-    {file = "bip32-3.1.linux-x86_64.tar.gz", hash = "sha256:9736aa445eb6fa45c752a65d0861ad813c2d7c390b3ee920e3ddc11e3dfa93f7"},
+    {file = "bip32-3.3-py3-none-any.whl", hash = "sha256:c1ed0b2896b090e090cbd3c7de94ed10a9e1f9157e264f09f1a7177cb0b31b6d"},
+    {file = "bip32-3.3.tar.gz", hash = "sha256:664e0700ee53c79bf2573b277f278b7f4a6ca14ee4ce5e8499721c4c752e32c1"},
 ]
 black = [
     {file = "black-22.8.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:ce957f1d6b78a8a231b18e0dd2d94a33d2ba738cd88a7fe64f53f659eea49fdd"},
@@ -955,8 +955,8 @@ black = [
     {file = "black-22.8.0.tar.gz", hash = "sha256:792f7eb540ba9a17e8656538701d3eb1afcb134e3b45b71f20b25c77a8db7e6e"},
 ]
 certifi = [
-    {file = "certifi-2022.6.15-py3-none-any.whl", hash = "sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412"},
-    {file = "certifi-2022.6.15.tar.gz", hash = "sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d"},
+    {file = "certifi-2022.6.15.1-py3-none-any.whl", hash = "sha256:43dadad18a7f168740e66944e4fa82c6611848ff9056ad910f8f7a3e46ab89e0"},
+    {file = "certifi-2022.6.15.1.tar.gz", hash = "sha256:cffdcd380919da6137f76633531a5817e3a9f268575c128249fb637e4f9e73fb"},
 ]
 cffi = [
     {file = "cffi-1.15.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:a66d3508133af6e8548451b25058d5812812ec3798c886bf38ed24a98216fab2"},
@@ -1077,8 +1077,8 @@ colorama = [
     {file = "colorama-0.4.5.tar.gz", hash = "sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4"},
 ]
 croniter = [
-    {file = "croniter-1.3.5-py2.py3-none-any.whl", hash = "sha256:4f72faca42c00beb6e30907f1315145f43dfbe5ec0ad4ada24b4c0d57b86a33a"},
-    {file = "croniter-1.3.5.tar.gz", hash = "sha256:7592fc0e8a00d82af98dfa2768b75983b6fb4c2adc8f6d0d7c931a715b7cefee"},
+    {file = "croniter-1.3.7-py2.py3-none-any.whl", hash = "sha256:12369c67e231c8ce5f98958d76ea6e8cb5b157fda4da7429d245a931e4ed411e"},
+    {file = "croniter-1.3.7.tar.gz", hash = "sha256:72ef78d0f8337eb35393b8893ebfbfbeb340f2d2ae47e0d2d78130e34b0dd8b9"},
 ]
 cytoolz = [
     {file = "cytoolz-0.12.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:8237612fed78d4580e94141a74ac0977f5a9614dd7fa8f3d2fcb30e6d04e73aa"},
@@ -1359,8 +1359,8 @@ hdwallets = [
     {file = "hdwallets-0.1.2.tar.gz", hash = "sha256:c85d08b59c3fd3bc5b29398583d7d7dc46f95456f69ff15a3ab0353084ee7529"},
 ]
 identify = [
-    {file = "identify-2.5.4-py2.py3-none-any.whl", hash = "sha256:962d9bec27ccd1fcceff9b11f8c635afeb163ea3d8b6b30d8f1eee37ec7fac47"},
-    {file = "identify-2.5.4.tar.gz", hash = "sha256:b020e876cec2b11dadb3324fa0427eb744b7d66ef19ac579a748dfff774b6dcf"},
+    {file = "identify-2.5.5-py2.py3-none-any.whl", hash = "sha256:ef78c0d96098a3b5fe7720be4a97e73f439af7cf088ebf47b620aeaa10fadf97"},
+    {file = "identify-2.5.5.tar.gz", hash = "sha256:322a5699daecf7c6fd60e68852f36f2ecbb6a36ff6e6e973e0d2bb6fca203ee6"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
@@ -1620,8 +1620,8 @@ toolz = [
     {file = "toolz-0.12.0.tar.gz", hash = "sha256:88c570861c440ee3f2f6037c4654613228ff40c93a6c25e0eba70d17282c6194"},
 ]
 types-protobuf = [
-    {file = "types-protobuf-3.20.1.tar.gz", hash = "sha256:36e3426476e373da6f2bb8a81a1194478cd1f33813a4e254849146d28c450e00"},
-    {file = "types_protobuf-3.20.1-py3-none-any.whl", hash = "sha256:b0bc0ffde2a339ee25c4b47e9dd515010153ad80c21d16fb57a2429987579801"},
+    {file = "types-protobuf-3.20.2.tar.gz", hash = "sha256:cfb76b5eba514807796603006134ccc361432dd061a8ccb8db2cf9108a454369"},
+    {file = "types_protobuf-3.20.2-py3-none-any.whl", hash = "sha256:e5aa38c2ea7a765f5d572a961e92b150c2eb8504b56a525eaae745a41b4d8fdc"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.3.0-py3-none-any.whl", hash = "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02"},
@@ -1640,8 +1640,8 @@ urllib3 = [
     {file = "urllib3-1.26.12.tar.gz", hash = "sha256:3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e"},
 ]
 virtualenv = [
-    {file = "virtualenv-20.16.4-py3-none-any.whl", hash = "sha256:035ed57acce4ac35c82c9d8802202b0e71adac011a511ff650cbcf9635006a22"},
-    {file = "virtualenv-20.16.4.tar.gz", hash = "sha256:014f766e4134d0008dcaa1f95bafa0fb0f575795d07cae50b1bee514185d6782"},
+    {file = "virtualenv-20.16.5-py3-none-any.whl", hash = "sha256:d07dfc5df5e4e0dbc92862350ad87a36ed505b978f6c39609dc489eadd5b0d27"},
+    {file = "virtualenv-20.16.5.tar.gz", hash = "sha256:227ea1b9994fdc5ea31977ba3383ef296d7472ea85be9d6732e42a91c04e80da"},
 ]
 websocket-client = [
     {file = "websocket-client-1.4.1.tar.gz", hash = "sha256:f9611eb65c8241a67fb373bef040b3cf8ad377a9f6546a12b620b6511e8ea9ef"},

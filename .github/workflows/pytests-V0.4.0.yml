@@ -183,7 +183,6 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
-        report_name = ${{matrix.VERSION_SDK}}
         with:
-          name: ${{report_name}}-report
+          name: ${{matrix.VERSION_SDK}}-report
           path: reports/report.html

@@ -86,7 +86,7 @@ jobs:
         with:
           _input-file: 'scripts/localnet.sh'
           _output-file: 'scripts/localnet.sh'
-          _input-text: 'sed -i '''
+          _input-text: "sed -i ''"
           _format-key: 'sed -i'
 
       - name: Set up Go

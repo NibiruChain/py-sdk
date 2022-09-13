@@ -9,7 +9,7 @@ on:
       - ".github/workflows/pytests-chain.yaml"
 env:
   ## Sets environment variable
-    VERSION_SDK: version = "0.4.1"
+    VERSION_SDK: version = "0.3.1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}

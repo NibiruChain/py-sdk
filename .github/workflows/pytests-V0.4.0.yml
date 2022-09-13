@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        VERSION_SDK: ['0.4.0', '0.4.1', '0.3.0']
+        VERSION_SDK: ['0.4.0', '0.4.1']
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
@@ -95,18 +95,6 @@ jobs:
       # check-out nibiru V0.4.0 repo and deploy
       # ----------------------------------------------
       - name: Checkout nibiru V0.4.0
-        if: (steps.output_test.outputs.new_value == env.ENV_VERSION)
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
-          repository: NibiruChain/nibiru
-          ref: refs/tags/v0.14.0
-
-
-      # ----------------------------------------------
-      # check-out nibiru V0.3.0 repo and deploy
-      # ----------------------------------------------
-      - name: Checkout nibiru V0.3.0
         if: (steps.output_test.outputs.new_value == env.ENV_VERSION)
         uses: actions/checkout@v2
         with:

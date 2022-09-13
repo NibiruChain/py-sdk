@@ -70,13 +70,6 @@ jobs:
            fi
            done < "$input_file"
 
-
-  # test to see if done correctly - should echo "value"
-      - run: echo ${{steps.output_test.outputs.new_value }}
-
-  # test to see if done correctly - should echo "value"
-      - run: echo ${{steps.output_test.outputs.new_value }}
-
       # ----------------------------------------------
       # check-out nibiru V0.4.0 repo and deploy
       # ----------------------------------------------
@@ -88,7 +81,7 @@ jobs:
           repository: NibiruChain/nibiru
           ref: refs/tags/v0.14.0
 
-      - name: Replace file in index.html
+      - name: Replace file in scripts/localnet.sh
         uses: bluwy/substitute-string-action@v1
         with:
           _input-file: 'scripts/localnet.sh'

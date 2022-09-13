@@ -31,7 +31,7 @@ jobs:
       LCD_PORT: 1317
       NETWORK_INSECURE: true
       WEBSOCKET_ENDPOINT: ws://localhost:26657/websocket
-      ENV_VERSION: `version = "${{matrix.VERSION_SDK}}"`
+      ENV_VERSION: version = "${{matrix.VERSION_SDK}}"
 
     steps:
 

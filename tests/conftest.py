@@ -9,7 +9,6 @@ See "Scope: sharing fixtures across classes, modules, packages or session"
 Fixtures available:
 - network
 - val_node
-- oracle_node
 - agent_node
 """
 import os
@@ -17,8 +16,8 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from nibiru import Network, Sdk, msg
-from nibiru.common import Coin, TxConfig, TxType
+from nibiru import Network, Sdk
+from nibiru.common import TxConfig, TxType
 
 
 def pytest_configure(config):
@@ -30,7 +29,6 @@ def pytest_configure(config):
         "LCD_PORT",
         "CHAIN_ID",
         "VALIDATOR_MNEMONIC",
-        "ORACLE_MNEMONIC",
     )
     for var in expected_env_vars:
         if not os.getenv(var):
@@ -56,20 +54,6 @@ def val_node(network: Network) -> Sdk:
         .with_config(tx_config)
         .with_network(network, pytest.NETWORK_INSECURE)
     )
-
-
-@pytest.fixture
-def oracle_agent(network: Network, val_node: Sdk) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
-    agent = (
-        Sdk.authorize(os.getenv("ORACLE_MNEMONIC"))
-        .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
-    )
-    val_node.tx.execute_msgs(
-        msg.MsgSend(val_node.address, agent.address, [Coin(10000, "unibi")])
-    )
-    return agent
 
 
 @pytest.fixture

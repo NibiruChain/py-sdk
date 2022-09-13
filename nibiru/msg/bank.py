@@ -1,5 +1,5 @@
 import dataclasses
-from typing import List
+from typing import Iterable, List, Union
 
 from nibiru_proto.proto.cosmos.bank.v1beta1 import tx_pb2 as pb
 from nibiru_proto.proto.cosmos.distribution.v1beta1 import tx_pb2 as tx_pb
@@ -21,13 +21,17 @@ class MsgSend(PythonMsg):
 
     from_address: str
     to_address: str
-    coins: List[Coin]
+    coins: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgSend:
+        coins = self.coins
+        if not isinstance(coins, Iterable):
+            coins = [self.coins]
+
         return pb.MsgSend(
             from_address=self.from_address,
             to_address=self.to_address,
-            amount=[coin._generate_proto_object() for coin in self.coins],
+            amount=[coin._generate_proto_object() for coin in coins],
         )
 
 

@@ -25,16 +25,32 @@ def camel_to_snake(camel: str):
     ).lstrip('_')
 
 
-def t_dict(d):
+def dict_keys_from_camel_to_snake(d):
+    """
+    Transform all keys from the dictionnary from camelcase to snake case.
+
+    Args:
+        d (dict): The dictionary to transform
+
+    Returns:
+        dict: The dictionary transformed
+    """
     if isinstance(d, list):
-        return [t_dict(i) if isinstance(i, (dict, list)) else i for i in d]
+        return [
+            dict_keys_from_camel_to_snake(i) if isinstance(i, (dict, list)) else i
+            for i in d
+        ]
     return {
-        camel_to_snake(a): t_dict(b) if isinstance(b, (dict, list)) else b
+        camel_to_snake(a): dict_keys_from_camel_to_snake(b)
+        if isinstance(b, (dict, list))
+        else b
         for a, b in d.items()
     }
 
 
-def deserialize(pb_msg: protobuf_message.Message) -> dict:
+def deserialize(
+    pb_msg: protobuf_message.Message, no_sdk_transformation: bool = False
+) -> dict:
     """Deserializes a proto message into a dictionary.
 
     - sdk.Dec values are converted to floats.
@@ -43,6 +59,7 @@ def deserialize(pb_msg: protobuf_message.Message) -> dict:
 
     Args:
         pb_msg (protobuf.message.Message)
+        no_sdk_transformation (bool): Wether to bypass the sdk transformation. Default to False
 
     Returns:
         dict: 'pb_msg' as a JSON-able dictionary.
@@ -66,13 +83,21 @@ def deserialize(pb_msg: protobuf_message.Message) -> dict:
         if custom_dtype is not None:
 
             if "sdk/types.Dec" in str(custom_dtype):
-                serialized_output[str(attr)] = from_sdk_dec(
-                    pb_msg.__getattribute__(attr)
-                )
+                if no_sdk_transformation:
+                    serialized_output[str(attr)] = float(pb_msg.__getattribute__(attr))
+                else:
+                    serialized_output[str(attr)] = from_sdk_dec(
+                        pb_msg.__getattribute__(attr)
+                    )
             elif "sdk/types.Int" in str(custom_dtype):
-                serialized_output[str(attr)] = from_sdk_int(
-                    pb_msg.__getattribute__(attr)
-                )
+                if no_sdk_transformation:
+                    serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
+                else:
+                    serialized_output[str(attr)] = from_sdk_int(
+                        pb_msg.__getattribute__(attr)
+                    )
+            elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
+                serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
             else:
                 try:
                     val = pb_msg.__getattribute__(attr)
@@ -124,7 +149,7 @@ def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
         elif is_sdk_dec[field.camelcase_name]:
             output[field.camelcase_name] = from_sdk_dec(output[field.camelcase_name])
 
-    return t_dict(output)
+    return dict_keys_from_camel_to_snake(output)
 
 
 class QueryClient:

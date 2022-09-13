@@ -1,3 +1,0 @@
-recursive-include nibiru/proto *.py
-recursive-include nibiru *.ini
-recursive-include nibiru/cert/ *.crt

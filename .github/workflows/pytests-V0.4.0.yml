@@ -18,6 +18,9 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        VERSION_SDK: ['version = "0.4.0"', 'version = "0.4.1"']
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       CHAIN_ID: ${{ secrets.CHAIN_ID }}

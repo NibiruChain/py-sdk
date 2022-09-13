@@ -94,7 +94,7 @@ jobs:
           _input-file: 'scripts/localnet.sh'
           _output-file: 'scripts/localnet.sh'
           _format-key: "sed -i ''"
-          files: "sed -i"
+          sed -i '': "sed -i"
 
       - name: Set up Go
         if: (steps.output_test.outputs.new_value == ${{env.VERSION_SDK}})

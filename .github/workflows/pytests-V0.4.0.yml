@@ -85,6 +85,18 @@ jobs:
           repository: NibiruChain/nibiru
           ref: refs/tags/v0.14.0
 
+
+      # ----------------------------------------------
+      # check-out nibiru V0.3.0 repo and deploy
+      # ----------------------------------------------
+      - name: Checkout nibiru V0.3.0
+        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
+          repository: NibiruChain/nibiru
+          ref: refs/tags/v0.14.0
+
       - name: Replace file in scripts/localnet.sh
         uses: bluwy/substitute-string-action@v1
         with:

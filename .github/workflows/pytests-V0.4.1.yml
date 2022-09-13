@@ -86,8 +86,8 @@ jobs:
         with:
           _input-file: 'scripts/localnet.sh'
           _output-file: 'scripts/localnet.sh'
-          _format-key: '%%key%%'
-          sed -i '': "sed -i"
+          _input-text: 'sed -i '''
+          _format-key: 'sed -i'
 
       - name: Set up Go
         if: (steps.output_test.outputs.new_value == ${{env.VERSION_SDK}})

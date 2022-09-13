@@ -74,11 +74,16 @@ jobs:
            fi
            done < "$input_file"
 
+      - name: Show Variables
+        run: |
+         echo 'Variables Value From File: ${{steps.output_test.outputs.new_value}}'
+         echo 'Variables Var: ${{env.ENV_VERSION}}'
+
       # ----------------------------------------------
       # check-out nibiru V0.4.0 repo and deploy
       # ----------------------------------------------
       - name: Checkout nibiru V0.4.0
-        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
+        if: (${{steps.output_test.outputs.new_value}} == ${{env.ENV_VERSION}})
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}
@@ -90,7 +95,7 @@ jobs:
       # check-out nibiru V0.3.0 repo and deploy
       # ----------------------------------------------
       - name: Checkout nibiru V0.3.0
-        if: (steps.output_test.outputs.new_value == ${{env.ENV_VERSION}})
+        if: (${{steps.output_test.outputs.new_value}} == ${{env.ENV_VERSION}})
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.NIBIBOT_GIT_TOKEN }}

@@ -75,6 +75,7 @@ class Network:
         return cls(
             lcd_endpoint='https://lcd.testnet-3.nibiru.fi',
             grpc_endpoint='grpc.testnet-3.nibiru.fi',
+            websocket_endpoint='wss://rpc.testnet-3.nibiru.fi/websocket',
             chain_id='nibiru-testnet-3',
             fee_denom='unibi',
             env='testnet',

@@ -16,7 +16,7 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     """
     pair = "ubtc:unusd"
 
-    expected_events = [
+    expected_events_tx = [
         # Vpool
         EventType.ReserveSnapshotSavedEvent,
         EventType.SwapQuoteForBaseEvent,
@@ -29,6 +29,12 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
         # Pricefeed
         EventType.OracleUpdatePriceEvent,
     ]
+
+    expected_events_block = [
+        EventType.PairPriceUpdatedEvent,
+    ]
+
+    expected_events = expected_events_block + expected_events_tx
 
     nibiru_websocket = NibiruWebsocket(
         network,

@@ -1,3 +1,4 @@
+import base64
 import json
 import threading
 import time
@@ -82,10 +83,41 @@ class NibiruWebsocket:
             _ (WebSocketApp): No idea what this is
             message (str): The message in a utf-8 data received from the server
         """
-        log = json.loads(message).get("result")
-        if log is None:
+        log = json.loads(message).get("result", {})
+        if not log:
             return
 
+        if log["query"] == "tm.event='Tx'":
+            self._handle_txs(log)
+
+        if log["query"] == "tm.event='NewBlock'":
+            self._handle_block(log)
+
+    def _handle_block(self, log: dict) -> None:
+        """
+        Read the log for the begin and end block and put relevant events in the queue.
+
+        Args:
+            log (dict): The logs
+        """
+
+        block_begin_events = log["data"]["value"]["result_begin_block"]["events"]
+        block_end_events = log["data"]["value"]["result_end_block"]["events"]
+
+        block_height = log["data"]["value"]["block"]["header"]["height"]
+
+        for event in block_begin_events + block_end_events:
+            self._handle_event(
+                block_height=block_height, tx_hash=None, event=event, base64_decode=True
+            )
+
+    def _handle_txs(self, log: dict):
+        """
+        Read the log for the transactions in a block and put relevant events in the queue.
+
+        Args:
+            log (dict): The logs
+        """
         events = log.get("events")
         if events is None:
             return
@@ -96,41 +128,76 @@ class NibiruWebsocket:
         events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
 
         for event in events["events"]:
-            # This below is faster since self.captured_events_type.keys() are hashed
-            if event["type"] in self.captured_events_type:
-                event_payload = {
-                    attribute["key"]: attribute["value"].strip('"')
-                    for attribute in event["attributes"]
-                }
+            self._handle_event(block_height, tx_hash, event)
 
-                if not isinstance(
-                    self.captured_events_type[event["type"]].value,
-                    str,
-                ):
-                    proto_message = google.protobuf.json_format.Parse(
-                        json.dumps(clean_nested_dict(event_payload)),
-                        self.captured_events_type[event["type"]].value(),
-                        ignore_unknown_fields=True,
-                    )
+    def _handle_event(
+        self, block_height: int, tx_hash: str, event: dict, base64_decode: bool = False
+    ):
+        """
+        Read an event and put it in the queue if it's part of the captured event type.
 
-                    event_payload = nibiru.query_clients.util.deserialize(
-                        proto_message,
-                        no_sdk_transformation=True,
-                    )
+        Args:
+            block_height (int): The height of the block
+            tx_hash (str): The hash of the transaction if it's coming from a transaction
+            event (dict): The event to parse
+            base64_decode (bool, optional): Whether to base64 decode the attributes and key of the event.
+                Defaults to False.
+        """
+        # This below is faster since self.captured_events_type.keys() are hashed
 
-                event_payload["block_height"] = block_height
-                event_payload["tx_hash"] = tx_hash
+        if base64_decode:
 
-                self.queue.put(EventCaptured(event["type"], event_payload))
+            def decode(value):
+                return base64.b64decode(value).decode('utf-8')
+
+        else:
+
+            def decode(value):
+                return value
+
+        if event["type"] in self.captured_events_type:
+
+            event_payload = {
+                decode(attribute["key"]): decode(attribute["value"]).strip('"')
+                for attribute in event["attributes"]
+            }
+
+            if not isinstance(
+                self.captured_events_type[event["type"]].value,
+                str,
+            ):
+                proto_message = google.protobuf.json_format.Parse(
+                    json.dumps(clean_nested_dict(event_payload)),
+                    self.captured_events_type[event["type"]].value(),
+                    ignore_unknown_fields=True,
+                )
+
+                event_payload = nibiru.query_clients.util.deserialize(
+                    proto_message,
+                    no_sdk_transformation=True,
+                )
+
+            event_payload["block_height"] = block_height
+            event_payload["tx_hash"] = tx_hash
+
+            self.queue.put(EventCaptured(event["type"], event_payload))
 
     def _subscribe(self):
-        self._ws.send(
-            json.dumps(
-                {
-                    "jsonrpc": "2.0",
-                    "method": "subscribe",
-                    "id": 1,
-                    "params": {"query": "tm.event='Tx'"},
-                }
+
+        tm_events = {
+            "new_block_value": "NewBlock",
+            "tx_value": "Tx",
+        }
+
+        for _, event_name in tm_events.items():
+
+            self._ws.send(
+                json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "method": "subscribe",
+                        "id": 1,
+                        "params": {"query": f"tm.event='{event_name}'"},
+                    }
+                )
             )
-        )

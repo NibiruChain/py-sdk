@@ -24,6 +24,14 @@ def test_get_chain_id(val_node: Sdk):
     assert val_node.network.chain_id == val_node.query.get_chain_id()
 
 
+def test_wait_next_block(val_node: Sdk):
+    current_block_height = val_node.query.get_latest_block().block.header.height
+    val_node.query.wait_for_next_block()
+    new_block_height = val_node.query.get_latest_block().block.header.height
+
+    assert new_block_height > current_block_height
+
+
 def test_version_works(val_node: Sdk):
     tests = [
         {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},

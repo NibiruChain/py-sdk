@@ -1,4 +1,5 @@
 import importlib.metadata as importlib_metadata
+import time
 from typing import Generator, List, Optional, Tuple, Union
 
 import grpc
@@ -119,6 +120,14 @@ class GrpcClient:
     def sync_timeout_height(self):
         block = self.get_latest_block()
         self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
+
+    def wait_for_next_block(self):
+        """
+        Wait for a block to be written
+        """
+        current_block = self.get_latest_block().block.header.height
+        while self.get_latest_block().block.header.height < current_block + 1:
+            time.sleep(0.5)
 
     def get_block_by_height(
         self, height: int

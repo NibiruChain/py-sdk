@@ -71,9 +71,7 @@ def deserialize(
         for field in pb_msg.ListFields()
     }
     serialized_output = {}
-    expected_fields: List[str] = [
-        attr for attr in dir(pb_msg) if attr not in PROTOBUF_MSG_BASE_ATTRS
-    ]
+    expected_fields: List[str] = list(pb_msg.DESCRIPTOR.fields_by_name.keys())
 
     for _, attr in enumerate(expected_fields):
 

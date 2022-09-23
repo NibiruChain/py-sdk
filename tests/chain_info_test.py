@@ -12,11 +12,12 @@ def test_genesis_block_ping():
     """Manually query block info from the chain using a get request. This verifies that
     the configuration is valid.
     """
-    host = os.environ["HOST"]
-    block_number = 1
-    tm_rpc_port = 26657
-    url = f"http://{host}:{tm_rpc_port}/block?height={block_number}"
-    query_resp: Dict[str, Any] = requests.get(url).json()
+    tendermint_rpc_endpoint = os.getenv(
+        "TENDERMINT_RPC_ENDPOINT", "http://localhost:26657"
+    )
+    query_resp: Dict[str, Any] = requests.get(
+        f"{tendermint_rpc_endpoint}/block?height=1"
+    ).json()
     assert all([key in query_resp.keys() for key in ["jsonrpc", "id", "result"]])
 
 

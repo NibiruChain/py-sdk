@@ -14,6 +14,7 @@ from typing import Dict, Optional
 class Network:
     lcd_endpoint: str
     grpc_endpoint: str
+    tendermint_rpc_endpoint: str
     chain_id: str
     env: str
     websocket_endpoint: str
@@ -40,6 +41,9 @@ class Network:
         chain_config: Dict[str, Optional[str]] = {
             "LCD_ENDPOINT": os.getenv("LCD_ENDPOINT", "http://localhost:1317"),
             "GRPC_ENDPOINT": os.getenv("GRPC_ENDPOINT", "localhost:9090"),
+            "TENDERMINT_RPC_ENDPOINT": os.getenv(
+                "TENDERMINT_RPC_ENDPOINT", "http://localhost:26657"
+            ),
             "WEBSOCKET_ENDPOINT": os.getenv(
                 "WEBSOCKET_ENDPOINT", "ws://localhost:26657/websocket"
             ),
@@ -59,6 +63,7 @@ class Network:
         return cls(
             lcd_endpoint=chain_config["LCD_ENDPOINT"],
             grpc_endpoint=chain_config["GRPC_ENDPOINT"],
+            tendermint_rpc_endpoint=chain_config["TENDERMINT_RPC_ENDPOINT"],
             websocket_endpoint=chain_config["WEBSOCKET_ENDPOINT"],
             chain_id=chain_config["CHAIN_ID"],
             fee_denom='unibi',
@@ -77,6 +82,7 @@ class Network:
         return cls(
             lcd_endpoint='https://lcd.testnet-3.nibiru.fi',
             grpc_endpoint='grpc.testnet-3.nibiru.fi',
+            tendermint_rpc_endpoint='https://rpc.testnet-3.nibiru.fi',
             websocket_endpoint='wss://rpc.testnet-3.nibiru.fi/websocket',
             chain_id='nibiru-testnet-3',
             fee_denom='unibi',
@@ -103,6 +109,7 @@ class Network:
         return cls(
             lcd_endpoint='http://localhost:1317',
             grpc_endpoint='localhost:9090',
+            tendermint_rpc_endpoint='http://localhost:26657',
             websocket_endpoint='ws://localhost:26657/websocket',
             chain_id='nibiru-localnet-0',
             fee_denom='unibi',

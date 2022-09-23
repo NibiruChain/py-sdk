@@ -26,6 +26,7 @@ def pytest_configure(config):
     expected_env_vars = (
         "LCD_ENDPOINT",
         "GRPC_ENDPOINT",
+        "TENDERMINT_RPC_ENDPOINT",
         "WEBSOCKET_ENDPOINT",
         "CHAIN_ID",
         "VALIDATOR_MNEMONIC",
@@ -36,7 +37,7 @@ def pytest_configure(config):
         val = os.getenv(env_var)
         if not val:
             raise ValueError(f"Environment variable {env_var} is missing!")
-        setattr(pytest, env_var, val)
+        setattr(pytest, env_var, val)  # pytest.<env_var> = val
 
     # NETWORK_INSECURE must be a boolean
     pytest.NETWORK_INSECURE = os.getenv("NETWORK_INSECURE") != "false"
@@ -47,6 +48,7 @@ def network() -> Network:
     return Network(
         lcd_endpoint=pytest.LCD_ENDPOINT,
         grpc_endpoint=pytest.GRPC_ENDPOINT,
+        tendermint_rpc_endpoint=pytest.TENDERMINT_RPC_ENDPOINT,
         websocket_endpoint=pytest.WEBSOCKET_ENDPOINT,
         chain_id=pytest.CHAIN_ID,
         env="unit_test",

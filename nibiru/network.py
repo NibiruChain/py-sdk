@@ -15,9 +15,9 @@ class Network:
     lcd_endpoint: str
     grpc_endpoint: str
     chain_id: str
-    fee_denom: str
     env: str
-    websocket_endpoint: str = None
+    websocket_endpoint: str
+    fee_denom: str = "unibi"
 
     def __post_init__(self):
         """
@@ -38,10 +38,13 @@ class Network:
             Network: The updated Network object.
         """
         chain_config: Dict[str, Optional[str]] = {
-            "HOST": os.getenv("HOST"),
-            "GRPC_PORT": os.getenv("GRPC_PORT"),
-            "LCD_PORT": os.getenv("LCD_PORT"),
-            "CHAIN_ID": os.getenv("CHAIN_ID"),
+            "HOST": os.getenv("HOST", "localhost"),
+            "GRPC_PORT": os.getenv("GRPC_PORT", "9090"),
+            "LCD_PORT": os.getenv("LCD_PORT", "1317"),
+            "WEBSOCKET_ENDPOINT": os.getenv(
+                "WEBSOCKET_ENDPOINT", "ws://localhost:26657/websocket"
+            ),
+            "CHAIN_ID": os.getenv("CHAIN_ID", "nibiru-localnet-0"),
         }
         for name, env_var in chain_config.items():
             if env_var is None:
@@ -57,7 +60,7 @@ class Network:
         return cls(
             lcd_endpoint=f'http://{chain_config["HOST"]}:{chain_config["LCD_PORT"]}',
             grpc_endpoint=f'{chain_config["HOST"]}:{chain_config["GRPC_PORT"]}',
-            websocket_endpoint=os.getenv("WEBSOCKET_ENDPOINT"),
+            websocket_endpoint=chain_config["WEBSOCKET_ENDPOINT"],
             chain_id=chain_config["CHAIN_ID"],
             fee_denom='unibi',
             env="devnet",
@@ -101,6 +104,7 @@ class Network:
         return cls(
             lcd_endpoint='http://localhost:1317',
             grpc_endpoint='localhost:9090',
+            websocket_endpoint='ws://localhost:26657/websocket',
             chain_id='nibiru-localnet-0',
             fee_denom='unibi',
             env='local',

@@ -27,22 +27,31 @@ def pytest_configure(config):
         "HOST",
         "GRPC_PORT",
         "LCD_PORT",
+        "WEBSOCKET_ENDPOINT",
         "CHAIN_ID",
         "VALIDATOR_MNEMONIC",
+        "ORACLE_MNEMONIC",
+        "NETWORK_INSECURE",
     )
-    for var in expected_env_vars:
-        if not os.getenv(var):
-            raise ValueError(f"Environment variable {var} is missing!")
+    for env_var in expected_env_vars:
+        val = os.getenv(env_var)
+        if not val:
+            raise ValueError(f"Environment variable {env_var} is missing!")
+        setattr(pytest, env_var, val)
 
-    pytest.VALIDATOR_MNEMONIC = os.getenv("VALIDATOR_MNEMONIC")
-    pytest.WEBSOCKET_ENDPOINT = os.getenv("WEBSOCKET_ENDPOINT")
-    pytest.ORACLE_MNEMONIC = os.getenv("ORACLE_MNEMONIC")
+    # NETWORK_INSECURE must be a boolean
     pytest.NETWORK_INSECURE = os.getenv("NETWORK_INSECURE") != "false"
 
 
 @pytest.fixture
 def network() -> Network:
-    return Network.devnet()
+    return Network(
+        lcd_endpoint=f'http://{pytest.HOST}:{pytest.LCD_PORT}',
+        grpc_endpoint=f'{pytest.HOST}:{pytest.GRPC_PORT}',
+        websocket_endpoint=pytest.WEBSOCKET_ENDPOINT,
+        chain_id=pytest.CHAIN_ID,
+        env="unit_test",
+    )
 
 
 @pytest.fixture

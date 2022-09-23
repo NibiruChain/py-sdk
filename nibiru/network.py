@@ -27,9 +27,9 @@ class Network:
             self.env = "custom"
 
     @classmethod
-    def devnet(cls) -> "Network":
+    def customnet(cls) -> "Network":
         """
-        Devnet is the network used for testing and debugging of the network. It is unstable and the version can change.
+        Custom is the network configured from ENV variables. Defaults to localnet if no ENV variables are provided.
 
         Raises:
             KeyError: If the values are not set in the testing environment, this will raise an exception.
@@ -91,7 +91,7 @@ class Network:
         raise NotImplementedError
 
     @classmethod
-    def local(cls) -> "Network":
+    def localnet(cls) -> "Network":
         """
         Localnet is the network you would expect to connect to if you run `make localnet` from the nibiru repository.
         It allows you to update locally the golang codebase to checkout the behavior of the chain with different changes

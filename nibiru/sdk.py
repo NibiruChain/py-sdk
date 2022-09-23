@@ -108,9 +108,7 @@ class Sdk:
         """
         self.network = network
         self._with_query_client(
-            GrpcClient(
-                self.network, insecure, bypass_version_check=bypass_version_check
-            )
+            GrpcClient(self.network, insecure, bypass_version_check)
         )
         return self
 

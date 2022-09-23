@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
+      LCD_ENDPOINT: ${{ secrets.LCD_ENDPOINT }}
+      GRPC_ENDPOINT: ${{ secrets.GRPC_ENDPOINT }}
+      TENDERMINT_RPC_ENDPOINT: ${{ secrets.TENDERMINT_RPC_ENDPOINT }}
+      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      HOST: ${{ secrets.HOST }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
-      GRPC_PORT: ${{ secrets.GRPC_PORT }}
-      LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
-      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
     steps:
       # ----------------------------------------------
       # check-out repo and set-up python

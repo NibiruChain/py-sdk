@@ -57,7 +57,6 @@ class GrpcClient:
             else grpc.secure_channel(network.grpc_endpoint, credentials)
         )
 
-        self.insecure = insecure
         self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(
             self.chain_channel
         )

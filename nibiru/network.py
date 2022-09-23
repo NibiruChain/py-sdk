@@ -38,9 +38,8 @@ class Network:
             Network: The updated Network object.
         """
         chain_config: Dict[str, Optional[str]] = {
-            "HOST": os.getenv("HOST", "localhost"),
-            "GRPC_PORT": os.getenv("GRPC_PORT", "9090"),
-            "LCD_PORT": os.getenv("LCD_PORT", "1317"),
+            "LCD_ENDPOINT": os.getenv("LCD_ENDPOINT", "http://localhost:1317"),
+            "GRPC_ENDPOINT": os.getenv("GRPC_ENDPOINT", "localhost:9090"),
             "WEBSOCKET_ENDPOINT": os.getenv(
                 "WEBSOCKET_ENDPOINT", "ws://localhost:26657/websocket"
             ),
@@ -58,8 +57,8 @@ class Network:
                 )
 
         return cls(
-            lcd_endpoint=f'http://{chain_config["HOST"]}:{chain_config["LCD_PORT"]}',
-            grpc_endpoint=f'{chain_config["HOST"]}:{chain_config["GRPC_PORT"]}',
+            lcd_endpoint=chain_config["LCD_ENDPOINT"],
+            grpc_endpoint=chain_config["GRPC_ENDPOINT"],
             websocket_endpoint=chain_config["WEBSOCKET_ENDPOINT"],
             chain_id=chain_config["CHAIN_ID"],
             fee_denom='unibi',

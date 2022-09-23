@@ -24,9 +24,8 @@ def pytest_configure(config):
     load_dotenv()
 
     expected_env_vars = (
-        "HOST",
-        "GRPC_PORT",
-        "LCD_PORT",
+        "LCD_ENDPOINT",
+        "GRPC_ENDPOINT",
         "WEBSOCKET_ENDPOINT",
         "CHAIN_ID",
         "VALIDATOR_MNEMONIC",
@@ -46,8 +45,8 @@ def pytest_configure(config):
 @pytest.fixture
 def network() -> Network:
     return Network(
-        lcd_endpoint=f'http://{pytest.HOST}:{pytest.LCD_PORT}',
-        grpc_endpoint=f'{pytest.HOST}:{pytest.GRPC_PORT}',
+        lcd_endpoint=pytest.LCD_ENDPOINT,
+        grpc_endpoint=pytest.GRPC_ENDPOINT,
         websocket_endpoint=pytest.WEBSOCKET_ENDPOINT,
         chain_id=pytest.CHAIN_ID,
         env="unit_test",

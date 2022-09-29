@@ -109,8 +109,11 @@ def deserialize(
                         serialized_output[str(attr)] = deserialize(val)
                 except Exception as ex:
                     serialized_output[str(attr)] = pb_msg.__getattribute__(attr)
-        elif (custom_dtype is None) and (attr_search == ''):
-            serialized_output[str(attr)] = ""
+        elif custom_dtype is None:
+            if attr_search == '':
+                serialized_output[str(attr)] = ""
+            elif isinstance(attr_search, bool):
+                serialized_output[str(attr)] = attr_search
         else:
             serialized_output[str(attr)] = deserialize(pb_msg.__getattribute__(attr))
 

@@ -153,5 +153,4 @@ class StakingQueryClient(QueryClient):
             ),
             should_deserialize=False,
         )
-
         return deserialize(proto_output)

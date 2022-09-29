@@ -4,3 +4,4 @@ from nibiru.query_clients.epoch import EpochQueryClient  # noqa
 from nibiru.query_clients.perp import PerpQueryClient  # noqa
 from nibiru.query_clients.pricefeed import PricefeedQueryClient  # noqa
 from nibiru.query_clients.vpool import VpoolQueryClient  # noqa
+from nibiru.query_clients.staking import StakingQueryClient  # noqa

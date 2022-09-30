@@ -66,7 +66,7 @@ def deserialize(
         dict: 'pb_msg' as a JSON-able dictionary.
     """
     if not isinstance(pb_msg, protobuf_message.Message):
-        raise TypeError(f"expted protobuf Message for 'pb_msg', not {type(pb_msg)}")
+        return pb_msg
     custom_dtypes: Dict[str, bytes] = {
         str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
         for field in pb_msg.ListFields()
@@ -98,22 +98,16 @@ def deserialize(
             elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
                 serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
             else:
-                try:
-                    val = pb_msg.__getattribute__(attr)
-                    if hasattr(val, '__len__') and not isinstance(val, str):
-                        updated_vals = []
-                        for v in val:
-                            updated_vals.append(deserialize(v))
-                        serialized_output[str(attr)] = updated_vals
-                    else:
-                        serialized_output[str(attr)] = deserialize(val)
-                except Exception as ex:
-                    serialized_output[str(attr)] = pb_msg.__getattribute__(attr)
-        elif custom_dtype is None:
-            if attr_search == '':
-                serialized_output[str(attr)] = ""
-            elif isinstance(attr_search, bool):
-                serialized_output[str(attr)] = attr_search
+                val = pb_msg.__getattribute__(attr)
+                if hasattr(val, '__len__') and not isinstance(val, str):
+                    updated_vals = []
+                    for v in val:
+                        updated_vals.append(deserialize(v))
+                    serialized_output[str(attr)] = updated_vals
+                else:
+                    serialized_output[str(attr)] = deserialize(val)
+        elif (custom_dtype is None) and (attr_search == ''):
+            serialized_output[str(attr)] = ""
         else:
             serialized_output[str(attr)] = deserialize(pb_msg.__getattribute__(attr))
 

@@ -74,6 +74,7 @@ class GrpcClient:
         self.vpool = nibiru.query_clients.VpoolQueryClient(self.chain_channel)
         self.epoch = nibiru.query_clients.EpochQueryClient(self.chain_channel)
         self.auth = nibiru.query_clients.AuthQueryClient(self.chain_channel)
+        self.staking = nibiru.query_clients.StakingQueryClient(self.chain_channel)
 
         if not bypass_version_check:
             self.assert_compatible_versions(

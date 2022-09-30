@@ -54,6 +54,11 @@ class EventType(Enum):
     # Bank
     Transfer = "transfer"
 
+    # Staking
+    Delegate = "delegate"
+    Unbond = "unbond"
+    Redelegate = "redelegate"
+
     def get_full_path(self):
         if isinstance(self.value, str):
             return self.value

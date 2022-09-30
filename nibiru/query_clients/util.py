@@ -5,6 +5,7 @@ from google.protobuf import message as protobuf_message
 from google.protobuf.json_format import MessageToDict
 from grpc import UnaryUnaryMultiCallable
 from grpc._channel import _InactiveRpcError
+from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 
 from nibiru.exceptions import QueryError
 from nibiru.utils import from_sdk_dec, from_sdk_int
@@ -65,7 +66,7 @@ def deserialize(
         dict: 'pb_msg' as a JSON-able dictionary.
     """
     if not isinstance(pb_msg, protobuf_message.Message):
-        raise TypeError(f"expted protobuf Message for 'pb_msg', not {type(pb_msg)}")
+        return pb_msg
     custom_dtypes: Dict[str, bytes] = {
         str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
         for field in pb_msg.ListFields()
@@ -97,19 +98,16 @@ def deserialize(
             elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
                 serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
             else:
-                try:
-                    val = pb_msg.__getattribute__(attr)
-                    if hasattr(val, '__len__') and not isinstance(val, str):
-                        updated_vals = []
-                        for v in val:
-                            updated_vals.append(deserialize(v))
-                        serialized_output[str(attr)] = updated_vals
-                    else:
-                        serialized_output[str(attr)] = deserialize(val)
-                except:
-                    serialized_output[str(attr)] = pb_msg.__getattribute__(attr)
-        elif (custom_dtype is None) and (attr_search == ''):
-            serialized_output[str(attr)] = ""
+                val = pb_msg.__getattribute__(attr)
+                if hasattr(val, '__len__') and not isinstance(val, str):
+                    updated_vals = []
+                    for v in val:
+                        updated_vals.append(deserialize(v))
+                    serialized_output[str(attr)] = updated_vals
+                else:
+                    serialized_output[str(attr)] = deserialize(val)
+        elif custom_dtype is None and not attr_search:
+            serialized_output[str(attr)] = attr_search
         else:
             serialized_output[str(attr)] = deserialize(pb_msg.__getattribute__(attr))
 
@@ -167,3 +165,13 @@ class QueryClient:
             raise QueryError(
                 f"Error on {str(api_callable._method).split('/')[-1][:-1]}: {err._state.details}"
             ) from None
+
+
+def get_page_request(kwargs):
+    return PageRequest(
+        key=kwargs.get("key"),
+        offset=kwargs.get("offset"),
+        limit=kwargs.get("limit"),
+        count_total=kwargs.get("count_total"),
+        reverse=kwargs.get("reverse"),
+    )

@@ -1,10 +1,8 @@
-from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 from nibiru_proto.proto.cosmos.staking.v1beta1 import query_pb2 as staking_type
 from nibiru_proto.proto.cosmos.staking.v1beta1 import query_pb2_grpc as staking_query
 
-from nibiru.query_clients.util import QueryClient, get_page_request, deserialize, \
-    deserialize_exp
+from nibiru.query_clients.util import QueryClient, deserialize, get_page_request
 
 
 class StakingQueryClient(QueryClient):
@@ -32,8 +30,7 @@ class StakingQueryClient(QueryClient):
         return self.query(
             api_callable=self.api.Delegation,
             req=staking_type.QueryDelegationRequest(
-                delegator_addr=delegator_addr,
-                validator_addr=validator_addr
+                delegator_addr=delegator_addr, validator_addr=validator_addr
             ),
         )
 
@@ -67,9 +64,7 @@ class StakingQueryClient(QueryClient):
         """
         return self.query(
             api_callable=self.api.HistoricalInfo,
-            req=staking_type.QueryHistoricalInfoRequest(
-                height=height
-            ),
+            req=staking_type.QueryHistoricalInfoRequest(height=height),
         )
 
     def params(self) -> dict:
@@ -81,8 +76,9 @@ class StakingQueryClient(QueryClient):
             req=staking_type.QueryParamsRequest(),
         )
 
-    def redelegations(self, delegator_addr: str, dst_validator_addr: str,
-                      **kwargs) -> dict:
+    def redelegations(
+        self, delegator_addr: str, dst_validator_addr: str, **kwargs
+    ) -> dict:
         """
         Query all redelegations records for one delegator
         """

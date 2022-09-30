@@ -2,8 +2,8 @@ import time
 
 import pytest
 
-from nibiru import Sdk, Network
-from nibiru.event_specs import EventType, EventCaptured
+from nibiru import Network, Sdk
+from nibiru.event_specs import EventCaptured, EventType
 from nibiru.exceptions import QueryError, SimulationError
 from nibiru.msg import MsgDelegate
 from nibiru.msg.bank import MsgUndelegate
@@ -52,15 +52,14 @@ def test_query_vpool(val_node: Sdk):
 def test_query_delegation(val_node: Sdk):
     transaction_must_succeed(delegate(val_node))
     query_resp = val_node.query.staking.delegation(
-        val_node.address,
-        get_validator_operator_address(val_node)
+        val_node.address, get_validator_operator_address(val_node)
     )
     dict_keys_must_match(
         query_resp["delegation_response"],
         [
             "delegation",
             "balance",
-        ]
+        ],
     )
 
 
@@ -72,7 +71,7 @@ def test_query_delegations(val_node: Sdk):
         [
             "delegation",
             "balance",
-        ]
+        ],
     )
 
 
@@ -86,7 +85,7 @@ def test_query_delegations_to(val_node: Sdk):
         [
             "delegation",
             "balance",
-        ]
+        ],
     )
 
 
@@ -104,8 +103,8 @@ def test_params(val_node: Sdk):
             "max_entries",
             "max_validators",
             "historical_entries",
-            "bond_denom"
-        ]
+            "bond_denom",
+        ],
     )
 
 
@@ -113,10 +112,7 @@ def test_redelegations(val_node: Sdk):
     query_resp = val_node.query.staking.redelegations(
         val_node.address, get_validator_operator_address(val_node)
     )
-    dict_keys_must_match(
-        query_resp,
-        ["redelegation_responses", "pagination"]
-    )
+    dict_keys_must_match(query_resp, ["redelegation_responses", "pagination"])
 
 
 def test_unbonding_delegation(val_node: Sdk):
@@ -131,8 +127,7 @@ def test_unbonding_delegation(val_node: Sdk):
     )
     if query_resp:
         dict_keys_must_match(
-            query_resp["unbond"],
-            ["delegator_address", "validator_address", "entries"]
+            query_resp["unbond"], ["delegator_address", "validator_address", "entries"]
         )
         assert len(query_resp["unbond"]["entries"]) > 0
 
@@ -144,16 +139,11 @@ def test_unbonding_deletations(val_node: Sdk):
     except SimulationError as ex:
         assert "too many unbonding" in ex.args[0]
 
-    query_resp = val_node.query.staking.unbonding_delegations(
-        val_node.address
-    )
-    dict_keys_must_match(
-        query_resp,
-        ["unbonding_responses", "pagination"]
-    )
+    query_resp = val_node.query.staking.unbonding_delegations(val_node.address)
+    dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
     dict_keys_must_match(
         query_resp["unbonding_responses"][0],
-        ["delegator_address", "validator_address", "entries"]
+        ["delegator_address", "validator_address", "entries"],
     )
     assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
@@ -168,23 +158,17 @@ def test_unbonding_deletations_from(val_node: Sdk):
     query_resp = val_node.query.staking.unbonding_delegations_from(
         get_validator_operator_address(val_node)
     )
-    dict_keys_must_match(
-        query_resp,
-        ["unbonding_responses", "pagination"]
-    )
+    dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
     dict_keys_must_match(
         query_resp["unbonding_responses"][0],
-        ["delegator_address", "validator_address", "entries"]
+        ["delegator_address", "validator_address", "entries"],
     )
     assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
 def test_validators(val_node: Sdk):
     query_resp = val_node.query.staking.validators()
-    dict_keys_must_match(
-        query_resp,
-        ["validators", "pagination"]
-    )
+    dict_keys_must_match(query_resp, ["validators", "pagination"])
     assert query_resp["pagination"]["total"] > 0
     assert len(query_resp["validators"]) > 0
     dict_keys_must_match(
@@ -201,7 +185,7 @@ def test_validators(val_node: Sdk):
             "unbonding_time",
             "commission",
             "min_self_delegation",
-        ]
+        ],
     )
 
 
@@ -223,7 +207,7 @@ def test_validator(val_node: Sdk):
             "unbonding_time",
             "commission",
             "min_self_delegation",
-        ]
+        ],
     )
 
 

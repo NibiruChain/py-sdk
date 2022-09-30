@@ -1,16 +1,46 @@
+import time
+
 import pytest
 
-from nibiru import Sdk
-from nibiru.exceptions import QueryError
-from tests import dict_keys_must_match
+from nibiru import Sdk, Network
+from nibiru.event_specs import EventType, EventCaptured
+from nibiru.exceptions import QueryError, SimulationError
+from nibiru.msg import MsgDelegate
+from nibiru.msg.bank import MsgUndelegate
+from nibiru.websocket import NibiruWebsocket
+from tests import dict_keys_must_match, transaction_must_succeed
 
 
 def get_validator_operator_address(val_node: Sdk):
     """
-    Return the first validator and deletator
+    Return the first validator and delegator
     """
     validator = val_node.query.staking.validators()["validators"][0]
     return validator["operator_address"]
+
+
+def delegate(val_node: Sdk):
+    return val_node.tx.execute_msgs(
+        [
+            MsgDelegate(
+                delegator_address=val_node.address,
+                validator_address=get_validator_operator_address(val_node),
+                amount=1,
+            ),
+        ]
+    )
+
+
+def undelegate(val_node: Sdk):
+    return val_node.tx.execute_msgs(
+        [
+            MsgUndelegate(
+                delegator_address=val_node.address,
+                validator_address=get_validator_operator_address(val_node),
+                amount=1,
+            ),
+        ]
+    )
 
 
 def test_query_vpool(val_node: Sdk):
@@ -20,6 +50,7 @@ def test_query_vpool(val_node: Sdk):
 
 
 def test_query_delegation(val_node: Sdk):
+    transaction_must_succeed(delegate(val_node))
     query_resp = val_node.query.staking.delegation(
         val_node.address,
         get_validator_operator_address(val_node)
@@ -34,6 +65,7 @@ def test_query_delegation(val_node: Sdk):
 
 
 def test_query_delegations(val_node: Sdk):
+    transaction_must_succeed(delegate(val_node))
     query_resp = val_node.query.staking.delegations(val_node.address)
     dict_keys_must_match(
         query_resp["delegation_responses"][0],
@@ -45,6 +77,7 @@ def test_query_delegations(val_node: Sdk):
 
 
 def test_query_delegations_to(val_node: Sdk):
+    transaction_must_succeed(delegate(val_node))
     query_resp = val_node.query.staking.delegations_to(
         get_validator_operator_address(val_node)
     )
@@ -75,11 +108,75 @@ def test_params(val_node: Sdk):
         ]
     )
 
+
 def test_redelegations(val_node: Sdk):
     query_resp = val_node.query.staking.redelegations(
         val_node.address, get_validator_operator_address(val_node)
     )
-    a = 1
+    dict_keys_must_match(
+        query_resp,
+        ["redelegation_responses", "pagination"]
+    )
+
+
+def test_unbonding_delegation(val_node: Sdk):
+    transaction_must_succeed(delegate(val_node))
+    try:
+        undelegate(val_node)
+    except SimulationError as ex:
+        assert "too many unbonding" in ex.args[0]
+
+    query_resp = val_node.query.staking.unbonding_delegation(
+        val_node.address, get_validator_operator_address(val_node)
+    )
+    if query_resp:
+        dict_keys_must_match(
+            query_resp["unbond"],
+            ["delegator_address", "validator_address", "entries"]
+        )
+        assert len(query_resp["unbond"]["entries"]) > 0
+
+
+def test_unbonding_deletations(val_node: Sdk):
+    transaction_must_succeed(delegate(val_node))
+    try:
+        undelegate(val_node)
+    except SimulationError as ex:
+        assert "too many unbonding" in ex.args[0]
+
+    query_resp = val_node.query.staking.unbonding_delegations(
+        val_node.address
+    )
+    dict_keys_must_match(
+        query_resp,
+        ["unbonding_responses", "pagination"]
+    )
+    dict_keys_must_match(
+        query_resp["unbonding_responses"][0],
+        ["delegator_address", "validator_address", "entries"]
+    )
+    assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
+
+
+def test_unbonding_deletations_from(val_node: Sdk):
+    transaction_must_succeed(delegate(val_node))
+    try:
+        undelegate(val_node)
+    except SimulationError as ex:
+        assert "too many unbonding" in ex.args[0]
+
+    query_resp = val_node.query.staking.unbonding_delegations_from(
+        get_validator_operator_address(val_node)
+    )
+    dict_keys_must_match(
+        query_resp,
+        ["unbonding_responses", "pagination"]
+    )
+    dict_keys_must_match(
+        query_resp["unbonding_responses"][0],
+        ["delegator_address", "validator_address", "entries"]
+    )
+    assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
 def test_validators(val_node: Sdk):
@@ -128,3 +225,33 @@ def test_validator(val_node: Sdk):
             "min_self_delegation",
         ]
     )
+
+
+def test_staking_events(val_node: Sdk, network: Network):
+    """
+    Check staking events are properly filtered
+    """
+    expected_events_tx = [EventType.Delegate]
+    expected_events = expected_events_tx
+
+    nibiru_websocket = NibiruWebsocket(
+        network,
+        expected_events,
+    )
+    nibiru_websocket.start()
+    time.sleep(1)
+
+    delegate(val_node)
+    time.sleep(5)
+
+    nibiru_websocket.queue.put(None)
+    while True:
+        event: EventCaptured = nibiru_websocket.queue.get()
+        time.sleep(1)
+
+        if event is None:
+            break
+        elif event.event_type == "delegate":
+            return  # Event Captured! Success
+
+    assert False, "Message delegate not captured"

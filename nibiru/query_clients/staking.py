@@ -74,7 +74,7 @@ class StakingQueryClient(QueryClient):
 
     def params(self) -> dict:
         """
-        Query all delegations made to one validator
+        Query the current staking parameters information
         """
         return self.query(
             api_callable=self.api.Params,
@@ -84,7 +84,7 @@ class StakingQueryClient(QueryClient):
     def redelegations(self, delegator_addr: str, dst_validator_addr: str,
                       **kwargs) -> dict:
         """
-        Query all delegations made to one validator
+        Query all redelegations records for one delegator
         """
         return self.query(
             api_callable=self.api.Redelegations,
@@ -97,7 +97,7 @@ class StakingQueryClient(QueryClient):
 
     def unbonding_delegation(self, delegator_addr: str, validator_addr: str) -> dict:
         """
-        Query all delegations made to one validator
+        Query an unbonding-delegation record based on delegator and validator address
         """
         return self.query(
             api_callable=self.api.UnbondingDelegation,
@@ -107,9 +107,21 @@ class StakingQueryClient(QueryClient):
             ),
         )
 
-    def unbonding_delegations(self, validator_addr: str, **kwargs) -> dict:
+    def unbonding_delegations(self, delegator_addr: str, **kwargs) -> dict:
         """
-        Query all delegations made to one validator
+        Query all unbonding-delegations records for one delegator
+        """
+        return self.query(
+            api_callable=self.api.DelegatorUnbondingDelegations,
+            req=staking_type.QueryDelegatorUnbondingDelegationsRequest(
+                delegator_addr=delegator_addr,
+                pagination=get_page_request(kwargs),
+            ),
+        )
+
+    def unbonding_delegations_from(self, validator_addr: str, **kwargs) -> dict:
+        """
+        Query all unbonding delegations from a validator
         """
         return self.query(
             api_callable=self.api.ValidatorUnbondingDelegations,
@@ -119,21 +131,9 @@ class StakingQueryClient(QueryClient):
             ),
         )
 
-    def unbonding_delegations_from(self, validator_addr: str, **kwargs) -> dict:
-        """
-        Query all delegations made to one validator
-        """
-        return self.query(
-            api_callable=self.api.DelegatorUnbondingDelegations,
-            req=staking_type.QueryDelegatorDelegationsRequest(
-                delegator_addr=validator_addr,
-                pagination=get_page_request(kwargs),
-            ),
-        )
-
     def validator(self, validator_addr: str) -> dict:
         """
-        Query all delegations made to one validator
+        Query a validator
         """
         return self.query(
             api_callable=self.api.Validator,
@@ -144,7 +144,7 @@ class StakingQueryClient(QueryClient):
 
     def validators(self, **kwargs) -> dict:
         """
-        Query all delegations made to one validator
+        Query for all validators
         """
         proto_output = self.query(
             api_callable=self.api.Validators,

@@ -106,8 +106,8 @@ def deserialize(
                     serialized_output[str(attr)] = updated_vals
                 else:
                     serialized_output[str(attr)] = deserialize(val)
-        elif (custom_dtype is None) and (attr_search == ''):
-            serialized_output[str(attr)] = ""
+        elif custom_dtype is None and not attr_search:
+            serialized_output[str(attr)] = attr_search
         else:
             serialized_output[str(attr)] = deserialize(pb_msg.__getattribute__(attr))
 

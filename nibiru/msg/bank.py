@@ -54,7 +54,30 @@ class MsgDelegate(PythonMsg):
         return staking_pb.MsgDelegate(
             delegator_address=self.delegator_address,
             validator_address=self.validator_address,
-            amount=Coin(self.amount, "unibi"),
+            amount=Coin(self.amount, "unibi")._generate_proto_object(),
+        )
+
+
+@dataclasses.dataclass
+class MsgUndelegate(PythonMsg):
+    """
+    Undelegate tokens from a validator
+
+    Attributes:
+        delegator_address: str
+        validator_address: str
+        amount: float
+    """
+
+    delegator_address: str
+    validator_address: str
+    amount: float
+
+    def to_pb(self) -> staking_pb.MsgUndelegate:
+        return staking_pb.MsgUndelegate(
+            delegator_address=self.delegator_address,
+            validator_address=self.validator_address,
+            amount=Coin(self.amount, "unibi")._generate_proto_object(),
         )
 
 

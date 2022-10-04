@@ -2,6 +2,7 @@ import base64
 import json
 import threading
 import time
+from json import JSONDecodeError
 from multiprocessing import Queue
 from typing import List
 
@@ -125,7 +126,13 @@ class NibiruWebsocket:
         block_height = int(log["data"]["value"]["TxResult"]["height"])
         tx_hash = events["tx.hash"][0]
 
-        events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
+        try:
+            events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
+        except JSONDecodeError as ex:
+            # failed to execute message
+            raw_log = log["data"]["value"]["TxResult"]["result"]["log"]
+            self.logger.debug(f"Failed parsing events log: {raw_log}. {ex}")
+            return
 
         for event in events["events"]:
             self._handle_event(block_height, tx_hash, event)

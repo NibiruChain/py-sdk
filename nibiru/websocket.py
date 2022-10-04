@@ -128,8 +128,10 @@ class NibiruWebsocket:
 
         try:
             events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
-        except JSONDecodeError:
+        except JSONDecodeError as ex:
             # failed to execute message
+            raw_log = log["data"]["value"]["TxResult"]["result"]["log"]
+            self.logger.debug(f"Failed parsing events log: {raw_log}. {ex}")
             return
 
         for event in events["events"]:

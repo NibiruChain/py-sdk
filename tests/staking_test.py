@@ -132,7 +132,7 @@ def test_unbonding_delegation(val_node: Sdk):
         assert len(query_resp["unbond"]["entries"]) > 0
 
 
-def test_unbonding_deletations(val_node: Sdk):
+def test_unbonding_delegations(val_node: Sdk):
     transaction_must_succeed(delegate(val_node))
     try:
         undelegate(val_node)
@@ -148,7 +148,7 @@ def test_unbonding_deletations(val_node: Sdk):
     assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
-def test_unbonding_deletations_from(val_node: Sdk):
+def test_unbonding_delegations_from(val_node: Sdk):
     transaction_must_succeed(delegate(val_node))
     try:
         undelegate(val_node)

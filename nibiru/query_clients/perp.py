@@ -53,7 +53,7 @@ class PerpQueryClient(QueryClient):
 
         return output
 
-    def trader_position(self, token_pair: str, trader: str) -> dict:
+    def position(self, token_pair: str, trader: str) -> dict:
         """
         Get the trader position. Returns information about position notional, margin ratio
         unrealized pnl, size of the position etc.
@@ -86,13 +86,13 @@ class PerpQueryClient(QueryClient):
         Returns:
             dict: The output of the query
         """
-        req = perp_type.QueryTraderPositionRequest(
+        req = perp_type.QueryPositionRequest(
             token_pair=token_pair,
             trader=trader,
         )
 
-        proto_output: perp_type.QueryTraderPositionResponse = self.query(
-            api_callable=self.api.QueryTraderPosition, req=req, should_deserialize=False
+        proto_output: perp_type.QueryPositionResponse = self.query(
+            api_callable=self.api.QueryPosition, req=req, should_deserialize=False
         )
 
         return deserialize(proto_output)

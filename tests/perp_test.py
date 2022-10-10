@@ -25,8 +25,8 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     )
 
     # Exception must be raised when requesting not existing position
-    with pytest.raises(QueryError, match="no position found"):
-        agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
+    with pytest.raises(QueryError, match="not found object 'nibiru.perp.v1.Position'"):
+        agent.query.perp.position(trader=agent.address, token_pair=pair)
 
     # Transaction open_position must succeed
     tx_output: dict = agent.tx.execute_msgs(
@@ -43,9 +43,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     transaction_must_succeed(tx_output)
 
     # Trader position must be a dict with specific keys
-    position_res = agent.query.perp.trader_position(
-        trader=agent.address, token_pair=pair
-    )
+    position_res = agent.query.perp.position(trader=agent.address, token_pair=pair)
     dict_keys_must_match(
         position_res,
         [
@@ -80,7 +78,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     transaction_must_succeed(tx_output)
 
     # Margin must increase. 10 + 10 = 20
-    position = agent.query.perp.trader_position(trader=agent.address, token_pair=pair)[
+    position = agent.query.perp.position(trader=agent.address, token_pair=pair)[
         "position"
     ]
     assert position["margin"] == 20.0
@@ -97,7 +95,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     transaction_must_succeed(tx_output)
 
     # Margin must decrease. 20 - 5 = 15
-    position = agent.query.perp.trader_position(trader=agent.address, token_pair=pair)[
+    position = agent.query.perp.position(trader=agent.address, token_pair=pair)[
         "position"
     ]
     assert position["margin"] == 15.0
@@ -111,4 +109,4 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
 
     # Exception must be raised when querying closed position
     with pytest.raises(QueryError, match="no position found"):
-        agent.query.perp.trader_position(trader=agent.address, token_pair=pair)
+        agent.query.perp.position(trader=agent.address, token_pair=pair)

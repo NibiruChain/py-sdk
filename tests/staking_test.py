@@ -1,10 +1,8 @@
 import time
 
-import pytest
-
 from nibiru import Network, Sdk
 from nibiru.event_specs import EventCaptured, EventType
-from nibiru.exceptions import QueryError, SimulationError
+from nibiru.exceptions import SimulationError
 from nibiru.msg import MsgDelegate
 from nibiru.msg.bank import MsgUndelegate
 from nibiru.websocket import NibiruWebsocket
@@ -90,8 +88,7 @@ def test_query_delegations_to(val_node: Sdk):
 
 
 def test_historical_info(val_node: Sdk):
-    with pytest.raises(QueryError, match="not found"):
-        val_node.query.staking.historical_info(1)
+    val_node.query.staking.historical_info(1)
 
 
 def test_params(val_node: Sdk):

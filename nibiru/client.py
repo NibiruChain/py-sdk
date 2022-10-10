@@ -112,8 +112,9 @@ class GrpcClient:
                 f"remote chain is running with version {chain_nibiru_version}"
             )
 
-            assert version.parse(nibiru_proto_version) >= version.parse(
-                chain_nibiru_version
+            assert (
+                version.parse(nibiru_proto_version).release
+                >= version.parse(chain_nibiru_version).release
             ), error_string
 
     def close_chain_channel(self):

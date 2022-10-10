@@ -18,7 +18,6 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
 
     expected_events_tx = [
         # Vpool
-        EventType.ReserveSnapshotSavedEvent,
         EventType.SwapQuoteForBaseEvent,
         EventType.SwapBaseForQuoteEvent,
         EventType.MarkPriceChanged,
@@ -72,6 +71,15 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
             expiry=datetime.utcnow() + timedelta(hours=1),
         ),
     )
+    val_node.tx.execute_msgs(
+        nibiru.msg.MsgPostPrice(
+            oracle=val_node.address,
+            token0="unibi",
+            token1="unusd",
+            price=11,
+            expiry=datetime.utcnow() + timedelta(hours=1),
+        ),
+    )
 
     LOGGER.info("Closing position")
     val_node.tx.execute_msgs(
@@ -98,6 +106,7 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     # duplication of markpricechanged events.
 
     received_events = [event.event_type for event in events]
+
     missing_events = [
         event
         for event in map(lambda x: x.get_full_path(), expected_events)

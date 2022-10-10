@@ -41,7 +41,7 @@ You can create a new account using the CLI command.
     )
 
     # You can query the position with the queries of the perp module
-    print(trader.query.perp.trader_position(token_pair="axlwbtc:unusd", trader=trader.address))
+    print(trader.query.perp.position(token_pair="axlwbtc:unusd", trader=trader.address))
 
 
 Using a different chain

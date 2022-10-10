@@ -137,7 +137,9 @@ class NibiruWebsocket:
             # failed to execute message
             raw_log = log["data"]["value"]["TxResult"]["result"]["log"]
             if self.tx_fail_queue:
-                self.tx_fail_queue.put(raw_log)
+                self.tx_fail_queue.put(
+                    {"block_height": block_height, "tx_hash": tx_hash, "error": raw_log}
+                )
             self.logger.debug(f"Failed parsing events log: {raw_log}. {ex}")
             return
 

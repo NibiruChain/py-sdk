@@ -151,7 +151,7 @@ def test_websocket_tx_fail_queue(val_node: Sdk, network: Network):
         event = tx_fail_queue.get()
         if event is None:
             break
-        if "failed to execute message" and "no position found" in event:
+        if "failed to execute message" and "no position found" in event["error"]:
             fail_event_found = True
             break
 

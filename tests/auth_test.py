@@ -6,7 +6,7 @@ def test_query_auth_account(val_node: nibiru.Sdk):
     query_resp: dict = val_node.query.auth.account(val_node.address)["account"]
 
     tests.dict_keys_must_match(
-        query_resp, ['@type', 'address', 'pubKey', 'accountNumber', 'sequence']
+        query_resp, ['@type', 'address', 'pubKey', 'sequence', 'accountNumber']
     )
 
 

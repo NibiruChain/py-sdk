@@ -39,9 +39,10 @@ coincurve = "^17.0.0"
 aiocron = "^1.8"
 pytest = "^7.1.2"
 pre-commit = "^2.20.0"
-nibiru-proto = "^0.14.1"
+nibiru-proto = "0.15.0a2"
 shutup = "^0.2.0"
 websocket-client = "^1.4.0"
+packaging = "^21.3"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

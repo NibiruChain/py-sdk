@@ -175,7 +175,7 @@ from the query call of the perp module.
 
 .. code:: python
 
-    trader.query.perp.trader_position(
+    trader.query.perp.position(
         token_pair="axlwbtc:unusd",
         trader=trader.address
     )

@@ -19,6 +19,7 @@ from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
 )
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
+from packaging import version
 
 import nibiru.query_clients
 from nibiru.network import Network
@@ -105,14 +106,16 @@ class GrpcClient:
                 f"The chain is running a custom release from branch/commit {chain_nibiru_version}"
             )
         else:
-            nibiru_proto_version = tuple(map(int, nibiru_proto_version.split(".")))
-            chain_nibiru_version = tuple(map(int, chain_nibiru_version.split(".")))
 
             error_string = (
                 f"Version error, Python sdk runs with nibiru protobuf version {nibiru_proto_version}, but the "
                 f"remote chain is running with version {chain_nibiru_version}"
             )
-            assert nibiru_proto_version >= chain_nibiru_version, error_string
+
+            assert (
+                version.parse(nibiru_proto_version).release
+                >= version.parse(chain_nibiru_version).release
+            ), error_string
 
     def close_chain_channel(self):
         self.chain_channel.close()

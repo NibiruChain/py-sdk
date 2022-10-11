@@ -1,7 +1,7 @@
 import json
 import logging
 from copy import deepcopy
-from typing import Any, List, Union
+from typing import Any, Dict, List, Union
 
 from google.protobuf.json_format import MessageToDict
 from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
@@ -34,7 +34,7 @@ class BaseTxClient:
         msgs: Union[PythonMsg, List[PythonMsg]],
         get_sequence_from_node: bool = False,
         **kwargs,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Execute a message to broadcast a transaction to the node.
         Simulate the message to generate the gas estimate and send it to the node.

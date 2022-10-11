@@ -23,38 +23,34 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-grpcio = "^1.47.0"
 asyncio = "^3.4.3"
 bech32 = "^1.2.0"
-python-dotenv = "^0.20.0"
-protobuf = "3.20.1" # see README
+python-dotenv = "^0.21.0"
 requests = "^2.28.1"
-aiohttp = "^3.8.1"
+aiohttp = "^3.8.3"
 ecdsa = "^0.18.0"
 mnemonic = "^0.20"
 hdwallets = "^0.1.2"
-bip32 = "^3.1"
 eip712-structs = "^1.1.0"
-coincurve = "^17.0.0"
 aiocron = "^1.8"
-pytest = "^7.1.2"
 pre-commit = "^2.20.0"
-nibiru-proto = "0.15.0a2"
 shutup = "^0.2.0"
-websocket-client = "^1.4.0"
+websocket-client = "^1.4.1"
 packaging = "^21.3"
+nibiru-proto = "==0.15.0a2"
+bip32 = "^3.3"
+importlib-metadata = "^5.0.0"
 
-[tool.poetry.dev-dependencies]
-black = "^22.6.0"
-flake8 = "^5.0.4"
-importlib-metadata = {version = "^1.0", python = "<3.8"}
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.1.3"
+black = "^22.10.0"
 
 
 [tool.black]
 line-length = 88
 skip-string-normalization = true
 include = '.*\.pyi?$'
-target-version = ['py39']
+target-version = ['py37']
 extend-exclude = '''
 ^/(
     \.vscode

@@ -1,14 +1,20 @@
-import importlib.metadata as importlib_metadata
+import sys
 
 try:
-    __version__ = importlib_metadata.version(__package__ or __name__)
-except importlib_metadata.PackageNotFoundError:
+    if sys.version_info >= (3, 8):
+        from importlib.metadata import version
+
+        __version__ = version(__package__ or __name__)
+    else:
+        import pkg_resources
+
+        __version__ = pkg_resources.get_distribution(__package__ or __name__).version
+except Exception:
     pass
 
 import google.protobuf.message
 
 ProtobufMessage = google.protobuf.message.Message
-
 
 import nibiru.common  # noqa
 import nibiru.msg  # noqa

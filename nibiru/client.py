@@ -1,4 +1,4 @@
-import importlib.metadata as importlib_metadata
+import sys
 import time
 from typing import Generator, List, Optional, Tuple, Union
 
@@ -78,8 +78,21 @@ class GrpcClient:
         self.staking = nibiru.query_clients.StakingQueryClient(self.chain_channel)
 
         if not bypass_version_check:
+            try:
+                if sys.version_info >= (3, 8):
+                    from importlib.metadata import version
+
+                    nibiru_proto_version = version("nibiru_proto")
+                else:
+                    import pkg_resources
+
+                    nibiru_proto_version = pkg_resources.get_distribution(
+                        "nibiru_proto"
+                    ).version
+            except Exception:
+                pass
             self.assert_compatible_versions(
-                nibiru_proto_version=importlib_metadata.version("nibiru_proto"),
+                nibiru_proto_version=nibiru_proto_version,
                 chain_nibiru_version=str(self.get_version()),
             )
 

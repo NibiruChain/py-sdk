@@ -85,7 +85,7 @@ def from_sdk_dec_n(dec_str: str, n: int = 6) -> float:
 
 
 def format_fields_nested(
-    object: Union[list, dict], fn: Callable[[Any], Any], fields: list[str]
+    object: Union[list, dict], fn: Callable[[Any], Any], fields: List[str]
 ) -> Union[list, dict]:
     """
     Format the fields inside a nested dictionary with the function provided

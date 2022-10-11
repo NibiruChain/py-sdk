@@ -2,7 +2,7 @@
 import collections
 import logging
 import pprint
-from typing import Any, Iterable, Optional, Union
+from typing import Any, Iterable, List, Optional, Union
 
 import shutup
 
@@ -34,7 +34,7 @@ def format_response(resp: Union[dict, list, str]) -> str:
         return pprint.pformat(resp, indent=3)
 
 
-def dict_keys_must_match(dict_: dict, keys: list[str]):
+def dict_keys_must_match(dict_: dict, keys: List[str]):
     """Asserts that two iterables have the same elements, the same number of
     times, without regard to order.
     Alias for the 'element_counts_are_equal' function.

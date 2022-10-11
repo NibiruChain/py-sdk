@@ -29,11 +29,11 @@ jobs:
       # ----------------------------------------------
       - name: Check out the repo
         uses: actions/checkout@v3
-      - name: Set up Python 3.9
+      - name: Set up Python 3.7
         id: setup-python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9.13
+          python-version: 3.7.14
 
       - name: Run python
         run: python --version && python -c "print('hello')"

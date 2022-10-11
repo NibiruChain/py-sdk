@@ -27,7 +27,7 @@ class NibiruWebsocket:
         self,
         network: Network,
         captured_events_type: List[EventType] = [],
-        tx_fail_queue=None,
+        tx_fail_queue: Queue = None,
     ):
         """
         The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru

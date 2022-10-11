@@ -20,12 +20,14 @@ ERROR_TIMEOUT_SLEEP = 3
 
 class NibiruWebsocket:
     queue: Queue = None
+    tx_fail_queue: Queue = None
     captured_events_type: List[List[str]]
 
     def __init__(
         self,
         network: Network,
         captured_events_type: List[EventType] = [],
+        tx_fail_queue: Queue = None,
     ):
         """
         The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru
@@ -35,7 +37,8 @@ class NibiruWebsocket:
         self.websocket_url = network.websocket_endpoint
         if self.websocket_url is None:
             raise ValueError(
-                "No websocket endpoint provided. Construct the network object setting up the "
+                "No websocket endpoint provided. "
+                "Construct the network object setting up the "
                 "`websocket_endpoint` endpoint"
             )
 
@@ -45,6 +48,8 @@ class NibiruWebsocket:
             for captured_event in captured_events_type
         }
         self.queue = Queue()
+        if tx_fail_queue:
+            self.tx_fail_queue = tx_fail_queue
         self.logger = init_logger("ws-logger")
 
     def start(self):
@@ -131,6 +136,10 @@ class NibiruWebsocket:
         except JSONDecodeError as ex:
             # failed to execute message
             raw_log = log["data"]["value"]["TxResult"]["result"]["log"]
+            if self.tx_fail_queue:
+                self.tx_fail_queue.put(
+                    {"block_height": block_height, "tx_hash": tx_hash, "error": raw_log}
+                )
             self.logger.debug(f"Failed parsing events log: {raw_log}. {ex}")
             return
 

@@ -1,10 +1,11 @@
 import time
 from datetime import datetime, timedelta
+from multiprocessing import Queue
 from typing import List
 
 import nibiru
 import nibiru.msg
-from nibiru import Network, common
+from nibiru import Network, Sdk, Transaction, common
 from nibiru.event_specs import EventCaptured
 from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
@@ -105,3 +106,53 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     ]
 
     assert not missing_events, f"Missing events: {missing_events}"
+
+
+def test_websocket_tx_fail_queue(val_node: Sdk, network: Network):
+    """
+    Try executing failing TXs and get errors from tx_fail_queue
+    """
+    tx_fail_queue = Queue()
+
+    nibiru_websocket = NibiruWebsocket(
+        network,
+        [EventType.PositionChangedEvent],
+        tx_fail_queue,
+    )
+    nibiru_websocket.start()
+    time.sleep(1)
+
+    # Send failing closing transaction without simulation
+    val_node.tx.client.sync_timeout_height()
+    address = val_node.tx.get_address_info()
+    tx = (
+        Transaction()
+        .with_messages(
+            [
+                nibiru.msg.MsgClosePosition(
+                    sender=val_node.address,
+                    token_pair="abc:def",
+                ).to_pb()
+            ]
+        )
+        .with_sequence(address.get_sequence())
+        .with_account_num(address.get_number())
+        .with_chain_id(network.chain_id)
+        .with_signer(val_node.tx.priv_key)
+    )
+    val_node.tx.execute_tx(tx, 300000)
+
+    time.sleep(3)
+
+    tx_fail_queue.put(None)
+    fail_event_found = False
+
+    while True:
+        event = tx_fail_queue.get()
+        if event is None:
+            break
+        if "failed to execute message" and "no position found" in event["error"]:
+            fail_event_found = True
+            break
+
+    assert fail_event_found, "Transaction failure not captured"

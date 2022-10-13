@@ -34,7 +34,7 @@ The package is intended to be used by coders, developers, technically-skilled tr
 Try me on colab!
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)][Colab link]
 
-[Colab link]: https://colab.research.google.com/github/NibiruChain/py-sdk/blob/examples/collab_notebook.ipynb
+[Colab link]: https://colab.research.google.com/github/NibiruChain/py-sdk/blob/master/examples/collab_notebook.ipynb
 
 
 #### README Contents

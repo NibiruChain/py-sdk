@@ -31,6 +31,12 @@ The `nibiru` package allows you to index, query, and send transactions on the Ni
 
 The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
+Try me on colab!
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)][Colab link]
+
+[Colab link]: https://colab.research.google.com/github/NibiruChain/py-sdk/blob/examples/collab_notebook.ipynb
+
+
 #### README Contents
 
 - [User Guidelines](#user-guidelines)

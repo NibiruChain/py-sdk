@@ -41,7 +41,7 @@ nibiru-proto = "==0.15.0a2"
 bip32 = "^3.3"
 importlib-metadata = "^5.0.0"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.dev-dependencies]
 pytest = "^7.1.3"
 black = "^22.10.0"
 

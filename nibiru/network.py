@@ -80,11 +80,11 @@ class Network:
             Network: The updated Network object.
         """
         return cls(
-            lcd_endpoint='https://lcd.testnet-3.nibiru.fi',
-            grpc_endpoint='grpc.testnet-3.nibiru.fi',
-            tendermint_rpc_endpoint='https://rpc.testnet-3.nibiru.fi',
-            websocket_endpoint='wss://rpc.testnet-3.nibiru.fi/websocket',
-            chain_id='nibiru-testnet-3',
+            lcd_endpoint='https://lcd.testnet-1.nibiru.fi',
+            grpc_endpoint='grpc.testnet-1.nibiru.fi',
+            tendermint_rpc_endpoint='https://rpc.testnet-1.nibiru.fi',
+            websocket_endpoint='wss://rpc.testnet-1.nibiru.fi/websocket',
+            chain_id='nibiru-testnet-1',
             fee_denom='unibi',
             env='testnet',
         )

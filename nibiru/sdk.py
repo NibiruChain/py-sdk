@@ -47,19 +47,14 @@ class Sdk:
         )
     """
 
-    query: GrpcClient
-    network: Network
-    tx: BaseTxClient
-    tx_config: TxConfig
-
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
-        """Unsupported, please use from_mnemonic to initialize."""
+        """Unsupported, please use authorize to initialize."""
         if not _error_do_not_use_init_directly:
-            raise TypeError("Please use PrivateKey.from_mnemonic() to construct me")
+            raise TypeError("Please use Sdk.Authorize() to construct me")
         self.priv_key: PrivateKey = None
-        self.query = None
-        self.tx = None
-        self.network = None
+        self.query: GrpcClient = None
+        self.tx: BaseTxClient = None
+        self.network: Network = None
         self.tx_config = TxConfig()
 
     @classmethod

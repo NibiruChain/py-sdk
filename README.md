@@ -42,14 +42,11 @@ The package is intended to be used by coders, developers, technically-skilled tr
   - [Installing `poetry` for dependency resolution and publishing packages](#installing-poetry-for-dependency-resolution-and-publishing-packages)
   - [Installing external dependencies](#installing-external-dependencies)
   - [Running tests](#running-tests)
-      - [Setting environment variables](#setting-environment-variables)
-      - [Running the tests with `poetry` + `pytest`](#running-the-tests-with-poetry--pytest)
-      - [(option B). Install the `nibiru` package with `pip`](#option-b-install-the-nibiru-package-with-pip)
   - [Makefile and Protocol Buffers](#makefile-and-protocol-buffers)
-    - [Other dependencies](#other-dependencies)
-    - [Generating types wth protobuf](#generating-types-wth-protobuf)
+    - [Generating types with protobuf](#generating-types-with-protobuf)
   - [Linting](#linting)
   - [Gotchas](#gotchas)
+  - [Usage instructions for publishing.](#usage-instructions-for-publishing)
 
 # User Guidelines
 
@@ -71,34 +68,6 @@ You may need to update `pip` to get this to run:
 ```sh
 python -m pip install --upgrade pip
 ```
-
-<!-- NOTE --------- Deperecating this section as the examples don't work.
-
-## Usage Instructions
-
-The [examples directory](https://github.com/NibiruChain/py-sdk/tree/master/examples) contains runnable examples that showcase how to use the package.
-- Requires Python 3.9+
-- Requires a running instance of the Nibiru blockchain
-
-```bash
-$ pipenv shell
-$ pipenv install
-```
-
-```sh
-# connecting to Nibiru Exchange API and create a new pool
-$ python examples/chain_client/dex/create_pool.py
-
-# sending a msg with bank transfer signs and posts a transaction to the Nibiru Chain
-$ python examples/chain_client/msg_send.py
-```
-
-Upgrade `pip` to the latest version, if you see these warnings:
-  ```
-  WARNING: Value for scheme.platlib does not match. Please report this to <https://github.com/pypa/pip/issues/10151>
-  WARNING: Additional context:   user = True   home = None   root = None   prefix = None
-  ```
--->
 
 ---
 
@@ -258,29 +227,9 @@ poetry run pytest -p no:warnings # silences warnings
 
 ## Makefile and Protocol Buffers
 
-### Other dependencies
+See the [NibiruChain/sdk-proto-gen repository](https://github.com/NibiruChain/sdk-proto-gen).
 
-To run shell scripts and commands in the `Makefile`, you'll need to install the following tools depending on your operating system.
-
-- **Ubuntu**
-
-  ```bash
-  sudo apt install python3.X-dev autoconf automake build-essential libffi-dev libtool pkg-config
-  ```
-
-- **macOS**
-
-  ```bash
-  brew install autoconf automake libtool
-  ```
-
-- **Fedora**
-
-  ```bash
-  sudo dnf install python3-devel autoconf automake gcc gcc-c++ libffi-devel libtool make pkgconfig
-  ```
-
-### Generating types wth protobuf
+### Generating types with protobuf
 
 The objective is to run `make proto-gen`, which simply executes `scripts/protocgen.sh`.
 

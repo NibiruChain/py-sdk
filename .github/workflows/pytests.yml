@@ -3,8 +3,10 @@ name: E2E 🐍 tests
 on:
   pull_request:
     branches: ["master"]
+    paths: ["**.py", "pyproject.toml", "poetry.lock"]
   push:
     branches: ["master"]
+    paths: ["**.py", "pyproject.toml", "poetry.lock"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}

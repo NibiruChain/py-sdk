@@ -1,11 +1,15 @@
-from typing import Dict, List, Union
+import importlib
+from typing import Dict, List, Optional, Union
 
 import google.protobuf.message
 from google.protobuf import message as protobuf_message
 from google.protobuf.json_format import MessageToDict
+from google.protobuf.message import Message
 from grpc import UnaryUnaryMultiCallable
 from grpc._channel import _InactiveRpcError
 from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
+from nibiru_proto.proto.cosmos.tx.v1beta1.tx_pb2 import Tx
+from nibiru_proto.proto.tendermint.types.block_pb2 import Block
 
 from nibiru.exceptions import QueryError
 from nibiru.utils import from_sdk_dec, from_sdk_int
@@ -175,3 +179,45 @@ def get_page_request(kwargs):
         count_total=kwargs.get("count_total"),
         reverse=kwargs.get("reverse"),
     )
+
+
+def get_msg_pb_by_type_url(type_url: str) -> Optional[Message]:
+    """
+    Tries loading protobuf class by type url.
+    Examples type urls:
+        /cosmos.bank.v1beta1.MsgSend
+        /nibiru.perp.v1.MsgOpenPosition
+    """
+    class_ = None
+    try:
+        type_url = type_url.replace("/", "")
+        module_name, class_name = type_url.rsplit(".", 1)
+        if module_name.startswith("nibiru."):
+            module_name = module_name.split(".", 1)[1]
+        module_name = f"nibiru_proto.proto.{module_name}.tx_pb2"
+        module_ = importlib.import_module(module_name)
+        class_ = getattr(module_, class_name)()
+    except Exception:
+        pass
+
+    return class_ or None
+
+
+def get_block_messages(block: Block) -> List[dict]:
+    """
+    Rerurns block messages as a list of dicts.
+    Matches corresponding messages types by type_url.
+    """
+    messages = []
+    for tx in block.data.txs:
+        tx_pb = Tx()
+        tx_pb.MergeFromString(tx)
+
+        for msg in tx_pb.body.messages:
+            msg_pb: Message = get_msg_pb_by_type_url(msg.type_url)
+            if msg_pb:
+                msg_pb.ParseFromString(msg.value)
+                messages.append(
+                    {"type_url": msg.type_url, "value": deserialize(msg_pb)}
+                )
+    return messages

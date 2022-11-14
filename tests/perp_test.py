@@ -42,6 +42,24 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     LOGGER.info(f"nibid tx perp open-position: {tests.format_response(tx_output)}")
     transaction_must_succeed(tx_output)
 
+    tx_output: dict = agent.tx.execute_msgs(
+        nibiru.msg.MsgOpenPosition(
+            sender=agent.address,
+            token_pair="ueth:unusd",
+            side=common.Side.BUY,
+            quote_asset_amount=10,
+            leverage=10,
+            base_asset_amount_limit=0,
+        )
+    )
+    LOGGER.info(f"nibid tx perp open-position: {tests.format_response(tx_output)}")
+    transaction_must_succeed(tx_output)
+
+    # Query all positions
+    position_res = agent.query.perp.positions(trader=agent.address)
+    assert len(position_res) == 2
+    print(position_res)
+
     # Trader position must be a dict with specific keys
     position_res = agent.query.perp.position(trader=agent.address, token_pair=pair)
     dict_keys_must_match(

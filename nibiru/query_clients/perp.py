@@ -96,3 +96,45 @@ class PerpQueryClient(QueryClient):
         )
 
         return deserialize(proto_output)
+
+    def positions(self, trader: str) -> dict:
+        """
+        Get the trader positions accross all pools. Returns information about position notional, margin ratio
+        unrealized pnl, size of the position etc.
+
+        Args:
+            trader (str): The trader address
+
+        Sample output::
+
+            {
+                "position": {
+                    "traderAddress": "nibi1zaavvzxez0elund",
+                    "pair": {
+                        "token0": "axlwbtc",
+                        "token1": "unusd"
+                    },
+                    "size": 11.241446725317692,
+                    "margin": 45999.99999999999,
+                    "openNotional": 230000.0,
+                    "lastUpdateCumulativePremiumFraction": "0",
+                    "blockNumber": "278"
+                },
+                "positionNotional": 230000.0,
+                "unrealizedPnl": 1.024e-20,
+                "marginRatioMark": 0.2,
+                "marginRatioIndex": 0.2
+            }
+
+        Returns:
+            dict: The output of the query
+        """
+        req = perp_type.QueryPositionsRequest(
+            trader=trader,
+        )
+
+        proto_output: perp_type.QueryPositionsResponse = self.query(
+            api_callable=self.api.QueryPositions, req=req, should_deserialize=False
+        )
+
+        return deserialize(proto_output)

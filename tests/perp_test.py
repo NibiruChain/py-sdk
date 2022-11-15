@@ -25,7 +25,7 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     )
 
     # Exception must be raised when requesting not existing position
-    with pytest.raises(QueryError, match="not found object 'nibiru.perp.v1.Position'"):
+    with pytest.raises(QueryError, match="not found: 'nibiru.perp.v1.Position'"):
         agent.query.perp.position(trader=agent.address, token_pair=pair)
 
     # Transaction open_position must succeed
@@ -108,5 +108,5 @@ def test_open_close_position(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     transaction_must_succeed(tx_output)
 
     # Exception must be raised when querying closed position
-    with pytest.raises(QueryError, match="not found object 'nibiru.perp.v1.Position'"):
+    with pytest.raises(QueryError, match="not found: 'nibiru.perp.v1.Position'"):
         agent.query.perp.position(trader=agent.address, token_pair=pair)

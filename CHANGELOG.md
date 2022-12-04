@@ -3,9 +3,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased](https://github.com/NibiruChain/py-sdk/compare/v0.5.0...HEAD)
 
+## [v0.16.0 (Unreleased)](https://github.com/NibiruChain/py-sdk/compare/dev...HEAD)
+
+Compatible with NibiruChain/nibiru v0.16
 - ...
+
+## [v0.5.3](https://github.com/NibiruChain/py-sdk/compare/v0.5.0...HEAD)
+
+Compatible with NibiruChain/nibiru v0.15
+- TODO
 
 ## [v0.4.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.4.0) 2022-09-06
 

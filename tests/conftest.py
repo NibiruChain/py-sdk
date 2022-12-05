@@ -12,6 +12,7 @@ Fixtures available:
 - agent_node
 """
 import os
+from typing import List
 
 import pytest
 from dotenv import load_dotenv
@@ -19,21 +20,22 @@ from dotenv import load_dotenv
 from nibiru import Network, Sdk
 from nibiru.common import TxConfig, TxType
 
+EXPECTED_ENV_VARS: List[str] = [
+    "LCD_ENDPOINT",
+    "GRPC_ENDPOINT",
+    "TENDERMINT_RPC_ENDPOINT",
+    "WEBSOCKET_ENDPOINT",
+    "CHAIN_ID",
+    "VALIDATOR_MNEMONIC",
+    "ORACLE_MNEMONIC",
+    "NETWORK_INSECURE",
+]
+
 
 def pytest_configure(config):
     load_dotenv()
 
-    expected_env_vars = (
-        "LCD_ENDPOINT",
-        "GRPC_ENDPOINT",
-        "TENDERMINT_RPC_ENDPOINT",
-        "WEBSOCKET_ENDPOINT",
-        "CHAIN_ID",
-        "VALIDATOR_MNEMONIC",
-        "ORACLE_MNEMONIC",
-        "NETWORK_INSECURE",
-    )
-    for env_var in expected_env_vars:
+    for env_var in EXPECTED_ENV_VARS:
         val = os.getenv(env_var)
         if not val:
             raise ValueError(f"Environment variable {env_var} is missing!")

@@ -4,7 +4,7 @@ from typing import List
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
 
-from nibiru.common import Coin, PoolAsset, PythonMsg
+from nibiru.common import Coin, PoolAsset, PoolType, PythonMsg
 
 
 @dataclasses.dataclass
@@ -22,6 +22,8 @@ class MsgCreatePool(PythonMsg):
     creator: str
     swap_fee: float
     exit_fee: float
+    a: int
+    pool_type: PoolType
     assets: List[PoolAsset]
 
     def to_pb(self) -> pb.MsgCreatePool:
@@ -38,7 +40,10 @@ class MsgCreatePool(PythonMsg):
         return pb.MsgCreatePool(
             creator=self.creator,
             pool_params=pool_tx_pb.PoolParams(
-                swap_fee=swap_fee_dec, exit_fee=exit_fee_dec
+                swap_fee=swap_fee_dec,
+                exit_fee=exit_fee_dec,
+                pool_type=self.pool_type,
+                A=str(int(self.a)),
             ),
             pool_assets=pool_assets,
         )

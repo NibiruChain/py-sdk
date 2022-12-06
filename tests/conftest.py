@@ -61,9 +61,14 @@ def network() -> Network:
     return Network.devnet(2)
 
 
+TX_CONFIG: TxConfig = TxConfig(
+    tx_type=TxType.BLOCK, gas_multiplier=3, gas_price=1, gas_wanted=250000
+)
+
+
 @pytest.fixture
 def val_node(network: Network) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK)
+    tx_config = TX_CONFIG
     network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
 
     return (
@@ -75,7 +80,7 @@ def val_node(network: Network) -> Sdk:
 
 @pytest.fixture
 def agent(network: Network) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
+    tx_config = TX_CONFIG
     network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
     agent = (
         Sdk.authorize().with_config(tx_config).with_network(network, network_insecure)

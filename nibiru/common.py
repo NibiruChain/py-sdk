@@ -1,6 +1,9 @@
 import abc
-from dataclasses import dataclass
+import collections.abc
+import dataclasses
+import pprint
 from enum import Enum
+from typing import Dict, List
 
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru_proto.proto.dex.v1.pool_pb2 import PoolType  # noqa
@@ -52,7 +55,7 @@ class Direction(Enum):
     REMOVE = 2
 
 
-@dataclass
+@dataclasses.dataclass
 class Coin:
     amount: float
     denom: str
@@ -61,7 +64,7 @@ class Coin:
         return cosmos_base_coin_pb.Coin(amount=str(self.amount), denom=self.denom)
 
 
-@dataclass
+@dataclasses.dataclass
 class PoolAsset:
     token: Coin
     weight: float
@@ -72,17 +75,20 @@ class TxConfig:
         self,
         gas_wanted: int = 0,
         gas_multiplier: float = 1.25,
-        gas_price: float = 0,
+        gas_price: float = 0.25,
         tx_type: TxType = TxType.ASYNC,
     ):
         """
         The TxConfig object allows to customize the behavior of the Sdk interface when a transaction is sent.
 
         Args:
-            gas_wanted (int, optional): Set the absolute gas_wanted to be used. Defaults to 0.
-            gas_multiplier (float, optional): Set the gas multiplier that's being applied to the estimated gas.
-                Defaults to 0. If gas_wanted is set this property is ignored.
-            gas_price (float, optional): Set the gas price used to calculate the fee. Defaults to 0.
+            gas_wanted (int, optional): Set the absolute gas_wanted to be used.
+                Defaults to 0.
+            gas_multiplier (float, optional): Set the gas multiplier that's being
+                applied to the estimated gas. If gas_wanted is set, this property
+                is ignored. Defaults to 0.
+            gas_price (float, optional): Set the gas price used to calculate the fee.
+                Defaults to 0.25.
             tx_type (TxType, optional): Configure how to execute the tx. Defaults to TxType.ASYNC.
         """
 
@@ -101,3 +107,90 @@ class PythonMsg(abc.ABC):
         Returns:
             Any: The protobuff mesage
         """
+
+
+@dataclasses.dataclass
+class TxResp:
+    """
+    A 'TxResp' represents the response payload from a successful transaction.
+
+    Args & Attributes:
+        height (str): ...TODO
+        txhash (str): ...TODO
+        data (str): ...TODO
+        rawLog (list): ...TODO
+        logs (list): ...TODO
+        gasWanted (str): ...TODO
+        gasUsed (str): ...TODO
+        events (list): ...TODO
+
+    """
+
+    height: str
+    txhash: str
+    data: str
+    rawLog: list
+    logs: list
+    gasWanted: str
+    gasUsed: str
+    events: list
+
+
+class RawEvent(collections.abc.MutableMapping):
+    """Dictionary representing a Tendermint event. In the raw TxOutput of a
+    successful transaciton, it's the value at
+    ```python
+    tx_output['rawLog'][0]['events']
+    ```
+
+    Keys (KeyType):
+        attributes (List[Dict[str,str]])
+        type (str)
+
+    Example:
+    ```python
+    {'attributes': [
+        {'key': 'recipient', 'value': 'nibi1uvu52rxwqj5ndmm59y6atvx33mru9xrz6sqekr'},
+        {'key': 'sender', 'value': 'nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl'},
+        {'key': 'amount', 'value': '7unibi,70unusd'}],
+    'type': 'transfer'}
+    ```
+    """
+
+
+# TODO test conversions from RawEvent to Event
+class Event:
+    event_type: str
+    attributes: Dict[str, str]
+
+    def __init__(self, raw_event: RawEvent):
+        self.event_type = raw_event["type"]
+        self.attributes = self.parse_attributes(raw_event["attributes"])
+
+    @staticmethod
+    def parse_attributes(raw_attributes: List[Dict[str, str]]) -> Dict[str, str]:
+        try:
+            attributes: dict[str, str] = {
+                kv_dict['key']: kv_dict['value'] for kv_dict in raw_attributes
+            }
+            return attributes
+        except:
+            raise Exception(
+                f"failed to parse raw attributes:\n{pprint.pformat(raw_attributes)}"
+            )
+
+
+class RawLogEvents:
+    """A dictionary corresponding to a Tendermint event
+
+    Keys (KeyType):
+        type (str)
+        attributes (List[EventAttribute])
+    """
+
+    events_raw: List[RawEvent]
+
+    def __init__(self, events_raw: List[RawEvent] = []):
+        self.events_raw = events_raw
+
+    # events_raw: list[]

@@ -1,20 +1,18 @@
 # chain_info_test.py
-import os
 from typing import Any, Dict, List, Union
 
 import pytest
 import requests
 
 from nibiru import Sdk
+from nibiru.network import Network
 
 
-def test_genesis_block_ping():
+def test_genesis_block_ping(network: Network):
     """Manually query block info from the chain using a get request. This verifies that
     the configuration is valid.
     """
-    tendermint_rpc_endpoint = os.getenv(
-        "TENDERMINT_RPC_ENDPOINT", "http://localhost:26657"
-    )
+    tendermint_rpc_endpoint = network.tendermint_rpc_endpoint
     query_resp: Dict[str, Any] = requests.get(
         f"{tendermint_rpc_endpoint}/block?height=1"
     ).json()

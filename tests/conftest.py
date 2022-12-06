@@ -47,7 +47,9 @@ def pytest_configure(config):
 
 @pytest.fixture
 def network() -> Network:
-    return Network(
+    """
+    # TODO Use ping test like ts-sdk to check RPC and LCD connections
+    Network(
         lcd_endpoint=pytest.LCD_ENDPOINT,
         grpc_endpoint=pytest.GRPC_ENDPOINT,
         tendermint_rpc_endpoint=pytest.TENDERMINT_RPC_ENDPOINT,
@@ -55,25 +57,27 @@ def network() -> Network:
         chain_id=pytest.CHAIN_ID,
         env="unit_test",
     )
+    """
+    return Network.devnet(2)
 
 
 @pytest.fixture
 def val_node(network: Network) -> Sdk:
     tx_config = TxConfig(tx_type=TxType.BLOCK)
+    network_insecure: bool = not ("https" in network.grpc_endpoint)
 
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
         .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
+        .with_network(network, network_insecure)
     )
 
 
 @pytest.fixture
 def agent(network: Network) -> Sdk:
     tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
+    network_insecure: bool = not ("https" in network.grpc_endpoint)
     agent = (
-        Sdk.authorize()
-        .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
+        Sdk.authorize().with_config(tx_config).with_network(network, network_insecure)
     )
     return agent

@@ -1,7 +1,5 @@
 import time
 
-import pytest
-
 from nibiru import Network, Sdk
 from nibiru.event_specs import EventCaptured, EventType
 from nibiru.exceptions import QueryError, SimulationError
@@ -90,8 +88,27 @@ def test_query_delegations_to(val_node: Sdk):
 
 
 def test_historical_info(val_node: Sdk):
-    with pytest.raises(QueryError, match="not found"):
-        val_node.query.staking.historical_info(1)
+    try:
+        hist_info = val_node.query.staking.historical_info(1)
+        if hist_info["hist"]["valset"]:
+            dict_keys_must_match(
+                hist_info["hist"]["valset"][0],
+                [
+                    "operator_address",
+                    "consensus_pubkey",
+                    "jailed",
+                    "status",
+                    "tokens",
+                    "delegator_shares",
+                    "description",
+                    "unbonding_height",
+                    "unbonding_time",
+                    "commission",
+                    "min_self_delegation",
+                ],
+            )
+    except QueryError:
+        pass
 
 
 def test_params(val_node: Sdk):

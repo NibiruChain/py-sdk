@@ -30,7 +30,8 @@ class Network:
     @classmethod
     def customnet(cls) -> "Network":
         """
-        Custom is the network configured from ENV variables. Defaults to localnet if no ENV variables are provided.
+        Custom is the network configured from ENV variables.
+        Defaults to localnet if no ENV variables are provided.
 
         Raises:
             KeyError: If the values are not set in the testing environment, this will raise an exception.
@@ -71,20 +72,23 @@ class Network:
         )
 
     @classmethod
-    def testnet(cls) -> "Network":
+    def testnet(cls, chain_num: int = 1) -> "Network":
         """
         Testnet is a network open to invited validators. It is more stable than devnet and provides a faucet to get some
         funds
+
+        Args:
+          chain_num (int): Testnet number
 
         Returns:
             Network: The updated Network object.
         """
         return cls(
-            lcd_endpoint='https://lcd.testnet-1.nibiru.fi',
-            grpc_endpoint='grpc.testnet-1.nibiru.fi',
-            tendermint_rpc_endpoint='https://rpc.testnet-1.nibiru.fi',
-            websocket_endpoint='wss://rpc.testnet-1.nibiru.fi/websocket',
-            chain_id='nibiru-testnet-1',
+            lcd_endpoint=f'https://lcd.testnet-{chain_num}.nibiru.fi',
+            grpc_endpoint=f'https://grpc.testnet-{chain_num}.nibiru.fi:443',
+            tendermint_rpc_endpoint=f'https://rpc.testnet-{chain_num}.nibiru.fi',
+            websocket_endpoint=f'wss://rpc.testnet-{chain_num}.nibiru.fi/websocket',
+            chain_id=f'nibiru-testnet-{chain_num}',
             fee_denom='unibi',
             env='testnet',
         )
@@ -125,3 +129,24 @@ class Network:
             str: The name of the current environment.
         """
         return self.env
+
+    @classmethod
+    def devnet(cls, chain_num: int = 1) -> "Network":
+        """
+        Devnet is a network open to invited validators.
+
+        Args:
+          chain_num (int): Devnet number
+
+        Returns:
+            Network: The updated Network object.
+        """
+        return cls(
+            lcd_endpoint=f'https://lcd.devnet-{chain_num}.nibiru.fi',
+            grpc_endpoint=f'grpc.devnet-{chain_num}.nibiru.fi:443',
+            tendermint_rpc_endpoint=f'https://rpc.devnet-{chain_num}.nibiru.fi:443',
+            websocket_endpoint=f'wss://rpc.devnet-{chain_num}.nibiru.fi/websocket',
+            chain_id=f'nibiru-devnet-{chain_num}',
+            fee_denom='unibi',
+            env='devnet',
+        )

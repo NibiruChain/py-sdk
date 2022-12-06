@@ -25,14 +25,10 @@ def test_query_vpool_all_pools(agent: nibiru.Sdk):
 
     all_vpools: List[dict] = query_resp["pools"]
     vpool_fields: List[str] = [
-        "base_asset_reserve",
-        "fluctuation_limit_ratio",
-        "maintenance_margin_ratio",
-        "max_leverage",
-        "max_oracle_spread_ratio",
         "pair",
+        "base_asset_reserve",
         "quote_asset_reserve",
-        "trade_limit_ratio",
+        "config",
     ]
     tests.dict_keys_must_match(all_vpools[0], keys=vpool_fields)
 

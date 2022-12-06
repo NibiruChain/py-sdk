@@ -12,6 +12,7 @@ Fixtures available:
 - agent_node
 """
 import os
+from typing import List
 
 import pytest
 from dotenv import load_dotenv
@@ -19,21 +20,22 @@ from dotenv import load_dotenv
 from nibiru import Network, Sdk
 from nibiru.common import TxConfig, TxType
 
+EXPECTED_ENV_VARS: List[str] = [
+    "LCD_ENDPOINT",
+    "GRPC_ENDPOINT",
+    "TENDERMINT_RPC_ENDPOINT",
+    "WEBSOCKET_ENDPOINT",
+    "CHAIN_ID",
+    "VALIDATOR_MNEMONIC",
+    "ORACLE_MNEMONIC",
+    "NETWORK_INSECURE",
+]
+
 
 def pytest_configure(config):
     load_dotenv()
 
-    expected_env_vars = (
-        "LCD_ENDPOINT",
-        "GRPC_ENDPOINT",
-        "TENDERMINT_RPC_ENDPOINT",
-        "WEBSOCKET_ENDPOINT",
-        "CHAIN_ID",
-        "VALIDATOR_MNEMONIC",
-        "ORACLE_MNEMONIC",
-        "NETWORK_INSECURE",
-    )
-    for env_var in expected_env_vars:
+    for env_var in EXPECTED_ENV_VARS:
         val = os.getenv(env_var)
         if not val:
             raise ValueError(f"Environment variable {env_var} is missing!")
@@ -45,7 +47,9 @@ def pytest_configure(config):
 
 @pytest.fixture
 def network() -> Network:
-    return Network(
+    """
+    # TODO Use ping test like ts-sdk to check RPC and LCD connections
+    Network(
         lcd_endpoint=pytest.LCD_ENDPOINT,
         grpc_endpoint=pytest.GRPC_ENDPOINT,
         tendermint_rpc_endpoint=pytest.TENDERMINT_RPC_ENDPOINT,
@@ -53,25 +57,32 @@ def network() -> Network:
         chain_id=pytest.CHAIN_ID,
         env="unit_test",
     )
+    """
+    return Network.devnet(2)
+
+
+TX_CONFIG: TxConfig = TxConfig(
+    tx_type=TxType.BLOCK, gas_multiplier=3, gas_price=1, gas_wanted=250000
+)
 
 
 @pytest.fixture
 def val_node(network: Network) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK)
+    tx_config = TX_CONFIG
+    network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
 
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
         .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
+        .with_network(network, network_insecure)
     )
 
 
 @pytest.fixture
 def agent(network: Network) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
+    tx_config = TX_CONFIG
+    network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
     agent = (
-        Sdk.authorize()
-        .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
+        Sdk.authorize().with_config(tx_config).with_network(network, network_insecure)
     )
     return agent

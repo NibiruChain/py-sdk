@@ -22,6 +22,7 @@ from packaging import version
 
 import nibiru.query_clients
 from nibiru.network import Network
+from nibiru.query_clients.util import deserialize
 from nibiru.utils import init_logger
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -262,11 +263,15 @@ class GrpcClient:
         )
 
     def get_bank_balances(self, address: str):
-        return self.stubBank.AllBalances(
-            bank_query.QueryAllBalancesRequest(address=address)
+        return deserialize(
+            self.stubBank.AllBalances(
+                bank_query.QueryAllBalancesRequest(address=address)
+            )
         )
 
     def get_bank_balance(self, address: str, denom: str):
-        return self.stubBank.Balance(
-            bank_query.QueryBalanceRequest(address=address, denom=denom)
+        return deserialize(
+            self.stubBank.Balance(
+                bank_query.QueryBalanceRequest(address=address, denom=denom)
+            )
         )

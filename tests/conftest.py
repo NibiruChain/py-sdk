@@ -64,7 +64,7 @@ def network() -> Network:
 @pytest.fixture
 def val_node(network: Network) -> Sdk:
     tx_config = TxConfig(tx_type=TxType.BLOCK)
-    network_insecure: bool = not ("https" in network.grpc_endpoint)
+    network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
 
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
@@ -76,7 +76,7 @@ def val_node(network: Network) -> Sdk:
 @pytest.fixture
 def agent(network: Network) -> Sdk:
     tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
-    network_insecure: bool = not ("https" in network.grpc_endpoint)
+    network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
     agent = (
         Sdk.authorize().with_config(tx_config).with_network(network, network_insecure)
     )

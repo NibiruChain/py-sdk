@@ -65,7 +65,6 @@ TX_CONFIG: TxConfig = TxConfig(
     tx_type=TxType.BLOCK,
     gas_multiplier=1.25,
     gas_price=0.25,
-    # tx_type=TxType.BLOCK, gas_multiplier=1.25, gas_price=0.25, gas_wanted=200000
 )
 
 

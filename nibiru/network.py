@@ -12,20 +12,48 @@ from typing import Dict, Optional
 
 @dataclasses.dataclass
 class Network:
+    """A representation of a Nibiru network based on its Tendermint RPC, gRPC,
+    and LCD (REST) endpoints. A 'Network' instance enables interactions with a
+    running blockchain.
+
+    Attributes:
+        lcd_endpoint (str): .
+        grpc_endpoint (str): .
+        tendermint_rpc_endpoint (str): .
+        chain_id (str): .
+        websocket_endpoint (str): .
+        env (Optional[str]): TODO docs
+        fee_denom (Optional[str]): Denom for the coin used to pay gas fees. Defaults to "unibi".
+
+    Methods:
+        customnet: A custom Nibiru network based on environment variables.
+            Defaults to localnet.
+        devnet: A development testnet environment that runs the latest release or
+            pre-release from the nibiru repo. Defaults to 'nibiru-devnet-1'.
+        localnet: The default local network created by running 'make localnet' in
+            the nibiru repo.
+        testnet: A stable testnet environment with public community members.
+            Think of this as out practice mainnet. Defaults to 'nibiru-testnet-1'.
+        mainnet: NotImplemented.
+
+    Examples:
+    >>> from nibiru import Network
+    >>> network = Network.devnet(2)
+    >>> network.is_insecure
+    True
+    """
+
     lcd_endpoint: str
     grpc_endpoint: str
     tendermint_rpc_endpoint: str
     chain_id: str
-    env: str
     websocket_endpoint: str
+    env: str = "custom"
     fee_denom: str = "unibi"
 
-    def __post_init__(self):
-        """
-        Update the env value if the dataclass was created without one.
-        """
-        if self.env == "":
-            self.env = "custom"
+    @property
+    def is_insecure(self) -> bool:
+        return not ("https" in self.tendermint_rpc_endpoint)
 
     @classmethod
     def customnet(cls) -> "Network":
@@ -74,8 +102,8 @@ class Network:
     @classmethod
     def testnet(cls, chain_num: int = 1) -> "Network":
         """
-        Testnet is a network open to invited validators. It is more stable than devnet and provides a faucet to get some
-        funds
+        Testnet is a network open to invited validators. It is more stable than
+        devnet and provides a faucet to get some funds
 
         Args:
           chain_num (int): Testnet number

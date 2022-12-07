@@ -95,7 +95,7 @@ class Sdk:
         return self
 
     def with_network(
-        self, network: Network, insecure=False, bypass_version_check: bool = False
+        self, network: Network, bypass_version_check: bool = False
     ) -> "Sdk":
         """
         Change the network of the sdk to the specified network.
@@ -110,7 +110,7 @@ class Sdk:
         """
         self.network = network
         self._with_query_client(
-            GrpcClient(self.network, insecure, bypass_version_check)
+            GrpcClient(network, network.is_insecure, bypass_version_check)
         )
         return self
 

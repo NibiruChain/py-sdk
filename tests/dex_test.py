@@ -3,8 +3,8 @@
 import nibiru
 import nibiru.msg
 from nibiru import Coin, PoolAsset
-from nibiru.common import PoolType
 from nibiru.exceptions import SimulationError
+from nibiru.pytypes import PoolType
 from tests import transaction_must_succeed
 
 PRECISION = 6

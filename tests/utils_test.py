@@ -3,7 +3,7 @@ from nibiru_proto.proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from nibiru_proto.proto.perp.v1.tx_pb2 import MsgOpenPosition
 
 import nibiru
-from nibiru import Coin, common
+from nibiru import Coin, pytypes
 from nibiru.query_clients.util import get_block_messages, get_msg_pb_by_type_url
 from nibiru.utils import from_sdk_dec, to_sdk_dec
 from tests import dict_keys_must_match
@@ -89,7 +89,7 @@ def test_get_block_messages(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         nibiru.msg.MsgOpenPosition(
             sender=agent.address,
             token_pair=pair,
-            side=common.Side.BUY,
+            side=pytypes.Side.BUY,
             quote_asset_amount=10,
             leverage=10,
             base_asset_amount_limit=0,

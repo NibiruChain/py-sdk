@@ -5,7 +5,7 @@ from typing import List
 
 import nibiru
 import nibiru.msg
-from nibiru import Network, Sdk, Transaction, common
+from nibiru import Network, Sdk, Transaction, pytypes
 from nibiru.event_specs import EventCaptured
 from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
@@ -50,7 +50,7 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
             nibiru.msg.MsgOpenPosition(
                 sender=val_node.address,
                 token_pair=pair,
-                side=common.Side.BUY,
+                side=pytypes.Side.BUY,
                 quote_asset_amount=10,
                 leverage=10,
                 base_asset_amount_limit=0,

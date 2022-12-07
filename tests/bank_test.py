@@ -16,12 +16,12 @@ def test_send_multiple_msgs(val_node: nibiru.Sdk, agent: nibiru.Sdk):
             nibiru.msg.MsgSend(
                 val_node.address,
                 agent.address,
-                [Coin(10000, "unibi"), Coin(100, "unusd")],
+                [Coin(7, "unibi"), Coin(70, "unusd")],
             ),
             nibiru.msg.MsgSend(
                 val_node.address,
                 agent.address,
-                [Coin(10000, "unibi"), Coin(100, "unusd")],
+                [Coin(15, "unibi"), Coin(23, "unusd")],
             ),
         ]
     )
@@ -40,7 +40,7 @@ def test_send_single_msg(val_node: nibiru.Sdk, agent: nibiru.Sdk):
             nibiru.msg.MsgSend(
                 val_node.address,
                 agent.address,
-                [Coin(10000, "unibi"), Coin(100, "unusd")],
+                [Coin(10, "unibi"), Coin(10, "unusd")],
             ),
         ]
     )

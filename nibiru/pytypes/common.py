@@ -1,9 +1,6 @@
 import abc
-import collections.abc
 import dataclasses
-import pprint
 from enum import Enum
-from typing import Dict, List
 
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru_proto.proto.dex.v1.pool_pb2 import PoolType  # noqa
@@ -107,90 +104,3 @@ class PythonMsg(abc.ABC):
         Returns:
             Any: The protobuff mesage
         """
-
-
-@dataclasses.dataclass
-class TxResp:
-    """
-    A 'TxResp' represents the response payload from a successful transaction.
-
-    Args & Attributes:
-        height (str): ...TODO
-        txhash (str): ...TODO
-        data (str): ...TODO
-        rawLog (list): ...TODO
-        logs (list): ...TODO
-        gasWanted (str): ...TODO
-        gasUsed (str): ...TODO
-        events (list): ...TODO
-
-    """
-
-    height: str
-    txhash: str
-    data: str
-    rawLog: list
-    logs: list
-    gasWanted: str
-    gasUsed: str
-    events: list
-
-
-class RawEvent(collections.abc.MutableMapping):
-    """Dictionary representing a Tendermint event. In the raw TxOutput of a
-    successful transaciton, it's the value at
-    ```python
-    tx_output['rawLog'][0]['events']
-    ```
-
-    Keys (KeyType):
-        attributes (List[Dict[str,str]])
-        type (str)
-
-    Example:
-    ```python
-    {'attributes': [
-        {'key': 'recipient', 'value': 'nibi1uvu52rxwqj5ndmm59y6atvx33mru9xrz6sqekr'},
-        {'key': 'sender', 'value': 'nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl'},
-        {'key': 'amount', 'value': '7unibi,70unusd'}],
-    'type': 'transfer'}
-    ```
-    """
-
-
-# TODO test conversions from RawEvent to Event
-class Event:
-    event_type: str
-    attributes: Dict[str, str]
-
-    def __init__(self, raw_event: RawEvent):
-        self.event_type = raw_event["type"]
-        self.attributes = self.parse_attributes(raw_event["attributes"])
-
-    @staticmethod
-    def parse_attributes(raw_attributes: List[Dict[str, str]]) -> Dict[str, str]:
-        try:
-            attributes: dict[str, str] = {
-                kv_dict['key']: kv_dict['value'] for kv_dict in raw_attributes
-            }
-            return attributes
-        except:
-            raise Exception(
-                f"failed to parse raw attributes:\n{pprint.pformat(raw_attributes)}"
-            )
-
-
-class RawLogEvents:
-    """A dictionary corresponding to a Tendermint event
-
-    Keys (KeyType):
-        type (str)
-        attributes (List[EventAttribute])
-    """
-
-    events_raw: List[RawEvent]
-
-    def __init__(self, events_raw: List[RawEvent] = []):
-        self.events_raw = events_raw
-
-    # events_raw: list[]

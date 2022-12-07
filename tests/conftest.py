@@ -18,7 +18,7 @@ import pytest
 from dotenv import load_dotenv
 
 from nibiru import Network, Sdk
-from nibiru.common import TxConfig, TxType
+from nibiru.pytypes import TxConfig, TxType
 
 EXPECTED_ENV_VARS: List[str] = [
     "LCD_ENDPOINT",
@@ -62,7 +62,10 @@ def network() -> Network:
 
 
 TX_CONFIG: TxConfig = TxConfig(
-    tx_type=TxType.BLOCK, gas_multiplier=3, gas_price=1, gas_wanted=250000
+    tx_type=TxType.BLOCK,
+    gas_multiplier=1.25,
+    gas_price=0.25,
+    # tx_type=TxType.BLOCK, gas_multiplier=1.25, gas_price=0.25, gas_wanted=200000
 )
 
 

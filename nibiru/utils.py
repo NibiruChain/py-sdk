@@ -1,8 +1,9 @@
+import collections
 import json
 import logging
 import sys
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
 from google.protobuf.timestamp_pb2 import Timestamp
 
@@ -303,3 +304,117 @@ def clean_nested_dict(dictionary: Union[List, Dict, str]) -> Dict:
                 dictionary[key] = value
 
     return dictionary
+
+
+# ----------------------------------------------------
+# ----------------------------------------------------
+
+
+def dict_keys_must_match(dict_: dict, keys: List[str]):
+    """Asserts that two iterables have the same elements, the same number of
+    times, without regard to order.
+    Alias for the 'element_counts_are_equal' function.
+
+    dict_keys_must_match(dict_, keys)
+
+    Example:
+    - [0, 1, 1] and [1, 0, 1] compare equal.
+    - [0, 0, 1] and [0, 1] compare unequal.
+
+    """
+    assert element_counts_are_equal(dict_.keys(), keys)
+
+
+def element_counts_are_equal(
+    first: Iterable[Any], second: Iterable[Any]
+) -> Optional[bool]:
+    """Asserts that two iterables have the same elements, the same number of
+    times, without regard to order.
+
+    Args:
+        first (Iterable[Any])
+        second (Iterable[Any])
+
+    Returns:
+        Optional[bool]: "passed" status. If this is True, first and second share
+            the same element counts. If they don't the function will raise an
+            AssertionError and return 'None'.
+    """
+    first_seq, second_seq = list(first), list(second)
+
+    passed: Union[bool, None]
+    try:
+        first = collections.Counter(first_seq)
+        second = collections.Counter(second_seq)
+    except TypeError:
+        # Handle case with unhashable elements
+        differences = _count_diff_all_purpose(first_seq, second_seq)
+    else:
+        if first == second:
+            passed = True
+            return passed
+        differences = _count_diff_hashable(first_seq, second_seq)
+
+    if differences:
+        standardMsg = "Element counts were not equal:\n"
+        lines = ["First has %d, Second has %d:  %r" % diff for diff in differences]
+        diffMsg = "\n".join(lines)
+        msg = "\n".join([standardMsg, diffMsg])
+        passed = False
+        assert passed, msg
+
+
+_Mismatch = collections.namedtuple("Mismatch", "actual expected value")
+
+
+def _count_diff_all_purpose(actual, expected):
+    "Returns list of (cnt_act, cnt_exp, elem) triples where the counts differ"
+    # elements need not be hashable
+    s, t = list(actual), list(expected)
+    m, n = len(s), len(t)
+    NULL = object()
+    result = []
+    for i, elem in enumerate(s):
+        if elem is NULL:
+            continue
+        cnt_s = cnt_t = 0
+        for j in range(i, m):
+            if s[j] == elem:
+                cnt_s += 1
+                s[j] = NULL
+        for j, other_elem in enumerate(t):
+            if other_elem == elem:
+                cnt_t += 1
+                t[j] = NULL
+        if cnt_s != cnt_t:
+            diff = _Mismatch(cnt_s, cnt_t, elem)
+            result.append(diff)
+
+    for i, elem in enumerate(t):
+        if elem is NULL:
+            continue
+        cnt_t = 0
+        for j in range(i, n):
+            if t[j] == elem:
+                cnt_t += 1
+                t[j] = NULL
+        diff = _Mismatch(0, cnt_t, elem)
+        result.append(diff)
+    return result
+
+
+def _count_diff_hashable(actual, expected):
+    "Returns list of (cnt_act, cnt_exp, elem) triples where the counts differ"
+    # elements must be hashable
+    s, t = collections.Counter(actual), collections.Counter(expected)
+    result = []
+    for elem, cnt_s in s.items():
+        cnt_t = t.get(elem, 0)
+        if cnt_s != cnt_t:
+            diff = _Mismatch(cnt_s, cnt_t, elem)
+            result.append(diff)
+    for elem, cnt_t in t.items():
+        if elem not in s:
+            diff = _Mismatch(0, cnt_t, elem)
+            result.append(diff)
+    return result

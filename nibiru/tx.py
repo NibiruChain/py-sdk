@@ -7,10 +7,10 @@ from google.protobuf.json_format import MessageToDict
 from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 
-from nibiru.client import GrpcClient
-from nibiru.common import GAS_PRICE, PythonMsg, TxConfig, TxType
 from nibiru.exceptions import SimulationError, TxError
+from nibiru.grpc_client import GrpcClient
 from nibiru.network import Network
+from nibiru.pytypes import GAS_PRICE, PythonMsg, TxConfig, TxType
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
 

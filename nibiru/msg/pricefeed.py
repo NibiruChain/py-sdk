@@ -3,7 +3,7 @@ from datetime import datetime
 
 from nibiru_proto.proto.pricefeed import tx_pb2 as pb
 
-from nibiru.common import PythonMsg
+from nibiru.pytypes import PythonMsg
 from nibiru.utils import to_sdk_dec, toPbTimestamp
 
 

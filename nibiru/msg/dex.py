@@ -4,7 +4,7 @@ from typing import List
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
 
-from nibiru.common import Coin, PoolAsset, PoolType, PythonMsg
+from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 
 
 @dataclasses.dataclass

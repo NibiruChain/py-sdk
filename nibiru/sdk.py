@@ -6,13 +6,13 @@ Once instanciated, the sdk provide the sdk.tx and sdk.query modules to be able t
 chain.
 
 This object depends on the network and transaction configuration the users want. These objects can be set using the
-Network and TxConfig classes respectively inside the nibiru/network.py and nibiru/common.py files.
+Network and TxConfig classes respectively inside the nibiru/network.py and nibiru/pytypes files.
 """
 import logging
 
-from nibiru.client import GrpcClient
-from nibiru.common import TxConfig
+from nibiru.grpc_client import GrpcClient
 from nibiru.network import Network
+from nibiru.pytypes import TxConfig
 from nibiru.tx import BaseTxClient
 from nibiru.wallet import PrivateKey
 
@@ -40,11 +40,13 @@ class Sdk:
 
     Example ::
 
-        sdk = (
-            Sdk.authorize(val_mnemonic)
-            .with_config(tx_config)
-            .with_network(network, network_insecure)
-        )
+    ```python
+    sdk = (
+        Sdk.authorize(val_mnemonic)
+        .with_config(tx_config)
+        .with_network(network, network_insecure)
+    )
+    ```
     """
 
     query: GrpcClient

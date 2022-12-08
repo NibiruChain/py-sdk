@@ -77,17 +77,19 @@ def test_get_msg_pb_by_type_url(type_url, cls):
     assert get_msg_pb_by_type_url(type_url) == cls()
 
 
-def test_get_block_messages(val_node: nibiru.Sdk, agent: nibiru.Sdk):
+def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     pair = "ubtc:unusd"
 
-    val_node.tx.execute_msgs(
+    sdk_val.tx.execute_msgs(
         nibiru.msg.MsgSend(
-            val_node.address, agent.address, [Coin(10000, "unibi"), Coin(100, "unusd")]
+            sdk_val.address,
+            sdk_agent.address,
+            [Coin(10000, "unibi"), Coin(100, "unusd")],
         )
     )
-    tx_output: dict = agent.tx.execute_msgs(
+    tx_output: dict = sdk_agent.tx.execute_msgs(
         nibiru.msg.MsgOpenPosition(
-            sender=agent.address,
+            sender=sdk_agent.address,
             token_pair=pair,
             side=pytypes.Side.BUY,
             quote_asset_amount=10,
@@ -96,7 +98,7 @@ def test_get_block_messages(val_node: nibiru.Sdk, agent: nibiru.Sdk):
         )
     )
     height = int(tx_output["height"])
-    block_resp = agent.query.get_block_by_height(height)
+    block_resp = sdk_agent.query.get_block_by_height(height)
     messages = get_block_messages(block_resp.block)
 
     msg_open_position = [

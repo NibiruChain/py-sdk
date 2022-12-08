@@ -6,21 +6,21 @@ import tests
 from nibiru import pytypes
 
 
-def test_query_vpool_reserve_assets(val_node: nibiru.Sdk):
+def test_query_vpool_reserve_assets(sdk_val: nibiru.Sdk):
     expected_pairs: List[str] = ["ubtc:unusd", "ueth:unusd"]
     for pair in expected_pairs:
-        query_resp: dict = val_node.query.vpool.reserve_assets(pair)
+        query_resp: dict = sdk_val.query.vpool.reserve_assets(pair)
         assert isinstance(query_resp, dict)
         assert query_resp["base_asset_reserve"] > 0
         assert query_resp["quote_asset_reserve"] > 0
 
 
-def test_query_vpool_all_pools(agent: nibiru.Sdk):
+def test_query_vpool_all_pools(sdk_agent: nibiru.Sdk):
     """Tests deserialization and expected attributes for the
     'nibid query vpool all-pools' command.
     """
 
-    query_resp: Dict[str, List[dict]] = agent.query.vpool.all_pools()
+    query_resp: Dict[str, List[dict]] = sdk_agent.query.vpool.all_pools()
     tests.dict_keys_must_match(query_resp, keys=["pools", "prices"])
 
     all_vpools: List[dict] = query_resp["pools"]
@@ -53,8 +53,8 @@ def test_query_vpool_all_pools(agent: nibiru.Sdk):
     tests.LOGGER.info(f"vpool_prices: {pprint.pformat(vpool_prices, indent=3)}")
 
 
-def test_query_vpool_base_asset_price(agent: nibiru.Sdk):
-    query_resp: Dict[str, List[dict]] = agent.query.vpool.base_asset_price(
+def test_query_vpool_base_asset_price(sdk_agent: nibiru.Sdk):
+    query_resp: Dict[str, List[dict]] = sdk_agent.query.vpool.base_asset_price(
         pair="ueth:unusd", direction=pytypes.Direction.ADD, base_asset_amount="15"
     )
     tests.dict_keys_must_match(query_resp, keys=["price_in_quote_denom"])

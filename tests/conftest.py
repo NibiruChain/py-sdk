@@ -8,7 +8,7 @@ See "Scope: sharing fixtures across classes, modules, packages or session"
 
 Fixtures available:
 - network
-- val_node
+- sdk_val
 - agent_node
 """
 import os
@@ -69,22 +69,17 @@ TX_CONFIG: TxConfig = TxConfig(
 
 
 @pytest.fixture
-def val_node(network: Network) -> Sdk:
+def sdk_val(network: Network) -> Sdk:
     tx_config = TX_CONFIG
-    network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
-
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
         .with_config(tx_config)
-        .with_network(network, network_insecure)
+        .with_network(network)
     )
 
 
 @pytest.fixture
-def agent(network: Network) -> Sdk:
+def sdk_agent(network: Network) -> Sdk:
     tx_config = TX_CONFIG
-    network_insecure: bool = not ("https" in network.tendermint_rpc_endpoint)
-    agent = (
-        Sdk.authorize().with_config(tx_config).with_network(network, network_insecure)
-    )
+    agent = Sdk.authorize().with_config(tx_config).with_network(network)
     return agent

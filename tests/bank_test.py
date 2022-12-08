@@ -8,19 +8,19 @@ from nibiru import Coin
 PRECISION = 6
 
 
-def test_send_multiple_msgs(val_node: nibiru.Sdk, agent: nibiru.Sdk):
+def test_send_multiple_msgs(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     """Tests the transfer of funds for a transaction with a multiple 'MsgSend' messages."""
 
-    tx_output = val_node.tx.execute_msgs(
+    tx_output = sdk_val.tx.execute_msgs(
         [
             nibiru.msg.MsgSend(
-                val_node.address,
-                agent.address,
+                sdk_val.address,
+                sdk_agent.address,
                 [Coin(7, "unibi"), Coin(70, "unusd")],
             ),
             nibiru.msg.MsgSend(
-                val_node.address,
-                agent.address,
+                sdk_val.address,
+                sdk_agent.address,
                 [Coin(15, "unibi"), Coin(23, "unusd")],
             ),
         ]
@@ -32,14 +32,14 @@ def test_send_multiple_msgs(val_node: nibiru.Sdk, agent: nibiru.Sdk):
     tests.transaction_must_succeed(tx_output)
 
 
-def test_send_single_msg(val_node: nibiru.Sdk, agent: nibiru.Sdk):
+def test_send_single_msg(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     """Tests the transfer of funds for a transaction with a single 'MsgSend' message."""
 
-    tx_output = val_node.tx.execute_msgs(
+    tx_output = sdk_val.tx.execute_msgs(
         [
             nibiru.msg.MsgSend(
-                val_node.address,
-                agent.address,
+                sdk_val.address,
+                sdk_agent.address,
                 [Coin(10, "unibi"), Coin(10, "unusd")],
             ),
         ]

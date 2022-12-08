@@ -121,7 +121,9 @@ class DexQueryClient(QueryClient):
             should_deserialize=False,
         )
 
-        output = MessageToDict(proto_output)["pools"]
+        output: dict = MessageToDict(proto_output).get("pools")
+        if output is None:
+            output = {}
 
         return format_fields_nested(
             object=format_fields_nested(

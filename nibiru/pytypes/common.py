@@ -67,32 +67,26 @@ class PoolAsset:
     weight: float
 
 
+@dataclasses.dataclass
 class TxConfig:
-    def __init__(
-        self,
-        gas_wanted: int = 0,
-        gas_multiplier: float = 1.25,
-        gas_price: float = 0.25,
-        tx_type: TxType = TxType.ASYNC,
-    ):
-        """
-        The TxConfig object allows to customize the behavior of the Sdk interface when a transaction is sent.
+    """
+    The TxConfig object allows to customize the behavior of the Sdk interface when a transaction is sent.
 
-        Args:
-            gas_wanted (int, optional): Set the absolute gas_wanted to be used.
-                Defaults to 0.
-            gas_multiplier (float, optional): Set the gas multiplier that's being
-                applied to the estimated gas. If gas_wanted is set, this property
-                is ignored. Defaults to 0.
-            gas_price (float, optional): Set the gas price used to calculate the fee.
-                Defaults to 0.25.
-            tx_type (TxType, optional): Configure how to execute the tx. Defaults to TxType.ASYNC.
-        """
+    Args:
+        gas_wanted (int, optional): Set the absolute gas_wanted to be used.
+            Defaults to 0.
+        gas_multiplier (float, optional): Set the gas multiplier that's being
+            applied to the estimated gas. If gas_wanted is set, this property
+            is ignored. Defaults to 0.
+        gas_price (float, optional): Set the gas price used to calculate the fee.
+            Defaults to 0.25.
+        tx_type (TxType, optional): Configure how to execute the tx. Defaults to TxType.ASYNC.
+    """
 
-        self.gas_multiplier = gas_multiplier
-        self.gas_wanted = gas_wanted
-        self.gas_price = gas_price
-        self.tx_type = tx_type
+    gas_wanted: int = 0
+    gas_multiplier: float = 1.25
+    gas_price: float = 0.25
+    tx_type: TxType = TxType.ASYNC
 
 
 class PythonMsg(abc.ABC):

@@ -19,6 +19,9 @@ import pytest
 
 from nibiru import Network, Sdk
 from nibiru.pytypes import TxConfig, TxType
+from tests.utils_test import can_ping, url_to_host
+
+DEVNET_CHAIN_ID = 2
 
 PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
     VALIDATOR_MNEMONIC="",
@@ -67,22 +70,39 @@ def pytest_configure(config):
         set_pytest_global(env_var_name, env_var_value)
 
 
+def get_network() -> Network:
+    if PYTEST_GLOBALS["use_localnet"]:
+        return Network.customnet()
+    return Network.devnet(DEVNET_CHAIN_ID)
+
+
 @pytest.fixture
 def network() -> Network:
     """
     # TODO Use ping test like ts-sdk to check RPC and LCD connections
-    Network(
-        lcd_endpoint=pytest.LCD_ENDPOINT,
-        grpc_endpoint=pytest.GRPC_ENDPOINT,
-        tendermint_rpc_endpoint=pytest.TENDERMINT_RPC_ENDPOINT,
-        websocket_endpoint=pytest.WEBSOCKET_ENDPOINT,
-        chain_id=pytest.CHAIN_ID,
-        env="unit_test",
-    )
     """
-    if PYTEST_GLOBALS["use_localnet"]:
-        return Network.customnet()
-    return Network.devnet(2)
+    return get_network()
+
+
+def pytest_sessionstart(session):
+    """
+    Called after the Session object has been created and
+    before performing collection and entering the run test loop.
+    """
+    network = get_network()
+
+    if not can_ping(url_to_host(network.lcd_endpoint)):
+        raise TimeoutError(
+            f"Lcd Endpoint {url_to_host(network.lcd_endpoint)} timed out"
+        )
+    if not can_ping(url_to_host(network.grpc_endpoint)):
+        raise TimeoutError(
+            f"Grpc Endpoint {url_to_host(network.grpc_endpoint)} timed out"
+        )
+    if not can_ping(url_to_host(network.tendermint_rpc_endpoint)):
+        raise TimeoutError(
+            f"Tendermint Rpc Endpoint {url_to_host(network.tendermint_rpc_endpoint)} timed out"
+        )
 
 
 TX_CONFIG: TxConfig = TxConfig(

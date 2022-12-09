@@ -1,7 +1,7 @@
 """Tests package for the Nibiru Python SDK"""
 import logging
 import pprint
-from typing import List, Union
+from typing import Iterable, List, Union
 
 import shutup
 
@@ -10,6 +10,20 @@ from nibiru import utils
 shutup.please()
 
 LOGGER: logging.Logger = utils.init_logger("test-logger")
+
+
+def raises(errs: Union[str, Iterable[str]], err: BaseException):
+    """Makes sure one of the errors in 'errs' in contained in 'err'. If none of
+    the given exceptions were raised, this function raises the original exception.
+    """
+    if isinstance(errs, str):
+        errs = [errs]
+    else:
+        errs = list(errs)
+    errs: List[str]
+
+    err_string = str(err)
+    assert any([e in err_string for e in errs]), err_string
 
 
 def format_response(resp: Union[dict, list, str]) -> str:

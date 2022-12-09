@@ -120,7 +120,6 @@ def test_dex_query_pools(pools: List[dict]):
 
 @pytest.mark.order(3)
 def test_dex_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
-    breakpoint()  # DEBUG REALU
     tx_output = sdk_val.tx.execute_msgs(
         [
             nibiru.msg.MsgJoinPool(
@@ -135,7 +134,6 @@ def test_dex_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
 
 @pytest.mark.order(4)
 def test_dex_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
-    breakpoint()  # DEBUG REALU
     tx_output = sdk_val.tx.execute_msgs(
         [
             # # TODO fix: need usdc on-chain  to do this

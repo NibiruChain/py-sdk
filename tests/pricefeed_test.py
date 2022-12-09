@@ -34,7 +34,6 @@ def post_price_test_tx(
 
 
 def test_post_price_unwhitelisted(sdk_oracle: nibiru.Sdk):
-    breakpoint()
     tests.LOGGER.info("'test_post_price_unwhitelisted' - should error")
     unwhitested_address = "nibi1pzd5e402eld9kcc3h78tmfrm5rpzlzk6hnxkvu"
     queryResp = sdk_oracle.query.pricefeed.oracles("ueth:unusd")

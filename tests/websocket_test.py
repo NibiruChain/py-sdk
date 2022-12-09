@@ -11,7 +11,7 @@ from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
 
 
-def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
+def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     """
     Open a position and ensure output is correct
     """
@@ -45,10 +45,10 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
 
     # Open a position from the validator node
     LOGGER.info("Opening position")
-    val_node.tx.execute_msgs(
+    sdk_val.tx.execute_msgs(
         [
             nibiru.msg.MsgOpenPosition(
-                sender=val_node.address,
+                sender=sdk_val.address,
                 token_pair=pair,
                 side=pytypes.Side.BUY,
                 quote_asset_amount=10,
@@ -56,25 +56,25 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
                 base_asset_amount_limit=0,
             ),
             nibiru.msg.MsgSend(
-                from_address=val_node.address,
+                from_address=sdk_val.address,
                 to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
                 coins=nibiru.Coin(amount=10, denom="unibi"),
             ),
         ]
     )
 
-    val_node.tx.execute_msgs(
+    sdk_val.tx.execute_msgs(
         nibiru.msg.MsgPostPrice(
-            oracle=val_node.address,
+            oracle=sdk_val.address,
             token0="unibi",
             token1="unusd",
             price=10,
             expiry=datetime.utcnow() + timedelta(hours=1),
         ),
     )
-    val_node.tx.execute_msgs(
+    sdk_val.tx.execute_msgs(
         nibiru.msg.MsgPostPrice(
-            oracle=val_node.address,
+            oracle=sdk_val.address,
             token0="unibi",
             token1="unusd",
             price=11,
@@ -83,9 +83,9 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     )
 
     LOGGER.info("Closing position")
-    val_node.tx.execute_msgs(
+    sdk_val.tx.execute_msgs(
         nibiru.msg.MsgClosePosition(
-            sender=val_node.address,
+            sender=sdk_val.address,
             token_pair=pair,
         )
     )
@@ -117,7 +117,7 @@ def test_websocket_listen(val_node: nibiru.Sdk, network: Network):
     assert not missing_events, f"Missing events: {missing_events}"
 
 
-def test_websocket_tx_fail_queue(val_node: Sdk, network: Network):
+def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
     """
     Try executing failing TXs and get errors from tx_fail_queue
     """
@@ -132,14 +132,14 @@ def test_websocket_tx_fail_queue(val_node: Sdk, network: Network):
     time.sleep(1)
 
     # Send failing closing transaction without simulation
-    val_node.tx.client.sync_timeout_height()
-    address = val_node.tx.get_address_info()
+    sdk_val.tx.client.sync_timeout_height()
+    address = sdk_val.tx.get_address_info()
     tx = (
         Transaction()
         .with_messages(
             [
                 nibiru.msg.MsgClosePosition(
-                    sender=val_node.address,
+                    sender=sdk_val.address,
                     token_pair="abc:def",
                 ).to_pb()
             ]
@@ -147,9 +147,9 @@ def test_websocket_tx_fail_queue(val_node: Sdk, network: Network):
         .with_sequence(address.get_sequence())
         .with_account_num(address.get_number())
         .with_chain_id(network.chain_id)
-        .with_signer(val_node.tx.priv_key)
+        .with_signer(sdk_val.tx.priv_key)
     )
-    val_node.tx.execute_tx(tx, 300000)
+    sdk_val.tx.execute_tx(tx, 300000)
 
     time.sleep(3)
 

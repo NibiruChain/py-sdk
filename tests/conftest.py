@@ -20,11 +20,11 @@ import pytest
 from nibiru import Network, Sdk
 from nibiru.pytypes import TxConfig, TxType
 
-PYTEST_GLOBALS = Dict[str, Any] = dict(
-    # required
+PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
     VALIDATOR_MNEMONIC="",
     ORACLE_MNEMONIC="",
-    # not required
+)
+PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
     use_localnet=False,
     LCD_ENDPOINT="",
     GRPC_ENDPOINT="",
@@ -32,6 +32,10 @@ PYTEST_GLOBALS = Dict[str, Any] = dict(
     WEBSOCKET_ENDPOINT="",
     CHAIN_ID="",
 )
+PYTEST_GLOBALS: Dict[str, Any] = {
+    **PYTEST_GLOBALS_REQUIRED,  # combines dictionaries
+    **PYTEST_GLOBALS_OPTIONAL,
+}
 
 
 def pytest_configure(config):
@@ -52,7 +56,7 @@ def pytest_configure(config):
         if use_localnet.lower() == "true":
             set_pytest_global("use_localnet", True)
     if not use_localnet:
-        EXPECTED_ENV_VARS = ["VALIDATOR_MNEMONIC", "ORACLE_MNEMONIC"]
+        EXPECTED_ENV_VARS = [key for key in PYTEST_GLOBALS_REQUIRED]
         set_pytest_global("use_localnet", False)
 
     # Set the expected environment variables. Raise a value error if one is missing

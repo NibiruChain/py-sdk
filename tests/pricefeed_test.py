@@ -121,7 +121,7 @@ class TestPostPrice:
         sdk_oracle.query.wait_for_next_block()
 
 
-@pytest.mark.order(after="TestPostPrice")
+@pytest.mark.order(after="TestPostPrice::test_post_prices")
 def test_pricefeed_queries(sdk_oracle: nibiru.Sdk):
 
     # Raw prices must exist after post_price transaction

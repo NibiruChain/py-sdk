@@ -9,48 +9,48 @@ from nibiru.websocket import NibiruWebsocket
 from tests import dict_keys_must_match, transaction_must_succeed
 
 
-def get_validator_operator_address(val_node: Sdk):
+def get_validator_operator_address(sdk_val: Sdk):
     """
     Return the first validator and delegator
     """
-    validator = val_node.query.staking.validators()["validators"][0]
+    validator = sdk_val.query.staking.validators()["validators"][0]
     return validator["operator_address"]
 
 
-def delegate(val_node: Sdk):
-    return val_node.tx.execute_msgs(
+def delegate(sdk_val: Sdk):
+    return sdk_val.tx.execute_msgs(
         [
             MsgDelegate(
-                delegator_address=val_node.address,
-                validator_address=get_validator_operator_address(val_node),
+                delegator_address=sdk_val.address,
+                validator_address=get_validator_operator_address(sdk_val),
                 amount=1,
             ),
         ]
     )
 
 
-def undelegate(val_node: Sdk):
-    return val_node.tx.execute_msgs(
+def undelegate(sdk_val: Sdk):
+    return sdk_val.tx.execute_msgs(
         [
             MsgUndelegate(
-                delegator_address=val_node.address,
-                validator_address=get_validator_operator_address(val_node),
+                delegator_address=sdk_val.address,
+                validator_address=get_validator_operator_address(sdk_val),
                 amount=1,
             ),
         ]
     )
 
 
-def test_query_vpool(val_node: Sdk):
-    query_resp = val_node.query.staking.pool()
+def test_query_vpool(sdk_val: Sdk):
+    query_resp = sdk_val.query.staking.pool()
     assert query_resp["pool"]["bonded_tokens"] >= 0
     assert query_resp["pool"]["not_bonded_tokens"] >= 0
 
 
-def test_query_delegation(val_node: Sdk):
-    transaction_must_succeed(delegate(val_node))
-    query_resp = val_node.query.staking.delegation(
-        val_node.address, get_validator_operator_address(val_node)
+def test_query_delegation(sdk_val: Sdk):
+    transaction_must_succeed(delegate(sdk_val))
+    query_resp = sdk_val.query.staking.delegation(
+        sdk_val.address, get_validator_operator_address(sdk_val)
     )
     dict_keys_must_match(
         query_resp["delegation_response"],
@@ -61,9 +61,9 @@ def test_query_delegation(val_node: Sdk):
     )
 
 
-def test_query_delegations(val_node: Sdk):
-    transaction_must_succeed(delegate(val_node))
-    query_resp = val_node.query.staking.delegations(val_node.address)
+def test_query_delegations(sdk_val: Sdk):
+    transaction_must_succeed(delegate(sdk_val))
+    query_resp = sdk_val.query.staking.delegations(sdk_val.address)
     dict_keys_must_match(
         query_resp["delegation_responses"][0],
         [
@@ -73,10 +73,10 @@ def test_query_delegations(val_node: Sdk):
     )
 
 
-def test_query_delegations_to(val_node: Sdk):
-    transaction_must_succeed(delegate(val_node))
-    query_resp = val_node.query.staking.delegations_to(
-        get_validator_operator_address(val_node)
+def test_query_delegations_to(sdk_val: Sdk):
+    transaction_must_succeed(delegate(sdk_val))
+    query_resp = sdk_val.query.staking.delegations_to(
+        get_validator_operator_address(sdk_val)
     )
     dict_keys_must_match(
         query_resp["delegation_responses"][0],
@@ -87,9 +87,9 @@ def test_query_delegations_to(val_node: Sdk):
     )
 
 
-def test_historical_info(val_node: Sdk):
+def test_historical_info(sdk_val: Sdk):
     try:
-        hist_info = val_node.query.staking.historical_info(1)
+        hist_info = sdk_val.query.staking.historical_info(1)
         if hist_info["hist"]["valset"]:
             dict_keys_must_match(
                 hist_info["hist"]["valset"][0],
@@ -111,8 +111,8 @@ def test_historical_info(val_node: Sdk):
         pass
 
 
-def test_params(val_node: Sdk):
-    query_resp = val_node.query.staking.params()
+def test_params(sdk_val: Sdk):
+    query_resp = sdk_val.query.staking.params()
     dict_keys_must_match(
         query_resp["params"],
         [
@@ -125,22 +125,22 @@ def test_params(val_node: Sdk):
     )
 
 
-def test_redelegations(val_node: Sdk):
-    query_resp = val_node.query.staking.redelegations(
-        val_node.address, get_validator_operator_address(val_node)
+def test_redelegations(sdk_val: Sdk):
+    query_resp = sdk_val.query.staking.redelegations(
+        sdk_val.address, get_validator_operator_address(sdk_val)
     )
     dict_keys_must_match(query_resp, ["redelegation_responses", "pagination"])
 
 
-def test_unbonding_delegation(val_node: Sdk):
-    transaction_must_succeed(delegate(val_node))
+def test_unbonding_delegation(sdk_val: Sdk):
+    transaction_must_succeed(delegate(sdk_val))
     try:
-        undelegate(val_node)
+        undelegate(sdk_val)
     except SimulationError as ex:
         assert "too many unbonding" in ex.args[0]
 
-    query_resp = val_node.query.staking.unbonding_delegation(
-        val_node.address, get_validator_operator_address(val_node)
+    query_resp = sdk_val.query.staking.unbonding_delegation(
+        sdk_val.address, get_validator_operator_address(sdk_val)
     )
     if query_resp:
         dict_keys_must_match(
@@ -149,14 +149,14 @@ def test_unbonding_delegation(val_node: Sdk):
         assert len(query_resp["unbond"]["entries"]) > 0
 
 
-def test_unbonding_delegations(val_node: Sdk):
-    transaction_must_succeed(delegate(val_node))
+def test_unbonding_delegations(sdk_val: Sdk):
+    transaction_must_succeed(delegate(sdk_val))
     try:
-        undelegate(val_node)
+        undelegate(sdk_val)
     except SimulationError as ex:
         assert "too many unbonding" in ex.args[0]
 
-    query_resp = val_node.query.staking.unbonding_delegations(val_node.address)
+    query_resp = sdk_val.query.staking.unbonding_delegations(sdk_val.address)
     dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
     dict_keys_must_match(
         query_resp["unbonding_responses"][0],
@@ -165,15 +165,15 @@ def test_unbonding_delegations(val_node: Sdk):
     assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
-def test_unbonding_delegations_from(val_node: Sdk):
-    transaction_must_succeed(delegate(val_node))
+def test_unbonding_delegations_from(sdk_val: Sdk):
+    transaction_must_succeed(delegate(sdk_val))
     try:
-        undelegate(val_node)
+        undelegate(sdk_val)
     except SimulationError as ex:
         assert "too many unbonding" in ex.args[0]
 
-    query_resp = val_node.query.staking.unbonding_delegations_from(
-        get_validator_operator_address(val_node)
+    query_resp = sdk_val.query.staking.unbonding_delegations_from(
+        get_validator_operator_address(sdk_val)
     )
     dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
     dict_keys_must_match(
@@ -183,8 +183,8 @@ def test_unbonding_delegations_from(val_node: Sdk):
     assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
-def test_validators(val_node: Sdk):
-    query_resp = val_node.query.staking.validators()
+def test_validators(sdk_val: Sdk):
+    query_resp = sdk_val.query.staking.validators()
     dict_keys_must_match(query_resp, ["validators", "pagination"])
     assert query_resp["pagination"]["total"] > 0
     assert len(query_resp["validators"]) > 0
@@ -206,9 +206,9 @@ def test_validators(val_node: Sdk):
     )
 
 
-def test_validator(val_node: Sdk):
-    validator = val_node.query.staking.validators()["validators"][0]
-    query_resp = val_node.query.staking.validator(validator["operator_address"])
+def test_validator(sdk_val: Sdk):
+    validator = sdk_val.query.staking.validators()["validators"][0]
+    query_resp = sdk_val.query.staking.validator(validator["operator_address"])
 
     dict_keys_must_match(
         query_resp["validator"],
@@ -228,7 +228,7 @@ def test_validator(val_node: Sdk):
     )
 
 
-def test_staking_events(val_node: Sdk, network: Network):
+def test_staking_events(sdk_val: Sdk, network: Network):
     """
     Check staking events are properly filtered
     """
@@ -242,7 +242,7 @@ def test_staking_events(val_node: Sdk, network: Network):
     nibiru_websocket.start()
     time.sleep(1)
 
-    delegate(val_node)
+    delegate(sdk_val)
     time.sleep(5)
 
     nibiru_websocket.queue.put(None)

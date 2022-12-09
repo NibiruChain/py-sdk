@@ -1,12 +1,14 @@
+from typing import List
+
 import pytest
 from nibiru_proto.proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from nibiru_proto.proto.perp.v1.tx_pb2 import MsgOpenPosition
 
 import nibiru
+import tests
 from nibiru import Coin, pytypes
 from nibiru.query_clients.util import get_block_messages, get_msg_pb_by_type_url
 from nibiru.utils import from_sdk_dec, to_sdk_dec
-from tests import dict_keys_must_match
 
 
 @pytest.mark.parametrize(
@@ -78,41 +80,21 @@ def test_get_msg_pb_by_type_url(type_url, cls):
 
 
 def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
-    pair = "ubtc:unusd"
-
-    sdk_val.tx.execute_msgs(
+    tx_output: pytypes.RawTxResp = sdk_val.tx.execute_msgs(
         nibiru.msg.MsgSend(
             sdk_val.address,
             sdk_agent.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],
         )
     )
-    tx_output: dict = sdk_agent.tx.execute_msgs(
-        nibiru.msg.MsgOpenPosition(
-            sender=sdk_agent.address,
-            token_pair=pair,
-            side=pytypes.Side.BUY,
-            quote_asset_amount=10,
-            leverage=10,
-            base_asset_amount_limit=0,
-        )
-    )
     height = int(tx_output["height"])
     block_resp = sdk_agent.query.get_block_by_height(height)
-    messages = get_block_messages(block_resp.block)
+    messages: List[dict] = get_block_messages(block_resp.block)
 
-    msg_open_position = [
-        msg for msg in messages if msg["type_url"] == "/nibiru.perp.v1.MsgOpenPosition"
-    ]
-    assert len(msg_open_position) > 0
-    dict_keys_must_match(
-        msg_open_position[0]["value"],
-        [
-            "sender",
-            "token_pair",
-            "side",
-            "quote_asset_amount",
-            "leverage",
-            "base_asset_amount_limit",
-        ],
+    msg = messages[0]
+    assert isinstance(msg, dict)
+    assert msg["type_url"] == "/cosmos.bank.v1beta1.MsgSend"
+    tests.dict_keys_must_match(
+        msg["value"],
+        ["from_address", "to_address", "amount"],
     )

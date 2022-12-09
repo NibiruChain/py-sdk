@@ -49,7 +49,7 @@ def test_post_price_unwhitelisted(sdk_oracle: nibiru.Sdk):
         assert transaction_must_succeed(tx_output) is None, err_msg
 
 
-def test_grpc_error(sdk_oracle: nibiru.Sdk):
+def test_query_markets(sdk_oracle: nibiru.Sdk):
     # Market ueth:unusd must be in the list of pricefeed markets
     markets_output = sdk_oracle.query.pricefeed.markets()
     assert isinstance(markets_output, dict)
@@ -65,61 +65,63 @@ def test_grpc_error(sdk_oracle: nibiru.Sdk):
     )
     assert sdk_oracle.address in ueth_unusd_market["oracles"]
 
-    # Transaction post_price in the past must raise proper error
-    with pytest.raises(nibiru.exceptions.SimulationError, match="Price is expired"):
-        _ = sdk_oracle.tx.execute_msgs(
-            msgs=MsgPostPrice(
-                sdk_oracle.address,
-                token0="ueth",
-                token1="unusd",
-                price=1800,
-                expiry=datetime.utcnow() - timedelta(hours=1),  # Price expired
+
+@pytest.mark.order(after="test_query_markets")
+class TestPostPrice:
+    def test_post_in_the_past(self, sdk_oracle: nibiru.Sdk):
+        # Transaction post_price in the past must raise proper error
+        with pytest.raises(nibiru.exceptions.SimulationError, match="Price is expired"):
+            _ = sdk_oracle.tx.execute_msgs(
+                msgs=MsgPostPrice(
+                    sdk_oracle.address,
+                    token0="ueth",
+                    token1="unusd",
+                    price=1800,
+                    expiry=datetime.utcnow() - timedelta(hours=1),  # Price expired
+                )
             )
+
+    def test_post_prices(self, sdk_oracle: nibiru.Sdk):
+
+        # Market ueth:unusd must be in the list of pricefeed markets
+        markets_output = sdk_oracle.query.pricefeed.markets()
+        assert isinstance(markets_output, dict)
+        assert any(
+            [market["pair_id"] == "ueth:unusd" for market in markets_output["markets"]]
         )
 
+        tests.LOGGER.info("Oracle must be in the list of ueth:unusd market oracles")
+        ueth_unusd_market = next(
+            market
+            for market in markets_output["markets"]
+            if market["pair_id"] == "ueth:unusd"
+        )
+        assert sdk_oracle.address in ueth_unusd_market["oracles"]
 
-@pytest.mark.order(2)
-def test_post_prices(sdk_oracle: nibiru.Sdk):
+        tests.LOGGER.info("Transaction post_price must succeed")
+        tx_output = post_price_test_tx(sdk=sdk_oracle)
+        tests.LOGGER.info(
+            f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
+        )
+        transaction_must_succeed(tx_output)
 
-    # Market ueth:unusd must be in the list of pricefeed markets
-    markets_output = sdk_oracle.query.pricefeed.markets()
-    assert isinstance(markets_output, dict)
-    assert any(
-        [market["pair_id"] == "ueth:unusd" for market in markets_output["markets"]]
-    )
-
-    tests.LOGGER.info("Oracle must be in the list of ueth:unusd market oracles")
-    ueth_unusd_market = next(
-        market
-        for market in markets_output["markets"]
-        if market["pair_id"] == "ueth:unusd"
-    )
-    assert sdk_oracle.address in ueth_unusd_market["oracles"]
-
-    tests.LOGGER.info("Transaction post_price must succeed")
-    tx_output = post_price_test_tx(sdk=sdk_oracle)
-    tests.LOGGER.info(
-        f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
-    )
-    transaction_must_succeed(tx_output)
-
-    # Repeating post_price transaction.
-    # Otherwise, getting "All input prices are expired" on query.pricefeed.price()
-    if sdk_oracle.address not in WHITELISTED_ORACLES.keys():
-        tests.LOGGER.info(f"oracle address not whitelisted: {sdk_oracle.address}")
-        with pytest.raises(Exception) as err:
-            tx_output = post_price_test_tx(sdk=sdk_oracle)
-            err_msg = str(err)
-            assert transaction_must_succeed(tx_output) is None, err_msg
-    tx_output = post_price_test_tx(sdk=sdk_oracle)
-    tests.LOGGER.info(
-        f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
-    )
-    assert transaction_must_succeed(tx_output) is None
-    sdk_oracle.query.wait_for_next_block()
+        # Repeating post_price transaction.
+        # Otherwise, getting "All input prices are expired" on query.pricefeed.price()
+        if sdk_oracle.address not in WHITELISTED_ORACLES.keys():
+            tests.LOGGER.info(f"oracle address not whitelisted: {sdk_oracle.address}")
+            with pytest.raises(Exception) as err:
+                tx_output = post_price_test_tx(sdk=sdk_oracle)
+                err_msg = str(err)
+                assert transaction_must_succeed(tx_output) is None, err_msg
+        tx_output = post_price_test_tx(sdk=sdk_oracle)
+        tests.LOGGER.info(
+            f"nibid tx pricefeed post-price:\n{tests.format_response(tx_output)}"
+        )
+        assert transaction_must_succeed(tx_output) is None
+        sdk_oracle.query.wait_for_next_block()
 
 
-@pytest.mark.order(3)
+@pytest.mark.order(after="TestPostPrice")
 def test_pricefeed_queries(sdk_oracle: nibiru.Sdk):
 
     # Raw prices must exist after post_price transaction

@@ -96,7 +96,6 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
 
     nibiru_websocket.queue.put(None)
     events: List[EventCaptured] = []
-    event = 1
     while True:
         event = nibiru_websocket.queue.get()
         if event is None:

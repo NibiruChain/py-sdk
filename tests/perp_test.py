@@ -21,7 +21,6 @@ class ERRORS:
     underwater_position = "underwater position"
 
 
-@pytest.mark.order(0)
 def test_open_position(sdk_val: nibiru.Sdk) -> bool:
     try:
         tests.LOGGER.info("nibid tx perp open-position")
@@ -55,7 +54,7 @@ def test_open_position(sdk_val: nibiru.Sdk) -> bool:
         tests.raises(ERRORS.bad_debt, err)
 
 
-@pytest.mark.order(1)
+@pytest.mark.order(after="test_open_position")
 def test_perp_query_position(sdk_val: nibiru.Sdk):
     try:
         # Trader position must be a dict with specific keys
@@ -86,7 +85,7 @@ def test_perp_query_position(sdk_val: nibiru.Sdk):
         tests.raises(ERRORS.position_not_found, err)
 
 
-@pytest.mark.order(3)
+@pytest.mark.order(after="test_perp_query_position")
 def test_perp_add_margin(sdk_val: nibiru.Sdk):
     try:
         # Transaction add_margin must succeed
@@ -106,7 +105,7 @@ def test_perp_add_margin(sdk_val: nibiru.Sdk):
     # TODO test: verify the margin changes using the events
 
 
-@pytest.mark.order(4)
+@pytest.mark.order(after="test_perp_add_margin")
 def test_perp_remove_margin(sdk_val: nibiru.Sdk):
     try:
         tx_output = sdk_val.tx.execute_msgs(
@@ -125,7 +124,7 @@ def test_perp_remove_margin(sdk_val: nibiru.Sdk):
         tests.raises(ERRORS.bad_debt, err)
 
 
-@pytest.mark.order(6)
+@pytest.mark.order(after="test_perp_remove_margin")
 def test_perp_close_posititon(sdk_val: nibiru.Sdk):
     """
     Open a position and ensure output is correct

@@ -7,45 +7,71 @@ See "Scope: sharing fixtures across classes, modules, packages or session"
 - docs reference: https://docs.pytest.org/en/6.2.x/fixture.html
 
 Fixtures available:
-- network
-- val_node
-- agent_node
+- sdk_val
+- sdk_agent
+- sdk_oracle
 """
 import os
+from typing import Any, Dict, List, Optional
 
+import dotenv
 import pytest
-from dotenv import load_dotenv
 
 from nibiru import Network, Sdk
-from nibiru.common import TxConfig, TxType
+from nibiru.pytypes import TxConfig, TxType
+
+PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
+    VALIDATOR_MNEMONIC="",
+    ORACLE_MNEMONIC="",
+)
+PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
+    use_localnet=False,
+    LCD_ENDPOINT="",
+    GRPC_ENDPOINT="",
+    TENDERMINT_RPC_ENDPOINT="",
+    WEBSOCKET_ENDPOINT="",
+    CHAIN_ID="",
+)
+PYTEST_GLOBALS: Dict[str, Any] = {
+    **PYTEST_GLOBALS_REQUIRED,  # combines dictionaries
+    **PYTEST_GLOBALS_OPTIONAL,
+}
 
 
 def pytest_configure(config):
-    load_dotenv()
+    dotenv.load_dotenv()
 
-    expected_env_vars = (
-        "LCD_ENDPOINT",
-        "GRPC_ENDPOINT",
-        "TENDERMINT_RPC_ENDPOINT",
-        "WEBSOCKET_ENDPOINT",
-        "CHAIN_ID",
-        "VALIDATOR_MNEMONIC",
-        "ORACLE_MNEMONIC",
-        "NETWORK_INSECURE",
-    )
-    for env_var in expected_env_vars:
-        val = os.getenv(env_var)
-        if not val:
-            raise ValueError(f"Environment variable {env_var} is missing!")
-        setattr(pytest, env_var, val)  # pytest.<env_var> = val
+    EXPECTED_ENV_VARS: List[str] = list(PYTEST_GLOBALS.keys())
 
-    # NETWORK_INSECURE must be a boolean
-    pytest.NETWORK_INSECURE = os.getenv("NETWORK_INSECURE") != "false"
+    def set_pytest_global(name: str, value: Any):
+        """Adds environment variables to the 'pytest' object and the 'PYTEST_GLOBALS'
+        dictionary so that a central point of truth on what variables are set
+        can be accessed from within tests.
+        """
+        setattr(pytest, name, value)  # pytest.<env_var> = val
+        PYTEST_GLOBALS[name] = value
+
+    use_localnet: Optional[str] = os.getenv("USE_LOCALNET")
+    if use_localnet is not None:
+        if use_localnet.lower() == "true":
+            set_pytest_global("use_localnet", True)
+    if not use_localnet:
+        EXPECTED_ENV_VARS = [key for key in PYTEST_GLOBALS_REQUIRED]
+        set_pytest_global("use_localnet", False)
+
+    # Set the expected environment variables. Raise a value error if one is missing
+    for env_var_name in EXPECTED_ENV_VARS:
+        env_var_value = os.getenv(env_var_name)
+        if not env_var_value:
+            raise ValueError(f"Environment variable {env_var_name} is missing!")
+        set_pytest_global(env_var_name, env_var_value)
 
 
 @pytest.fixture
 def network() -> Network:
-    return Network(
+    """
+    # TODO Use ping test like ts-sdk to check RPC and LCD connections
+    Network(
         lcd_endpoint=pytest.LCD_ENDPOINT,
         grpc_endpoint=pytest.GRPC_ENDPOINT,
         tendermint_rpc_endpoint=pytest.TENDERMINT_RPC_ENDPOINT,
@@ -53,25 +79,42 @@ def network() -> Network:
         chain_id=pytest.CHAIN_ID,
         env="unit_test",
     )
+    """
+    if PYTEST_GLOBALS["use_localnet"]:
+        return Network.customnet()
+    return Network.devnet(2)
+
+
+TX_CONFIG: TxConfig = TxConfig(
+    tx_type=TxType.BLOCK,
+    gas_multiplier=1.25,
+    gas_price=0.25,
+)
 
 
 @pytest.fixture
-def val_node(network: Network) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK)
-
+def sdk_val(network: Network) -> Sdk:
+    tx_config = TX_CONFIG
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
         .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
+        .with_network(network)
     )
 
 
 @pytest.fixture
-def agent(network: Network) -> Sdk:
-    tx_config = TxConfig(tx_type=TxType.BLOCK, gas_multiplier=3)
-    agent = (
-        Sdk.authorize()
-        .with_config(tx_config)
-        .with_network(network, pytest.NETWORK_INSECURE)
-    )
+def sdk_agent(network: Network) -> Sdk:
+    tx_config = TX_CONFIG
+    agent = Sdk.authorize().with_config(tx_config).with_network(network)
     return agent
+
+
+# address: nibi10hj3gq54uxd9l5d6a7sn4dcvhd0l3wdgt2zvyp
+@pytest.fixture
+def sdk_oracle(network: Network) -> Sdk:
+    tx_config = TX_CONFIG
+    return (
+        Sdk.authorize(pytest.ORACLE_MNEMONIC)
+        .with_config(tx_config)
+        .with_network(network)
+    )

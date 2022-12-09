@@ -6,7 +6,7 @@ from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequ
 from nibiru_proto.proto.dex.v1 import query_pb2 as dex_type
 from nibiru_proto.proto.dex.v1 import query_pb2_grpc as dex_query
 
-from nibiru.common import Coin
+from nibiru.pytypes import Coin
 from nibiru.query_clients.util import QueryClient
 from nibiru.utils import format_fields_nested, from_sdk_dec_n
 
@@ -121,7 +121,9 @@ class DexQueryClient(QueryClient):
             should_deserialize=False,
         )
 
-        output = MessageToDict(proto_output)["pools"]
+        output: dict = MessageToDict(proto_output).get("pools")
+        if output is None:
+            output = {}
 
         return format_fields_nested(
             object=format_fields_nested(

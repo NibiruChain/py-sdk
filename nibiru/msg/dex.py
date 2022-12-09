@@ -1,10 +1,10 @@
 import dataclasses
-from typing import List
+from typing import List, Union
 
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
 
-from nibiru.common import Coin, PoolAsset, PythonMsg
+from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 
 
 @dataclasses.dataclass
@@ -22,6 +22,8 @@ class MsgCreatePool(PythonMsg):
     creator: str
     swap_fee: float
     exit_fee: float
+    a: int
+    pool_type: PoolType
     assets: List[PoolAsset]
 
     def to_pb(self) -> pb.MsgCreatePool:
@@ -38,7 +40,10 @@ class MsgCreatePool(PythonMsg):
         return pb.MsgCreatePool(
             creator=self.creator,
             pool_params=pool_tx_pb.PoolParams(
-                swap_fee=swap_fee_dec, exit_fee=exit_fee_dec
+                swap_fee=swap_fee_dec,
+                exit_fee=exit_fee_dec,
+                pool_type=self.pool_type,
+                A=str(int(self.a)),
             ),
             pool_assets=pool_assets,
         )
@@ -57,9 +62,11 @@ class MsgJoinPool(PythonMsg):
 
     sender: str
     pool_id: int
-    tokens: List[Coin]
+    tokens: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgJoinPool:
+        if isinstance(self.tokens, Coin):
+            self.tokens = [self.tokens]
         return pb.MsgJoinPool(
             sender=self.sender,
             pool_id=self.pool_id,
@@ -80,7 +87,7 @@ class MsgExitPool(PythonMsg):
 
     sender: str
     pool_id: int
-    pool_shares: List[Coin]
+    pool_shares: Coin
 
     def to_pb(self) -> pb.MsgExitPool:
         return pb.MsgExitPool(

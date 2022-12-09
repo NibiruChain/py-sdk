@@ -10,6 +10,8 @@ from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
 from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
+from nibiru.crypto.ripemd160 import ripemd160
+
 BECH32_PUBKEY_ACC_PREFIX = "nibipub"
 BECH32_PUBKEY_VAL_PREFIX = "nibivaloperpub"
 BECH32_PUBKEY_CONS_PREFIX = "nibivalconspub"
@@ -183,7 +185,7 @@ class PublicKey:
 
         pubkey = self.verify_key.to_string("compressed")
         s = hashlib.new("sha256", pubkey).digest()
-        r = hashlib.new("ripemd160", s).digest()
+        r = ripemd160(s)
         return Address(r)
 
     def verify(self, msg: bytes, sig: bytes) -> bool:

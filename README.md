@@ -31,11 +31,11 @@ The `nibiru` package allows you to index, query, and send transactions on the Ni
 
 The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
-Try me on colab!
+## Python SDK Tutorial          <!-- omit in toc -->
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)][Colab link]
 
 [Colab link]: https://colab.research.google.com/github/NibiruChain/py-sdk/blob/master/examples/collab_notebook.ipynb
-
 
 #### README Contents
 
@@ -48,14 +48,10 @@ Try me on colab!
   - [Installing `poetry` for dependency resolution and publishing packages](#installing-poetry-for-dependency-resolution-and-publishing-packages)
   - [Installing external dependencies](#installing-external-dependencies)
   - [Running tests](#running-tests)
-      - [Setting environment variables](#setting-environment-variables)
-      - [Running the tests with `poetry` + `pytest`](#running-the-tests-with-poetry--pytest)
-      - [(option B). Install the `nibiru` package with `pip`](#option-b-install-the-nibiru-package-with-pip)
   - [Makefile and Protocol Buffers](#makefile-and-protocol-buffers)
-    - [Other dependencies](#other-dependencies)
-    - [Generating types wth protobuf](#generating-types-wth-protobuf)
   - [Linting](#linting)
   - [Gotchas](#gotchas)
+  - [Usage instructions for publishing.](#usage-instructions-for-publishing)
 
 # User Guidelines
 
@@ -77,34 +73,6 @@ You may need to update `pip` to get this to run:
 ```sh
 python -m pip install --upgrade pip
 ```
-
-<!-- NOTE --------- Deperecating this section as the examples don't work.
-
-## Usage Instructions
-
-The [examples directory](https://github.com/NibiruChain/py-sdk/tree/master/examples) contains runnable examples that showcase how to use the package.
-- Requires Python 3.9+
-- Requires a running instance of the Nibiru blockchain
-
-```bash
-$ pipenv shell
-$ pipenv install
-```
-
-```sh
-# connecting to Nibiru Exchange API and create a new pool
-$ python examples/chain_client/dex/create_pool.py
-
-# sending a msg with bank transfer signs and posts a transaction to the Nibiru Chain
-$ python examples/chain_client/msg_send.py
-```
-
-Upgrade `pip` to the latest version, if you see these warnings:
-  ```
-  WARNING: Value for scheme.platlib does not match. Please report this to <https://github.com/pypa/pip/issues/10151>
-  WARNING: Additional context:   user = True   home = None   root = None   prefix = None
-  ```
--->
 
 ---
 
@@ -177,19 +145,19 @@ Poetry can be installed with both `curl` and `pip`. We recommended using `curl` 
 NOTE We highly, highly, highly recommend that you DO NOT use `brew` to install `poetry`.
 If you use `brew`, it's going to install directly to your system, which prevents you from being able to leverage `pyenv` to seamlessly switch between Python interpreters.
 
-```sh
+```bash
 # installation with pip: recommended option in tandem with pyenv
 pip install poetry
 ```
 
-```sh
+```bash
 # For UNIX systems - installation with curl
 curl -sSL https://install.python-poetry.org/ | python -
 ```
 
 After this installation command, add the `poetry` binary to the path in your shell config (if it's not done automatically).
 
-```sh
+```bash
 export PATH=$PATH:$HOME/.poetry/bin
 ```
 
@@ -197,7 +165,7 @@ export PATH=$PATH:$HOME/.poetry/bin
 
 The `nibiru` project is defined by its `pyproject.toml`. At the root of the repo, simply call:
 
-```sh
+```bash
 poetry install
 ```
 
@@ -210,7 +178,26 @@ This will resolve dependencies between each of the project's packages and instal
 There's currently a "devnet" running in GCP that the CI workflows use. You can find these secrets at [this notion page](https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0) if you have access to it or contact one of the `CODEOWNERS` (@Unique-Divine, @matthiasmatt, @nibiruheisenberg).
 This is useful so that you can run every part of the package code without needing to visit other repositories.
 
-Set up a `.env` file to set environment variables for the tests.
+You'll need to set up a `.env` configuration file to set environment variables for the tests.
+
+#### Environment Variables - Local
+
+
+```bash
+# Example configuration for the Nibiry Python SDK
+HOST="..."
+VALIDATOR_MNEMONIC="..."
+ORACLE_MNEMONIC="..."
+TENDERMINT_RPC_ENDPOINT="http://...:26657"
+LCD_ENDPOINT="http://...:1317"
+GRPC_ENDPOINT="...:9090"
+WEBSOCKET_ENDPOINT="ws://...:26657/websocket"
+CHAIN_ID="..."
+NETWORK_INSECURE=true
+```
+
+#### Environment variables in GitHub Actions
+
 The variables used in the CI build can be found in the `env` section of the [`pytests.yml` workflow](.github/workflows/pytests.yml):
 
 ```yaml
@@ -227,28 +214,17 @@ jobs:
 
 You'll need an `.env` configuration like this.
 
-```sh
-# Example configuration for the Nibiry Python SDK
-HOST="..."
-VALIDATOR_MNEMONIC="..."
-ORACLE_MNEMONIC="..."
-GRPC_PORT="..."
-LCD_PORT="..."
-CHAIN_ID="..."
-NETWORK_INSECURE=true
-```
-
 #### Running the tests with `poetry` + `pytest`
 
 After following the instructions for setting up `poetry`, you can run the tests with `poetry run pytest`:
 
-```sh
+```bash
 poetry run pytest -p no:warnings # silences warnings
 ```
 
 #### (option B). Install the `nibiru` package with `pip`
 
-  ```sh
+  ```bash
   # from local
   # build and install
   pip install .
@@ -264,37 +240,18 @@ poetry run pytest -p no:warnings # silences warnings
 
 ## Makefile and Protocol Buffers
 
-### Other dependencies
+See the [NibiruChain/sdk-proto-gen repository](https://github.com/NibiruChain/sdk-proto-gen).
 
-To run shell scripts and commands in the `Makefile`, you'll need to install the following tools depending on your operating system.
+After cloning `sdk-proto-gen` and the proto files for `nibiru`, you only need to run `make proto-gen`:
 
-- **Ubuntu**
+```bash
+git clone git@github.com:NibiruChain/sdk-proto-gen.git
+git clone git@github.com:NibiruChain/nibiru.git
+```
 
-  ```bash
-  sudo apt install python3.X-dev autoconf automake build-essential libffi-dev libtool pkg-config
-  ```
-
-- **macOS**
-
-  ```bash
-  brew install autoconf automake libtool
-  ```
-
-- **Fedora**
-
-  ```bash
-  sudo dnf install python3-devel autoconf automake gcc gcc-c++ libffi-devel libtool make pkgconfig
-  ```
-
-### Generating types wth protobuf
-
-The objective is to run `make proto-gen`, which simply executes `scripts/protocgen.sh`.
-
-In order to do this, you'll need to install a few packages on your system.
-
-```sh
-python -m pip install --user grpcio-tools
-pip install mypy-protobuf
+```bash
+cd sdk-proto-gen
+make proto-gen
 ```
 
 If you get a permissions error such as

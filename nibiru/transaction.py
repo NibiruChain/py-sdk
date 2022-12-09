@@ -6,8 +6,8 @@ from nibiru_proto.proto.cosmos.base.v1beta1.coin_pb2 import Coin
 from nibiru_proto.proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
 from nibiru_proto.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
-from nibiru.client import GrpcClient
-from nibiru.common import MAX_MEMO_CHARACTERS
+from nibiru.grpc_client import GrpcClient
+from nibiru.pytypes import MAX_MEMO_CHARACTERS
 from nibiru.wallet import PrivateKey, PublicKey
 
 

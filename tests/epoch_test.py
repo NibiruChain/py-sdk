@@ -2,13 +2,13 @@ import nibiru
 import tests
 
 
-def test_query_current_epoch(val_node: nibiru.Sdk):
-    query_resp: dict = val_node.query.epoch.current_epoch("15 min")
+def test_query_current_epoch(sdk_val: nibiru.Sdk):
+    query_resp: dict = sdk_val.query.epoch.current_epoch("15 min")
     assert query_resp["currentEpoch"] > 0
 
 
-def test_query_epoch_info(val_node: nibiru.Sdk):
-    query_resp: dict = val_node.query.epoch.epoch_infos()
+def test_query_epoch_info(sdk_val: nibiru.Sdk):
+    query_resp: dict = sdk_val.query.epoch.epoch_infos()
     print(query_resp)
     assert len(query_resp["epochs"]) > 0
 

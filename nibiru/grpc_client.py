@@ -1,4 +1,3 @@
-import sys
 import time
 from typing import Generator, List, Optional, Tuple, Union
 
@@ -23,6 +22,7 @@ from packaging import version
 
 import nibiru.query_clients
 from nibiru.network import Network
+from nibiru.query_clients.util import deserialize
 from nibiru.utils import init_logger
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -79,18 +79,12 @@ class GrpcClient:
 
         if not bypass_version_check:
             try:
-                if sys.version_info >= (3, 8):
-                    from importlib.metadata import version
+                from importlib import metadata
+            except ImportError:  # for Python<3.8
+                import importlib_metadata as metadata
 
-                    nibiru_proto_version = version("nibiru_proto")
-                else:
-                    import pkg_resources
+            nibiru_proto_version = metadata.version("nibiru_proto")
 
-                    nibiru_proto_version = pkg_resources.get_distribution(
-                        "nibiru_proto"
-                    ).version
-            except Exception:
-                pass
             self.assert_compatible_versions(
                 nibiru_proto_version=nibiru_proto_version,
                 chain_nibiru_version=str(self.get_version()),
@@ -269,11 +263,15 @@ class GrpcClient:
         )
 
     def get_bank_balances(self, address: str):
-        return self.stubBank.AllBalances(
-            bank_query.QueryAllBalancesRequest(address=address)
+        return deserialize(
+            self.stubBank.AllBalances(
+                bank_query.QueryAllBalancesRequest(address=address)
+            )
         )
 
     def get_bank_balance(self, address: str, denom: str):
-        return self.stubBank.Balance(
-            bank_query.QueryBalanceRequest(address=address, denom=denom)
+        return deserialize(
+            self.stubBank.Balance(
+                bank_query.QueryBalanceRequest(address=address, denom=denom)
+            )
         )

@@ -2,16 +2,20 @@ import nibiru
 import tests
 
 
-def test_query_auth_account(val_node: nibiru.Sdk):
-    query_resp: dict = val_node.query.auth.account(val_node.address)["account"]
+def test_query_auth_account(sdk_val: nibiru.Sdk):
+    tests.LOGGER.debug(
+        "sdk_val",
+    )
+
+    query_resp: dict = sdk_val.query.auth.account(sdk_val.address)["account"]
 
     tests.dict_keys_must_match(
         query_resp, ['@type', 'address', 'pubKey', 'sequence', 'accountNumber']
     )
 
 
-def test_query_auth_accounts(val_node: nibiru.Sdk):
-    query_resp: dict = val_node.query.auth.accounts()
+def test_query_auth_accounts(sdk_val: nibiru.Sdk):
+    query_resp: dict = sdk_val.query.auth.accounts()
 
     for account in query_resp["accounts"]:
 

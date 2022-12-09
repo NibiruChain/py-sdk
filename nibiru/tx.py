@@ -1,16 +1,16 @@
 import json
 import logging
 from copy import deepcopy
-from typing import Any, Dict, List, Union
+from typing import Any, List, Union
 
 from google.protobuf.json_format import MessageToDict
 from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 
+from nibiru import pytypes as pt
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.grpc_client import GrpcClient
 from nibiru.network import Network
-from nibiru.pytypes import GAS_PRICE, PythonMsg, TxConfig, TxType
 from nibiru.transaction import Transaction
 from nibiru.wallet import PrivateKey
 
@@ -21,7 +21,7 @@ class BaseTxClient:
         priv_key: PrivateKey,
         network: Network,
         client: GrpcClient,
-        config: TxConfig,
+        config: pt.TxConfig,
     ):
         self.priv_key = priv_key
         self.network = network
@@ -31,10 +31,10 @@ class BaseTxClient:
 
     def execute_msgs(
         self,
-        msgs: Union[PythonMsg, List[PythonMsg]],
+        msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
         get_sequence_from_node: bool = False,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> pt.RawTxResp:
         """
         Execute a message to broadcast a transaction to the node.
         Simulate the message to generate the gas estimate and send it to the node.
@@ -49,7 +49,8 @@ class BaseTxClient:
             TxError: Raw error log from the blockchain if the response code is nonzero.
 
         Returns:
-            dict[str, Any]: The transaction response as a dict in proto3 JSON format.
+            Union[RawTxResp, Dict[str, Any]]: The transaction response as a dict
+                in proto3 JSON format.
         """
         if not isinstance(msgs, list):
             msgs = [msgs]
@@ -89,7 +90,7 @@ class BaseTxClient:
 
             # Convert raw log into a dictionary
             tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
-            return tx_output
+            return pt.RawTxResp(tx_output)
 
         except SimulationError as err:
             if (
@@ -112,7 +113,7 @@ class BaseTxClient:
             gas_wanted = conf.gas_wanted
         elif conf.gas_multiplier > 0:
             gas_wanted = gas_estimate * conf.gas_multiplier
-        gas_price = GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
+        gas_price = pt.GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
 
         fee = [
             cosmos_base_coin_pb.Coin(
@@ -133,10 +134,10 @@ class BaseTxClient:
 
         return self._send_tx(tx_raw_bytes, conf.tx_type)
 
-    def _send_tx(self, tx_raw_bytes, tx_type: TxType) -> abci_type.TxResponse:
-        if tx_type == TxType.SYNC:
+    def _send_tx(self, tx_raw_bytes, tx_type: pt.TxType) -> abci_type.TxResponse:
+        if tx_type == pt.TxType.SYNC:
             return self.client.send_tx_sync_mode(tx_raw_bytes)
-        elif tx_type == TxType.ASYNC:
+        elif tx_type == pt.TxType.ASYNC:
             return self.client.send_tx_async_mode(tx_raw_bytes)
 
         return self.client.send_tx_block_mode(tx_raw_bytes)

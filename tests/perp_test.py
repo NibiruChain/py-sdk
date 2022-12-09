@@ -21,7 +21,7 @@ class ERRORS:
     underwater_position = "underwater position"
 
 
-def test_open_position(sdk_val: nibiru.Sdk) -> bool:
+def test_open_position(sdk_val: nibiru.Sdk):
     try:
         tests.LOGGER.info("nibid tx perp open-position")
         tx_output: pt.RawTxResp = sdk_val.tx.execute_msgs(

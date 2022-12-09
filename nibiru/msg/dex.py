@@ -1,5 +1,5 @@
 import dataclasses
-from typing import List
+from typing import List, Union
 
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
@@ -62,9 +62,11 @@ class MsgJoinPool(PythonMsg):
 
     sender: str
     pool_id: int
-    tokens: List[Coin]
+    tokens: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgJoinPool:
+        if isinstance(self.tokens, Coin):
+            self.tokens = [self.tokens]
         return pb.MsgJoinPool(
             sender=self.sender,
             pool_id=self.pool_id,
@@ -85,7 +87,7 @@ class MsgExitPool(PythonMsg):
 
     sender: str
     pool_id: int
-    pool_shares: List[Coin]
+    pool_shares: Coin
 
     def to_pb(self) -> pb.MsgExitPool:
         return pb.MsgExitPool(

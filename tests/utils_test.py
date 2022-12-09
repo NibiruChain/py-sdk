@@ -117,12 +117,19 @@ def can_ping(host) -> bool:
     )
 
     _, error = ping.communicate()
+    print(error)
     return error == b""
 
 
 def url_to_host(url: str) -> str:
     """
     Convert an url like "https://rpc.devnet-2.nibiru.fi:443" to "https://rpc.devnet-2.nibiru.fi"
+
+    Args:
+        url (str): tue url to transform
+
+    Returns:
+        str: an url that can be pinged
     """
     url: ParseResult = urlparse(url)
 

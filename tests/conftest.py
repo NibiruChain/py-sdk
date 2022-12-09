@@ -12,34 +12,55 @@ Fixtures available:
 - sdk_oracle
 """
 import os
-from typing import List
+from typing import Any, Dict, List, Optional
 
+import dotenv
 import pytest
-from dotenv import load_dotenv
 
 from nibiru import Network, Sdk
 from nibiru.pytypes import TxConfig, TxType
 
+PYTEST_GLOBALS = Dict[str, Any] = dict(
+    # required
+    VALIDATOR_MNEMONIC="",
+    ORACLE_MNEMONIC="",
+    # not required
+    use_localnet=False,
+    LCD_ENDPOINT="",
+    GRPC_ENDPOINT="",
+    TENDERMINT_RPC_ENDPOINT="",
+    WEBSOCKET_ENDPOINT="",
+    CHAIN_ID="",
+)
+
 
 def pytest_configure(config):
-    load_dotenv()
+    dotenv.load_dotenv()
 
-    EXPECTED_ENV_VARS: List[str] = [
-        "LCD_ENDPOINT",
-        "GRPC_ENDPOINT",
-        "TENDERMINT_RPC_ENDPOINT",
-        "WEBSOCKET_ENDPOINT",
-        "CHAIN_ID",
-        "VALIDATOR_MNEMONIC",
-        "ORACLE_MNEMONIC",
-        "NETWORK_INSECURE",
-    ]
+    EXPECTED_ENV_VARS: List[str] = list(PYTEST_GLOBALS.keys())
 
-    for env_var in EXPECTED_ENV_VARS:
-        val = os.getenv(env_var)
-        if not val:
-            raise ValueError(f"Environment variable {env_var} is missing!")
-        setattr(pytest, env_var, val)  # pytest.<env_var> = val
+    def set_pytest_global(name: str, value: Any):
+        """Adds environment variables to the 'pytest' object and the 'PYTEST_GLOBALS'
+        dictionary so that a central point of truth on what variables are set
+        can be accessed from within tests.
+        """
+        setattr(pytest, name, value)  # pytest.<env_var> = val
+        PYTEST_GLOBALS[name] = value
+
+    use_localnet: Optional[str] = os.getenv("USE_LOCALNET")
+    if use_localnet is not None:
+        if use_localnet.lower() == "true":
+            set_pytest_global("use_localnet", True)
+    if not use_localnet:
+        EXPECTED_ENV_VARS = ["VALIDATOR_MNEMONIC", "ORACLE_MNEMONIC"]
+        set_pytest_global("use_localnet", False)
+
+    # Set the expected environment variables. Raise a value error if one is missing
+    for env_var_name in EXPECTED_ENV_VARS:
+        env_var_value = os.getenv(env_var_name)
+        if not env_var_value:
+            raise ValueError(f"Environment variable {env_var_name} is missing!")
+        set_pytest_global(env_var_name, env_var_value)
 
 
 @pytest.fixture
@@ -55,6 +76,8 @@ def network() -> Network:
         env="unit_test",
     )
     """
+    if PYTEST_GLOBALS["use_localnet"]:
+        return Network.customnet()
     return Network.devnet(2)
 
 

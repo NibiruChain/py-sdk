@@ -55,8 +55,8 @@ jobs:
       # ----------------------------------------------
       # Install ping for early tests
       # ----------------------------------------------
-      - name: Ping URL
-        uses: nerdify/ping-action@1.0.0
+      - name: Install ping
+        run: sudo apt-get install -y iputils-ping
 
       # ----------------------------------------------
       # Install & configure poetry

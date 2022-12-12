@@ -113,7 +113,7 @@ class Network:
         """
         return cls(
             lcd_endpoint=f'https://lcd.testnet-{chain_num}.nibiru.fi',
-            grpc_endpoint=f'grpc.testnet-{chain_num}.nibiru.fi:443',
+            grpc_endpoint=f'tcp://grpc.testnet-{chain_num}.nibiru.fi:443',
             tendermint_rpc_endpoint=f'https://rpc.testnet-{chain_num}.nibiru.fi',
             websocket_endpoint=f'wss://rpc.testnet-{chain_num}.nibiru.fi/websocket',
             chain_id=f'nibiru-testnet-{chain_num}',
@@ -171,7 +171,7 @@ class Network:
         """
         return cls(
             lcd_endpoint=f'https://lcd.devnet-{chain_num}.nibiru.fi',
-            grpc_endpoint=f'grpc.devnet-{chain_num}.nibiru.fi:443',
+            grpc_endpoint=f'tcp://grpc.devnet-{chain_num}.nibiru.fi:443',
             tendermint_rpc_endpoint=f'https://rpc.devnet-{chain_num}.nibiru.fi:443',
             websocket_endpoint=f'wss://rpc.devnet-{chain_num}.nibiru.fi/websocket',
             chain_id=f'nibiru-devnet-{chain_num}',

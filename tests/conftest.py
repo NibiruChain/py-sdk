@@ -13,7 +13,6 @@ Fixtures available:
 """
 import os
 from typing import Any, Dict, List, Optional
-from urllib.parse import ParseResult, urlparse
 
 import dotenv
 import pytest
@@ -100,11 +99,10 @@ def pytest_sessionstart(session):
             f"Lcd Endpoint {url_to_host(network.lcd_endpoint)} timed out"
         )
 
-    grpc_url: ParseResult = urlparse(network.grpc_endpoint)
-    print(network.grpc_endpoint)
-    grpc_url = grpc_url.scheme
-    if not can_ping(grpc_url):
-        raise TimeoutError(f"Grpc Endpoint {grpc_url} timed out")
+    if not can_ping(url_to_host(network.grpc_endpoint)):
+        raise TimeoutError(
+            f"Grpc Endpoint {url_to_host(network.grpc_endpoint)} timed out"
+        )
 
     if not can_ping(url_to_host(network.tendermint_rpc_endpoint)):
         raise TimeoutError(

@@ -135,5 +135,4 @@ def url_to_host(url: str) -> str:
 
     if url.hostname is None:
         return url.scheme
-
-    return url.scheme + "://" + url.hostname
+    return url.hostname

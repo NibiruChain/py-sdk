@@ -91,6 +91,9 @@ def pytest_sessionstart(session):
     """
     network = get_network()
 
+    if not can_ping("www.google.com"):
+        raise TimeoutError(f"Cannot ping google.com")
+
     if not can_ping(url_to_host(network.lcd_endpoint)):
         raise TimeoutError(
             f"Lcd Endpoint {url_to_host(network.lcd_endpoint)} timed out"

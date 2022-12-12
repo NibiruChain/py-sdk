@@ -117,7 +117,6 @@ def can_ping(host) -> bool:
     )
 
     _, error = ping.communicate()
-    print(error)
     return error == b""
 
 
@@ -134,4 +133,5 @@ def url_to_host(url: str) -> str:
     url: ParseResult = urlparse(url)
 
     assert url.hostname, ReferenceError(f"Url {url} hostname is empty.")
+
     return url.hostname

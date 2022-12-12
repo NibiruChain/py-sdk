@@ -98,10 +98,9 @@ def pytest_sessionstart(session):
         raise TimeoutError(
             f"Lcd Endpoint {url_to_host(network.lcd_endpoint)} timed out"
         )
-    if not can_ping(url_to_host(network.grpc_endpoint)):
-        raise TimeoutError(
-            f"Grpc Endpoint {url_to_host(network.grpc_endpoint)} timed out"
-        )
+    if not can_ping(network.grpc_endpoint):
+        raise TimeoutError(f"Grpc Endpoint {network.grpc_endpoint} timed out")
+
     if not can_ping(url_to_host(network.tendermint_rpc_endpoint)):
         raise TimeoutError(
             f"Tendermint Rpc Endpoint {url_to_host(network.tendermint_rpc_endpoint)} timed out"

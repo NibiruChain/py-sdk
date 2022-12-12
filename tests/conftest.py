@@ -101,6 +101,7 @@ def pytest_sessionstart(session):
         )
 
     grpc_url: ParseResult = urlparse(network.grpc_endpoint)
+    print(network.grpc_endpoint)
     grpc_url = grpc_url.scheme
     if not can_ping(grpc_url):
         raise TimeoutError(f"Grpc Endpoint {grpc_url} timed out")

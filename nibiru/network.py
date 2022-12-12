@@ -159,7 +159,7 @@ class Network:
         return self.env
 
     @classmethod
-    def devnet(cls, chain_num: int = 1) -> "Network":
+    def devnet(cls, chain_num: int = 2) -> "Network":
         """
         Devnet is a network open to invited validators.
 

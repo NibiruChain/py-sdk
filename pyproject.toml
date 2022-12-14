@@ -37,9 +37,10 @@ pre-commit = "^2.20.0"
 shutup = "^0.2.0"
 websocket-client = "^1.4.1"
 packaging = "^21.3"
-nibiru-proto = "==0.16.0b1"
+nibiru-proto = "==0.16.2"
 bip32 = "^3.3"
 importlib-metadata = "^5.0.0"
+pytest-skip-slow = "^0.0.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.3"

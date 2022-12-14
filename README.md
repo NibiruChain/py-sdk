@@ -220,6 +220,8 @@ After following the instructions for setting up `poetry`, you can run the tests 
 
 ```bash
 poetry run pytest -p no:warnings # silences warnings
+
+poetry run pytest --slow -p no:warnings # to include slowly running tests
 ```
 
 #### (option B). Install the `nibiru` package with `pip`

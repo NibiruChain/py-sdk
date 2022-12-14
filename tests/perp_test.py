@@ -43,7 +43,7 @@ def test_open_position(sdk_val: nibiru.Sdk):
         assert "/nibiru.perp.v1.MsgOpenPosition" in tx_resp.rawLog[0].msgs
         events_for_msg: List[str] = [
             "nibiru.perp.v1.PositionChangedEvent",
-            "nibiru.vpool.v1.SwapQuoteForBaseEvent",
+            "nibiru.vpool.v1.SwapOnVpoolEvent",
             "nibiru.vpool.v1.MarkPriceChangedEvent",
             "transfer",
         ]

@@ -28,7 +28,7 @@ PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
     ORACLE_MNEMONIC="",
 )
 PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
-    use_localnet=False,
+    USE_LOCALNET=False,
     LCD_ENDPOINT="",
     GRPC_ENDPOINT="",
     TENDERMINT_RPC_ENDPOINT="",

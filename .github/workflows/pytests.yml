@@ -25,6 +25,7 @@ jobs:
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
+      DEVNET_CHAIN_ID: ${{ secrets.DEVNET_CHAIN_ID }}
     steps:
       # ----------------------------------------------
       # check-out repo and set-up python

@@ -1,4 +1,6 @@
+import subprocess
 from typing import List
+from urllib.parse import ParseResult, urlparse
 
 import pytest
 from nibiru_proto.proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
@@ -98,3 +100,38 @@ def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
         msg["value"],
         ["from_address", "to_address", "amount"],
     )
+
+
+def can_ping(host) -> bool:
+    """
+    Check wether the host can be pinged.
+
+    Args:
+        host (str): the url of the host to ping
+
+    Returns:
+        bool: wether we can ping or not
+    """
+    ping = subprocess.Popen(
+        ["ping", "-c", "4", host], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+
+    _, error = ping.communicate()
+    return error == b""
+
+
+def url_to_host(url: str) -> str:
+    """
+    Convert an url like "https://rpc.devnet-2.nibiru.fi:443" to "https://rpc.devnet-2.nibiru.fi"
+
+    Args:
+        url (str): tue url to transform
+
+    Returns:
+        str: an url that can be pinged
+    """
+    url: ParseResult = urlparse(url)
+
+    assert url.hostname, ReferenceError(f"Url {url} hostname is empty.")
+
+    return url.hostname

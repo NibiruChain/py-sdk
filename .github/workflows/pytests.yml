@@ -51,6 +51,13 @@ jobs:
         with:
           path: ~/.local
           key: poetry-0 # increment to reset cache
+
+      # ----------------------------------------------
+      # Install ping for early tests
+      # ----------------------------------------------
+      - name: Install ping
+        run: sudo apt-get install -y iputils-ping
+
       # ----------------------------------------------
       # Install & configure poetry
       # ----------------------------------------------

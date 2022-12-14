@@ -52,10 +52,11 @@ class GrpcClient:
             credentials = grpc.ssl_channel_credentials()
 
         # chain stubs
+        grpc_endpoint = network.grpc_endpoint.lstrip("tcp://")
         self.chain_channel = (
-            grpc.insecure_channel(network.grpc_endpoint)
+            grpc.insecure_channel(grpc_endpoint)
             if insecure
-            else grpc.secure_channel(network.grpc_endpoint, credentials)
+            else grpc.secure_channel(grpc_endpoint, credentials)
         )
 
         self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(

@@ -68,7 +68,7 @@ class PerpQueryClient(QueryClient):
                 "position": {
                     "traderAddress": "nibi1zaavvzxez0elund",
                     "pair": {
-                        "token0": "axlwbtc",
+                        "token0": "ubtc",
                         "token1": "unusd"
                     },
                     "size": 11.241446725317692,

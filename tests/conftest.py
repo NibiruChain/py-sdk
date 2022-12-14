@@ -21,8 +21,6 @@ from nibiru import Network, Sdk
 from nibiru.pytypes import TxConfig, TxType
 from tests.utils_test import can_ping, url_to_host
 
-DEVNET_CHAIN_ID = 2
-
 PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
     VALIDATOR_MNEMONIC="",
     ORACLE_MNEMONIC="",
@@ -73,7 +71,7 @@ def pytest_configure(config):
 def get_network() -> Network:
     if PYTEST_GLOBALS["use_localnet"]:
         return Network.customnet()
-    return Network.devnet(DEVNET_CHAIN_ID)
+    return Network.devnet(int(os.getenv("DEVNET_CHAIN_ID", "1")))
 
 
 @pytest.fixture

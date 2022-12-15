@@ -71,7 +71,7 @@ def pytest_configure(config):
 def get_network() -> Network:
     if PYTEST_GLOBALS["use_localnet"]:
         return Network.customnet()
-    return Network.devnet(int(os.getenv("DEVNET_CHAIN_ID", "1")))
+    return Network.devnet(int(os.getenv("DEVNET_NUMBER", "1")))
 
 
 @pytest.fixture

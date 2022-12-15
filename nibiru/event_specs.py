@@ -23,8 +23,7 @@ class EventType(Enum):
 
     # Vpool events
     ReserveSnapshotSavedEvent = vpool_events.ReserveSnapshotSavedEvent
-    SwapQuoteForBaseEvent = vpool_events.SwapQuoteForBaseEvent
-    SwapBaseForQuoteEvent = vpool_events.SwapBaseForQuoteEvent
+    SwapOnVpoolEvent = vpool_events.SwapOnVpoolEvent
     MarkPriceChanged = vpool_events.MarkPriceChangedEvent
 
     # # Dex event

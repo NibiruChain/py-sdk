@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 from multiprocessing import Queue
 from typing import List
 
+import pytest
+
 import nibiru
 import nibiru.msg
 from nibiru import Network, Sdk, Transaction, pytypes
@@ -11,6 +13,7 @@ from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
 
 
+@pytest.mark.slow
 def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     """
     Open a position and ensure output is correct
@@ -19,8 +22,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
 
     expected_events_tx = [
         # Vpool
-        EventType.SwapQuoteForBaseEvent,
-        EventType.SwapBaseForQuoteEvent,
+        EventType.SwapOnVpoolEvent,
         EventType.MarkPriceChanged,
         # Perp
         EventType.PositionChangedEvent,
@@ -116,6 +118,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     assert not missing_events, f"Missing events: {missing_events}"
 
 
+@pytest.mark.slow
 def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
     """
     Try executing failing TXs and get errors from tx_fail_queue

@@ -16,6 +16,7 @@ import google.protobuf.message
 
 ProtobufMessage = google.protobuf.message.Message
 
+import nibiru.exceptions  # noqa
 import nibiru.msg  # noqa
 import nibiru.pytypes  # noqa
 from nibiru.grpc_client import GrpcClient  # noqa

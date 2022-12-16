@@ -177,6 +177,15 @@ poetry run pytest --slow -p no:warnings # to include slowly running tests
   pip install nibiru
   ```
 
+## Docgen
+
+```bash
+poetry run pdoc nibiru -o=docs-md-pdoc -f --skip-errors
+```
+
+See https://pdoc3.github.io/pdoc/
+
+
 ## Publishing on PyPI
 
 1. Changing the version number in the `pyproject.toml` changes the package version number. You can either edit it manually or use one of the `poetry version [bump-rule]` commands.

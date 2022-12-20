@@ -48,7 +48,7 @@ The package is intended to be used by coders, developers, technically-skilled tr
 ## Installation from `PyPI`
 
 ```bash
-pip install nibiru  # requires Python 3.9
+pip install nibiru  # requires Python 3.7+
 ```
 
 You may need to update `pip` to get this to run:
@@ -92,7 +92,7 @@ import requests
 requests.post(
     "https://faucet.testnet-2.nibiru.fi/",
     json={
-        "address": agent.address,
+        "address": sdk.address,
         "coins": ["10000000unibi", "100000000000unusd"],
     },
 )

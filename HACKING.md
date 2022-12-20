@@ -108,6 +108,20 @@ poetry install
 
 This will resolve dependencies between each of the project's packages and install them into a virtual environment.
 
+If you find an error, reset your poetry environment with:
+
+```
+$ poetry env list
+nibiru-XXXX-pyX.X (Activated)
+$ poetry env remove nibiru-XXXX-pyX.X
+```
+
+And enforce to use the specific version with:
+
+```bash
+poetry env use 3.9.13
+```
+
 ## Running tests
 
 #### Setting environment variables

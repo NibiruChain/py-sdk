@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 Compatible with NibiruChain/nibiru v0.16
 
-- [[#xxx]](https://github.com/NibiruChain/py-sdk/pull/xxx) refactor(msg)!: Unifies the PythonMsg functions under the nibiru.Msg object for improved UX.
+- [[#191]](https://github.com/NibiruChain/py-sdk/pull/191) refactor(msg)!: Unifies the PythonMsg functions under the nibiru.Msg object for improved UX.
 - [[#189]](https://github.com/NibiruChain/py-sdk/pull/189) build(dependencies): dependencies cleanup, removed eip712 structs
 
 ## v0.16.3

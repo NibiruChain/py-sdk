@@ -8,11 +8,16 @@ Guidelines for developing and contributing to the Nibiru Python SDK.
   - [Installing `poetry` for dependency resolution and publishing packages](#installing-poetry-for-dependency-resolution-and-publishing-packages)
     - [Installing external dependencies](#installing-external-dependencies)
   - [Running tests](#running-tests)
+      - [Setting environment variables](#setting-environment-variables)
+      - [Environment Variables - Local](#environment-variables---local)
+      - [Environment variables in GitHub Actions](#environment-variables-in-github-actions)
+      - [Running the tests with `poetry` + `pytest`](#running-the-tests-with-poetry--pytest)
+      - [(option B). Install the `nibiru` package with `pip`](#option-b-install-the-nibiru-package-with-pip)
+  - [Docgen](#docgen)
   - [Publishing on PyPI](#publishing-on-pypi)
     - [poetry version subcommands](#poetry-version-subcommands)
   - [Makefile and Protocol Buffers](#makefile-and-protocol-buffers)
   - [Linting](#linting)
-  - [Gotchas](#gotchas)
 
 
 ## Environment Setup
@@ -23,7 +28,7 @@ Our recommended setup for a professional dev environment is to use `pyenv` in co
 - `poetry` is used for managing virtual environments, dependency resolution, package installations, package building, and package publishing.
 - We assume you're on a Unix machine such as WSL2 Ubuntu, MacOS, or a common Linux distro.
 
-Currently, `nibiru` is created with Python 3.9.13. It may be compatible with higher versions, but we only run end-to-end tests in 3.9.13.
+Currently, `nibiru` is created with Python 3.7.16. It may be compatible with higher versions, but we only run end-to-end tests in 3.7.16.
 
 ### Pyenv for managing multiple Python interpreters
 
@@ -36,10 +41,9 @@ brew install pyenv
 You'll then need to add the following snippet to your shell config, e.g. your `.bash_profile`, `.bashrc`, or `.zshrc`.
 
 ```bash
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv init --path)"
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 ```
 
 After using `source` on your config or restarting the shell, you should have the `pyenv` root command.
@@ -47,7 +51,7 @@ After using `source` on your config or restarting the shell, you should have the
 The command use to install any version of python is `pyenv install`. Display additional info for this command with `pyenv install --help`.
 
 ```bash
-pyenv install 3.9.13 # example for nibiru
+pyenv install 3.7.16 # example for nibiru
 ```
 
 Once you have a version installed, you can print out the versions on your machine with:
@@ -59,7 +63,7 @@ pyenv versions
 ```
 # example output
   system
-* 3.9.13 (set by /home/realu/.python-version)
+* 3.7.16 (set by /home/realu/.python-version)
   3.10.4
 ```
 
@@ -89,13 +93,13 @@ pip install poetry
 
 ```bash
 # For UNIX systems - installation with curl
-curl -sSL https://install.python-poetry.org/ | python -
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 After this installation command, add the `poetry` binary to the path in your shell config (if it's not done automatically).
 
 ```bash
-export PATH=$PATH:$HOME/.poetry/bin
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
 ### Installing external dependencies
@@ -262,29 +266,3 @@ poetry run pre-commit install
 ```
 
 This will help keep your code clean.
-
-## Gotchas
-
-The `protobuf` package must be version 3.20.x or lower. Otherwise, the following error appears at runtime.
-
-```
-nibiru/clients/__init__.py:1: in <module>
-    from nibiru.clients.dex import Dex  # noqa
-nibiru/clients/dex.py:8: in <module>
-    from nibiru.proto.dex.v1 import query_pb2 as dex_type
-nibiru/proto/dex/v1/query_pb2.py:16: in <module>
-    from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
-../../../anaconda3/envs/divine/lib/python3.9/site-packages/google/api/annotations_pb2.py:30: in <module>
-    from google.api import http_pb2 as google_dot_api_dot_http__pb2
-../../../anaconda3/envs/divine/lib/python3.9/site-packages/google/api/http_pb2.py:48: in <module>
-    _descriptor.FieldDescriptor(
-../../../anaconda3/envs/divine/lib/python3.9/site-packages/google/protobuf/descriptor.py:560: in __new__
-    _message.Message._CheckCalledFromGeneratedFile()
-E   TypeError: Descriptors cannot not be created directly.
-E   If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc >= 3.19.0.
-E   If you cannot immediately regenerate your protos, some other possible workarounds are:
-E    1. Downgrade the protobuf package to 3.20.x or lower.
-E    2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
-E
-E   More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
-```

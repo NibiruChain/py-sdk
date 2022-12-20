@@ -36,7 +36,12 @@ The package is intended to be used by coders, developers, technically-skilled tr
 - [Python SDK Tutorial](#python-sdk-tutorial)
 - [Installation from `PyPI`](#installation-from-pypi)
 - [Usage](#usage)
+  - [Ex: Creating a wallet and SDK client](#ex-creating-a-wallet-and-sdk-client)
+  - [Ex: Using the faucet](#ex-using-the-faucet)
+  - [Ex: Querying chain state](#ex-querying-chain-state)
+  - [Ex: Submitting transactions](#ex-submitting-transactions)
 - [Documentation Website](#documentation-website)
+- [Contributing](#contributing)
 
 ## Python SDK Tutorial
 
@@ -60,7 +65,7 @@ python -m pip install --upgrade pip
 
 ## Usage
 
-#### Ex: Creating a wallet and SDK client
+### Ex: Creating a wallet and SDK client
 
 ```python
 from nibiru import wallet
@@ -85,7 +90,7 @@ queries. It is associated with:
 - A `Network`, which specifies the RPC, LCD, and gRPC endpoints for connecting to Nibiru Chain.
 - An optional `TxConfig` for changing gas parameters.
 
-#### Ex: Using the faucet
+### Ex: Using the faucet
 
 ```python
 import requests
@@ -99,7 +104,7 @@ requests.post(
 )
 ```
 
-#### Ex: Querying chain state
+### Ex: Querying chain state
 
 ```python
 # Querying the token balances of the account
@@ -111,7 +116,7 @@ print(query_resp)
 # Queries from other modules can be accessed from "sdk.query.module"
 ```
 
-#### Ex: Submitting transactions
+### Ex: Submitting transactions
 
 ```python
 # version 0.16.3
@@ -138,3 +143,7 @@ Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.rea
 
 - Learn more about opening and managing your spot and perp positions [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.sdks.tx.html#nibiru-sdks-tx-package)
 - Learn about querying the chain using the Sdk [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.clients.html#nibiru-clients-package)
+
+## Contributing
+
+Please read [HACKING.MD](HACKING.md) for developer environment setup.

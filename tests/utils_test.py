@@ -83,7 +83,7 @@ def test_get_msg_pb_by_type_url(type_url, cls):
 
 def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     tx_output: pytypes.RawTxResp = sdk_val.tx.execute_msgs(
-        nibiru.msg.MsgSend(
+        nibiru.Msg.bank.send(
             sdk_val.address,
             sdk_agent.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],

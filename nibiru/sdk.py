@@ -38,7 +38,7 @@ class Sdk:
         tx_config
 
 
-    Example ::
+    Examples:
 
     ```python
     sdk = (

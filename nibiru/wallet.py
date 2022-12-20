@@ -22,6 +22,8 @@ BECH32_ADDR_CONS_PREFIX = "nibivalcons"
 
 DEFAULT_DERIVATION_PATH = "m/44'/118'/0'/0/0"
 
+Mnemonic = str
+
 
 class PrivateKey:
     """
@@ -38,13 +40,14 @@ class PrivateKey:
         self.signing_key: SigningKey = None
 
     @classmethod
-    def generate(cls, path=DEFAULT_DERIVATION_PATH) -> Tuple[str, "PrivateKey"]:
+    def generate(cls, path=DEFAULT_DERIVATION_PATH) -> Tuple[Mnemonic, "PrivateKey"]:
         """
         Generate new private key with random mnemonic phrase
 
         :param path: the HD path that follows the BIP32 standard
 
-        :return: A tuple of mnemonic phrase and PrivateKey instance
+        Returns:
+            Tuple[Mnemonic, 'PrivateKey']: A tuple of mnemonic phrase and PrivateKey instance
         """
         phrase = Mnemonic(language="english").generate(strength=256)
         return (phrase, cls.from_mnemonic(phrase, path))

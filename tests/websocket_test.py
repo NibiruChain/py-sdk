@@ -6,8 +6,7 @@ from typing import List
 import pytest
 
 import nibiru
-import nibiru.msg
-from nibiru import Network, Sdk, Transaction, pytypes
+from nibiru import Msg, Network, Sdk, Transaction, pytypes
 from nibiru.event_specs import EventCaptured
 from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
@@ -49,7 +48,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     LOGGER.info("Opening position")
     sdk_val.tx.execute_msgs(
         [
-            nibiru.msg.MsgOpenPosition(
+            Msg.perp.open_position(
                 sender=sdk_val.address,
                 token_pair=pair,
                 side=pytypes.Side.BUY,
@@ -57,7 +56,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
                 leverage=10,
                 base_asset_amount_limit=0,
             ),
-            nibiru.msg.MsgSend(
+            Msg.bank.send(
                 from_address=sdk_val.address,
                 to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
                 coins=nibiru.Coin(amount=10, denom="unibi"),
@@ -66,7 +65,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     )
 
     sdk_val.tx.execute_msgs(
-        nibiru.msg.MsgPostPrice(
+        Msg.pricefeed.post_price(
             oracle=sdk_val.address,
             token0="unibi",
             token1="unusd",
@@ -75,7 +74,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
         ),
     )
     sdk_val.tx.execute_msgs(
-        nibiru.msg.MsgPostPrice(
+        Msg.pricefeed.post_price(
             oracle=sdk_val.address,
             token0="unibi",
             token1="unusd",
@@ -86,7 +85,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
 
     LOGGER.info("Closing position")
     sdk_val.tx.execute_msgs(
-        nibiru.msg.MsgClosePosition(
+        Msg.perp.close_position(
             sender=sdk_val.address,
             token_pair=pair,
         )
@@ -140,7 +139,7 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
         Transaction()
         .with_messages(
             [
-                nibiru.msg.MsgClosePosition(
+                Msg.perp.close_position(
                     sender=sdk_val.address,
                     token_pair="abc:def",
                 ).to_pb()

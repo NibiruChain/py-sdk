@@ -77,7 +77,7 @@ class BaseTxClient:
                 .with_signer(self.priv_key)
             )
             sim_res = self.simulate(tx)
-            gas_estimate = sim_res.gas_info.gas_used
+            gas_estimate: float = sim_res.gas_info.gas_used
             tx_output: abci_type.TxResponse = self.execute_tx(
                 tx, gas_estimate, **kwargs
             )
@@ -107,12 +107,17 @@ class BaseTxClient:
     def execute_tx(
         self, tx: Transaction, gas_estimate: float, **kwargs
     ) -> abci_type.TxResponse:
-        conf = self.get_config(**kwargs)
-        gas_wanted = gas_estimate * 1.25
-        if conf.gas_wanted > 0:
-            gas_wanted = conf.gas_wanted
-        elif conf.gas_multiplier > 0:
-            gas_wanted = gas_estimate * conf.gas_multiplier
+        conf: pt.TxConfig = self.get_config(**kwargs)
+
+        def compute_gas_wanted() -> float:
+            gas_wanted = gas_estimate * 1.25  # apply gas multiplier
+            if conf.gas_wanted > 0:
+                gas_wanted = conf.gas_wanted
+            elif conf.gas_multiplier > 0:
+                gas_wanted = gas_estimate * conf.gas_multiplier
+            return gas_wanted
+
+        gas_wanted = compute_gas_wanted()
         gas_price = pt.GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
 
         fee = [
@@ -159,7 +164,7 @@ class BaseTxClient:
 
         return self.address
 
-    def get_config(self, **kwargs):
+    def get_config(self, **kwargs) -> pt.TxConfig:
         """
         Properties in kwargs overwrite config
         """

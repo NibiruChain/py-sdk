@@ -100,7 +100,7 @@ class Network:
         )
 
     @classmethod
-    def testnet(cls, chain_num: int = 1) -> "Network":
+    def testnet(cls, chain_num: int = 2) -> "Network":
         """
         Testnet is a network open to invited validators. It is more stable than
         devnet and provides a faucet to get some funds

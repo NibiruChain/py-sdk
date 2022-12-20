@@ -5,7 +5,6 @@ from typing import Dict, List
 import pytest
 
 import nibiru
-import nibiru.msg
 import tests
 from nibiru import Coin, PoolAsset, utils
 from nibiru.exceptions import SimulationError
@@ -29,7 +28,7 @@ def test_dex_create_pool(sdk_val: nibiru.Sdk):
 
     try:
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.msg.MsgCreatePool(
+            nibiru.Msg.dex.create_pool(
                 creator=sdk_val.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
@@ -52,7 +51,7 @@ def test_dex_create_pool(sdk_val: nibiru.Sdk):
     # # TODO fix: need usdc on-chain  to do this
     try:
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.msg.MsgCreatePool(
+            nibiru.Msg.dex.create_pool(
                 creator=sdk_val.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
@@ -129,7 +128,7 @@ def test_dex_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
     try:
         tx_output = sdk_val.tx.execute_msgs(
             [
-                nibiru.msg.MsgJoinPool(
+                nibiru.Msg.dex.join_pool(
                     sender=sdk_val.address,
                     pool_id=pool_ids["unibi:unusd"],
                     tokens=[Coin(1000, "unibi"), Coin(100, "unusd")],
@@ -147,19 +146,19 @@ def test_dex_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
         tx_output = sdk_val.tx.execute_msgs(
             [
                 # # TODO fix: need usdc on-chain  to do this
-                # nibiru.msg.MsgJoinPool(
+                # nibiru.Msg.dex.join_pool(
                 #     sender=sdk_agent.address,
                 #     pool_id=pool_ids["unusd:uusdc"],
                 #     tokens=[Coin(100, "uusdc"), Coin(100, "unusd")],
                 # ),
                 # # TODO fix: need usdc on-chain  to do this
-                # nibiru.msg.MsgSwapAssets(
+                # nibiru.Msg.dex.swap(
                 #     sender=sdk_agent.address,
                 #     pool_id=pool_ids["unusd:uusdc"],
                 #     token_in=Coin(100, "uusdc"),
                 #     token_out_denom="unusd",
                 # ),
-                nibiru.msg.MsgSwapAssets(
+                nibiru.Msg.dex.swap(
                     sender=sdk_val.address,
                     pool_id=pool_ids["unibi:unusd"],
                     token_in=Coin(100, "unusd"),
@@ -182,7 +181,7 @@ def test_dex_exit_pool(sdk_val: nibiru.Sdk):
     if pool_tokens:
         tx_output = sdk_val.tx.execute_msgs(
             [
-                nibiru.msg.MsgExitPool(
+                nibiru.Msg.dex.exit_pool(
                     sender=sdk_val.address,
                     pool_id=int(pool_token["denom"].split("/")[-1]),
                     pool_shares=Coin(pool_token["amount"], pool_token["denom"]),

@@ -1,5 +1,6 @@
 import base64
 import json
+import pprint
 import threading
 import time
 from json import JSONDecodeError
@@ -131,6 +132,8 @@ class NibiruWebsocket:
         block_height = int(log["data"]["value"]["TxResult"]["height"])
         tx_hash = events["tx.hash"][0]
 
+        print(f"DEBUG log: ")
+        pprint.pprint(log)
         try:
             events = json.loads(log["data"]["value"]["TxResult"]["result"]["log"])[0]
         except JSONDecodeError as ex:

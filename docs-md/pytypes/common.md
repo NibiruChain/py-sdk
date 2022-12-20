@@ -51,10 +51,7 @@ Classes
 
     ### Descendants
 
-    * nibiru.msg.bank.MsgDelegate
     * nibiru.msg.bank.MsgSend
-    * nibiru.msg.bank.MsgUndelegate
-    * nibiru.msg.bank.MsgWithdrawDelegatorReward
     * nibiru.msg.dex.MsgCreatePool
     * nibiru.msg.dex.MsgExitPool
     * nibiru.msg.dex.MsgJoinPool
@@ -65,6 +62,9 @@ Classes
     * nibiru.msg.perp.MsgOpenPosition
     * nibiru.msg.perp.MsgRemoveMargin
     * nibiru.msg.pricefeed.MsgPostPrice
+    * nibiru.msg.staking.MsgDelegate
+    * nibiru.msg.staking.MsgUndelegate
+    * nibiru.msg.staking.MsgWithdrawDelegatorReward
 
     ### Methods
 
@@ -89,7 +89,7 @@ Classes
     `SELL`
     :
 
-`TxConfig(gas_wanted: int = 0, gas_multiplier: float = 1.25, gas_price: float = 0.25, tx_type: nibiru.pytypes.common.TxType = TxType.ASYNC)`
+`TxConfig(gas_wanted: int = 0, gas_multiplier: float = 1.25, gas_price: float = 0.25, tx_type: nibiru.pytypes.common.TxType = TxType.BLOCK)`
 :   The TxConfig object allows to customize the behavior of the Sdk interface when a transaction is sent.
 
     Args:
@@ -100,7 +100,8 @@ Classes
             is ignored. Defaults to 0.
         gas_price (float, optional): Set the gas price used to calculate the fee.
             Defaults to 0.25.
-        tx_type (TxType, optional): Configure how to execute the tx. Defaults to TxType.ASYNC.
+        tx_type (TxType, optional): Configure how to execute the tx.
+            Defaults to TxType.BLOCK.
 
     ### Class variables
 

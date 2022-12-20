@@ -36,8 +36,8 @@ jobs:
         id: setup-python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7.13
-          # 3.7.13 is the highest 3.7 version available on pyenv
+          python-version: 3.7.16
+          # 3.7.16 is the highest 3.7 version available on pyenv
           # See `grep '3.7' <<< $(pyenv install -l)` to view the available list.
 
       - name: Run python

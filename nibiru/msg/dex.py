@@ -7,6 +7,61 @@ from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
 from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 
 
+class MsgsDex:
+    """MsgsDex has methods for building messages for transactions on Nibi-Swap.
+
+    Methods:
+    - create_pool: Create a pool using the assets specified
+    - exit_pool: Exit a pool using the specified pool shares
+    - join_pool: Join a pool using the specified tokens
+    - swap: Swap the assets provided for the denom specified
+    """
+
+    def create_pool(
+        creator: str,
+        swap_fee: float,
+        exit_fee: float,
+        a: int,
+        pool_type: PoolType,
+        assets: List[PoolAsset],
+    ) -> 'MsgCreatePool':
+        return MsgCreatePool(
+            creator=creator,
+            swap_fee=swap_fee,
+            exit_fee=exit_fee,
+            a=a,
+            pool_type=pool_type,
+            assets=assets,
+        )
+
+    def join_pool(
+        sender: str,
+        pool_id: int,
+        tokens: Union[Coin, List[Coin]],
+    ) -> 'MsgJoinPool':
+        return MsgJoinPool(sender=sender, pool_id=pool_id, tokens=tokens)
+
+    def exit_pool(
+        sender: str,
+        pool_id: int,
+        pool_shares: Coin,
+    ) -> 'MsgExitPool':
+        return MsgExitPool(sender=sender, pool_id=pool_id, pool_shares=pool_shares)
+
+    def swap(
+        sender: str,
+        pool_id: int,
+        token_in: Coin,
+        token_out_denom: str,
+    ) -> 'MsgSwapAssets':
+        return MsgSwapAssets(
+            sender=sender,
+            pool_id=pool_id,
+            token_in=token_in,
+            token_out_denom=token_out_denom,
+        )
+
+
 @dataclasses.dataclass
 class MsgCreatePool(PythonMsg):
     """

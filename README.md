@@ -63,7 +63,7 @@ You may need to update `pip` to get this to run:
 python -m pip install --upgrade pip
 ```
 
-## Usage 
+## Usage
 
 ### Ex: Creating a wallet and SDK client
 
@@ -74,10 +74,10 @@ from nibiru import wallet
 mnemonic, private_key = wallet.PrivateKey.generate()
 ```
 
-After, creating an account, you can create an `Sdk` instance. 
+After, creating an account, you can create an `Sdk` instance.
 
 ```python
-import nibiru 
+import nibiru
 
 network = nibiru.network.Network.testnet(2)
 sdk = nibiru.Sdk.authorize(mnemonic)
@@ -87,7 +87,7 @@ sdk = nibiru.Sdk.authorize(mnemonic)
 The `Sdk` class creates an interface to sign and send transactions or execute
 queries. It is associated with:
 - A transaction signer (wallet), which is configured from existing mnemonic to recover a `PrivateKey`.
-- A `Network`, which specifies the RPC, LCD, and gRPC endpoints for connecting to Nibiru Chain. 
+- A `Network`, which specifies the RPC, LCD, and gRPC endpoints for connecting to Nibiru Chain.
 - An optional `TxConfig` for changing gas parameters.
 
 ### Ex: Using the faucet
@@ -110,17 +110,18 @@ requests.post(
 # Querying the token balances of the account
 sdk.query.get_bank_balances(sdk.address)
 
-# Querying from the vpool module 
+# Querying from the vpool module
 query_resp = sdk.query.vpool.all_pools()
 print(query_resp)
 # Queries from other modules can be accessed from "sdk.query.module"
 ```
 
-### Ex: Submitting transactions 
+### Ex: Submitting transactions
 
 ```python
+# version 0.16.3
 import nibiru
-from nibiru.msg
+import nibiru.msg
 
 tx_resp = sdk.tx.execute_msgs(
     nibiru.msg.MsgOpenPosition(
@@ -134,7 +135,7 @@ tx_resp = sdk.tx.execute_msgs(
 )
 ```
 
-You can broadcast any available transaction by passing its corresponding `Msg` to the `sdk.tx.execute_msgs` function. 
+You can broadcast any available transaction by passing its corresponding `Msg` to the `sdk.tx.execute_msgs` function.
 
 ## Documentation Website
 

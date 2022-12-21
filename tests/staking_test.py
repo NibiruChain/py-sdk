@@ -1,10 +1,8 @@
 import time
 
-from nibiru import Network, Sdk
+from nibiru import Msg, Network, Sdk
 from nibiru.event_specs import EventCaptured, EventType
 from nibiru.exceptions import QueryError, SimulationError
-from nibiru.msg import MsgDelegate
-from nibiru.msg.bank import MsgUndelegate
 from nibiru.websocket import NibiruWebsocket
 from tests import dict_keys_must_match, transaction_must_succeed
 
@@ -20,7 +18,7 @@ def get_validator_operator_address(sdk_val: Sdk):
 def delegate(sdk_val: Sdk):
     return sdk_val.tx.execute_msgs(
         [
-            MsgDelegate(
+            Msg.staking.delegate(
                 delegator_address=sdk_val.address,
                 validator_address=get_validator_operator_address(sdk_val),
                 amount=1,
@@ -32,7 +30,7 @@ def delegate(sdk_val: Sdk):
 def undelegate(sdk_val: Sdk):
     return sdk_val.tx.execute_msgs(
         [
-            MsgUndelegate(
+            Msg.staking.undelegate(
                 delegator_address=sdk_val.address,
                 validator_address=get_validator_operator_address(sdk_val),
                 amount=1,

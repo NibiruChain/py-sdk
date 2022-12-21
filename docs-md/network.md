@@ -94,7 +94,7 @@ Classes
     `mainnet() ‑> nibiru.network.Network`
     :   Soon!
 
-    `testnet(chain_num: int = 1) ‑> nibiru.network.Network`
+    `testnet(chain_num: int = 2) ‑> nibiru.network.Network`
     :   Testnet is a network open to invited validators. It is more stable than
         devnet and provides a faucet to get some funds
 

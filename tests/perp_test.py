@@ -4,8 +4,8 @@ from typing import List
 import pytest
 
 import nibiru
-import nibiru.msg
 import tests
+from nibiru import Msg
 from nibiru import pytypes as pt
 from nibiru.exceptions import QueryError
 from tests import dict_keys_must_match, transaction_must_succeed
@@ -25,10 +25,10 @@ def test_open_position(sdk_val: nibiru.Sdk):
     try:
         tests.LOGGER.info("nibid tx perp open-position")
         tx_output: pt.RawTxResp = sdk_val.tx.execute_msgs(
-            nibiru.msg.MsgOpenPosition(
+            Msg.perp.open_position(
                 sender=sdk_val.address,
                 token_pair=PAIR,
-                side=pt.Side.SELL,
+                is_long=False,
                 quote_asset_amount=10,
                 leverage=10,
                 base_asset_amount_limit=0,
@@ -90,7 +90,7 @@ def test_perp_add_margin(sdk_val: nibiru.Sdk):
     try:
         # Transaction add_margin must succeed
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.msg.MsgAddMargin(
+            Msg.perp.add_margin(
                 sender=sdk_val.address,
                 token_pair=PAIR,
                 margin=pt.Coin(10, "unusd"),
@@ -109,7 +109,7 @@ def test_perp_add_margin(sdk_val: nibiru.Sdk):
 def test_perp_remove_margin(sdk_val: nibiru.Sdk):
     try:
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.msg.MsgRemoveMargin(
+            Msg.perp.remove_margin(
                 sender=sdk_val.address,
                 token_pair=PAIR,
                 margin=pt.Coin(5, "unusd"),
@@ -133,7 +133,7 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
     try:
         # Transaction close_position must succeed
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.msg.MsgClosePosition(sender=sdk_val.address, token_pair=PAIR)
+            Msg.perp.close_position(sender=sdk_val.address, token_pair=PAIR)
         )
         tests.LOGGER.info(
             f"nibid tx perp close-position: \n{tests.format_response(tx_output)}"

@@ -4,7 +4,7 @@ Module nibiru.websocket
 Classes
 -------
 
-`NibiruWebsocket(network: nibiru.network.Network, captured_events_type: List[nibiru.event_specs.EventType] = [], tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f5ead984410>> = None)`
+`NibiruWebsocket(network: nibiru.network.Network, captured_events_type: List[nibiru.event_specs.EventType] = [], tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f9fb274cf10>> = None)`
 :   The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru
     chain.
 
@@ -13,10 +13,10 @@ Classes
     `captured_events_type: List[List[str]]`
     :
 
-    `queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f5ead984410>>`
+    `queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f9fb274cf10>>`
     :
 
-    `tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f5ead984410>>`
+    `tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f9fb274cf10>>`
     :
 
     ### Methods

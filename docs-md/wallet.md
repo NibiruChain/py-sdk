@@ -82,7 +82,8 @@ Classes
 
         :param path: the HD path that follows the BIP32 standard
 
-        :return: A tuple of mnemonic phrase and PrivateKey instance
+        Returns:
+            Tuple[Mnemonic, 'PrivateKey']: A tuple of mnemonic phrase and PrivateKey instance
 
     ### Methods
 

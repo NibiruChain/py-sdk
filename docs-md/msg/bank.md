@@ -4,32 +4,9 @@ Module nibiru.msg.bank
 Classes
 -------
 
-`MsgDelegate(delegator_address: str, validator_address: str, amount: float)`
-:   Delegate tokens to a validator
-
-    Attributes:
-        delegator_address: str
-        validator_address: str
-        amount: float
-
-    ### Ancestors (in MRO)
-
-    * nibiru.pytypes.common.PythonMsg
-    * abc.ABC
-
-    ### Class variables
-
-    `amount: float`
-    :
-
-    `delegator_address: str`
-    :
-
-    `validator_address: str`
-    :
-
 `MsgSend(from_address: str, to_address: str, coins: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]])`
-:   Send tokens from one account to another
+:   Send tokens from one account to another. PythonMsg corresponding to the
+    'cosmos.bank.v1beta1.MsgSend' message.
 
     Attributes:
         from_address (str): The address of the sender
@@ -52,46 +29,21 @@ Classes
     `to_address: str`
     :
 
-`MsgUndelegate(delegator_address: str, validator_address: str, amount: float)`
-:   Undelegate tokens from a validator
+`MsgsBank()`
+:   Messages for the x/bank module.
 
-    Attributes:
-        delegator_address: str
-        validator_address: str
-        amount: float
+    Methods:
+    - send: Send tokens from one account to another
 
-    ### Ancestors (in MRO)
+    ### Methods
 
-    * nibiru.pytypes.common.PythonMsg
-    * abc.ABC
+    `send(from_address: str, to_address: str, coins: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]) ‑> nibiru.msg.bank.MsgSend`
+    :   Send tokens from one account to another
 
-    ### Class variables
+        Attributes:
+            from_address (str): The address of the sender
+            to_address (str): The address of the receiver
+            coins (List[Coin]): The list of coins to send
 
-    `amount: float`
-    :
-
-    `delegator_address: str`
-    :
-
-    `validator_address: str`
-    :
-
-`MsgWithdrawDelegatorReward(delegator_address: str, validator_address: str)`
-:   Withdraw the reward from a validator
-
-    Attributes:
-        delegator_address: str
-        validator_address: str
-
-    ### Ancestors (in MRO)
-
-    * nibiru.pytypes.common.PythonMsg
-    * abc.ABC
-
-    ### Class variables
-
-    `delegator_address: str`
-    :
-
-    `validator_address: str`
-    :
+        Returns:
+            MsgSend: PythonMsg corresponding to the 'cosmos.bank.v1beta1.MsgSend' message

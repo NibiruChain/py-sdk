@@ -3,11 +3,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
 
-## [v0.16.0 (Unreleased)](https://github.com/NibiruChain/py-sdk/compare/dev...HEAD)
+## v0.16.4-dev.1
 
 Compatible with NibiruChain/nibiru v0.16
-- ...
+
+- [[#191]](https://github.com/NibiruChain/py-sdk/pull/191) refactor(msg)!: Unifies the PythonMsg functions under the nibiru.Msg object for improved UX.
+- [[#189]](https://github.com/NibiruChain/py-sdk/pull/189) build(dependencies): dependencies cleanup, removed eip712 structs
+
+## v0.16.3
+
+Compatible with NibiruChain/nibiru v0.16
+
+- docs(README): Add usage examples
+- [[#188]](https://github.com/NibiruChain/py-sdk/pull/188) docs: docgen in markdown with pdoc
+- [[#186]](https://github.com/NibiruChain/py-sdk/pull/186) chore: update package version for publish
+- [[#185]](https://github.com/NibiruChain/py-sdk/pull/185) chore!: update protos to v0.16.2
+- [[#183]](https://github.com/NibiruChain/py-sdk/pull/183) test: Add test for network validity before running test suite.
+- [[#180]](https://github.com/NibiruChain/py-sdk/pull/180) test,feat!: (1) New events and tx resp abstractions. (2) Cater tests to have devnet and testnet compatibility
+- [[#175]](https://github.com/NibiruChain/py-sdk/pull/175) feat,test: Add tests for dex queries and txs
+- [[#173]](https://github.com/NibiruChain/py-sdk/pull/173) fix: Replaced built-in bin ripemd160 with pure Python
 
 ## [v0.5.3](https://github.com/NibiruChain/py-sdk/compare/v0.5.0...HEAD)
 

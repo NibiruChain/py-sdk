@@ -10,6 +10,8 @@ from nibiru.utils import to_sdk_dec, toPbTimestamp
 @dataclasses.dataclass
 class MsgPostPrice(PythonMsg):
     """
+    Message that posts a price into pricefeed module.
+
     Attributes:
         oracle (str): address of the msg sender
         token0 (str): base asset denomination, e.g. ATOM
@@ -25,6 +27,13 @@ class MsgPostPrice(PythonMsg):
     expiry: datetime
 
     def to_pb(self) -> pb.MsgPostPrice:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgPostPrice: The proto object.
+
+        """
         return pb.MsgPostPrice(
             oracle=self.oracle,
             token0=self.token0,

@@ -27,6 +27,13 @@ class MsgCreatePool(PythonMsg):
     assets: List[PoolAsset]
 
     def to_pb(self) -> pb.MsgCreatePool:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgCreatePool: The proto object.
+
+        """
         pool_assets = [
             pool_tx_pb.PoolAsset(
                 token=a.token._generate_proto_object(), weight=str(int(a.weight * 1e6))
@@ -65,6 +72,13 @@ class MsgJoinPool(PythonMsg):
     tokens: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgJoinPool:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgJoinPool: The proto object.
+
+        """
         if isinstance(self.tokens, Coin):
             self.tokens = [self.tokens]
         return pb.MsgJoinPool(
@@ -90,6 +104,13 @@ class MsgExitPool(PythonMsg):
     pool_shares: Coin
 
     def to_pb(self) -> pb.MsgExitPool:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgExitPool: The proto object.
+
+        """
         return pb.MsgExitPool(
             sender=self.sender,
             pool_id=self.pool_id,
@@ -115,6 +136,13 @@ class MsgSwapAssets(PythonMsg):
     token_out_denom: str
 
     def to_pb(self) -> pb.MsgSwapAssets:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgSwapAssets: The proto object.
+
+        """
         return pb.MsgSwapAssets(
             sender=self.sender,
             pool_id=self.pool_id,

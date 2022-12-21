@@ -24,6 +24,13 @@ class MsgSend(PythonMsg):
     coins: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgSend:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgSend: The proto object.
+
+        """
         coins = self.coins
         if not isinstance(coins, Iterable):
             coins = [self.coins]
@@ -51,6 +58,13 @@ class MsgDelegate(PythonMsg):
     amount: float
 
     def to_pb(self) -> staking_pb.MsgDelegate:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            staking_pb.MsgDelegate: The proto object.
+
+        """
         return staking_pb.MsgDelegate(
             delegator_address=self.delegator_address,
             validator_address=self.validator_address,
@@ -74,6 +88,13 @@ class MsgUndelegate(PythonMsg):
     amount: float
 
     def to_pb(self) -> staking_pb.MsgUndelegate:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            staking_pb.MsgUndelegate: The proto object.
+
+        """
         return staking_pb.MsgUndelegate(
             delegator_address=self.delegator_address,
             validator_address=self.validator_address,
@@ -95,6 +116,13 @@ class MsgWithdrawDelegatorReward(PythonMsg):
     validator_address: str
 
     def to_pb(self) -> tx_pb.MsgWithdrawDelegatorReward:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            tx_pb.MsgWithdrawDelegatorReward: The proto object.
+
+        """
         return tx_pb.MsgWithdrawDelegatorReward(
             delegator_address=self.delegator_address,
             validator_address=self.validator_address,

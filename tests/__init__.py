@@ -15,6 +15,11 @@ LOGGER: logging.Logger = utils.init_logger("test-logger")
 def raises(errs: Union[str, Iterable[str]], err: BaseException):
     """Makes sure one of the errors in 'errs' in contained in 'err'. If none of
     the given exceptions were raised, this function raises the original exception.
+
+    Args:
+        errs (Union[str, Iterable[str]]): The list of errors to be checked err against.
+        err: (BaseException): The error we want to check that is raised.
+
     """
     if isinstance(errs, str):
         errs = [errs]
@@ -57,6 +62,10 @@ def dict_keys_must_match(dict_: dict, keys: List[str]):
     Example:
     - [0, 1, 1] and [1, 0, 1] compare equal.
     - [0, 0, 1] and [0, 1] compare unequal.
+
+    Args:
+        dict_: one of the iterables to compare
+        keys: the other iterable.
 
     """
     assert utils.element_counts_are_equal(dict_.keys(), keys)

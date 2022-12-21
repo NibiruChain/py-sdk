@@ -16,7 +16,7 @@ class MsgSend(PythonMsg):
     Attributes:
         from_address (str): The address of the sender
         to_address (str): The address of the receiver
-        coins (List[Coin]): The list of coins to send
+        coins (Union[Coin, List[Coin]]): The list of coins to send
     """
 
     from_address: str

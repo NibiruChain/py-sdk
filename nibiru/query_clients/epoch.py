@@ -16,6 +16,15 @@ class EpochQueryClient(QueryClient):
         self.api = epoch_query.QueryStub(channel)
 
     def current_epoch(self, epoch_identifier: str) -> dict:
+        """
+        Returns information about the epoch specified
+
+        Args:
+            epoch_identifier(str): the identifier of the epoch, example: "week"
+
+        Returns:
+
+        """
         proto_output = self.query(
             api_callable=self.api.CurrentEpoch,
             req=epoch_type.QueryCurrentEpochRequest(identifier=epoch_identifier),
@@ -27,6 +36,12 @@ class EpochQueryClient(QueryClient):
         return output
 
     def epoch_infos(self) -> dict:
+        """
+        Returns all the epochs that exist and its details
+
+        Returns:
+            dict: the list of epochs
+        """
         proto_output = self.query(
             api_callable=self.api.EpochInfos,
             req=epoch_type.QueryEpochsInfoRequest(),

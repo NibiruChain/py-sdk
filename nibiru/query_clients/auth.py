@@ -16,9 +16,10 @@ class AuthQueryClient(QueryClient):
 
     def account(self, address: str) -> dict:
         """
+        Returns information of the given account
 
         Args:
-            address: the address of the account we want to get information
+            address(str): the address of the account we want to get information
 
         Returns:
             dict: a dictionary containing information of the account

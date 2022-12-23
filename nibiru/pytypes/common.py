@@ -86,13 +86,14 @@ class TxConfig:
             is ignored. Defaults to 0.
         gas_price (float, optional): Set the gas price used to calculate the fee.
             Defaults to 0.25.
-        tx_type (TxType, optional): Configure how to execute the tx. Defaults to TxType.ASYNC.
+        tx_type (TxType, optional): Configure how to execute the tx.
+            Defaults to TxType.BLOCK.
     """
 
     gas_wanted: int = 0
     gas_multiplier: float = 1.25
     gas_price: float = 0.25
-    tx_type: TxType = TxType.ASYNC
+    tx_type: TxType = TxType.BLOCK
 
 
 class PythonMsg(abc.ABC):

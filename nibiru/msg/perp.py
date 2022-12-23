@@ -7,6 +7,96 @@ from nibiru.pytypes import Coin, PythonMsg, Side
 from nibiru.utils import to_sdk_dec, to_sdk_int
 
 
+class MsgsPerp:
+    """
+    Messages for the Nibiru Chain x/perp module
+
+    Methods:
+    - open_position
+    - close_position:
+    - add_margin: Deleverages a position by adding margin to back it.
+    - remove_margin: Increases the leverage of the position by removing margin.
+    """
+
+    def open_position(
+        sender: str,
+        token_pair: str,
+        is_long: bool,
+        quote_asset_amount: float,
+        leverage: float,
+        base_asset_amount_limit: float,
+    ) -> 'MsgOpenPosition':
+        """
+        Open a posiiton using the specified parameters.
+
+        Attributes:
+            sender (str): The sender address
+            token_pair (str): The token pair
+            is_long (bool): Determines whether to open with long or short exposure.
+            quote_asset_amount (float): The quote amount you want to use to buy base
+            leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
+                margin ratio of the pool.
+            base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
+                quote.
+        """
+        side: Side
+        if is_long:
+            side = Side.BUY
+        else:
+            side = Side.SELL
+        return MsgOpenPosition(
+            sender=sender,
+            token_pair=token_pair,
+            side=side,
+            quote_asset_amount=quote_asset_amount,
+            leverage=leverage,
+            base_asset_amount_limit=base_asset_amount_limit,
+        )
+
+    def close_position(
+        sender: str,
+        token_pair: str,
+    ) -> 'MsgClosePosition':
+        """
+        Close the position.
+
+        Attributes:
+            sender (str): The sender address
+            token_pair (str): The token pair
+        """
+        return MsgClosePosition(sender=sender, token_pair=token_pair)
+
+    def add_margin(
+        sender: str,
+        token_pair: str,
+        margin: Coin,
+    ) -> 'MsgAddMargin':
+        """
+        Add margin for the position (token_pair + trader)
+
+        Attributes:
+            sender (str): The trader address
+            token_pair (str): The token pair
+            margin (Coin): The margin to remove in a coin format
+        """
+        return MsgAddMargin(sender=sender, token_pair=token_pair, margin=margin)
+
+    def remove_margin(
+        sender: str,
+        token_pair: str,
+        margin: Coin,
+    ) -> 'MsgRemoveMargin':
+        """
+        Remove margin for the position (token_pair + trader)
+
+        Attributes:
+            sender (str): The trader address
+            token_pair (str): The token pair
+            margin (Coin): The margin to remove in a coin format
+        """
+        return MsgRemoveMargin(sender=sender, token_pair=token_pair, margin=margin)
+
+
 @dataclasses.dataclass
 class MsgRemoveMargin(PythonMsg):
     """

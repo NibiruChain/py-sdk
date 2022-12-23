@@ -7,7 +7,6 @@ from nibiru_proto.proto.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
 
 import nibiru
 import tests
-from nibiru.msg import MsgPostPrice
 from tests import dict_keys_must_match, transaction_must_succeed
 
 WHITELISTED_ORACLES: Dict[str, str] = {
@@ -23,7 +22,7 @@ def post_price_test_tx(
     if from_oracle is None:
         from_oracle = sdk.address
     tests.LOGGER.info(f"sending 'nibid tx post price' from {from_oracle}")
-    msg = MsgPostPrice(
+    msg = nibiru.Msg.pricefeed.post_price(
         oracle=from_oracle,
         token0="ueth",
         token1="unusd",
@@ -72,7 +71,7 @@ class TestPostPrice:
         # Transaction post_price in the past must raise proper error
         with pytest.raises(nibiru.exceptions.SimulationError, match="Price is expired"):
             _ = sdk_oracle.tx.execute_msgs(
-                msgs=MsgPostPrice(
+                msgs=nibiru.Msg.pricefeed.post_price(
                     sdk_oracle.address,
                     token0="ueth",
                     token1="unusd",

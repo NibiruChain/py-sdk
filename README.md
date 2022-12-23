@@ -35,7 +35,13 @@ The package is intended to be used by coders, developers, technically-skilled tr
 
 - [Python SDK Tutorial](#python-sdk-tutorial)
 - [Installation from `PyPI`](#installation-from-pypi)
+- [Usage](#usage)
+  - [Ex: Creating a wallet and SDK client](#ex-creating-a-wallet-and-sdk-client)
+  - [Ex: Using the faucet](#ex-using-the-faucet)
+  - [Ex: Querying chain state](#ex-querying-chain-state)
+  - [Ex: Submitting transactions](#ex-submitting-transactions)
 - [Documentation Website](#documentation-website)
+- [Contributing](#contributing)
 
 ## Python SDK Tutorial
 
@@ -57,9 +63,9 @@ You may need to update `pip` to get this to run:
 python -m pip install --upgrade pip
 ```
 
-## Usage 
+## Usage
 
-#### Ex: Creating a wallet and SDK client
+### Ex: Creating a wallet and SDK client
 
 ```python
 from nibiru import wallet
@@ -68,10 +74,10 @@ from nibiru import wallet
 mnemonic, private_key = wallet.PrivateKey.generate()
 ```
 
-After, creating an account, you can create an `Sdk` instance. 
+After, creating an account, you can create an `Sdk` instance.
 
 ```python
-import nibiru 
+import nibiru
 
 network = nibiru.network.Network.testnet(2)
 sdk = nibiru.Sdk.authorize(mnemonic)
@@ -81,10 +87,10 @@ sdk = nibiru.Sdk.authorize(mnemonic)
 The `Sdk` class creates an interface to sign and send transactions or execute
 queries. It is associated with:
 - A transaction signer (wallet), which is configured from existing mnemonic to recover a `PrivateKey`.
-- A `Network`, which specifies the RPC, LCD, and gRPC endpoints for connecting to Nibiru Chain. 
+- A `Network`, which specifies the RPC, LCD, and gRPC endpoints for connecting to Nibiru Chain.
 - An optional `TxConfig` for changing gas parameters.
 
-#### Ex: Using the faucet
+### Ex: Using the faucet
 
 ```python
 import requests
@@ -98,23 +104,24 @@ requests.post(
 )
 ```
 
-#### Ex: Querying chain state
+### Ex: Querying chain state
 
 ```python
 # Querying the token balances of the account
 sdk.query.get_bank_balances(sdk.address)
 
-# Querying from the vpool module 
+# Querying from the vpool module
 query_resp = sdk.query.vpool.all_pools()
 print(query_resp)
 # Queries from other modules can be accessed from "sdk.query.module"
 ```
 
-#### Ex: Submitting transactions 
+### Ex: Submitting transactions
 
 ```python
+# version 0.16.3
 import nibiru
-from nibiru.msg
+import nibiru.msg
 
 tx_resp = sdk.tx.execute_msgs(
     nibiru.msg.MsgOpenPosition(
@@ -128,7 +135,7 @@ tx_resp = sdk.tx.execute_msgs(
 )
 ```
 
-You can broadcast any available transaction by passing its corresponding `Msg` to the `sdk.tx.execute_msgs` function. 
+You can broadcast any available transaction by passing its corresponding `Msg` to the `sdk.tx.execute_msgs` function.
 
 ## Documentation Website
 
@@ -136,3 +143,7 @@ Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.rea
 
 - Learn more about opening and managing your spot and perp positions [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.sdks.tx.html#nibiru-sdks-tx-package)
 - Learn about querying the chain using the Sdk [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.clients.html#nibiru-clients-package)
+
+## Contributing
+
+Please read [HACKING.MD](HACKING.md) for developer environment setup.

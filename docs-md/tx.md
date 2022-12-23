@@ -32,7 +32,7 @@ Classes
     `get_address_info(self)`
     :
 
-    `get_config(self, **kwargs)`
+    `get_config(self, **kwargs) ‑> nibiru.pytypes.common.TxConfig`
     :   Properties in kwargs overwrite config
 
     `simulate(self, tx: nibiru.transaction.Transaction)`

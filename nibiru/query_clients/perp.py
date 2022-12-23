@@ -19,7 +19,7 @@ class PerpQueryClient(QueryClient):
         """
         Get the parameters of the perp module.
 
-        Output sample::
+        Sample output::
 
             {
                 "feePoolFeeRatio": 0.001,

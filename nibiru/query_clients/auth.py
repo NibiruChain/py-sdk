@@ -15,6 +15,15 @@ class AuthQueryClient(QueryClient):
         self.api = auth_query.QueryStub(channel)
 
     def account(self, address: str) -> dict:
+        """
+
+        Args:
+            address: the address of the account we want to get information
+
+        Returns:
+            dict: a dictionary containing information of the account
+
+        """
         proto_output = self.query(
             api_callable=self.api.Account,
             req=auth_type.QueryAccountRequest(address=address),
@@ -25,6 +34,13 @@ class AuthQueryClient(QueryClient):
         return output
 
     def accounts(self) -> dict:
+        """
+        Accounts returns all the existing accounts
+
+        Returns:
+            dict: a dictionary with information of all the existing accounts paginated
+
+        """
         proto_output = self.query(
             api_callable=self.api.Accounts,
             req=auth_type.QueryAccountRequest(),

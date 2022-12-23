@@ -2,7 +2,7 @@
 The sdk is the main interface to the chain. Each sdk object needs to be authorized with a wallet, which can be generated
 with a new address if needed.
 
-Once instanciated, the sdk provide the sdk.tx and sdk.query modules to be able to query or send a transaction to the
+Once instantiated, the sdk provide the sdk.tx and sdk.query modules to be able to query or send a transaction to the
 chain.
 
 This object depends on the network and transaction configuration the users want. These objects can be set using the

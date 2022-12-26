@@ -118,7 +118,7 @@ Classes
     :
 
 `TxType(value, names=None, *, module=None, qualname=None, type=None, start=1)`
-:   The TxType allows you to chose what type of synchronization you want to use to send transaction
+:   The TxType allows you to choose what type of synchronization you want to use to send transaction
 
     ### Ancestors (in MRO)
 

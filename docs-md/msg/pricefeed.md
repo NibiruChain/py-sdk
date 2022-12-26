@@ -36,6 +36,14 @@ Classes
     `token1: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> pricefeed.tx_pb2.MsgPostPrice`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgPostPrice: The proto object.
+
 `MsgsPricefeed()`
 :   Messages for the x/pricefeed module.
 

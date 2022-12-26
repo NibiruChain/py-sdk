@@ -4,7 +4,7 @@ Module nibiru.msg.dex
 Classes
 -------
 
-`MsgCreatePool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f9fb40d6390>, assets: List[nibiru.pytypes.common.PoolAsset])`
+`MsgCreatePool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7fe6a551fa90>, assets: List[nibiru.pytypes.common.PoolAsset])`
 :   Create a pool using the assets specified
 
     Attributes:
@@ -32,11 +32,19 @@ Classes
     `exit_fee: float`
     :
 
-    `pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f9fb40d6390>`
+    `pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7fe6a551fa90>`
     :
 
     `swap_fee: float`
     :
+
+    ### Methods
+
+    `to_pb(self) ‑> dex.v1.tx_pb2.MsgCreatePool`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgCreatePool: The proto object.
 
 `MsgExitPool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin)`
 :   Exit a pool using the specified pool shares
@@ -62,6 +70,14 @@ Classes
     `sender: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> dex.v1.tx_pb2.MsgExitPool`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgExitPool: The proto object.
+
 `MsgJoinPool(sender: str, pool_id: int, tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]])`
 :   Join a pool using the specified tokens
 
@@ -85,6 +101,14 @@ Classes
 
     `tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]`
     :
+
+    ### Methods
+
+    `to_pb(self) ‑> dex.v1.tx_pb2.MsgJoinPool`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgJoinPool: The proto object.
 
 `MsgSwapAssets(sender: str, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str)`
 :   Swap the assets provided for the denom specified
@@ -114,6 +138,14 @@ Classes
     `token_out_denom: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> dex.v1.tx_pb2.MsgSwapAssets`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgSwapAssets: The proto object.
+
 `MsgsDex()`
 :   MsgsDex has methods for building messages for transactions on Nibi-Swap.
 
@@ -125,7 +157,7 @@ Classes
 
     ### Methods
 
-    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f9fb40d6390>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.dex.MsgCreatePool`
+    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7fe6a551fa90>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.dex.MsgCreatePool`
     :
 
     `exit_pool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin) ‑> nibiru.msg.dex.MsgExitPool`

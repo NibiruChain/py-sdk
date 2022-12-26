@@ -28,6 +28,14 @@ Classes
     `token_pair: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> perp.v1.tx_pb2.MsgAddMargin`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgAddMargin: The proto object.
+
 `MsgClosePosition(sender: str, token_pair: str)`
 :   Close the position.
 
@@ -47,6 +55,14 @@ Classes
 
     `token_pair: str`
     :
+
+    ### Methods
+
+    `to_pb(self) ‑> perp.v1.tx_pb2.MsgClosePosition`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgClosePosition: The proto object.
 
 `MsgLiquidate(sender: str, token_pair: str, trader: str)`
 :   Close the position.
@@ -71,8 +87,16 @@ Classes
     `trader: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> perp.v1.tx_pb2.MsgLiquidate`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgLiquidate: The proto object.
+
 `MsgOpenPosition(sender: str, token_pair: str, side: nibiru.pytypes.common.Side, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float)`
-:   Open a posiiton using the specified parameters.
+:   Open a position using the specified parameters.
 
     Attributes:
         sender (str): The sender address
@@ -109,6 +133,14 @@ Classes
     `token_pair: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> perp.v1.tx_pb2.MsgOpenPosition`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgOpenPosition: The proto object.
+
 `MsgRemoveMargin(sender: str, token_pair: str, margin: nibiru.pytypes.common.Coin)`
 :   Remove margin for the position (token_pair + trader)
 
@@ -132,6 +164,14 @@ Classes
 
     `token_pair: str`
     :
+
+    ### Methods
+
+    `to_pb(self) ‑> perp.v1.tx_pb2.MsgRemoveMargin`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgRemoveMargin: The proto object.
 
 `MsgsPerp()`
 :   Messages for the Nibiru Chain x/perp module

@@ -11,7 +11,7 @@ Classes
     Attributes:
         from_address (str): The address of the sender
         to_address (str): The address of the receiver
-        coins (List[Coin]): The list of coins to send
+        coins (Union[Coin, List[Coin]]): The list of coins to send
 
     ### Ancestors (in MRO)
 
@@ -28,6 +28,14 @@ Classes
 
     `to_address: str`
     :
+
+    ### Methods
+
+    `to_pb(self) ‑> cosmos.bank.v1beta1.tx_pb2.MsgSend`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgSend: The proto object.
 
 `MsgsBank()`
 :   Messages for the x/bank module.

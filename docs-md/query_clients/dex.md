@@ -16,7 +16,7 @@ Classes
     `estimate_exit_exact_amount_in(self, pool_id: int, num_shares: int) ‑> dict`
     :   Estimate the output of an exit pool transaction with the current level of reserves
 
-        Sample output::
+        Example Return Value::
 
             {
                 "tokensOut": [
@@ -41,7 +41,7 @@ Classes
     `estimate_join_exact_amount_in(self, pool_id: int, tokens_ins: List[nibiru.pytypes.common.Coin]) ‑> dict`
     :   Estimate the number of share given for a join pool operation
 
-        Sample output::
+        Example Return Value::
 
             {
                 "poolSharesOut": 100000000000000.0,
@@ -63,7 +63,7 @@ Classes
     `estimate_swap_exact_amount_in(self, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str) ‑> dict`
     :   Estimate the output of the swap with the current reserves
 
-        Sample output::
+        Example Return Value::
 
             {
                 "tokenOut": {
@@ -83,7 +83,7 @@ Classes
     `params(self) ‑> dict`
     :   Requests the parameters of the dex module.
 
-        Sample output::
+        Example Return Value::
 
             {
                 "startingPoolNumber": "1",
@@ -107,7 +107,7 @@ Classes
     `pools(self, **kwargs)`
     :   Return all available pools in the dex module.
 
-        Sample output::
+        Example Return Value::
 
             [
                 {
@@ -166,7 +166,7 @@ Classes
     `total_liquidity(self) ‑> dict`
     :   Returns the total amount of liquidity for the dex module
 
-        Output sample::
+        Example Return Value::
 
             {
                 "liquidity": [
@@ -187,7 +187,7 @@ Classes
     `total_pool_liquidity(self, pool_id: int) ‑> dict`
     :   Returns the total liquidity for a specific pool id
 
-        Sample output::
+        Example Return Value::
 
             {
                 "liquidity": [
@@ -211,7 +211,7 @@ Classes
     `total_shares(self, pool_id: int) ‑> dict`
     :   Returns the total amount of shares for the pool specified
 
-        Sample output::
+        Example Return Value::
 
             {
                 "totalShares": {

@@ -17,8 +17,9 @@ def raises(errs: Union[str, Iterable[str]], err: BaseException):
     the given exceptions were raised, this function raises the original exception.
 
     Args:
-        errs (Union[str, Iterable[str]]): The list of errors to be checked err against.
-        err: (BaseException): The error we want to check that is raised.
+        errs (Union[str, Iterable[str]]): An error string or iterable of error
+            strings, of which we expect one to be contained in 'err'.
+        err: (BaseException): The error that is actually raised.
 
     """
     if isinstance(errs, str):
@@ -52,21 +53,23 @@ def format_response(resp: Union[dict, list, str]) -> str:
         return pprint.pformat(resp, indent=3)
 
 
-def dict_keys_must_match(dict_: dict, keys: List[str]):
+def dict_keys_must_match(dict_: dict, keys: Iterable[str]):
     """Asserts that two iterables have the same elements, the same number of
-    times, without regard to order.
-    Alias for the 'element_counts_are_equal' function.
-
-    dict_keys_must_match(dict_, keys)
-
-    Example:
-    - [0, 1, 1] and [1, 0, 1] compare equal.
-    - [0, 0, 1] and [0, 1] compare unequal.
+    times, without regard to order. This function is asserts the output of the
+    'element_counts_are_equal' function.
 
     Args:
-        dict_: one of the iterables to compare
-        keys: the other iterable.
+        dict_ (dict): The dictionary that's having its keys checked.
+        keys (Iterable[str]): An iterable of keys that that 'dict_' should have.
 
+    Examples:
+
+    ```python
+    # no error
+    dict_keys_must_match(dict_={"a": 0, "b": 1}, keys=["a", "b"])
+    # raises error
+    dict_keys_must_match(dict_={"a": 0, "b": 1}, keys=["a"])
+    ```
     """
     assert utils.element_counts_are_equal(dict_.keys(), keys)
 

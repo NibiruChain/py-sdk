@@ -19,12 +19,14 @@ class VpoolQueryClient(QueryClient):
         """
         Returns the reserves of the vpool
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {
           "base_asset_reserve": "142621265.346706602199856348",
           "quote_asset_reserve": "2401396363770.998849167876702560"
         }
+        ```
 
         Args:
             pair: the pair in "base:quote" format
@@ -40,8 +42,9 @@ class VpoolQueryClient(QueryClient):
         """
         Returns information about all the existing vpools
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {
             "pools": [
                 {
@@ -71,6 +74,7 @@ class VpoolQueryClient(QueryClient):
                 },
             ]
         }
+        ```
 
         Returns:
             dict: the list of existing pools
@@ -87,11 +91,13 @@ class VpoolQueryClient(QueryClient):
         """
         Returns the price at which a base asset amount is valued in quote
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {
           "price_in_quote_denom": "16837.575682263963270039"
         }
+        ```
 
         Args:
             pair: the pair in "base:quote" format

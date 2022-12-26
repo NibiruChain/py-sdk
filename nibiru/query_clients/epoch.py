@@ -8,8 +8,9 @@ from nibiru.query_clients.util import QueryClient
 
 class EpochQueryClient(QueryClient):
     """
-    EpochQueryClient allows to query the endpoints made available by the Nibiru Chain's epoch module.
-    This module is used to time out certain events like for example funding rate payments.
+    EpochQueryClient allows to query the endpoints made available by the epoch
+    module of Nibiru Chain. This module is used to time out certain events like
+    funding rate payments.
     """
 
     def __init__(self, channel: Channel):
@@ -19,9 +20,11 @@ class EpochQueryClient(QueryClient):
         """
         Returns information about the epoch specified
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {"current_epoch":"329"}
+        ```
 
         Args:
             epoch_identifier(str): the identifier of the epoch, example: "week"
@@ -43,8 +46,9 @@ class EpochQueryClient(QueryClient):
         """
         Returns all the epochs that exist and its details
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {
             "epochs": [
                 {
@@ -64,7 +68,9 @@ class EpochQueryClient(QueryClient):
                   "current_epoch_start_time": "2022-12-23T18:55:34.903063726Z",
                   "epoch_counting_started": true,
                   "current_epoch_start_height": "426741"
-                },
+                }]
+        }
+        ```
 
         Returns:
             dict: the list of epochs

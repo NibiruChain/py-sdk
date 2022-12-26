@@ -18,14 +18,16 @@ class AuthQueryClient(QueryClient):
         """
         Returns information of the given account
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {
           "address": "nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl",
           "pub_key": null,
           "account_number": "17",
           "sequence": "0"
         }
+        ```
 
         Args:
             address(str): the address of the account we want to get information
@@ -47,8 +49,9 @@ class AuthQueryClient(QueryClient):
         """
         Accounts returns all the existing accounts
 
-        Sample output::
+        Example Return Value::
 
+        ```json
         {
         "accounts": [
             {
@@ -62,7 +65,10 @@ class AuthQueryClient(QueryClient):
               "pub_key": null,
               "account_number": "6927",
               "sequence": "0"
-            },...
+            }
+          ]
+        }
+        ```
 
         Returns:
             dict: a dictionary with information of all the existing accounts paginated

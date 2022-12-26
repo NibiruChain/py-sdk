@@ -4,7 +4,7 @@ Module nibiru.grpc_client
 Classes
 -------
 
-`GrpcClient(network: nibiru.network.Network, insecure=False, credentials: grpc.ChannelCredentials = None, bypass_version_check: bool = False)`
+`GrpcClient(network: nibiru.pytypes.network.Network, insecure=False, credentials: grpc.ChannelCredentials = None, bypass_version_check: bool = False)`
 :   _summary_
 
     Args:
@@ -36,18 +36,24 @@ Classes
         Returns:
             Optional[auth_type.BaseAccount]: the account information, none if not found
 
-    `get_bank_balance(self, address: str, denom: str)`
-    :   Gets the balance of asset denom of an account
+    `get_bank_balance(self, address: str, denom: str) ‑> dict`
+    :   Returns the balance of 'denom' for the given 'address'
 
         Args:
             address: the account address
             denom: the denom
 
-    `get_bank_balances(self, address: str)`
-    :   Get all balances from an account
+        Returns:
+            dict: balance for the coin with denom, 'denom'
+
+    `get_bank_balances(self, address: str) ‑> dict`
+    :   Returns the balances of all coins for the given 'address'
 
         Args:
             address: the account address
+
+        Returns
+            dict: balances for each coin
 
     `get_block_by_height(self, height: int) ‑> cosmos.base.tendermint.v1beta1.query_pb2.GetBlockByHeightResponse`
     :   Returns the block specified by height

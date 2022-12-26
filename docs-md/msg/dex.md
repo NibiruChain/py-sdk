@@ -4,7 +4,7 @@ Module nibiru.msg.dex
 Classes
 -------
 
-`MsgCreatePool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f39e3dc2b10>, assets: List[nibiru.pytypes.common.PoolAsset])`
+`MsgCreatePool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>, assets: List[nibiru.pytypes.common.PoolAsset])`
 :   Create a pool using the assets specified
 
     Attributes:
@@ -32,7 +32,7 @@ Classes
     `exit_fee: float`
     :
 
-    `pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f39e3dc2b10>`
+    `pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>`
     :
 
     `swap_fee: float`
@@ -157,7 +157,7 @@ Classes
 
     ### Methods
 
-    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f39e3dc2b10>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.dex.MsgCreatePool`
+    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.dex.MsgCreatePool`
     :
 
     `exit_pool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin) ‑> nibiru.msg.dex.MsgExitPool`

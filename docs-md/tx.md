@@ -1,13 +1,14 @@
 Module nibiru.tx
 ================
 Classes:
-    TxClient
-    Transaction
+    TxClient: A client for building, simulating, and broadcasting transactions.
+    Transaction: Transactions trigger state changes based on messages. Each message
+        must be cryptographically signed before being broadcasted to the network.
 
 Classes
 -------
 
-`Transaction(msgs: Tuple[google.protobuf.message.Message, ...] = None, account_num: int = None, priv_key: nibiru.wallet.PrivateKey = None, sequence: int = None, chain_id: str = None, fee: List[cosmos.base.v1beta1.coin_pb2.Coin] = None, gas: int = 0, memo: str = '', timeout_height: int = 0)`
+`Transaction(msgs: Tuple[google.protobuf.message.Message, ...] = None, account_num: int = None, priv_key: nibiru.wallet.PrivateKey = None, sequence: int = None, chain_id: str = None, fee: List[cosmos.base.v1beta1.coin_pb2.Coin] = None, gas_limit: int = 0, memo: str = '', timeout_height: int = 0)`
 :   Transactions trigger state changes based on messages ('msgs'). Each message
     must be signed before being broadcasted to the network, included in a block,
     validated, and approved through the consensus process.
@@ -18,12 +19,20 @@ Classes
             its own number, and the highest account number is equivalent to the
             number of accounts in the 'auth' module (but not necessarily the store).
         msgs: A List of messages to be executed.
-        sequence: int = None, TODO
+        sequence (int): A per sender "nonce" that acts as a security measure to
+            prevent replay attacks on transactions. Each transaction request must
+            have a different sequence number from all previously executed
+            transactions so that no transaction can be replayed.
         chain_id (str): The unique identifier for the blockchain that this
             transaction targets. Inclusion of a 'chain_id' prevents potential
             attackers from using signed transactions on other blockchains.
-        fee: List[Coin] = None, TODO
-        gas (int): TODO
+        fee (List[Coin]): Coins to be paid in fees. The 'fee' helps prevents end
+            users from spamming the network. Gas cosumed during message execution
+            is typically priced from a fee equal to 'gas_consumed * gas_prices'.
+            Here, 'gas_prices' is the minimum gas price, and it's a parameter local
+            to each node.
+        gas_limit (int): Maximum gas to be allowed for the transaction. The
+            transaction execution fails if the gas limit is exceeded.
         priv_key (wallet.PrivateKey): Primary signer for the transaction. By
             convention, the signer from the first message is referred to as the
             primary signer and pays the fee for the whole transaction. We refer
@@ -52,7 +61,7 @@ Classes
     `with_fee(self, fee: List[cosmos.base.v1beta1.coin_pb2.Coin]) ‑> nibiru.tx.Transaction`
     :
 
-    `with_gas(self, gas: numbers.Number) ‑> nibiru.tx.Transaction`
+    `with_gas_limit(self, gas: numbers.Number) ‑> nibiru.tx.Transaction`
     :
 
     `with_memo(self, memo: str) ‑> nibiru.tx.Transaction`
@@ -74,22 +83,29 @@ Classes
     :
 
 `TxClient(priv_key: nibiru.wallet.PrivateKey, network: nibiru.pytypes.network.Network, client: nibiru.grpc_client.GrpcClient, config: nibiru.pytypes.common.TxConfig)`
-:
+:   A client for building, simulating, and broadcasting transactions.
 
     ### Methods
 
+    `build_tx(self, msgs: Union[nibiru.pytypes.common.PythonMsg, List[nibiru.pytypes.common.PythonMsg]], get_sequence_from_node: bool = False) ‑> Tuple[nibiru.tx.Transaction, nibiru.wallet.Address]`
+    :
+
     `execute_msgs(self, msgs: Union[nibiru.pytypes.common.PythonMsg, List[nibiru.pytypes.common.PythonMsg]], get_sequence_from_node: bool = False, **kwargs) ‑> nibiru.pytypes.tx_resp.RawTxResp`
-    :   Execute a message to broadcast a transaction to the node.
-        Simulate the message to generate the gas estimate and send it to the node.
-        If the transaction fail because of account sequence mismatch, we try to send it
-        again once more with the sequence coming from a query to the lcd endpoint.
+    :   Broadcasts messages to a node in a single transaction. This function first
+        simulates the corresponding transaction to estimate the amount of gas needed.
+
+        If the transaction fails because of account sequence mismatch, we try to
+        query the sequence from the LCD endpoint and broadcast with the updated
+        sequence value.
 
         Args:
             get_sequence_from_node (bool, optional): Specifies whether the sequence
                 comes from the local value or the lcd endpoint. Defaults to False.
 
         Raises:
-            TxError: Raw error log from the blockchain if the response code is nonzero.
+            SimulationError: If broadcasting fails during the simulation.
+            TxError: If the response code is nonzero, the 'TxError' includes the
+                raw error logs from the blockchain.
 
         Returns:
             Union[RawTxResp, Dict[str, Any]]: The transaction response as a dict
@@ -98,11 +114,19 @@ Classes
     `execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs) ‑> cosmos.base.abci.v1beta1.abci_pb2.TxResponse`
     :
 
-    `get_address_info(self)`
+    `get_address_info(self) ‑> nibiru.wallet.Address`
     :
 
     `get_config(self, **kwargs) ‑> nibiru.pytypes.common.TxConfig`
-    :   Properties in kwargs overwrite config
+    :   Properties in kwargs overwrite the self.config
 
-    `simulate(self, tx: Transaction)`
-    :
+    `simulate(self, tx: Transaction) ‑> cosmos.base.abci.v1beta1.abci_pb2.SimulationResponse`
+    :   Args:
+            tx (Transaction): The transaction being simulated.
+
+        Returns:
+            SimulationResponse: SimulationResponse defines the response generated
+                when a transaction is simulated successfully.
+
+        Raises:
+            SimulationError

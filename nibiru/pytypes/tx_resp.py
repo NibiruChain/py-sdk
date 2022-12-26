@@ -74,8 +74,8 @@ class TxResp:
         return f"TxResp({repr_body})"
 
 
-# from typing import TypedDict
-# class RawTxResp(TypedDict): # not available in Python 3.7
+# from typing import TypedDict  # not available in Python 3.7
+# class RawTxResp(TypedDict):
 class RawTxResp(dict):
     """Proxy for a 'TypedDict' representing a transaction response.
     - The 'TxResponse' type is defined in

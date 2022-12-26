@@ -1,9 +1,8 @@
 """
-
 Classes:
-    TxClient
-    Transaction
-
+    TxClient: A client for building, simulating, and broadcasting transactions.
+    Transaction: Transactions trigger state changes based on messages. Each message
+        must be cryptographically signed before being broadcasted to the network.
 """
 import json
 import logging
@@ -26,6 +25,10 @@ from nibiru.grpc_client import GrpcClient
 
 
 class TxClient:
+    """
+    A client for building, simulating, and broadcasting transactions.
+    """
+
     def __init__(
         self,
         priv_key: wallet.PrivateKey,
@@ -108,6 +111,8 @@ class TxClient:
         conf: pt.TxConfig = self.get_config(**kwargs)
 
         def compute_gas_wanted() -> float:
+            # Related to https://github.com/cosmos/cosmos-sdk/issues/14405
+            # TODO We should consider adding the behavior mentioned by tac0turtle.
             gas_wanted = gas_estimate * 1.25  # apply gas multiplier
             if conf.gas_wanted > 0:
                 gas_wanted = conf.gas_wanted
@@ -128,7 +133,7 @@ class TxClient:
             "Executing transaction with fee: %s and gas_wanted: %d", fee, gas_wanted
         )
         tx = (
-            tx.with_gas(gas_wanted)
+            tx.with_gas_limit(gas_wanted)
             .with_fee(fee)
             .with_memo("")
             .with_timeout_height(self.client.timeout_height)
@@ -160,20 +165,16 @@ class TxClient:
 
         pb_msgs = [msg.to_pb() for msg in msgs]
 
-        address: wallet = None
-        sequence_args = {}
-        if get_sequence_from_node:
-            sequence_args = {
-                "from_node": True,
-                "lcd_endpoint": self.network.lcd_endpoint,
-            }
-
         self.client.sync_timeout_height()
         address: wallet.Address = self.get_address_info()
+        sequence: int = address.get_sequence(
+            from_node=get_sequence_from_node,
+            lcd_endpoint=self.network.lcd_endpoint,
+        )
         tx = (
             Transaction()
             .with_messages(pb_msgs)
-            .with_sequence(address.get_sequence(**sequence_args))
+            .with_sequence(sequence)
             .with_account_num(address.get_number())
             .with_chain_id(self.network.chain_id)
             .with_signer(self.priv_key)
@@ -212,17 +213,17 @@ class TxClient:
 
     def get_config(self, **kwargs) -> pt.TxConfig:
         """
-        Properties in kwargs overwrite config
+        Properties in kwargs overwrite the self.config
         """
-        c = deepcopy(self.config)
-        props = dir(c)
+        config: pt.TxConfig = deepcopy(self.config)
+        prop_names = dir(config)
         for (k, v) in kwargs.items():
-            if k in props:
-                setattr(c, k, v)
+            if k in prop_names:
+                setattr(config, k, v)
             else:
                 logging.warning("%s is not a supported config property, ignoring", k)
 
-        return c
+        return config
 
 
 class Transaction:
@@ -237,12 +238,20 @@ class Transaction:
             its own number, and the highest account number is equivalent to the
             number of accounts in the 'auth' module (but not necessarily the store).
         msgs: A List of messages to be executed.
-        sequence: int = None, TODO
+        sequence (int): A per sender "nonce" that acts as a security measure to
+            prevent replay attacks on transactions. Each transaction request must
+            have a different sequence number from all previously executed
+            transactions so that no transaction can be replayed.
         chain_id (str): The unique identifier for the blockchain that this
             transaction targets. Inclusion of a 'chain_id' prevents potential
             attackers from using signed transactions on other blockchains.
-        fee: List[Coin] = None, TODO
-        gas (int): TODO
+        fee (List[Coin]): Coins to be paid in fees. The 'fee' helps prevents end
+            users from spamming the network. Gas cosumed during message execution
+            is typically priced from a fee equal to 'gas_consumed * gas_prices'.
+            Here, 'gas_prices' is the minimum gas price, and it's a parameter local
+            to each node.
+        gas_limit (int): Maximum gas to be allowed for the transaction. The
+            transaction execution fails if the gas limit is exceeded.
         priv_key (wallet.PrivateKey): Primary signer for the transaction. By
             convention, the signer from the first message is referred to as the
             primary signer and pays the fee for the whole transaction. We refer
@@ -250,7 +259,6 @@ class Transaction:
         memo (str): Memo is a note or comment to be added to the transction.
         timeout_height (int): Timeout height is the block height after which the
             transaction will not be processed by the chain.
-
     """
 
     def __init__(
@@ -261,7 +269,7 @@ class Transaction:
         sequence: int = None,
         chain_id: str = None,
         fee: List[Coin] = None,
-        gas: int = 0,
+        gas_limit: int = 0,
         memo: str = "",
         timeout_height: int = 0,
     ):
@@ -270,8 +278,8 @@ class Transaction:
         self.priv_key = priv_key
         self.sequence = sequence
         self.chain_id = chain_id
-        self.fee = cosmos_tx_type.Fee(amount=fee, gas_limit=gas)
-        self.gas = gas
+        self.fee = cosmos_tx_type.Fee(amount=fee, gas_limit=gas_limit)
+        self.gas_limit = gas_limit
         self.memo = memo
         self.timeout_height = timeout_height
 
@@ -320,7 +328,7 @@ class Transaction:
         self.fee = cosmos_tx_type.Fee(amount=fee, gas_limit=self.fee.gas_limit)
         return self
 
-    def with_gas(self, gas: Number) -> "Transaction":
+    def with_gas_limit(self, gas: Number) -> "Transaction":
         self.fee.gas_limit = int(gas)
         return self
 

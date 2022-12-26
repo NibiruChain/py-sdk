@@ -53,14 +53,6 @@ nibiru.sdk module
    :undoc-members:
    :show-inheritance:
 
-nibiru.transaction module
--------------------------
-
-.. automodule:: nibiru.transaction
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 nibiru.tx module
 ----------------
 

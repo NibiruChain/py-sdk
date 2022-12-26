@@ -1,5 +1,5 @@
-Module nibiru.network
-=====================
+Module nibiru.pytypes.network
+=============================
 The network class allows the user to defines the network the sdk interface should connect to.
 
 There are some default values set for devnet, testnet, mainet and localnet, but the user cna also define its own
@@ -64,7 +64,7 @@ Classes
 
     ### Static methods
 
-    `customnet() ‑> nibiru.network.Network`
+    `customnet() ‑> nibiru.pytypes.network.Network`
     :   Custom is the network configured from ENV variables.
         Defaults to localnet if no ENV variables are provided.
 
@@ -74,7 +74,7 @@ Classes
         Returns:
             Network: The updated Network object.
 
-    `devnet(chain_num: int = 2) ‑> nibiru.network.Network`
+    `devnet(chain_num: int = 2) ‑> nibiru.pytypes.network.Network`
     :   Devnet is a network open to invited validators.
 
         Args:
@@ -83,7 +83,7 @@ Classes
         Returns:
             Network: The updated Network object.
 
-    `localnet() ‑> nibiru.network.Network`
+    `localnet() ‑> nibiru.pytypes.network.Network`
     :   Localnet is the network you would expect to connect to if you run `make localnet` from the nibiru repository.
         It allows you to update locally the golang codebase to checkout the behavior of the chain with different changes
         applied.
@@ -91,10 +91,10 @@ Classes
         Returns:
             Network: The updated Network object.
 
-    `mainnet() ‑> nibiru.network.Network`
+    `mainnet() ‑> nibiru.pytypes.network.Network`
     :   Soon!
 
-    `testnet(chain_num: int = 2) ‑> nibiru.network.Network`
+    `testnet(chain_num: int = 2) ‑> nibiru.pytypes.network.Network`
     :   Testnet is a network open to invited validators. It is more stable than
         devnet and provides a faucet to get some funds
 

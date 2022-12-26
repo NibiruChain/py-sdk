@@ -9,7 +9,6 @@ import tests
 from nibiru import Coin, PoolAsset, utils
 from nibiru.exceptions import SimulationError
 from nibiru.pytypes import PoolType
-from tests import transaction_must_succeed
 
 PRECISION = 6
 
@@ -41,7 +40,7 @@ def test_dex_create_pool(sdk_val: nibiru.Sdk):
             )
         )
 
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
     except SimulationError as simulation_error:
         tests.raises(
             [DexErrors.same_denom, DexErrors.insufficient_funds], simulation_error
@@ -63,7 +62,7 @@ def test_dex_create_pool(sdk_val: nibiru.Sdk):
                 a=10,
             )
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
     except SimulationError as simulation_error:
         assert has_reasonable_err(simulation_error), simulation_error
     """
@@ -135,7 +134,7 @@ def test_dex_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
                 ),
             ]
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
     except BaseException as err:
         tests.raises(DexErrors.no_pool_shares, err)
 
@@ -166,7 +165,7 @@ def test_dex_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
                 ),
             ]
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
     except BaseException as err:
         tests.raises(DexErrors.swap_low_unusd_in_pool, err)
 
@@ -189,7 +188,7 @@ def test_dex_exit_pool(sdk_val: nibiru.Sdk):
                 for pool_token in pool_tokens
             ]
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
     else:
         tests.LOGGER.info(
             "skipped test for 'nibid tx dex exit-pool' because\n"

@@ -1,13 +1,14 @@
 Module nibiru.sdk
 =================
-The sdk is the main interface to the chain. Each sdk object needs to be authorized with a wallet, which can be generated
-with a new address if needed.
+The "Sdk" is the main interface to the blockchain. Each "Sdk" object needs to be
+authorized with a wallet/signer.
 
-Once instantiated, the sdk provide the sdk.tx and sdk.query modules to be able to query or send a transaction to the
-chain.
+An "Sdk" includes a transaction client for signing and broadcasting transactions
+and a query client for sending gRPC queries.
 
-This object depends on the network and transaction configuration the users want. These objects can be set using the
-Network and TxConfig classes respectively inside the nibiru/network.py and nibiru/pytypes files.
+This object depends on the network and transaction configuration the users want.
+These objects can be set using the Network and TxConfig classes from the
+nibiru/pytypes package.
 
 Classes
 -------
@@ -17,7 +18,8 @@ Classes
     queries from a node.
 
     It is associated to:
-    - a wallet, which can be either created or recovered from an existing mnemonic.
+    - a wallet or signer, which can be newly generated or recovered from an
+        existing mnemonic.
     - a network, defining the node to connect to
     - optionally a configuration defining how to behave and the gas configuration
         for each transaction
@@ -47,13 +49,13 @@ Classes
 
     ### Class variables
 
-    `network: nibiru.network.Network`
+    `network: nibiru.pytypes.network.Network`
     :
 
     `query: nibiru.grpc_client.GrpcClient`
     :
 
-    `tx: nibiru.tx.BaseTxClient`
+    `tx: nibiru.tx.TxClient`
     :
 
     `tx_config: nibiru.pytypes.common.TxConfig`
@@ -90,7 +92,7 @@ Classes
         Returns:
             Sdk: The updated sdk object
 
-    `with_network(self, network: nibiru.network.Network, bypass_version_check: bool = False) ‑> nibiru.sdk.Sdk`
+    `with_network(self, network: nibiru.pytypes.network.Network, bypass_version_check: bool = False) ‑> nibiru.sdk.Sdk`
     :   Change the network of the sdk to the specified network.
 
         Args:

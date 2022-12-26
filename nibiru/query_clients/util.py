@@ -1,21 +1,18 @@
 import importlib
 from typing import Dict, List, Optional, Union
 
-import google.protobuf.message
-from google.protobuf import message as protobuf_message
-from google.protobuf.json_format import MessageToDict
-from google.protobuf.message import Message
-from grpc import UnaryUnaryMultiCallable
-from grpc._channel import _InactiveRpcError
+import grpc
+import grpc._channel
+from google.protobuf import json_format, message
 from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from nibiru_proto.proto.cosmos.tx.v1beta1.tx_pb2 import Tx
 from nibiru_proto.proto.tendermint.types.block_pb2 import Block
 
+from nibiru import utils
 from nibiru.exceptions import QueryError
-from nibiru.utils import from_sdk_dec, from_sdk_int
 
 PROTOBUF_MSG_BASE_ATTRS: List[str] = (
-    dir(protobuf_message.Message)
+    dir(message.Message)
     + ['Extensions', 'FindInitializationErrors', '_CheckCalledFromGeneratedFile']
     + ['_extensions_by_name', '_extensions_by_number']
 )
@@ -53,9 +50,7 @@ def dict_keys_from_camel_to_snake(d):
     }
 
 
-def deserialize(
-    pb_msg: protobuf_message.Message, no_sdk_transformation: bool = False
-) -> dict:
+def deserialize(pb_msg: message.Message, no_sdk_transformation: bool = False) -> dict:
     """Deserializes a proto message into a dictionary.
 
     - sdk.Dec values are converted to floats.
@@ -69,7 +64,7 @@ def deserialize(
     Returns:
         dict: 'pb_msg' as a JSON-able dictionary.
     """
-    if not isinstance(pb_msg, protobuf_message.Message):
+    if not isinstance(pb_msg, message.Message):
         return pb_msg
     custom_dtypes: Dict[str, bytes] = {
         str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
@@ -89,14 +84,14 @@ def deserialize(
                 if no_sdk_transformation:
                     serialized_output[str(attr)] = float(pb_msg.__getattribute__(attr))
                 else:
-                    serialized_output[str(attr)] = from_sdk_dec(
+                    serialized_output[str(attr)] = utils.from_sdk_dec(
                         pb_msg.__getattribute__(attr)
                     )
             elif "sdk/types.Int" in str(custom_dtype):
                 if no_sdk_transformation:
                     serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
                 else:
-                    serialized_output[str(attr)] = from_sdk_int(
+                    serialized_output[str(attr)] = utils.from_sdk_int(
                         pb_msg.__getattribute__(attr)
                     )
             elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
@@ -118,7 +113,7 @@ def deserialize(
     return serialized_output
 
 
-def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
+def deserialize_exp(proto_message: message.Message) -> dict:
     """
     Take a proto message and convert it into a dictionnary.
     sdk.Dec values are converted to be consistent with txs.
@@ -129,7 +124,7 @@ def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
     Returns:
         dict
     """
-    output = MessageToDict(proto_message)
+    output = json_format.MessageToDict(proto_message)
 
     is_sdk_dec = {
         field.camelcase_name: "types.Dec" in str(field.GetOptions())
@@ -147,7 +142,9 @@ def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
                 output[field.camelcase_name] = output[field.camelcase_name]
 
         elif is_sdk_dec[field.camelcase_name]:
-            output[field.camelcase_name] = from_sdk_dec(output[field.camelcase_name])
+            output[field.camelcase_name] = utils.from_sdk_dec(
+                output[field.camelcase_name]
+            )
 
     return dict_keys_from_camel_to_snake(output)
 
@@ -155,17 +152,17 @@ def deserialize_exp(proto_message: protobuf_message.Message) -> dict:
 class QueryClient:
     def query(
         self,
-        api_callable: UnaryUnaryMultiCallable,
-        req: google.protobuf.message.Message,
+        api_callable: grpc.UnaryUnaryMultiCallable,
+        req: message.Message,
         should_deserialize: bool = True,
-    ) -> Union[dict, google.protobuf.message.Message]:
+    ) -> Union[dict, message.Message]:
 
         try:
-            output: google.protobuf.message.Message = api_callable(req)
+            output: message.Message = api_callable(req)
             if should_deserialize:
                 return deserialize(output)
             return output
-        except _InactiveRpcError as err:
+        except grpc._channel._InactiveRpcError as err:
             raise QueryError(
                 f"Error on {str(api_callable._method).split('/')[-1][:-1]}: {err._state.details}"
             ) from None
@@ -181,7 +178,7 @@ def get_page_request(kwargs):
     )
 
 
-def get_msg_pb_by_type_url(type_url: str) -> Optional[Message]:
+def get_msg_pb_by_type_url(type_url: str) -> Optional[message.Message]:
     """
     Tries loading protobuf class by type url.
     Examples type urls:
@@ -214,7 +211,7 @@ def get_block_messages(block: Block) -> List[dict]:
         tx_pb.MergeFromString(tx)
 
         for msg in tx_pb.body.messages:
-            msg_pb: Message = get_msg_pb_by_type_url(msg.type_url)
+            msg_pb: message.Message = get_msg_pb_by_type_url(msg.type_url)
             if msg_pb:
                 msg_pb.ParseFromString(msg.value)
                 messages.append(

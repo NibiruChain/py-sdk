@@ -9,7 +9,7 @@ import json
 import logging
 from copy import deepcopy
 from numbers import Number
-from typing import Any, Iterable, List, Tuple, Union
+from typing import Any, Callable, Iterable, List, Tuple, Union
 
 from google.protobuf import any_pb2, message
 from google.protobuf.json_format import MessageToDict
@@ -46,46 +46,34 @@ class TxClient:
         **kwargs,
     ) -> pt.RawTxResp:
         """
-        Execute a message to broadcast a transaction to the node.
-        Simulate the message to generate the gas estimate and send it to the node.
-        If the transaction fail because of account sequence mismatch, we try to send it
-        again once more with the sequence coming from a query to the lcd endpoint.
+        Broadcasts messages to a node in a single transaction. This function first
+        simulates the corresponding transaction to estimate the amount of gas needed.
+
+        If the transaction fails because of account sequence mismatch, we try to
+        query the sequence from the LCD endpoint and broadcast with the updated
+        sequence value.
 
         Args:
             get_sequence_from_node (bool, optional): Specifies whether the sequence
                 comes from the local value or the lcd endpoint. Defaults to False.
 
         Raises:
-            TxError: Raw error log from the blockchain if the response code is nonzero.
+            SimulationError: If broadcasting fails during the simulation.
+            TxError: If the response code is nonzero, the 'TxError' includes the
+                raw error logs from the blockchain.
 
         Returns:
             Union[RawTxResp, Dict[str, Any]]: The transaction response as a dict
                 in proto3 JSON format.
         """
-        if not isinstance(msgs, list):
-            msgs = [msgs]
 
-        pb_msgs = [msg.to_pb() for msg in msgs]
-
-        address = None
-        sequence_args = {}
-        if get_sequence_from_node:
-            sequence_args = {
-                "from_node": True,
-                "lcd_endpoint": self.network.lcd_endpoint,
-            }
+        tx: Transaction
+        address: wallet.Address
+        tx, address = self.build_tx(
+            msgs=msgs, get_sequence_from_node=get_sequence_from_node
+        )
 
         try:
-            self.client.sync_timeout_height()
-            address = self.get_address_info()
-            tx = (
-                Transaction()
-                .with_messages(pb_msgs)
-                .with_sequence(address.get_sequence(**sequence_args))
-                .with_account_num(address.get_number())
-                .with_chain_id(self.network.chain_id)
-                .with_signer(self.priv_key)
-            )
             sim_res = self.simulate(tx)
             gas_estimate: float = sim_res.gas_info.gas_used
             tx_output: abci_type.TxResponse = self.execute_tx(
@@ -149,28 +137,76 @@ class TxClient:
 
         return self._send_tx(tx_raw_bytes, conf.tx_type)
 
-    def _send_tx(self, tx_raw_bytes, tx_type: pt.TxType) -> abci_type.TxResponse:
+    def _send_tx(self, tx_raw_bytes: bytes, tx_type: pt.TxType) -> abci_type.TxResponse:
+
+        broadcast_fn: Callable[[bytes], abci_type.TxResponse]
+
         if tx_type == pt.TxType.SYNC:
-            return self.client.send_tx_sync_mode(tx_raw_bytes)
+            broadcast_fn = self.client.send_tx_sync_mode
         elif tx_type == pt.TxType.ASYNC:
-            return self.client.send_tx_async_mode(tx_raw_bytes)
+            broadcast_fn = self.client.send_tx_async_mode
+        else:
+            broadcast_fn = self.client.send_tx_block_mode
 
-        return self.client.send_tx_block_mode(tx_raw_bytes)
+        return broadcast_fn(tx_raw_bytes)
 
-    def simulate(self, tx: "Transaction"):
-        sim_tx_raw_bytes = tx.get_signed_tx_data()
+    def build_tx(
+        self,
+        msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
+        get_sequence_from_node: bool = False,
+    ) -> Tuple["Transaction", wallet.Address]:
+        if not isinstance(msgs, list):
+            msgs = [msgs]
 
-        (sim_res, success) = self.client.simulate_tx(sim_tx_raw_bytes)
+        pb_msgs = [msg.to_pb() for msg in msgs]
+
+        address: wallet = None
+        sequence_args = {}
+        if get_sequence_from_node:
+            sequence_args = {
+                "from_node": True,
+                "lcd_endpoint": self.network.lcd_endpoint,
+            }
+
+        self.client.sync_timeout_height()
+        address: wallet.Address = self.get_address_info()
+        tx = (
+            Transaction()
+            .with_messages(pb_msgs)
+            .with_sequence(address.get_sequence(**sequence_args))
+            .with_account_num(address.get_number())
+            .with_chain_id(self.network.chain_id)
+            .with_signer(self.priv_key)
+        )
+        return tx, address
+
+    def simulate(self, tx: "Transaction") -> abci_type.SimulationResponse:
+        """
+        Args:
+            tx (Transaction): The transaction being simulated.
+
+        Returns:
+            SimulationResponse: SimulationResponse defines the response generated
+                when a transaction is simulated successfully.
+
+        Raises:
+            SimulationError
+        """
+        sim_tx_raw_bytes: bytes = tx.get_signed_tx_data()
+
+        sim_res: abci_type.SimulationResponse
+        success: bool
+        sim_res, success = self.client.simulate_tx(sim_tx_raw_bytes)
         if not success:
             raise SimulationError(sim_res)
 
         return sim_res
 
-    def get_address_info(self):
+    def get_address_info(self) -> wallet.Address:
         if self.address is None:
-            pub_key = self.priv_key.to_public_key()
+            pub_key: wallet.PublicKey = self.priv_key.to_public_key()
             self.address = pub_key.to_address()
-            self.address.init_num_seq(self.network.lcd_endpoint)
+            self.address = self.address.init_num_seq(self.network.lcd_endpoint)
 
         return self.address
 

@@ -20,9 +20,7 @@ from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 from packaging import version
 
-import nibiru.query_clients
-from nibiru.network import Network
-from nibiru.query_clients.util import deserialize
+from nibiru import pytypes, query_clients
 from nibiru.utils import init_logger
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -32,7 +30,7 @@ GITHUB_COMMIT_HASH_LEN = 40
 class GrpcClient:
     def __init__(
         self,
-        network: Network,
+        network: pytypes.Network,
         insecure=False,
         credentials: grpc.ChannelCredentials = None,
         bypass_version_check: bool = False,
@@ -70,13 +68,13 @@ class GrpcClient:
         self.timeout_height = 1
 
         # Query services
-        self.dex = nibiru.query_clients.DexQueryClient(self.chain_channel)
-        self.pricefeed = nibiru.query_clients.PricefeedQueryClient(self.chain_channel)
-        self.perp = nibiru.query_clients.PerpQueryClient(self.chain_channel)
-        self.vpool = nibiru.query_clients.VpoolQueryClient(self.chain_channel)
-        self.epoch = nibiru.query_clients.EpochQueryClient(self.chain_channel)
-        self.auth = nibiru.query_clients.AuthQueryClient(self.chain_channel)
-        self.staking = nibiru.query_clients.StakingQueryClient(self.chain_channel)
+        self.dex = query_clients.DexQueryClient(self.chain_channel)
+        self.pricefeed = query_clients.PricefeedQueryClient(self.chain_channel)
+        self.perp = query_clients.PerpQueryClient(self.chain_channel)
+        self.vpool = query_clients.VpoolQueryClient(self.chain_channel)
+        self.epoch = query_clients.EpochQueryClient(self.chain_channel)
+        self.auth = query_clients.AuthQueryClient(self.chain_channel)
+        self.staking = query_clients.StakingQueryClient(self.chain_channel)
 
         if not bypass_version_check:
             try:
@@ -342,29 +340,34 @@ class GrpcClient:
             )
         )
 
-    def get_bank_balances(self, address: str):
+    def get_bank_balances(self, address: str) -> dict:
         """
-        Get all balances from an account
+        Returns the balances of all coins for the given 'address'
 
         Args:
             address: the account address
+
+        Returns
+            dict: balances for each coin
         """
-        return deserialize(
+        return query_clients.deserialize(
             self.stubBank.AllBalances(
                 bank_query.QueryAllBalancesRequest(address=address)
             )
         )
 
-    def get_bank_balance(self, address: str, denom: str):
+    def get_bank_balance(self, address: str, denom: str) -> dict:
         """
-        Gets the balance of asset denom of an account
+        Returns the balance of 'denom' for the given 'address'
 
         Args:
             address: the account address
             denom: the denom
 
+        Returns:
+            dict: balance for the coin with denom, 'denom'
         """
-        return deserialize(
+        return query_clients.deserialize(
             self.stubBank.Balance(
                 bank_query.QueryBalanceRequest(address=address, denom=denom)
             )

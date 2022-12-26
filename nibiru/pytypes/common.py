@@ -13,7 +13,8 @@ GAS_PRICE = 1 * pow(10, -3)
 
 class TxType(Enum):
     """
-    The TxType allows you to choose what type of synchronization you want to use to send transaction
+    The TxType allows you to choose what type of synchronization you want to use
+    to send transaction
     """
 
     SYNC = 1

@@ -1,19 +1,19 @@
 """
-The sdk is the main interface to the chain. Each sdk object needs to be authorized with a wallet, which can be generated
-with a new address if needed.
+The "Sdk" is the main interface to the blockchain. Each "Sdk" object needs to be
+authorized with a wallet/signer.
 
-Once instantiated, the sdk provide the sdk.tx and sdk.query modules to be able to query or send a transaction to the
-chain.
+An "Sdk" includes a transaction client for signing and broadcasting transactions
+and a query client for sending gRPC queries.
 
-This object depends on the network and transaction configuration the users want. These objects can be set using the
-Network and TxConfig classes respectively inside the nibiru/network.py and nibiru/pytypes files.
+This object depends on the network and transaction configuration the users want.
+These objects can be set using the Network and TxConfig classes from the
+nibiru/pytypes package.
 """
 import logging
 
+from nibiru import pytypes
 from nibiru.grpc_client import GrpcClient
-from nibiru.network import Network
-from nibiru.pytypes import TxConfig
-from nibiru.tx import BaseTxClient
+from nibiru.tx import TxClient
 from nibiru.wallet import PrivateKey
 
 
@@ -22,7 +22,8 @@ class Sdk:
     queries from a node.
 
     It is associated to:
-    - a wallet, which can be either created or recovered from an existing mnemonic.
+    - a wallet or signer, which can be newly generated or recovered from an
+        existing mnemonic.
     - a network, defining the node to connect to
     - optionally a configuration defining how to behave and the gas configuration
         for each transaction
@@ -50,9 +51,9 @@ class Sdk:
     """
 
     query: GrpcClient
-    network: Network
-    tx: BaseTxClient
-    tx_config: TxConfig
+    network: pytypes.Network
+    tx: TxClient
+    tx_config: pytypes.TxConfig
 
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
         """Unsupported, please use from_mnemonic to initialize."""
@@ -62,7 +63,7 @@ class Sdk:
         self.query = None
         self.tx = None
         self.network = None
-        self.tx_config = TxConfig()
+        self.tx_config = pytypes.TxConfig()
 
     @classmethod
     def authorize(cls, key: str = None) -> "Sdk":
@@ -95,7 +96,7 @@ class Sdk:
         return self
 
     def with_network(
-        self, network: Network, bypass_version_check: bool = False
+        self, network: pytypes.Network, bypass_version_check: bool = False
     ) -> "Sdk":
         """
         Change the network of the sdk to the specified network.
@@ -114,7 +115,7 @@ class Sdk:
         )
         return self
 
-    def with_config(self, config: TxConfig) -> "Sdk":
+    def with_config(self, config: pytypes.TxConfig) -> "Sdk":
         """
         Change the configuration for trasnactions for the sdk to the specified config.
 
@@ -125,7 +126,7 @@ class Sdk:
             Sdk: The updated sdk object
         """
         self.tx_config = config
-        tx_client = BaseTxClient(
+        tx_client = TxClient(
             client=self.query,
             network=self.network,
             priv_key=self.priv_key,
@@ -148,7 +149,7 @@ class Sdk:
     # Private methods
     def _with_query_client(self, client: GrpcClient) -> "Sdk":
         self.query = client
-        tx_client = BaseTxClient(
+        tx_client = TxClient(
             client=self.query,
             network=self.network,
             priv_key=self.priv_key,
@@ -157,7 +158,7 @@ class Sdk:
         self._with_tx_client(tx_client)
         return self
 
-    def _with_tx_client(self, tx_client: BaseTxClient) -> "Sdk":
+    def _with_tx_client(self, tx_client: TxClient) -> "Sdk":
         self.tx = tx_client
         return self
 

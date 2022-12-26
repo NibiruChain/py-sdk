@@ -4,11 +4,11 @@ from typing import Any, Dict, List, Union
 import pytest
 import requests
 
-from nibiru import Sdk
-from nibiru.network import Network
+import nibiru
+from nibiru import pytypes
 
 
-def test_genesis_block_ping(network: Network):
+def test_genesis_block_ping(network: pytypes.Network):
     """Manually query block info from the chain using a get request. This verifies that
     the configuration is valid.
     """
@@ -19,11 +19,11 @@ def test_genesis_block_ping(network: Network):
     assert all([key in query_resp.keys() for key in ["jsonrpc", "id", "result"]])
 
 
-def test_get_chain_id(sdk_val: Sdk):
+def test_get_chain_id(sdk_val: nibiru.Sdk):
     assert sdk_val.network.chain_id == sdk_val.query.get_chain_id()
 
 
-def test_wait_next_block(sdk_val: Sdk):
+def test_wait_next_block(sdk_val: nibiru.Sdk):
     current_block_height = sdk_val.query.get_latest_block().block.header.height
     sdk_val.query.wait_for_next_block()
     new_block_height = sdk_val.query.get_latest_block().block.header.height
@@ -31,7 +31,7 @@ def test_wait_next_block(sdk_val: Sdk):
     assert new_block_height > current_block_height
 
 
-def test_version_works(sdk_val: Sdk):
+def test_version_works(sdk_val: nibiru.Sdk):
     tests = [
         {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},
         {"should_fail": True, "versions": ["0.3.2", "0.3.4"]},
@@ -51,7 +51,7 @@ def test_version_works(sdk_val: Sdk):
             sdk_val.query.assert_compatible_versions(*test["versions"])
 
 
-def test_query_perp_params(sdk_val: Sdk):
+def test_query_perp_params(sdk_val: nibiru.Sdk):
     params: Dict[str, Union[float, str]] = sdk_val.query.perp.params()
     perp_param_names: List[str] = [
         "ecosystemFundFeeRatio",
@@ -63,7 +63,7 @@ def test_query_perp_params(sdk_val: Sdk):
     assert all([(param_name in params) for param_name in perp_param_names])
 
 
-def test_block_getters(sdk_agent: Sdk):
+def test_block_getters(sdk_agent: nibiru.Sdk):
     """Tests queries from the Tendemint gRPC channel
     - GetBlockByHeight
     - GetLatestBlock
@@ -82,7 +82,7 @@ def test_block_getters(sdk_agent: Sdk):
         ), "missing attributes on the 'block' field"
 
 
-def test_blocks_getters(sdk_agent: Sdk):
+def test_blocks_getters(sdk_agent: nibiru.Sdk):
     """Tests queries from the Tendemint gRPC channel
     - GetBlocksByHeight
     """
@@ -99,7 +99,7 @@ def test_blocks_getters(sdk_agent: Sdk):
         ), "missing attributes on the 'block' field"
 
 
-def test_query(sdk_val: Sdk):
+def test_query(sdk_val: nibiru.Sdk):
     """
     Open a position and ensure output is correct
     """

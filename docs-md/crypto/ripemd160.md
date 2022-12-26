@@ -89,6 +89,9 @@ Functions
 `ripemd160(b: bytes) ‑> bytes`
 :   simple wrapper for a simpler API to this hash function, just bytes to bytes
 
+    Args:
+        b: the bytes input
+
 Classes
 -------
 

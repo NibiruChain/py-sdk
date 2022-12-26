@@ -23,7 +23,7 @@ class DexQueryClient(QueryClient):
         """
         Requests the parameters of the dex module.
 
-        Sample output::
+        Example Return Value::
 
             {
                 "startingPoolNumber": "1",
@@ -62,7 +62,7 @@ class DexQueryClient(QueryClient):
         """
         Return all available pools in the dex module.
 
-        Sample output::
+        Example Return Value::
 
             [
                 {
@@ -139,7 +139,7 @@ class DexQueryClient(QueryClient):
         """
         Returns the total amount of liquidity for the dex module
 
-        Output sample::
+        Example Return Value::
 
             {
                 "liquidity": [
@@ -172,7 +172,7 @@ class DexQueryClient(QueryClient):
         """
         Returns the total liquidity for a specific pool id
 
-        Sample output::
+        Example Return Value::
 
             {
                 "liquidity": [
@@ -208,7 +208,7 @@ class DexQueryClient(QueryClient):
         """
         Returns the total amount of shares for the pool specified
 
-        Sample output::
+        Example Return Value::
 
             {
                 "totalShares": {
@@ -267,7 +267,7 @@ class DexQueryClient(QueryClient):
         """
         Estimate the output of the swap with the current reserves
 
-        Sample output::
+        Example Return Value::
 
             {
                 "tokenOut": {
@@ -305,7 +305,7 @@ class DexQueryClient(QueryClient):
         """
         Estimate the number of share given for a join pool operation
 
-        Sample output::
+        Example Return Value::
 
             {
                 "poolSharesOut": 100000000000000.0,
@@ -346,7 +346,7 @@ class DexQueryClient(QueryClient):
         """
         Estimate the output of an exit pool transaction with the current level of reserves
 
-        Sample output::
+        Example Return Value::
 
             {
                 "tokensOut": [

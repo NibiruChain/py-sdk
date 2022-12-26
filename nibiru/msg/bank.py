@@ -42,7 +42,7 @@ class MsgSend(PythonMsg):
     Attributes:
         from_address (str): The address of the sender
         to_address (str): The address of the receiver
-        coins (List[Coin]): The list of coins to send
+        coins (Union[Coin, List[Coin]]): The list of coins to send
     """
 
     from_address: str
@@ -50,6 +50,13 @@ class MsgSend(PythonMsg):
     coins: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgSend:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgSend: The proto object.
+
+        """
         coins = self.coins
         if not isinstance(coins, Iterable):
             coins = [self.coins]

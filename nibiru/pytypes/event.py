@@ -5,7 +5,7 @@ from typing import Dict, List
 
 class RawEvent(collections.abc.MutableMapping):
     """Dictionary representing a Tendermint event. In the raw TxOutput of a
-    successful transaciton, it's the value at
+    successful transaction, it's the value at
 
     ```python
     tx_output['rawLog'][0]['events']
@@ -73,6 +73,13 @@ class Event:
         return f"Event(type={self.type}, attrs={self.attrs})"
 
     def to_dict(self) -> Dict[str, Dict[str, str]]:
+        """
+        Returns as dictionary
+
+        Returns:
+            Dict[str, Dict[str, str]]: the dictionary
+
+        """
         return {self.type: self.attrs}
 
 
@@ -104,7 +111,13 @@ class TxLogEvents:
         self.msgs = self.get_msg_types()
 
     def get_msg_types(self) -> List[str]:
+        """
+        Returns the message types as a list of strings.
 
+        Returns:
+            List[str]: the list of msg types as strings
+
+        """
         msgs = []
         self.event_types = []
         for event in self.events:

@@ -43,11 +43,14 @@ Classes
     ### Methods
 
     `to_dict(self) ‑> Dict[str, Dict[str, str]]`
-    :
+    :   Returns as dictionary
+
+        Returns:
+            Dict[str, Dict[str, str]]: the dictionary
 
 `RawEvent()`
 :   Dictionary representing a Tendermint event. In the raw TxOutput of a
-    successful transaciton, it's the value at
+    successful transaction, it's the value at
 
     ```python
     tx_output['rawLog'][0]['events']
@@ -108,4 +111,7 @@ Classes
     ### Methods
 
     `get_msg_types(self) ‑> List[str]`
-    :
+    :   Returns the message types as a list of strings.
+
+        Returns:
+            List[str]: the list of msg types as strings

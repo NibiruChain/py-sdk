@@ -91,7 +91,8 @@ class GrpcClient:
                 chain_nibiru_version=str(self.get_version()),
             )
 
-    def assert_compatible_versions(self, nibiru_proto_version, chain_nibiru_version):
+    @staticmethod
+    def assert_compatible_versions(nibiru_proto_version, chain_nibiru_version):
         """
         Assert that this version of the python sdk is compatible with the chain.
         If you run the chain from a non tagged release, the version query will be returning something like
@@ -143,6 +144,16 @@ class GrpcClient:
     def get_block_by_height(
         self, height: int
     ) -> tendermint_query.GetBlockByHeightResponse:
+        """
+        Returns the block specified by height
+
+        Args:
+            height: the height of the block
+
+        Returns:
+            tendermint_query.GetBlockByHeightResponse: the block info
+
+        """
         req = tendermint_query.GetBlockByHeightRequest(height=height)
         return self.stubCosmosTendermint.GetBlockByHeight(req)
 
@@ -174,10 +185,24 @@ class GrpcClient:
 
     # default client methods
     def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:
+        """
+        Returns the last block
+
+        Returns:
+            tendermint_query.GetLatestBlockResponse: the last block information
+
+        """
         req = tendermint_query.GetLatestBlockRequest()
         return self.stubCosmosTendermint.GetLatestBlock(req)
 
-    def get_version(self) -> tendermint_query.GetLatestBlockResponse:
+    def get_version(self) -> str:
+        """
+        Returns the application version
+
+        Returns:
+            str: the version of the app
+
+        """
         req = tendermint_query.GetNodeInfoRequest()
         version = self.stubCosmosTendermint.GetNodeInfo(req).application_version.version
 
@@ -187,9 +212,26 @@ class GrpcClient:
         return version
 
     def get_latest_block_height(self) -> int:
+        """
+        Returns the latest block height
+
+        Returns:
+            int: the last block height
+
+        """
         return self.get_latest_block().block.header.height
 
     def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
+        """
+        Returns the account info from address
+
+        Args:
+            address: the address of the account
+
+        Returns:
+            Optional[auth_type.BaseAccount]: the account information, none if not found
+
+        """
         try:
             account_any = self.stubAuth.Account(
                 auth_query.QueryAccountRequest(address=address)
@@ -230,6 +272,16 @@ class GrpcClient:
             return err._state.details, False
 
     def send_tx_sync_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
+        """
+        Sends a transaction in sync mode
+
+        Args:
+            tx_byte: the tx in bytes
+
+        Returns:
+            abci_type.TxResponse: the tx response
+
+        """
         req = tx_service.BroadcastTxRequest(
             tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC
         )
@@ -237,6 +289,16 @@ class GrpcClient:
         return result.tx_response
 
     def send_tx_async_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
+        """
+        Sends a transaction in async mode
+
+        Args:
+            tx_byte: the tx in bytes
+
+        Returns:
+            abci_type.TxResponse: the tx response
+
+        """
         req = tx_service.BroadcastTxRequest(
             tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_ASYNC
         )
@@ -244,6 +306,16 @@ class GrpcClient:
         return result.tx_response
 
     def send_tx_block_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
+        """
+        Sends a transaction in block mode
+
+        Args:
+            tx_byte: the tx in bytes
+
+        Returns:
+            abci_type.TxResponse: the tx response
+
+        """
         req = tx_service.BroadcastTxRequest(
             tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_BLOCK
         )
@@ -251,6 +323,13 @@ class GrpcClient:
         return result.tx_response
 
     def get_chain_id(self) -> str:
+        """
+        Gets the chain id
+
+        Returns:
+            str: the chain id
+
+        """
         latest_block = self.get_latest_block()
         return latest_block.block.header.chain_id
 
@@ -264,6 +343,12 @@ class GrpcClient:
         )
 
     def get_bank_balances(self, address: str):
+        """
+        Get all balances from an account
+
+        Args:
+            address: the account address
+        """
         return deserialize(
             self.stubBank.AllBalances(
                 bank_query.QueryAllBalancesRequest(address=address)
@@ -271,6 +356,14 @@ class GrpcClient:
         )
 
     def get_bank_balance(self, address: str, denom: str):
+        """
+        Gets the balance of asset denom of an account
+
+        Args:
+            address: the account address
+            denom: the denom
+
+        """
         return deserialize(
             self.stubBank.Balance(
                 bank_query.QueryBalanceRequest(address=address, denom=denom)

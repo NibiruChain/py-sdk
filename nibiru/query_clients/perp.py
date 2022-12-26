@@ -19,16 +19,18 @@ class PerpQueryClient(QueryClient):
         """
         Get the parameters of the perp module.
 
-        Output sample::
+        Example Return Value::
 
-            {
-                "feePoolFeeRatio": 0.001,
-                "ecosystemFundFeeRatio": 0.001,
-                "liquidationFeeRatio": 0.025,
-                "partialLiquidationRatio": 0.25,
-                "epochIdentifier": "30 min",
-                "twapLookbackWindow": "900s"
-            }
+        ```json
+        {
+          "feePoolFeeRatio": 0.001,
+          "ecosystemFundFeeRatio": 0.001,
+          "liquidationFeeRatio": 0.025,
+          "partialLiquidationRatio": 0.25,
+          "epochIdentifier": "30 min",
+          "twapLookbackWindow": "900s"
+        }
+        ```
 
         Returns:
             dict: The current parameters for the perpetual module
@@ -62,26 +64,28 @@ class PerpQueryClient(QueryClient):
             token_pair (str): The token pair
             trader (str): The trader address
 
-        Sample output::
+        Example Return Value::
 
-            {
-                "position": {
-                    "traderAddress": "nibi1zaavvzxez0elund",
-                    "pair": {
-                        "token0": "ubtc",
-                        "token1": "unusd"
-                    },
-                    "size": 11.241446725317692,
-                    "margin": 45999.99999999999,
-                    "openNotional": 230000.0,
-                    "lastUpdateCumulativePremiumFraction": "0",
-                    "blockNumber": "278"
-                },
-                "positionNotional": 230000.0,
-                "unrealizedPnl": 1.024e-20,
-                "marginRatioMark": 0.2,
-                "marginRatioIndex": 0.2
-            }
+        ```json
+        {
+          "position": {
+            "traderAddress": "nibi1zaavvzxez0elund",
+            "pair": {
+              "token0": "ubtc",
+              "token1": "unusd"
+            },
+            "size": 11.241446725317692,
+            "margin": 45999.99999999999,
+            "openNotional": 230000.0,
+            "lastUpdateCumulativePremiumFraction": "0",
+            "blockNumber": "278"
+          },
+          "positionNotional": 230000.0,
+          "unrealizedPnl": 1.024e-20,
+          "marginRatioMark": 0.2,
+          "marginRatioIndex": 0.2
+        }
+        ```
 
         Returns:
             dict: The output of the query

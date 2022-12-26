@@ -13,7 +13,7 @@ GAS_PRICE = 1 * pow(10, -3)
 
 class TxType(Enum):
     """
-    The TxType allows you to chose what type of synchronization you want to use to send transaction
+    The TxType allows you to choose what type of synchronization you want to use to send transaction
     """
 
     SYNC = 1
@@ -58,6 +58,12 @@ class Coin:
     denom: str
 
     def _generate_proto_object(self):
+        """
+
+        Returns:
+            cosmos_base_coin_pb.Coin: the coin object as proto object
+
+        """
         return cosmos_base_coin_pb.Coin(amount=str(self.amount), denom=self.denom)
 
 

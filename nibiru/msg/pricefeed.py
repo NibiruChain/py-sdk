@@ -64,6 +64,13 @@ class MsgPostPrice(PythonMsg):
     expiry: datetime
 
     def to_pb(self) -> pb.MsgPostPrice:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgPostPrice: The proto object.
+
+        """
         return pb.MsgPostPrice(
             oracle=self.oracle,
             token0=self.token0,

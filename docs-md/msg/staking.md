@@ -28,6 +28,14 @@ Classes
     `validator_address: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> cosmos.staking.v1beta1.tx_pb2.MsgDelegate`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            staking_pb.MsgDelegate: The proto object.
+
 `MsgUndelegate(delegator_address: str, validator_address: str, amount: float)`
 :   Undelegate tokens from a validator
 
@@ -52,6 +60,14 @@ Classes
     `validator_address: str`
     :
 
+    ### Methods
+
+    `to_pb(self) ‑> cosmos.staking.v1beta1.tx_pb2.MsgUndelegate`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            staking_pb.MsgUndelegate: The proto object.
+
 `MsgWithdrawDelegatorReward(delegator_address: str, validator_address: str)`
 :   Withdraw the reward from a validator
 
@@ -71,6 +87,14 @@ Classes
 
     `validator_address: str`
     :
+
+    ### Methods
+
+    `to_pb(self) ‑> cosmos.distribution.v1beta1.tx_pb2.MsgWithdrawDelegatorReward`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            tx_pb.MsgWithdrawDelegatorReward: The proto object.
 
 `MsgsStaking()`
 :   Messages for the x/staking and x/distribution modules.

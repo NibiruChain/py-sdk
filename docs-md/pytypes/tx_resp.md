@@ -34,7 +34,8 @@ Classes
 `TxResp(height: int, txhash: str, data: str, rawLog: List[nibiru.pytypes.event.TxLogEvents], logs: list, gasWanted: int, gasUsed: int, events: list, _raw: RawTxResp)`
 :   A 'TxResp' represents the response payload from a successful transaction.
 
-    The 'TxResponse' type is defined in [cosmos-sdk/types/abci.pb.go](https://github.com/cosmos/cosmos-sdk/blob/v0.45.10/types/abci.pb.go)
+    The 'TxResponse' type is defined in
+    [cosmos-sdk/types/abci.pb.go](https://github.com/cosmos/cosmos-sdk/blob/v0.45.10/types/abci.pb.go)
 
     ### Args & Attributes:
 

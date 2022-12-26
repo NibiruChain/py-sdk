@@ -10,7 +10,8 @@ class TxResp:
     """
     A 'TxResp' represents the response payload from a successful transaction.
 
-    The 'TxResponse' type is defined in [cosmos-sdk/types/abci.pb.go](https://github.com/cosmos/cosmos-sdk/blob/v0.45.10/types/abci.pb.go)
+    The 'TxResponse' type is defined in
+    [cosmos-sdk/types/abci.pb.go](https://github.com/cosmos/cosmos-sdk/blob/v0.45.10/types/abci.pb.go)
 
     ### Args & Attributes:
 

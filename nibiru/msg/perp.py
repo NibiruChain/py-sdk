@@ -113,6 +113,13 @@ class MsgRemoveMargin(PythonMsg):
     margin: Coin
 
     def to_pb(self) -> pb.MsgRemoveMargin:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgRemoveMargin: The proto object.
+
+        """
         return pb.MsgRemoveMargin(
             sender=self.sender,
             token_pair=self.token_pair,
@@ -136,6 +143,13 @@ class MsgAddMargin(PythonMsg):
     margin: Coin
 
     def to_pb(self) -> pb.MsgAddMargin:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgAddMargin: The proto object.
+
+        """
         return pb.MsgAddMargin(
             sender=self.sender,
             token_pair=self.token_pair,
@@ -146,7 +160,7 @@ class MsgAddMargin(PythonMsg):
 @dataclasses.dataclass
 class MsgOpenPosition(PythonMsg):
     """
-    Open a posiiton using the specified parameters.
+    Open a position using the specified parameters.
 
     Attributes:
         sender (str): The sender address
@@ -167,6 +181,13 @@ class MsgOpenPosition(PythonMsg):
     base_asset_amount_limit: float
 
     def to_pb(self) -> pb.MsgOpenPosition:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgOpenPosition: The proto object.
+
+        """
         pb_side = state_pb.Side.BUY if self.side == Side.BUY else state_pb.SELL
         quote_asset_amount_pb = to_sdk_int(self.quote_asset_amount)
         base_asset_amount_limit_pb = to_sdk_int(self.base_asset_amount_limit)
@@ -196,6 +217,13 @@ class MsgClosePosition(PythonMsg):
     token_pair: str
 
     def to_pb(self) -> pb.MsgClosePosition:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgClosePosition: The proto object.
+
+        """
         return pb.MsgClosePosition(
             sender=self.sender,
             token_pair=self.token_pair,
@@ -217,6 +245,13 @@ class MsgLiquidate(PythonMsg):
     trader: str
 
     def to_pb(self) -> pb.MsgLiquidate:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgLiquidate: The proto object.
+
+        """
         return pb.MsgLiquidate(
             sender=self.sender,
             token_pair=self.token_pair,

@@ -34,7 +34,7 @@ def test_wait_next_block(sdk_val: nibiru.Sdk):
 def test_version_works(sdk_val: nibiru.Sdk):
     tests = [
         {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},
-        {"should_fail": True, "versions": ["0.3.2", "0.3.4"]},
+        {"should_fail": False, "versions": ["0.3.2", "0.3.4"]},
         {"should_fail": True, "versions": ["0.3.2", "0.4.1"]},
         {"should_fail": True, "versions": ["0.3.2", "1.0.0"]},
         {

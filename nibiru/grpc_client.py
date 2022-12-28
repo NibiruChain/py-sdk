@@ -120,8 +120,11 @@ class GrpcClient:
             )
 
             assert (
-                version.parse(nibiru_proto_version).release
-                >= version.parse(chain_nibiru_version).release
+                version.parse(nibiru_proto_version).major
+                >= version.parse(chain_nibiru_version).major
+            ) and (
+                version.parse(nibiru_proto_version).minor
+                >= version.parse(chain_nibiru_version).minor
             ), error_string
 
     def close_chain_channel(self):

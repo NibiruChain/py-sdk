@@ -5,7 +5,70 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-- feat(proto): use external proto pkg `nibiru_proto` for versioned types [#81](https://github.com/NibiruChain/py-sdk/pull/81)
+## v0.16.4-dev.1
+
+Compatible with NibiruChain/nibiru v0.16
+
+- [[#191]](https://github.com/NibiruChain/py-sdk/pull/191) refactor(msg)!: Unifies the PythonMsg functions under the nibiru.Msg object for improved UX.
+- [[#189]](https://github.com/NibiruChain/py-sdk/pull/189) build(dependencies): dependencies cleanup, removed eip712 structs
+
+## v0.16.3
+
+Compatible with NibiruChain/nibiru v0.16
+
+- docs(README): Add usage examples
+- [[#188]](https://github.com/NibiruChain/py-sdk/pull/188) docs: docgen in markdown with pdoc
+- [[#186]](https://github.com/NibiruChain/py-sdk/pull/186) chore: update package version for publish
+- [[#185]](https://github.com/NibiruChain/py-sdk/pull/185) chore!: update protos to v0.16.2
+- [[#183]](https://github.com/NibiruChain/py-sdk/pull/183) test: Add test for network validity before running test suite.
+- [[#180]](https://github.com/NibiruChain/py-sdk/pull/180) test,feat!: (1) New events and tx resp abstractions. (2) Cater tests to have devnet and testnet compatibility
+- [[#175]](https://github.com/NibiruChain/py-sdk/pull/175) feat,test: Add tests for dex queries and txs
+- [[#173]](https://github.com/NibiruChain/py-sdk/pull/173) fix: Replaced built-in bin ripemd160 with pure Python
+
+## [v0.5.3](https://github.com/NibiruChain/py-sdk/compare/v0.5.0...HEAD)
+
+Compatible with NibiruChain/nibiru v0.15
+- TODO
+
+## [v0.4.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.4.0) 2022-09-06
+
+### Improvements
+
+- [[#117]](https://github.com/NibiruChain/py-sdk/pull/117) feat: add websocket module to py-sdk
+- [[#122]](https://github.com/NibiruChain/py-sdk/pull/122) feat: get block by height  enhancement
+- [[#126]](https://github.com/NibiruChain/py-sdk/pull/126) feat (rpc): add more chain info queries
+- [[#127]](https://github.com/NibiruChain/py-sdk/pull/127) feat: add generator for blocks queries
+
+## [v0.3.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.3.0) 2022-08-25
+
+### API Breaking Changes
+
+- [[#111]](https://github.com/NibiruChain/nibiru-py/pull/111) case str to float safely in the vpool module's all pools query.
+
+## [v0.2.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.2.0) [2022-08-24](https://github.com/NibiruChain/py-sdk/pull/109)
+
+### API Breaking Changes
+
+- [[#109]](https://github.com/NibiruChain/nibiru-py/pull/109) Update nibiru-proto dependency for v0.14.0 binary.
+- [[#108]](https://github.com/NibiruChain/py-sdk/pull/108) Improve query error handling
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) hotfix/test(query_clients): Test vpool.query.all_pools fn. Account for deserialize edge case #102.
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) feat: Split the design of txs between message and execution.
+
+### Improvements
+
+- [[#104]](https://github.com/NibiruChain/py-sdk/pull/104) docs: Update README.md
+- [[#97]](https://github.com/NibiruChain/py-sdk/pull/97) Remove legacy run-examples.sh
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) refactor(ci-cd): Update linter workflow. Cache poetry installation.
+- [[#96]](https://github.com/NibiruChain/py-sdk/pull/96) test: Add back utils_test file
+
+## [v0.1.0](https://github.com/NibiruChain/py-sdk/releases/tag/v0.1.0)  2022-08-22
+
+- [[#81]](https://github.com/NibiruChain/py-sdk/pull/81) feat(proto): use external proto pkg `nibiru_proto` for versioned types
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) fix(query_clients): account for missing fields on the pb_msg in deserialize
+- [[#103]](https://github.com/NibiruChain/py-sdk/pull/103) test(vpool): test_query_vpool_base_asset_price
+- [[#98]](https://github.com/NibiruChain/py-sdk/pull/98) chore: Remove protogen script as we're pulling from `nibiru-proto` now
+- [[#100]](https://github.com/NibiruChain/py-sdk/pull/100) chore: Automate publishing with ci
+- [[#92]](https://github.com/NibiruChain/py-sdk/pull/92) refactor: Split the design of tx between message and execution
 
 ## v0.0.17 - 2022-08-16
 

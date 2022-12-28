@@ -71,13 +71,13 @@ is taken as the average of spot prices across major exchanges.
 
 .. code:: python
 
-    trader.query.pricefeed.price("axlwbtc:unusd")
+    trader.query.pricefeed.price("ubtc:unusd")
 
     '''
     Output:
     {
         "price": {
-            "pair_id": "axlwbtc:unusd",
+            "pair_id": "ubtc:unusd",
             "price": 20776.0
         }
     }
@@ -134,7 +134,7 @@ The python package helps to create and open short and long positions.
     trader.tx.execute_msgs(
         nib.msg.MsgOpenPosition(
             trader.address,                 # The address of the trader
-            token_pair="axlwbtc:unusd",     # The market to interact with
+            token_pair="ubtc:unusd",     # The market to interact with
             side=Side.BUY,                  # Either Side.BUY or Side.SELL
             quote_asset_amount=23000,       # Margin for the position
             leverage=5,                     # Leverage of the position
@@ -175,8 +175,8 @@ from the query call of the perp module.
 
 .. code:: python
 
-    trader.query.perp.trader_position(
-        token_pair="axlwbtc:unusd",
+    trader.query.perp.position(
+        token_pair="ubtc:unusd",
         trader=trader.address
     )
 
@@ -190,7 +190,7 @@ from the query call of the perp module.
             "margin": 23000000000.0,
             "open_notional": 115000000000.0,
             "pair": {
-                "token0": "axlwbtc",
+                "token0": "ubtc",
                 "token1": "unusd"
             },
             "size": 5684626.791893228,

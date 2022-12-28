@@ -4,13 +4,13 @@ Getting Started
 Installation
 ------------
 
-Requires Python 3.7+
-``nibiru-py`` is available on `PYPI <https://pypi.python.org/pypi/nibiru-py/>`_.
+Requires Python 3.9+
+``nibiru`` is available on `PYPI <https://pypi.python.org/pypi/nibiru/>`_.
 Install with ``pip``:
 
 .. code:: bash
 
-    pip install nibiru-py
+    pip install nibiru
 
 
 Quick start
@@ -22,26 +22,28 @@ You can create a new account using the CLI command.
 .. code:: python
 
     import nibiru
-    from nibiru.common import Side
+    import nibiru.msg
 
     # Use the mnemonic from your account
-    MNEMONIC = ""guard cream ..."
+    MNEMONIC = "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
 
     # Create a SDK object with your mnemonic
-    trader = nibiru.Sdk.authorize(MNEMONIC)
+    trader = nibiru.Sdk.authorize(MNEMONIC).with_network(nibiru.Network.devnet(2))
 
-    # Open a long position of axlwbtc for 1000 unusd and 10 leverage
-    trader.tx.perp.open_position(
-        sender=trader.address,
-        token_pair="axlwbtc:unusd",
-        side=Side.BUY,
-        quote_asset_amount=1000,
-        leverage=10,
-        base_asset_amount_limit=0,
+    # Open a long position of ubtc:unusd for 10 unusd and 5 leverage
+    trader.tx.execute_msgs(
+        nibiru.msg.MsgOpenPosition(
+            sender=trader.address,
+            token_pair="ubtc:unusd",
+            side=nibiru.Side.BUY,
+            quote_asset_amount=10,
+            leverage=5,
+            base_asset_amount_limit=0,
+        )
     )
 
     # You can query the position with the queries of the perp module
-    print(trader.query.perp.trader_position(token_pair="axlwbtc:unusd", trader=trader.address))
+    print(trader.query.perp.position(token_pair="ubtc:unusd", trader=trader.address))
 
 
 Using a different chain
@@ -55,13 +57,7 @@ a chain on your localnet, but you can connect to a remote node by running the fo
     import nibiru
 
     # Configure the network we want to connect to (in this case private testnet).
-    network = nibiru.Network(
-        lcd_endpoint='https://lcd.nibiru.fi:1317',
-        grpc_endpoint=f'https://rpc.nibiru.fi:9090',
-        chain_id="nibiru-testnet-3",
-        fee_denom='unibi',
-        env='local',
-    )
+    network = nibiru.Network.testnet()
 
     # Create the sdk object with a specific network
     trader = Sdk.authorize(MNEMONIC).with_network(network)
@@ -89,11 +85,13 @@ that it was picked by a block. This behavior can be changed using the TxConfig o
     trader = Sdk.authorize(MNEMONIC).with_config(tx_config)
 
     # This next function will run until the transaction is picked up in a block.
-    trader.tx.perp.open_position(
-        sender=trader.address,
-        token_pair="axlwbtc:unusd",
-        side=Side.BUY,
-        quote_asset_amount=1000,
-        leverage=10,
-        base_asset_amount_limit=0,
+    trader.tx.execute_msgs(
+        nibiru.msg.MsgOpenPosition(
+            sender=trader.address,
+            token_pair="ubtc:unusd",
+            side=nibiru.Side.BUY,
+            quote_asset_amount=10,
+            leverage=5,
+            base_asset_amount_limit=0,
+        )
     )

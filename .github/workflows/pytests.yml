@@ -3,8 +3,10 @@ name: E2E 🐍 tests
 on:
   pull_request:
     branches: ["master"]
+    paths: ["**.py", "pyproject.toml", "poetry.lock"]
   push:
     branches: ["master"]
+    paths: ["**.py", "pyproject.toml", "poetry.lock"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
@@ -15,24 +17,31 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
+      LCD_ENDPOINT: ${{ secrets.LCD_ENDPOINT }}
+      GRPC_ENDPOINT: ${{ secrets.GRPC_ENDPOINT }}
+      TENDERMINT_RPC_ENDPOINT: ${{ secrets.TENDERMINT_RPC_ENDPOINT }}
+      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      HOST: ${{ secrets.HOST }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
-      GRPC_PORT: ${{ secrets.GRPC_PORT }}
-      LCD_PORT: ${{ secrets.LCD_PORT }}
       NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
+      DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
       # ----------------------------------------------
       # check-out repo and set-up python
       # ----------------------------------------------
       - name: Check out the repo
         uses: actions/checkout@v3
-      - name: Set up Python 3.9
+      - name: Set up Python 3.7
         id: setup-python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9.13
+          python-version: 3.7.15
+          # 3.7.15 is the highest version available for this GitHub action.
+          #   See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json
+          #   to see the full list of supported Python versions.
+          # 3.7.16 is the highest 3.7 version available on pyenv
+          #   See `grep '3.7' <<< $(pyenv install -l)` to view the available list.
 
       - name: Run python
         run: python --version && python -c "print('hello')"
@@ -46,6 +55,13 @@ jobs:
         with:
           path: ~/.local
           key: poetry-0 # increment to reset cache
+
+      # ----------------------------------------------
+      # Install ping for early tests
+      # ----------------------------------------------
+      - name: Install ping
+        run: sudo apt-get install -y iputils-ping
+
       # ----------------------------------------------
       # Install & configure poetry
       # ----------------------------------------------
@@ -74,4 +90,4 @@ jobs:
       # run tests
       #----------------------------------------------
       - name: Run Python SDK tests
-        run: poetry run pytest -s
+        run: poetry run pytest -s tests

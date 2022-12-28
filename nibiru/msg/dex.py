@@ -1,10 +1,65 @@
 import dataclasses
-from typing import List
+from typing import List, Union
 
 from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
 from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
 
-from nibiru.common import Coin, PoolAsset, PythonMsg
+from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
+
+
+class MsgsDex:
+    """MsgsDex has methods for building messages for transactions on Nibi-Swap.
+
+    Methods:
+    - create_pool: Create a pool using the assets specified
+    - exit_pool: Exit a pool using the specified pool shares
+    - join_pool: Join a pool using the specified tokens
+    - swap: Swap the assets provided for the denom specified
+    """
+
+    def create_pool(
+        creator: str,
+        swap_fee: float,
+        exit_fee: float,
+        a: int,
+        pool_type: PoolType,
+        assets: List[PoolAsset],
+    ) -> 'MsgCreatePool':
+        return MsgCreatePool(
+            creator=creator,
+            swap_fee=swap_fee,
+            exit_fee=exit_fee,
+            a=a,
+            pool_type=pool_type,
+            assets=assets,
+        )
+
+    def join_pool(
+        sender: str,
+        pool_id: int,
+        tokens: Union[Coin, List[Coin]],
+    ) -> 'MsgJoinPool':
+        return MsgJoinPool(sender=sender, pool_id=pool_id, tokens=tokens)
+
+    def exit_pool(
+        sender: str,
+        pool_id: int,
+        pool_shares: Coin,
+    ) -> 'MsgExitPool':
+        return MsgExitPool(sender=sender, pool_id=pool_id, pool_shares=pool_shares)
+
+    def swap(
+        sender: str,
+        pool_id: int,
+        token_in: Coin,
+        token_out_denom: str,
+    ) -> 'MsgSwapAssets':
+        return MsgSwapAssets(
+            sender=sender,
+            pool_id=pool_id,
+            token_in=token_in,
+            token_out_denom=token_out_denom,
+        )
 
 
 @dataclasses.dataclass
@@ -22,9 +77,18 @@ class MsgCreatePool(PythonMsg):
     creator: str
     swap_fee: float
     exit_fee: float
+    a: int
+    pool_type: PoolType
     assets: List[PoolAsset]
 
     def to_pb(self) -> pb.MsgCreatePool:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgCreatePool: The proto object.
+
+        """
         pool_assets = [
             pool_tx_pb.PoolAsset(
                 token=a.token._generate_proto_object(), weight=str(int(a.weight * 1e6))
@@ -38,7 +102,10 @@ class MsgCreatePool(PythonMsg):
         return pb.MsgCreatePool(
             creator=self.creator,
             pool_params=pool_tx_pb.PoolParams(
-                swap_fee=swap_fee_dec, exit_fee=exit_fee_dec
+                swap_fee=swap_fee_dec,
+                exit_fee=exit_fee_dec,
+                pool_type=self.pool_type,
+                A=str(int(self.a)),
             ),
             pool_assets=pool_assets,
         )
@@ -57,9 +124,18 @@ class MsgJoinPool(PythonMsg):
 
     sender: str
     pool_id: int
-    tokens: List[Coin]
+    tokens: Union[Coin, List[Coin]]
 
     def to_pb(self) -> pb.MsgJoinPool:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgJoinPool: The proto object.
+
+        """
+        if isinstance(self.tokens, Coin):
+            self.tokens = [self.tokens]
         return pb.MsgJoinPool(
             sender=self.sender,
             pool_id=self.pool_id,
@@ -80,9 +156,16 @@ class MsgExitPool(PythonMsg):
 
     sender: str
     pool_id: int
-    pool_shares: List[Coin]
+    pool_shares: Coin
 
     def to_pb(self) -> pb.MsgExitPool:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgExitPool: The proto object.
+
+        """
         return pb.MsgExitPool(
             sender=self.sender,
             pool_id=self.pool_id,
@@ -108,6 +191,13 @@ class MsgSwapAssets(PythonMsg):
     token_out_denom: str
 
     def to_pb(self) -> pb.MsgSwapAssets:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgSwapAssets: The proto object.
+
+        """
         return pb.MsgSwapAssets(
             sender=self.sender,
             pool_id=self.pool_id,

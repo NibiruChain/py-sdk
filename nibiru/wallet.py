@@ -10,6 +10,8 @@ from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
 from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
+from nibiru.crypto.ripemd160 import ripemd160
+
 BECH32_PUBKEY_ACC_PREFIX = "nibipub"
 BECH32_PUBKEY_VAL_PREFIX = "nibivaloperpub"
 BECH32_PUBKEY_CONS_PREFIX = "nibivalconspub"
@@ -19,6 +21,8 @@ BECH32_ADDR_VAL_PREFIX = "nibivaloper"
 BECH32_ADDR_CONS_PREFIX = "nibivalcons"
 
 DEFAULT_DERIVATION_PATH = "m/44'/118'/0'/0/0"
+
+MnemonicStr = str
 
 
 class PrivateKey:
@@ -36,13 +40,14 @@ class PrivateKey:
         self.signing_key: SigningKey = None
 
     @classmethod
-    def generate(cls, path=DEFAULT_DERIVATION_PATH) -> Tuple[str, "PrivateKey"]:
+    def generate(cls, path=DEFAULT_DERIVATION_PATH) -> Tuple[MnemonicStr, "PrivateKey"]:
         """
         Generate new private key with random mnemonic phrase
 
         :param path: the HD path that follows the BIP32 standard
 
-        :return: A tuple of mnemonic phrase and PrivateKey instance
+        Returns:
+            Tuple[Mnemonic, 'PrivateKey']: A tuple of mnemonic phrase and PrivateKey instance
         """
         phrase = Mnemonic(language="english").generate(strength=256)
         return (phrase, cls.from_mnemonic(phrase, path))
@@ -183,7 +188,7 @@ class PublicKey:
 
         pubkey = self.verify_key.to_string("compressed")
         s = hashlib.new("sha256", pubkey).digest()
-        r = hashlib.new("ripemd160", s).digest()
+        r = ripemd160(s)
         return Address(r)
 
     def verify(self, msg: bytes, sig: bytes) -> bool:

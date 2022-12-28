@@ -144,6 +144,7 @@ cython_debug/
 .vscode
 .chain_cookie
 .exchange_cookie
-*.ipynb
+/*.ipynb
 .python-version
 test.py
+test.pk

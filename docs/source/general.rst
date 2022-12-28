@@ -28,7 +28,7 @@ You can get the current price fo the base in quote by running:
 
 .. code:: python
 
-    trader.query.vpool.base_asset_price("axlwbtc:unusd", Side.BUY, "10000")
+    trader.query.vpool.base_asset_price("ubtc:unusd", Side.BUY, "10000")
 
 
 `Get the current position for a trader and a token pair`_
@@ -38,7 +38,7 @@ You can get information about your current position by running:
 
 .. code:: python
 
-    trader.query.perp.trader_position(
-        token_pair="axlwbtc:unusd",
+    trader.query.perp.position(
+        token_pair="ubtc:unusd",
         trader=trader.address
     )

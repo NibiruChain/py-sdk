@@ -6,11 +6,12 @@ from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequ
 from nibiru_proto.proto.dex.v1 import query_pb2 as dex_type
 from nibiru_proto.proto.dex.v1 import query_pb2_grpc as dex_query
 
-from nibiru.common import Coin
+from nibiru.pytypes import Coin
+from nibiru.query_clients.util import QueryClient
 from nibiru.utils import format_fields_nested, from_sdk_dec_n
 
 
-class DexQueryClient:
+class DexQueryClient(QueryClient):
     """
     Dex allows to query the endpoints made available by the Nibiru Chain's DEX module.
     """
@@ -22,7 +23,7 @@ class DexQueryClient:
         """
         Requests the parameters of the dex module.
 
-        Sample output::
+        Example Return Value::
 
             {
                 "startingPoolNumber": "1",
@@ -43,7 +44,13 @@ class DexQueryClient:
         Returns:
             dict: The parameters fo the dex module.
         """
-        output = MessageToDict(self.api.Params(dex_type.QueryParamsRequest()))["params"]
+        proto_output = self.query(
+            api_callable=self.api.Params,
+            req=dex_type.QueryParamsRequest(),
+            should_deserialize=False,
+        )
+
+        output: dict = MessageToDict(proto_output)["params"]
 
         output["poolCreationFee"] = [
             {"denom": item["denom"], "amount": from_sdk_dec_n(item["amount"])}
@@ -55,7 +62,7 @@ class DexQueryClient:
         """
         Return all available pools in the dex module.
 
-        Sample output::
+        Example Return Value::
 
             [
                 {
@@ -100,19 +107,23 @@ class DexQueryClient:
         Returns:
             dict: The output of the query
         """
-        output = MessageToDict(
-            self.api.Pools(
-                dex_type.QueryPoolsRequest(
-                    pagination=PageRequest(
-                        key=kwargs.get("key"),
-                        offset=kwargs.get("offset"),
-                        limit=kwargs.get("limit"),
-                        count_total=kwargs.get("count_total"),
-                        reverse=kwargs.get("reverse"),
-                    ),
-                )
-            )
-        )["pools"]
+        proto_output = self.query(
+            api_callable=self.api.Pools,
+            req=dex_type.QueryPoolsRequest(
+                pagination=PageRequest(
+                    key=kwargs.get("key"),
+                    offset=kwargs.get("offset"),
+                    limit=kwargs.get("limit"),
+                    count_total=kwargs.get("count_total"),
+                    reverse=kwargs.get("reverse"),
+                ),
+            ),
+            should_deserialize=False,
+        )
+
+        output: dict = MessageToDict(proto_output).get("pools")
+        if output is None:
+            output = {}
 
         return format_fields_nested(
             object=format_fields_nested(
@@ -128,7 +139,7 @@ class DexQueryClient:
         """
         Returns the total amount of liquidity for the dex module
 
-        Output sample::
+        Example Return Value::
 
             {
                 "liquidity": [
@@ -146,9 +157,13 @@ class DexQueryClient:
         Returns:
             dict: The total liquidity of the protocol
         """
-        output = MessageToDict(
-            self.api.TotalLiquidity(dex_type.QueryTotalLiquidityRequest())
+        proto_output = self.query(
+            api_callable=self.api.TotalLiquidity,
+            req=dex_type.QueryTotalLiquidityRequest(),
+            should_deserialize=False,
         )
+
+        output = MessageToDict(proto_output)
         return format_fields_nested(
             object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
         )
@@ -157,7 +172,7 @@ class DexQueryClient:
         """
         Returns the total liquidity for a specific pool id
 
-        Sample output::
+        Example Return Value::
 
             {
                 "liquidity": [
@@ -178,11 +193,13 @@ class DexQueryClient:
         Returns:
             dict: The total liquidity for the pool
         """
-        output = MessageToDict(
-            self.api.TotalPoolLiquidity(
-                dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id)
-            )
+        proto_output = self.query(
+            api_callable=self.api.TotalPoolLiquidity,
+            req=dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
+            should_deserialize=False,
         )
+
+        output = MessageToDict(proto_output)
         return format_fields_nested(
             object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
         )
@@ -191,7 +208,7 @@ class DexQueryClient:
         """
         Returns the total amount of shares for the pool specified
 
-        Sample output::
+        Example Return Value::
 
             {
                 "totalShares": {
@@ -206,9 +223,13 @@ class DexQueryClient:
         Returns:
             dict: The amount of shares for the pool
         """
-        output = MessageToDict(
-            self.api.TotalShares(dex_type.QueryTotalSharesRequest(pool_id=pool_id))
+        proto_output = self.query(
+            api_callable=self.api.TotalShares,
+            req=dex_type.QueryTotalSharesRequest(pool_id=pool_id),
+            should_deserialize=False,
         )
+
+        output = MessageToDict(proto_output)
         return format_fields_nested(
             object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
         )
@@ -227,15 +248,17 @@ class DexQueryClient:
         Returns:
             dict: _description_
         """
-        output = MessageToDict(
-            self.api.SpotPrice(
-                dex_type.QuerySpotPriceRequest(
-                    pool_id=pool_id,
-                    token_in_denom=token_in_denom,
-                    token_out_denom=token_out_denom,
-                )
-            )
+        proto_output = self.query(
+            api_callable=self.api.SpotPrice,
+            req=dex_type.QuerySpotPriceRequest(
+                pool_id=pool_id,
+                token_in_denom=token_in_denom,
+                token_out_denom=token_out_denom,
+            ),
+            should_deserialize=False,
         )
+
+        output = MessageToDict(proto_output)
         return format_fields_nested(object=output, fn=float, fields=["spotPrice"])
 
     def estimate_swap_exact_amount_in(
@@ -244,7 +267,7 @@ class DexQueryClient:
         """
         Estimate the output of the swap with the current reserves
 
-        Sample output::
+        Example Return Value::
 
             {
                 "tokenOut": {
@@ -261,15 +284,17 @@ class DexQueryClient:
         Returns:
             dict: The output of the query
         """
-        output = MessageToDict(
-            self.api.EstimateSwapExactAmountIn(
-                dex_type.QuerySwapExactAmountInRequest(
-                    pool_id=pool_id,
-                    token_in=token_in._generate_proto_object(),
-                    token_out_denom=token_out_denom,
-                )
-            )
+        proto_output = self.query(
+            api_callable=self.api.EstimateSwapExactAmountIn,
+            req=dex_type.QuerySwapExactAmountInRequest(
+                pool_id=pool_id,
+                token_in=token_in._generate_proto_object(),
+                token_out_denom=token_out_denom,
+            ),
+            should_deserialize=False,
         )
+
+        output = MessageToDict(proto_output)
         return format_fields_nested(
             object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
         )
@@ -280,7 +305,7 @@ class DexQueryClient:
         """
         Estimate the number of share given for a join pool operation
 
-        Sample output::
+        Example Return Value::
 
             {
                 "poolSharesOut": 100000000000000.0,
@@ -299,16 +324,18 @@ class DexQueryClient:
         Returns:
             dict: The output of the query
         """
-        output = MessageToDict(
-            self.api.EstimateJoinExactAmountIn(
-                dex_type.QueryJoinExactAmountInRequest(
-                    pool_id=pool_id,
-                    tokens_in=[
-                        tokens_in._generate_proto_object() for tokens_in in tokens_ins
-                    ],
-                )
-            )
+        proto_output = self.query(
+            api_callable=self.api.EstimateJoinExactAmountIn,
+            req=dex_type.QueryJoinExactAmountInRequest(
+                pool_id=pool_id,
+                tokens_in=[
+                    tokens_in._generate_proto_object() for tokens_in in tokens_ins
+                ],
+            ),
+            should_deserialize=False,
         )
+
+        output = MessageToDict(proto_output)
         return format_fields_nested(
             object=output,
             fn=lambda x: from_sdk_dec_n(x, 6),
@@ -319,7 +346,7 @@ class DexQueryClient:
         """
         Estimate the output of an exit pool transaction with the current level of reserves
 
-        Sample output::
+        Example Return Value::
 
             {
                 "tokensOut": [
@@ -341,13 +368,14 @@ class DexQueryClient:
         Returns:
             dict: The output of the query
         """
-        output = MessageToDict(
-            self.api.EstimateExitExactAmountIn(
-                dex_type.QueryExitExactAmountInRequest(
-                    pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
-                )
-            )
+        proto_output = self.query(
+            api_callable=self.api.EstimateExitExactAmountIn,
+            req=dex_type.QueryExitExactAmountInRequest(
+                pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
+            ),
+            should_deserialize=False,
         )
+        output = MessageToDict(proto_output)
         return format_fields_nested(
             object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
         )

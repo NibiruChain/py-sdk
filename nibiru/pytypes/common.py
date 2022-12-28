@@ -1,8 +1,9 @@
 import abc
-from dataclasses import dataclass
+import dataclasses
 from enum import Enum
 
 from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+from nibiru_proto.proto.dex.v1.pool_pb2 import PoolType  # noqa
 
 import nibiru
 
@@ -12,7 +13,8 @@ GAS_PRICE = 1 * pow(10, -3)
 
 class TxType(Enum):
     """
-    The TxType allows you to chose what type of synchronization you want to use to send transaction
+    The TxType allows you to choose what type of synchronization you want to use
+    to send transaction
     """
 
     SYNC = 1
@@ -51,44 +53,48 @@ class Direction(Enum):
     REMOVE = 2
 
 
-@dataclass
+@dataclasses.dataclass
 class Coin:
     amount: float
     denom: str
 
     def _generate_proto_object(self):
+        """
+
+        Returns:
+            cosmos_base_coin_pb.Coin: the coin object as proto object
+
+        """
         return cosmos_base_coin_pb.Coin(amount=str(self.amount), denom=self.denom)
 
 
-@dataclass
+@dataclasses.dataclass
 class PoolAsset:
     token: Coin
     weight: float
 
 
+@dataclasses.dataclass
 class TxConfig:
-    def __init__(
-        self,
-        gas_wanted: int = 0,
-        gas_multiplier: float = 1.25,
-        gas_price: float = 0,
-        tx_type: TxType = TxType.ASYNC,
-    ):
-        """
-        The TxConfig object allows to customize the behavior of the Sdk interface when a transaction is sent.
+    """
+    The TxConfig object allows to customize the behavior of the Sdk interface when a transaction is sent.
 
-        Args:
-            gas_wanted (int, optional): Set the absolute gas_wanted to be used. Defaults to 0.
-            gas_multiplier (float, optional): Set the gas multiplier that's being applied to the estimated gas.
-                Defaults to 0. If gas_wanted is set this property is ignored.
-            gas_price (float, optional): Set the gas price used to calculate the fee. Defaults to 0.
-            tx_type (TxType, optional): Configure how to execute the tx. Defaults to TxType.ASYNC.
-        """
+    Args:
+        gas_wanted (int, optional): Set the absolute gas_wanted to be used.
+            Defaults to 0.
+        gas_multiplier (float, optional): Set the gas multiplier that's being
+            applied to the estimated gas. If gas_wanted is set, this property
+            is ignored. Defaults to 0.
+        gas_price (float, optional): Set the gas price used to calculate the fee.
+            Defaults to 0.25.
+        tx_type (TxType, optional): Configure how to execute the tx.
+            Defaults to TxType.BLOCK.
+    """
 
-        self.gas_multiplier = gas_multiplier
-        self.gas_wanted = gas_wanted
-        self.gas_price = gas_price
-        self.tx_type = tx_type
+    gas_wanted: int = 0
+    gas_multiplier: float = 1.25
+    gas_price: float = 0.25
+    tx_type: TxType = TxType.BLOCK
 
 
 class PythonMsg(abc.ABC):

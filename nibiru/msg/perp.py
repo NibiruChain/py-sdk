@@ -3,8 +3,98 @@ import dataclasses
 from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
 from nibiru_proto.proto.perp.v1 import tx_pb2 as pb
 
-from nibiru.common import Coin, PythonMsg, Side
+from nibiru.pytypes import Coin, PythonMsg, Side
 from nibiru.utils import to_sdk_dec, to_sdk_int
+
+
+class MsgsPerp:
+    """
+    Messages for the Nibiru Chain x/perp module
+
+    Methods:
+    - open_position
+    - close_position:
+    - add_margin: Deleverages a position by adding margin to back it.
+    - remove_margin: Increases the leverage of the position by removing margin.
+    """
+
+    def open_position(
+        sender: str,
+        token_pair: str,
+        is_long: bool,
+        quote_asset_amount: float,
+        leverage: float,
+        base_asset_amount_limit: float,
+    ) -> 'MsgOpenPosition':
+        """
+        Open a posiiton using the specified parameters.
+
+        Attributes:
+            sender (str): The sender address
+            token_pair (str): The token pair
+            is_long (bool): Determines whether to open with long or short exposure.
+            quote_asset_amount (float): The quote amount you want to use to buy base
+            leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
+                margin ratio of the pool.
+            base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
+                quote.
+        """
+        side: Side
+        if is_long:
+            side = Side.BUY
+        else:
+            side = Side.SELL
+        return MsgOpenPosition(
+            sender=sender,
+            token_pair=token_pair,
+            side=side,
+            quote_asset_amount=quote_asset_amount,
+            leverage=leverage,
+            base_asset_amount_limit=base_asset_amount_limit,
+        )
+
+    def close_position(
+        sender: str,
+        token_pair: str,
+    ) -> 'MsgClosePosition':
+        """
+        Close the position.
+
+        Attributes:
+            sender (str): The sender address
+            token_pair (str): The token pair
+        """
+        return MsgClosePosition(sender=sender, token_pair=token_pair)
+
+    def add_margin(
+        sender: str,
+        token_pair: str,
+        margin: Coin,
+    ) -> 'MsgAddMargin':
+        """
+        Add margin for the position (token_pair + trader)
+
+        Attributes:
+            sender (str): The trader address
+            token_pair (str): The token pair
+            margin (Coin): The margin to remove in a coin format
+        """
+        return MsgAddMargin(sender=sender, token_pair=token_pair, margin=margin)
+
+    def remove_margin(
+        sender: str,
+        token_pair: str,
+        margin: Coin,
+    ) -> 'MsgRemoveMargin':
+        """
+        Remove margin for the position (token_pair + trader)
+
+        Attributes:
+            sender (str): The trader address
+            token_pair (str): The token pair
+            margin (Coin): The margin to remove in a coin format
+        """
+        return MsgRemoveMargin(sender=sender, token_pair=token_pair, margin=margin)
 
 
 @dataclasses.dataclass
@@ -23,6 +113,13 @@ class MsgRemoveMargin(PythonMsg):
     margin: Coin
 
     def to_pb(self) -> pb.MsgRemoveMargin:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgRemoveMargin: The proto object.
+
+        """
         return pb.MsgRemoveMargin(
             sender=self.sender,
             token_pair=self.token_pair,
@@ -46,6 +143,13 @@ class MsgAddMargin(PythonMsg):
     margin: Coin
 
     def to_pb(self) -> pb.MsgAddMargin:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgAddMargin: The proto object.
+
+        """
         return pb.MsgAddMargin(
             sender=self.sender,
             token_pair=self.token_pair,
@@ -56,7 +160,7 @@ class MsgAddMargin(PythonMsg):
 @dataclasses.dataclass
 class MsgOpenPosition(PythonMsg):
     """
-    Open a posiiton using the specified parameters.
+    Open a position using the specified parameters.
 
     Attributes:
         sender (str): The sender address
@@ -77,6 +181,13 @@ class MsgOpenPosition(PythonMsg):
     base_asset_amount_limit: float
 
     def to_pb(self) -> pb.MsgOpenPosition:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgOpenPosition: The proto object.
+
+        """
         pb_side = state_pb.Side.BUY if self.side == Side.BUY else state_pb.SELL
         quote_asset_amount_pb = to_sdk_int(self.quote_asset_amount)
         base_asset_amount_limit_pb = to_sdk_int(self.base_asset_amount_limit)
@@ -106,6 +217,13 @@ class MsgClosePosition(PythonMsg):
     token_pair: str
 
     def to_pb(self) -> pb.MsgClosePosition:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgClosePosition: The proto object.
+
+        """
         return pb.MsgClosePosition(
             sender=self.sender,
             token_pair=self.token_pair,
@@ -127,6 +245,13 @@ class MsgLiquidate(PythonMsg):
     trader: str
 
     def to_pb(self) -> pb.MsgLiquidate:
+        """
+        Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgLiquidate: The proto object.
+
+        """
         return pb.MsgLiquidate(
             sender=self.sender,
             token_pair=self.token_pair,

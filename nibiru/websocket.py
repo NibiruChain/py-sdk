@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 import pprint
 import threading
 import time
@@ -14,7 +15,7 @@ from websocket import WebSocketApp
 import nibiru.query_clients.util
 from nibiru import Network
 from nibiru.event_specs import EventCaptured, EventType
-from nibiru.utils import clean_nested_dict, init_logger
+from nibiru.utils import clean_nested_dict
 
 ERROR_TIMEOUT_SLEEP = 3
 
@@ -51,7 +52,7 @@ class NibiruWebsocket:
         self.queue = Queue()
         if tx_fail_queue:
             self.tx_fail_queue = tx_fail_queue
-        self.logger = init_logger("ws-logger")
+        self.logger = logging.getLogger("ws-logger")
 
     def start(self):
         """

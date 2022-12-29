@@ -1,7 +1,6 @@
 import collections
 import json
 import logging
-import sys
 from datetime import datetime
 from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
@@ -212,38 +211,6 @@ class ColoredFormatter(logging.Formatter):
         log_format = self.FORMATS.get(record.levelno)
         formatter = logging.Formatter(log_format, datefmt="%H:%M:%S")
         return formatter.format(record=record)
-
-
-def init_logger(name: str) -> logging.Logger:
-    """
-    Simple logger to use throughout the test suite.
-
-    Examples:
-    ```python
-    from nibiru.utils import init_logger
-    LOGGER = init_logger("test-logger")
-    LOGGER.info("successfully executed tx staking command")
-    LOGGER.debug("debugging error message")
-    ```
-
-    Log levels include: [debug, info, warning, error, critical]
-
-    Args:
-        name (str): Name of the logger
-
-    Returns:
-        logging.Logger: The logger object
-    """
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-
-    # Logs to stdout so we can at least see logs in GHA.
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.DEBUG)
-
-    handler.setFormatter(fmt=ColoredFormatter())
-    logger.addHandler(handler)
-    return logger
 
 
 def clean_nested_dict(dictionary: Union[List, Dict, str]) -> Dict:

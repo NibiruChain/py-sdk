@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Generator, List, Optional, Tuple, Union
 
@@ -21,7 +22,6 @@ from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_
 from packaging import version
 
 from nibiru import pytypes, query_clients
-from nibiru.utils import init_logger
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 GITHUB_COMMIT_HASH_LEN = 40
@@ -104,7 +104,7 @@ class GrpcClient:
             chain_nibiru_version = chain_nibiru_version[1:]
 
         if len(chain_nibiru_version) >= GITHUB_COMMIT_HASH_LEN:
-            logger = init_logger("client-logger")
+            logger = logging.getLogger("client-logger")
             logger.warning(
                 f"The chain is running a custom release from branch/commit {chain_nibiru_version}. "
                 "We bypass the compatibility assertion"

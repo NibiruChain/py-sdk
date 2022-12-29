@@ -1,7 +1,6 @@
 import collections
 import json
 import logging
-import sys
 from datetime import datetime
 from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
@@ -235,14 +234,6 @@ def init_logger(name: str) -> logging.Logger:
         logging.Logger: The logger object
     """
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-
-    # Logs to stdout so we can at least see logs in GHA.
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.DEBUG)
-
-    handler.setFormatter(fmt=ColoredFormatter())
-    logger.addHandler(handler)
     return logger
 
 

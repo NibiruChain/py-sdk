@@ -120,14 +120,13 @@ print(query_resp)
 
 ```python
 # version 0.16.3
-import nibiru
-import nibiru.msg
+from nibiru import Msg
 
 tx_resp = sdk.tx.execute_msgs(
-    nibiru.msg.MsgOpenPosition(
+    Msg.perp.open_position(
         sender=sdk.address,
         token_pair="ubtc:unusd",
-        side=nibiru.common.Side.BUY,
+        is_long=True,
         quote_asset_amount=10,
         leverage=10,
         base_asset_amount_limit=0,

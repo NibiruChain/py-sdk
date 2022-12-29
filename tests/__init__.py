@@ -9,7 +9,7 @@ from nibiru import utils
 
 shutup.please()
 
-LOGGER: logging.Logger = utils.init_logger("test-logger")
+LOGGER: logging.Logger = logging.getLogger("test-logger")
 
 
 def raises(errs: Union[str, Iterable[str]], err: BaseException):

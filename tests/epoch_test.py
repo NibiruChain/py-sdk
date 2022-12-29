@@ -9,7 +9,6 @@ def test_query_current_epoch(sdk_val: nibiru.Sdk):
 
 def test_query_epoch_info(sdk_val: nibiru.Sdk):
     query_resp: dict = sdk_val.query.epoch.epoch_infos()
-    print(query_resp)
     assert len(query_resp["epochs"]) > 0
 
     for epoch in query_resp["epochs"]:

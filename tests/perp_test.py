@@ -1,5 +1,5 @@
 # perp_test.py
-from typing import List
+from typing import Dict, List
 
 import pytest
 
@@ -8,7 +8,6 @@ import tests
 from nibiru import Msg
 from nibiru import pytypes as pt
 from nibiru.exceptions import QueryError
-from tests import dict_keys_must_match, transaction_must_succeed
 
 PRECISION = 6
 
@@ -37,7 +36,7 @@ def test_open_position(sdk_val: nibiru.Sdk):
         tests.LOGGER.info(
             f"nibid tx perp open-position: {tests.format_response(tx_output)}"
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
 
         tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
         assert "/nibiru.perp.v1.MsgOpenPosition" in tx_resp.rawLog[0].msgs
@@ -61,7 +60,7 @@ def test_perp_query_position(sdk_val: nibiru.Sdk):
         position_res = sdk_val.query.perp.position(
             trader=sdk_val.address, token_pair=PAIR
         )
-        dict_keys_must_match(
+        tests.dict_keys_must_match(
             position_res,
             [
                 "block_number",
@@ -86,6 +85,30 @@ def test_perp_query_position(sdk_val: nibiru.Sdk):
 
 
 @pytest.mark.order(after="test_perp_query_position")
+def test_perp_query_all_positions(sdk_val: nibiru.Sdk):
+    positions_map: Dict[str, dict] = sdk_val.query.perp.all_positions(
+        trader=sdk_val.address
+    )
+
+    if not positions_map:
+        return
+
+    pair, position_resp = [item for item in positions_map.items()][0]
+    assert len(pair.split(":")) == 2  # check that pair is of form "token0:token1"
+    tests.dict_keys_must_match(
+        position_resp,
+        [
+            'position',
+            'position_notional',
+            'unrealized_pnl',
+            'margin_ratio_mark',
+            'margin_ratio_index',
+            'block_number',
+        ],
+    )
+
+
+@pytest.mark.order(after="test_perp_query_all_positions")
 def test_perp_add_margin(sdk_val: nibiru.Sdk):
     try:
         # Transaction add_margin must succeed
@@ -118,7 +141,7 @@ def test_perp_remove_margin(sdk_val: nibiru.Sdk):
         tests.LOGGER.info(
             f"nibid tx perp remove-margin: \n{tests.format_response(tx_output)}"
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
         # TODO test: verify the margin changes using the events
     except BaseException as err:
         tests.raises(ERRORS.bad_debt, err)
@@ -138,7 +161,7 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
         tests.LOGGER.info(
             f"nibid tx perp close-position: \n{tests.format_response(tx_output)}"
         )
-        transaction_must_succeed(tx_output)
+        tests.transaction_must_succeed(tx_output)
 
         # Querying the position should raise an exception if it closed successfully
         with pytest.raises(

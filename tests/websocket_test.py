@@ -6,14 +6,16 @@ from typing import List
 import pytest
 
 import nibiru
-from nibiru import Msg, Network, Sdk, Transaction, pytypes
+from nibiru import Msg, Network, Sdk, Transaction
 from nibiru.event_specs import EventCaptured
 from nibiru.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
 
 
 @pytest.mark.slow
-def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
+def test_websocket_listen(
+    sdk_val: nibiru.Sdk, sdk_oracle: nibiru.Sdk, network: Network
+):
     """
     Open a position and ensure output is correct
     """
@@ -51,7 +53,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
             Msg.perp.open_position(
                 sender=sdk_val.address,
                 token_pair=pair,
-                side=pytypes.Side.BUY,
+                is_long=True,
                 quote_asset_amount=10,
                 leverage=10,
                 base_asset_amount_limit=0,
@@ -66,7 +68,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
 
     sdk_val.tx.execute_msgs(
         Msg.pricefeed.post_price(
-            oracle=sdk_val.address,
+            oracle=sdk_oracle.address,
             token0="unibi",
             token1="unusd",
             price=10,
@@ -75,7 +77,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     )
     sdk_val.tx.execute_msgs(
         Msg.pricefeed.post_price(
-            oracle=sdk_val.address,
+            oracle=sdk_oracle.address,
             token0="unibi",
             token1="unusd",
             price=11,

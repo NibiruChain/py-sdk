@@ -18,6 +18,7 @@ class MsgsPerp:
     - remove_margin: Increases the leverage of the position by removing margin.
     """
 
+    @staticmethod
     def open_position(
         sender: str,
         token_pair: str,
@@ -53,6 +54,7 @@ class MsgsPerp:
             base_asset_amount_limit=base_asset_amount_limit,
         )
 
+    @staticmethod
     def close_position(
         sender: str,
         token_pair: str,
@@ -66,6 +68,7 @@ class MsgsPerp:
         """
         return MsgClosePosition(sender=sender, token_pair=token_pair)
 
+    @staticmethod
     def add_margin(
         sender: str,
         token_pair: str,
@@ -81,6 +84,7 @@ class MsgsPerp:
         """
         return MsgAddMargin(sender=sender, token_pair=token_pair, margin=margin)
 
+    @staticmethod
     def remove_margin(
         sender: str,
         token_pair: str,
@@ -95,6 +99,22 @@ class MsgsPerp:
             margin (Coin): The margin to remove in a coin format
         """
         return MsgRemoveMargin(sender=sender, token_pair=token_pair, margin=margin)
+
+    @staticmethod
+    def liquidate(
+        sender: str,
+        token_pair: str,
+        trader: str,
+    ) -> 'MsgLiquidate':
+        """
+        Liquidates unhealthy position (token_pair + trader)
+
+        Attributes:
+            sender (str): The liquidator address
+            token_pair (str): The token pair
+            trader (str): The trader address
+        """
+        return MsgLiquidate(sender=sender, token_pair=token_pair, trader=trader)
 
 
 @dataclasses.dataclass

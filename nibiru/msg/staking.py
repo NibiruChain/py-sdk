@@ -16,6 +16,7 @@ class MsgsStaking:
     - withdraw_delegator_reward: Withdraw the reward from a validator
     """
 
+    @staticmethod
     def delegate(
         delegator_address: str,
         validator_address: str,
@@ -38,6 +39,7 @@ class MsgsStaking:
             amount=amount,
         )
 
+    @staticmethod
     def undelegate(
         delegator_address: str,
         validator_address: str,
@@ -57,6 +59,7 @@ class MsgsStaking:
             amount=amount,
         )
 
+    @staticmethod
     def withdraw_delegator_reward(
         delegator_address: str,
         validator_address: str,

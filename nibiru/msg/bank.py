@@ -14,6 +14,7 @@ class MsgsBank:
     - send: Send tokens from one account to another
     """
 
+    @staticmethod
     def send(
         from_address: str,
         to_address: str,

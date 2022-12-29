@@ -15,6 +15,7 @@ class MsgsPricefeed:
     - post_price
     """
 
+    @staticmethod
     def post_price(
         oracle: str,
         token0: str,

@@ -17,6 +17,7 @@ class MsgsDex:
     - swap: Swap the assets provided for the denom specified
     """
 
+    @staticmethod
     def create_pool(
         creator: str,
         swap_fee: float,
@@ -34,6 +35,7 @@ class MsgsDex:
             assets=assets,
         )
 
+    @staticmethod
     def join_pool(
         sender: str,
         pool_id: int,
@@ -41,6 +43,7 @@ class MsgsDex:
     ) -> 'MsgJoinPool':
         return MsgJoinPool(sender=sender, pool_id=pool_id, tokens=tokens)
 
+    @staticmethod
     def exit_pool(
         sender: str,
         pool_id: int,
@@ -48,6 +51,7 @@ class MsgsDex:
     ) -> 'MsgExitPool':
         return MsgExitPool(sender=sender, pool_id=pool_id, pool_shares=pool_shares)
 
+    @staticmethod
     def swap(
         sender: str,
         pool_id: int,

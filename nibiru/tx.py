@@ -98,6 +98,8 @@ class TxClient:
                 "account sequence mismatch, expected" in str(err)
                 and not get_sequence_from_node
             ):
+                if not isinstance(msgs, Iterable):
+                    msgs = [msgs]
                 return self.execute_msgs(*msgs, get_sequence_from_node=True, **kwargs)
 
             if address:

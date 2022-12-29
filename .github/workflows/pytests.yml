@@ -71,6 +71,7 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
+          version: latest
       #----------------------------------------------
       # load cached venv if cache exists
       #----------------------------------------------
@@ -89,5 +90,18 @@ jobs:
       #----------------------------------------------
       # run tests
       #----------------------------------------------
+      - name: Install unbuffer command for run step
+        run: sudo apt-get install -y expect-dev
       - name: Run Python SDK tests
-        run: poetry run pytest -s tests
+        run: unbuffer poetry run pytest -s tests --cov=nibiru | tee coverage.txt
+        # piping to tee lets us see stdout and write to a file simultaneously.
+        # unbuffer retains the colored text from pytest through the pipe to tee
+        # -s makes the output verbose to make logs more descriptive.
+        # --cov toggles on the coverage report at the specified path
+      #----------------------------------------------
+      # Upload test output and coverage report as a GitHub artifact
+      #----------------------------------------------
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-coverage
+          path: coverage.txt

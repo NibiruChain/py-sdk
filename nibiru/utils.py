@@ -213,30 +213,6 @@ class ColoredFormatter(logging.Formatter):
         return formatter.format(record=record)
 
 
-def init_logger(name: str) -> logging.Logger:
-    """
-    Simple logger to use throughout the test suite.
-
-    Examples:
-    ```python
-    from nibiru.utils import init_logger
-    LOGGER = init_logger("test-logger")
-    LOGGER.info("successfully executed tx staking command")
-    LOGGER.debug("debugging error message")
-    ```
-
-    Log levels include: [debug, info, warning, error, critical]
-
-    Args:
-        name (str): Name of the logger
-
-    Returns:
-        logging.Logger: The logger object
-    """
-    logger = logging.getLogger(name)
-    return logger
-
-
 def clean_nested_dict(dictionary: Union[List, Dict, str]) -> Dict:
     """
     Takes a nested dictionnary with some values being string json values and convert it into a proper nested

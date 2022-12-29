@@ -1,3 +1,5 @@
+from typing import Dict, List, Union
+
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 from nibiru_proto.proto.perp.v1 import query_pb2 as perp_type
@@ -100,3 +102,55 @@ class PerpQueryClient(QueryClient):
         )
 
         return deserialize(proto_output)
+
+    def all_positions(self, trader: str) -> Dict[str, dict]:
+        """
+        Args:
+            trader (str): Address of the owner of the positions
+
+        Returns:
+            Dict[str, dict]: All of the open positions for the 'trader'.
+
+        Example Return Value:
+
+        ```json
+        {
+          "ubtc:unusd": {
+            "block_number": 1137714,
+            "margin_ratio_index": 0.0,
+            "margin_ratio_mark": 0.09999999999655101,
+            "position": {
+            "block_number": 1137714,
+            "latest_cumulative_premium_fraction": 17233.436302191654,
+            "margin": 10.0,
+            "open_notional": 100.0,
+            "pair": { "token0": "ubtc", "token1": "unusd" },
+            "size": -0.00545940925278242,
+            "trader_address": "nibi10gm4kys9yyrlqpvj05vqvjwvje87gln8nsm8wa"
+            },
+            "position_notional": 100.0,
+            "unrealized_pnl": -5.079e-15
+          }
+        }
+        ```
+        """
+        req = perp_type.QueryPositionsRequest(
+            trader=trader,
+        )
+
+        proto_output: perp_type.QueryPositionsResponse = self.query(
+            api_callable=self.api.QueryPositions, req=req, should_deserialize=False
+        )
+        proto_as_dict: dict[str, list] = deserialize(proto_output)
+
+        position_resps: Union[List[dict], None] = proto_as_dict.get("positions")
+        if position_resps is None:
+            return proto_as_dict
+
+        positions_map: Dict[str, dict] = {}
+        for position_resp in position_resps:
+            pair_as_dict: dict = position_resp["position"]["pair"]
+            pair: str = f'{pair_as_dict["token0"]}:{pair_as_dict["token1"]}'
+            positions_map[pair] = position_resp
+
+        return positions_map

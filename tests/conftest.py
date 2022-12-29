@@ -31,6 +31,7 @@ PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
     GRPC_ENDPOINT="",
     TENDERMINT_RPC_ENDPOINT="",
     WEBSOCKET_ENDPOINT="",
+    DEVNET_NUMBER="1",
     CHAIN_ID="",
 )
 PYTEST_GLOBALS: Dict[str, Any] = {

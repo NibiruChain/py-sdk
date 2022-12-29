@@ -78,6 +78,7 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
+          version: latest
       # ----------------------------------------------
       # Build and Publish
       # ----------------------------------------------

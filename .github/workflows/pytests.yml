@@ -91,7 +91,7 @@ jobs:
       - name: Install unbuffer command for run step
         run: sudo apt-get install -y expect-dev
       - name: Run Python SDK tests
-        run: unbuffer poetry run pytest -s tests --cov=nibiru --log-cli-level=DEBUG | tee coverage.txt
+        run: unbuffer poetry run pytest -s tests --cov=nibiru --log-cli-level=DEBUG 2>&1 | tee coverage.txt
         # piping to tee lets us see stdout and write to a file simultaneously.
         # unbuffer retains the colored text from pytest through the pipe to tee
         # -s makes the output verbose to make logs more descriptive.

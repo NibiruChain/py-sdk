@@ -1,5 +1,4 @@
 import time
-from datetime import datetime, timedelta
 from multiprocessing import Queue
 from typing import List
 
@@ -13,9 +12,7 @@ from tests import LOGGER
 
 
 @pytest.mark.slow
-def test_websocket_listen(
-    sdk_val: nibiru.Sdk, sdk_oracle: nibiru.Sdk, network: Network
-):
+def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     """
     Open a position and ensure output is correct
     """
@@ -29,15 +26,9 @@ def test_websocket_listen(
         EventType.PositionChangedEvent,
         # Bank
         EventType.Transfer,
-        # Pricefeed
-        EventType.OracleUpdatePriceEvent,
     ]
 
-    expected_events_block = [
-        EventType.PairPriceUpdatedEvent,
-    ]
-
-    expected_events = expected_events_block + expected_events_tx
+    expected_events = expected_events_tx
 
     nibiru_websocket = NibiruWebsocket(
         network,
@@ -64,25 +55,6 @@ def test_websocket_listen(
                 coins=nibiru.Coin(amount=10, denom="unibi"),
             ),
         ]
-    )
-
-    sdk_val.tx.execute_msgs(
-        Msg.pricefeed.post_price(
-            oracle=sdk_oracle.address,
-            token0="unibi",
-            token1="unusd",
-            price=10,
-            expiry=datetime.utcnow() + timedelta(hours=1),
-        ),
-    )
-    sdk_val.tx.execute_msgs(
-        Msg.pricefeed.post_price(
-            oracle=sdk_oracle.address,
-            token0="unibi",
-            token1="unusd",
-            price=11,
-            expiry=datetime.utcnow() + timedelta(hours=1),
-        ),
     )
 
     LOGGER.info("Closing position")

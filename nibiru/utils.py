@@ -267,6 +267,12 @@ def clean_nested_dict(dictionary: Union[List, Dict, str]) -> Dict:
         if isinstance(value, str):
             if value[0] == "{" and value[-1] == "}":
                 dictionary[key] = clean_nested_dict(value)
+            elif value[0] == "[" and value[-1] == "]":
+                try:
+                    values_list = json.loads(value)
+                    dictionary[key] = [clean_nested_dict(v) for v in values_list]
+                except ValueError:
+                    dictionary[key] = value
             else:
                 dictionary[key] = value
 

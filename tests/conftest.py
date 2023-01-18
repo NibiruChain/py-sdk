@@ -9,7 +9,6 @@ See "Scope: sharing fixtures across classes, modules, packages or session"
 Fixtures available:
 - sdk_val
 - sdk_agent
-- sdk_oracle
 """
 import os
 from typing import Any, Dict, List, Optional
@@ -23,7 +22,6 @@ from tests.utils_test import can_ping, url_to_host
 
 PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
     VALIDATOR_MNEMONIC="",
-    ORACLE_MNEMONIC="",
 )
 PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
     USE_LOCALNET=False,
@@ -131,14 +129,3 @@ def sdk_agent(network: Network) -> Sdk:
     tx_config = TX_CONFIG
     agent = Sdk.authorize().with_config(tx_config).with_network(network)
     return agent
-
-
-# address: nibi10hj3gq54uxd9l5d6a7sn4dcvhd0l3wdgt2zvyp
-@pytest.fixture
-def sdk_oracle(network: Network) -> Sdk:
-    tx_config = TX_CONFIG
-    return (
-        Sdk.authorize(pytest.ORACLE_MNEMONIC)
-        .with_config(tx_config)
-        .with_network(network)
-    )

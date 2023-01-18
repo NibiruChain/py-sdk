@@ -1,5 +1,4 @@
 import time
-from datetime import datetime, timedelta
 from multiprocessing import Queue
 from typing import List
 
@@ -13,9 +12,7 @@ from tests import LOGGER
 
 
 @pytest.mark.slow
-def test_websocket_listen(
-    sdk_val: nibiru.Sdk,  network: Network
-):
+def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     """
     Open a position and ensure output is correct
     """

@@ -128,13 +128,11 @@ You'll need to set up a `.env` configuration file to set environment variables f
 # Example configuration for the Nibiry Python SDK
 HOST="..."
 VALIDATOR_MNEMONIC="..."
-ORACLE_MNEMONIC="..."
 TENDERMINT_RPC_ENDPOINT="http://...:26657"
 LCD_ENDPOINT="http://...:1317"
 GRPC_ENDPOINT="...:9090"
 WEBSOCKET_ENDPOINT="ws://...:26657/websocket"
 CHAIN_ID="..."
-NETWORK_INSECURE=true
 ```
 
 #### Environment variables in GitHub Actions

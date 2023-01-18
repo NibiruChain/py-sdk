@@ -69,20 +69,6 @@ dollar value of BTC on spot exchanges is the index price of the BTC:USD
 perp. Thus we’d call BTC **“the underlying”**. Usually, the index price
 is taken as the average of spot prices across major exchanges.
 
-.. code:: python
-
-    trader.query.pricefeed.price("ubtc:unusd")
-
-    '''
-    Output:
-    {
-        "price": {
-            "pair_id": "ubtc:unusd",
-            "price": 20776.0
-        }
-    }
-    '''
-
 Some trading strategies can be built on the difference between mark price
 and index price.
 

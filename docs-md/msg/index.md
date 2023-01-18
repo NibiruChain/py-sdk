@@ -7,5 +7,4 @@ Sub-modules
 * nibiru.msg.dex
 * nibiru.msg.msg
 * nibiru.msg.perp
-* nibiru.msg.pricefeed
 * nibiru.msg.staking

@@ -61,7 +61,6 @@ Classes
     * nibiru.msg.perp.MsgLiquidate
     * nibiru.msg.perp.MsgOpenPosition
     * nibiru.msg.perp.MsgRemoveMargin
-    * nibiru.msg.pricefeed.MsgPostPrice
     * nibiru.msg.staking.MsgDelegate
     * nibiru.msg.staking.MsgUndelegate
     * nibiru.msg.staking.MsgWithdrawDelegatorReward

@@ -20,14 +20,6 @@ nibiru.query\_clients.perp module
    :undoc-members:
    :show-inheritance:
 
-nibiru.query\_clients.pricefeed module
---------------------------------------
-
-.. automodule:: nibiru.query_clients.pricefeed
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 nibiru.query\_clients.util module
 ---------------------------------
 

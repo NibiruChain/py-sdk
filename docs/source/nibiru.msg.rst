@@ -28,14 +28,6 @@ nibiru.msg.perp module
    :undoc-members:
    :show-inheritance:
 
-nibiru.msg.pricefeed module
----------------------------
-
-.. automodule:: nibiru.msg.pricefeed
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

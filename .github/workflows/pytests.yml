@@ -23,8 +23,6 @@ jobs:
       WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
-      ORACLE_MNEMONIC: ${{ secrets.ORACLE_MNEMONIC }}
-      NETWORK_INSECURE: ${{ secrets.NETWORK_INSECURE }}
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
       # ----------------------------------------------

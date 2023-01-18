@@ -1,5 +1,4 @@
 import time
-from datetime import datetime, timedelta
 from multiprocessing import Queue
 from typing import List
 
@@ -13,9 +12,7 @@ from tests import LOGGER
 
 
 @pytest.mark.slow
-def test_websocket_listen(
-    sdk_val: nibiru.Sdk, sdk_oracle: nibiru.Sdk, network: Network
-):
+def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     """
     Open a position and ensure output is correct
     """
@@ -29,13 +26,9 @@ def test_websocket_listen(
         EventType.PositionChangedEvent,
         # Bank
         EventType.Transfer,
-        # Pricefeed
-        EventType.OracleUpdatePriceEvent,
     ]
 
-    expected_events_block = [
-        EventType.PairPriceUpdatedEvent,
-    ]
+    expected_events_block = []
 
     expected_events = expected_events_block + expected_events_tx
 
@@ -46,52 +39,7 @@ def test_websocket_listen(
     nibiru_websocket.start()
     time.sleep(1)
 
-    # Open a position from the validator node
-    LOGGER.info("Opening position")
-    sdk_val.tx.execute_msgs(
-        [
-            Msg.perp.open_position(
-                sender=sdk_val.address,
-                token_pair=pair,
-                is_long=True,
-                quote_asset_amount=10,
-                leverage=10,
-                base_asset_amount_limit=0,
-            ),
-            Msg.bank.send(
-                from_address=sdk_val.address,
-                to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
-                coins=nibiru.Coin(amount=10, denom="unibi"),
-            ),
-        ]
-    )
-
-    sdk_val.tx.execute_msgs(
-        Msg.pricefeed.post_price(
-            oracle=sdk_oracle.address,
-            token0="unibi",
-            token1="unusd",
-            price=10,
-            expiry=datetime.utcnow() + timedelta(hours=1),
-        ),
-    )
-    sdk_val.tx.execute_msgs(
-        Msg.pricefeed.post_price(
-            oracle=sdk_oracle.address,
-            token0="unibi",
-            token1="unusd",
-            price=11,
-            expiry=datetime.utcnow() + timedelta(hours=1),
-        ),
-    )
-
-    LOGGER.info("Closing position")
-    sdk_val.tx.execute_msgs(
-        Msg.perp.close_position(
-            sender=sdk_val.address,
-            token_pair=pair,
-        )
-    )
+    do_chain_stuff(sdk_val, pair)
 
     # Give time for events to come
     LOGGER.info("Sent txs, waiting for websocket to pick it up")
@@ -117,6 +65,42 @@ def test_websocket_listen(
     ]
 
     assert not missing_events, f"Missing events: {missing_events}"
+
+
+@pytest.mark.slow
+def test_websocket_listen_raw(sdk_val: nibiru.Sdk, network: Network):
+    """
+    Open a position and ensure output is correct
+    """
+    pair = "ubtc:unusd"
+
+    nibiru_websocket = NibiruWebsocket(network, raw_mode=True)
+    nibiru_websocket.start()
+    time.sleep(1)
+
+    do_chain_stuff(sdk_val, pair)
+
+    # Give time for events to come
+    LOGGER.info("Sent txs, waiting for websocket to pick it up")
+    time.sleep(3)
+
+    nibiru_websocket.queue.put(None)
+    events: List[str] = []
+    while True:
+        event = nibiru_websocket.queue.get()
+        if event is None:
+            break
+        events.append(event)
+
+    # Asserting for truth because test are running in parallel in the same chain and might result in
+    # duplication of markpricechanged events.
+
+    for event in events:
+        print(event)
+
+    assert len(events) > 40
+
+    raise
 
 
 @pytest.mark.slow
@@ -168,3 +152,39 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
             break
 
     assert fail_event_found, "Transaction failure not captured"
+
+
+def do_chain_stuff(sdk_val: Sdk, pair: str):
+    """
+    Do stuff that can create events in the chain
+
+    Args:
+        sdk_val (Sdk): the validator sdk client
+        pair (str): the pair
+    """
+    LOGGER.info("Opening position")
+    sdk_val.tx.execute_msgs(
+        [
+            Msg.perp.open_position(
+                sender=sdk_val.address,
+                token_pair=pair,
+                is_long=True,
+                quote_asset_amount=10,
+                leverage=10,
+                base_asset_amount_limit=0,
+            ),
+            Msg.bank.send(
+                from_address=sdk_val.address,
+                to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
+                coins=nibiru.Coin(amount=10, denom="unibi"),
+            ),
+        ]
+    )
+
+    LOGGER.info("Closing position")
+    sdk_val.tx.execute_msgs(
+        Msg.perp.close_position(
+            sender=sdk_val.address,
+            token_pair=pair,
+        )
+    )

@@ -132,6 +132,9 @@ def url_to_host(url: str) -> str:
     """
     url: ParseResult = urlparse(url)
 
+    if url.scheme == 'localhost':
+        return url.scheme
+
     assert url.hostname, ReferenceError(f"Url {url} hostname is empty.")
 
     return url.hostname

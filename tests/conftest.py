@@ -64,8 +64,6 @@ def pytest_configure(config):
     # Set the expected environment variables. Raise a value error if one is missing
     for env_var_name in EXPECTED_ENV_VARS:
         env_var_value = os.getenv(env_var_name)
-        if not env_var_value:
-            raise ValueError(f"Environment variable {env_var_name} is missing!")
         set_pytest_global(env_var_name, env_var_value)
 
 

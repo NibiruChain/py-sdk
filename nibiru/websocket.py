@@ -29,10 +29,21 @@ class NibiruWebsocket:
         network: Network,
         captured_events_type: List[EventType] = [],
         tx_fail_queue: Queue = None,
+        raw_mode: bool = False,
     ):
         """
         The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru
         chain.
+
+        Args:
+            network (Network): the network object
+            captured_events_type (List[EventType], optional): the list of events to capture. If raw mode is specified,
+                it will capture all events as dicts. Defaults to [].
+            tx_fail_queue (Queue, optional): wether to get the failure inside the queue. Defaults to None.
+            raw_mode (bool, optional): allow raw mode. Queue is filled with non deserialized fields. Defaults to False.
+
+        Raises:
+            ValueError: in case the websocket was not set in the network object.
         """
 
         self.websocket_url = network.websocket_endpoint
@@ -52,6 +63,7 @@ class NibiruWebsocket:
         if tx_fail_queue:
             self.tx_fail_queue = tx_fail_queue
         self.logger = logging.getLogger("ws-logger")
+        self.raw_mode = raw_mode
 
     def start(self):
         """
@@ -172,19 +184,20 @@ class NibiruWebsocket:
             def decode(value):
                 return value
 
-        if event["type"] in self.captured_events_type:
-
-            event_payload = {
+        event_payload = clean_nested_dict(
+            {
                 decode(attribute["key"]): decode(attribute["value"]).strip('"')
                 for attribute in event["attributes"]
             }
+        )
 
+        if not self.raw_mode and event["type"] in self.captured_events_type:
             if not isinstance(
                 self.captured_events_type[event["type"]].value,
                 str,
             ):
                 proto_message = google.protobuf.json_format.Parse(
-                    json.dumps(clean_nested_dict(event_payload)),
+                    json.dumps(event_payload),
                     self.captured_events_type[event["type"]].value(),
                     ignore_unknown_fields=True,
                 )
@@ -194,6 +207,12 @@ class NibiruWebsocket:
                     no_sdk_transformation=True,
                 )
 
+            event_payload["block_height"] = block_height
+            event_payload["tx_hash"] = tx_hash
+
+            self.queue.put(EventCaptured(event["type"], event_payload))
+
+        elif self.raw_mode:
             event_payload["block_height"] = block_height
             event_payload["tx_hash"] = tx_hash
 

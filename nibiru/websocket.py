@@ -126,8 +126,13 @@ class NibiruWebsocket:
         block_height = log["data"]["value"]["block"]["header"]["height"]
 
         for event in block_begin_events + block_end_events:
-            self._handle_event(
-                block_height=block_height, tx_hash=None, event=event, base64_decode=True
+            self.queue.put(
+                self._handle_event(
+                    block_height=block_height,
+                    tx_hash=None,
+                    event=event,
+                    base64_decode=True,
+                )
             )
 
     def _handle_txs(self, log: dict):
@@ -157,11 +162,11 @@ class NibiruWebsocket:
             return
 
         for event in events["events"]:
-            self._handle_event(block_height, tx_hash, event)
+            self.queue.put(self._handle_event(block_height, tx_hash, event))
 
     def _handle_event(
         self, block_height: int, tx_hash: str, event: dict, base64_decode: bool = False
-    ):
+    ) -> EventCaptured:
         """
         Read an event and put it in the queue if it's part of the captured event type.
 
@@ -210,13 +215,13 @@ class NibiruWebsocket:
             event_payload["block_height"] = block_height
             event_payload["tx_hash"] = tx_hash
 
-            self.queue.put(EventCaptured(event["type"], event_payload))
+            return EventCaptured(event["type"], event_payload)
 
         elif self.raw_mode:
             event_payload["block_height"] = block_height
             event_payload["tx_hash"] = tx_hash
 
-            self.queue.put(EventCaptured(event["type"], event_payload))
+            return EventCaptured(event["type"], event_payload)
 
     def _subscribe(self):
 

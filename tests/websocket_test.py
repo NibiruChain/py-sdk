@@ -100,8 +100,6 @@ def test_websocket_listen_raw(sdk_val: nibiru.Sdk, network: Network):
 
     assert len(events) > 40
 
-    raise
-
 
 @pytest.mark.slow
 def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):

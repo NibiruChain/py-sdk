@@ -1,7 +1,6 @@
 import dataclasses
 
-from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
-from nibiru_proto.proto.perp.v1 import tx_pb2 as pb
+import nibiru_proto.nibiru.perp.v1 as perp_proto
 
 from nibiru.pytypes import Coin, PythonMsg, Side
 from nibiru.utils import to_sdk_dec, to_sdk_int
@@ -132,15 +131,15 @@ class MsgRemoveMargin(PythonMsg):
     token_pair: str
     margin: Coin
 
-    def to_pb(self) -> pb.MsgRemoveMargin:
+    def to_pb(self) -> perp_proto.MsgRemoveMargin:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgRemoveMargin: The proto object.
+            perp_proto.MsgRemoveMargin: The proto object.
 
         """
-        return pb.MsgRemoveMargin(
+        return perp_proto.MsgRemoveMargin(
             sender=self.sender,
             token_pair=self.token_pair,
             margin=self.margin._generate_proto_object(),
@@ -162,15 +161,15 @@ class MsgAddMargin(PythonMsg):
     token_pair: str
     margin: Coin
 
-    def to_pb(self) -> pb.MsgAddMargin:
+    def to_pb(self) -> perp_proto.MsgAddMargin:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgAddMargin: The proto object.
+            perp_proto.MsgAddMargin: The proto object.
 
         """
-        return pb.MsgAddMargin(
+        return perp_proto.MsgAddMargin(
             sender=self.sender,
             token_pair=self.token_pair,
             margin=self.margin._generate_proto_object(),
@@ -200,20 +199,20 @@ class MsgOpenPosition(PythonMsg):
     leverage: float
     base_asset_amount_limit: float
 
-    def to_pb(self) -> pb.MsgOpenPosition:
+    def to_pb(self) -> perp_proto.MsgOpenPosition:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgOpenPosition: The proto object.
+            perp_proto.MsgOpenPosition: The proto object.
 
         """
-        pb_side = state_pb.Side.BUY if self.side == Side.BUY else state_pb.SELL
+        pb_side = perp_proto.Side.BUY if self.side == Side.BUY else perp_proto.Side.SELL
         quote_asset_amount_pb = to_sdk_int(self.quote_asset_amount)
         base_asset_amount_limit_pb = to_sdk_int(self.base_asset_amount_limit)
         leverage_pb = to_sdk_dec(self.leverage)
 
-        return pb.MsgOpenPosition(
+        return perp_proto.MsgOpenPosition(
             sender=self.sender,
             token_pair=self.token_pair,
             side=pb_side,
@@ -236,15 +235,15 @@ class MsgClosePosition(PythonMsg):
     sender: str
     token_pair: str
 
-    def to_pb(self) -> pb.MsgClosePosition:
+    def to_pb(self) -> perp_proto.MsgClosePosition:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgClosePosition: The proto object.
+            perp_proto.MsgClosePosition: The proto object.
 
         """
-        return pb.MsgClosePosition(
+        return perp_proto.MsgClosePosition(
             sender=self.sender,
             token_pair=self.token_pair,
         )
@@ -264,15 +263,15 @@ class MsgLiquidate(PythonMsg):
     token_pair: str
     trader: str
 
-    def to_pb(self) -> pb.MsgLiquidate:
+    def to_pb(self) -> perp_proto.MsgLiquidate:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgLiquidate: The proto object.
+            perp_proto.MsgLiquidate: The proto object.
 
         """
-        return pb.MsgLiquidate(
+        return perp_proto.MsgLiquidate(
             sender=self.sender,
             token_pair=self.token_pair,
             trader=self.trader,

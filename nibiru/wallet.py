@@ -2,13 +2,13 @@ import hashlib
 import json
 from typing import Tuple
 
+import nibiru_proto.cosmos.crypto.secp256k1 as PubKeyProto
 import requests
 from bech32 import bech32_decode, bech32_encode, convertbits
 from bip32 import BIP32
 from ecdsa import BadSignatureError, SECP256k1, SigningKey, VerifyingKey
 from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
-from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 from nibiru.crypto.ripemd160 import ripemd160
 
@@ -153,8 +153,8 @@ class PublicKey:
         """
         return self.verify_key.to_string("compressed").hex()
 
-    def to_public_key_proto(self) -> PubKeyProto:
-        return PubKeyProto(key=self.verify_key.to_string("compressed"))
+    def to_public_key_proto(self) -> PubKeyProto.PubKey:
+        return PubKeyProto.PubKey(key=self.verify_key.to_string("compressed"))
 
     def _to_bech32(self, prefix: str) -> str:
         five_bit_r = convertbits(

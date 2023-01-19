@@ -3,22 +3,12 @@ import time
 from typing import Generator, List, Optional, Tuple, Union
 
 import grpc
-from nibiru_proto.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
-from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
-from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
-from nibiru_proto.proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
-from nibiru_proto.proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc
-from nibiru_proto.proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
-from nibiru_proto.proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
-from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2 as tendermint_query,
-)
-from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2_grpc as tendermint_query_grpc,
-)
-from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
-from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
+import nibiru_proto.cosmos.auth.v1beta1 as auth
+import nibiru_proto.cosmos.authz.v1beta1 as authz
+import nibiru_proto.cosmos.bank.v1beta1 as bank
+import nibiru_proto.cosmos.base.abci.v1beta1 as abci_type
+import nibiru_proto.cosmos.base.tendermint.v1beta1 as tendermint
+import nibiru_proto.cosmos.tx.v1beta1 as pb_tx
 from packaging import version
 
 from nibiru import pytypes, query_clients
@@ -57,13 +47,11 @@ class GrpcClient:
             else grpc.secure_channel(grpc_endpoint, credentials)
         )
 
-        self.stubCosmosTendermint = tendermint_query_grpc.ServiceStub(
-            self.chain_channel
-        )
-        self.stubAuth = auth_query_grpc.QueryStub(self.chain_channel)
-        self.stubAuthz = authz_query_grpc.QueryStub(self.chain_channel)
-        self.stubBank = bank_query_grpc.QueryStub(self.chain_channel)
-        self.stubTx = tx_service_grpc.ServiceStub(self.chain_channel)
+        self.stubCosmosTendermint = tendermint.ServiceStub(self.chain_channel)
+        self.stubAuth = auth.QueryStub(self.chain_channel)
+        self.stubAuthz = authz.QueryStub(self.chain_channel)
+        self.stubBank = bank.QueryStub(self.chain_channel)
+        self.stubTx = pb_tx.ServiceStub(self.chain_channel)
 
         self.timeout_height = 1
 
@@ -142,9 +130,7 @@ class GrpcClient:
         while self.get_latest_block().block.header.height < current_block + 1:
             time.sleep(0.5)
 
-    def get_block_by_height(
-        self, height: int
-    ) -> tendermint_query.GetBlockByHeightResponse:
+    def get_block_by_height(self, height: int) -> tendermint.GetBlockByHeightResponse:
         """
         Returns the block specified by height
 
@@ -152,15 +138,15 @@ class GrpcClient:
             height: the height of the block
 
         Returns:
-            tendermint_query.GetBlockByHeightResponse: the block info
+            tendermint.GetBlockByHeightResponse: the block info
 
         """
-        req = tendermint_query.GetBlockByHeightRequest(height=height)
-        return self.stubCosmosTendermint.GetBlockByHeight(req)
+        req = tendermint.GetBlockByHeightRequest(height=height)
+        return self.stubCosmosTendermint.get_block_by_height(req)
 
     def get_blocks_by_height(
         self, start_height: int, end_height: int = None
-    ) -> Generator[tendermint_query.GetBlockByHeightResponse, None, None]:
+    ) -> Generator[tendermint.GetBlockByHeightResponse, None, None]:
         """
         Iterate through all the blocks in the chain and yield the output of the block one by one.
         If no end_height is specified, iterate until the current latest block is reached.
@@ -170,7 +156,7 @@ class GrpcClient:
             end_height (int, optional): The last block height to query. Defaults to None.
 
         Yields:
-            Generator[tendermint_query.GetBlockByHeightResponse, None, None]
+            Generator[tendermint.GetBlockByHeightResponse, None, None]
         """
         if end_height is None:
             height = start_height
@@ -185,16 +171,16 @@ class GrpcClient:
                 yield self.get_block_by_height(height)
 
     # default client methods
-    def get_latest_block(self) -> tendermint_query.GetLatestBlockResponse:
+    def get_latest_block(self) -> tendermint.GetLatestBlockResponse:
         """
         Returns the last block
 
         Returns:
-            tendermint_query.GetLatestBlockResponse: the last block information
+            tendermint.GetLatestBlockResponse: the last block information
 
         """
-        req = tendermint_query.GetLatestBlockRequest()
-        return self.stubCosmosTendermint.GetLatestBlock(req)
+        req = tendermint.GetLatestBlockRequest()
+        return self.stubCosmosTendermint.get_latest_block(req)
 
     def get_version(self) -> str:
         """
@@ -204,8 +190,10 @@ class GrpcClient:
             str: the version of the app
 
         """
-        req = tendermint_query.GetNodeInfoRequest()
-        version = self.stubCosmosTendermint.GetNodeInfo(req).application_version.version
+        req = tendermint.GetNodeInfoRequest()
+        version = self.stubCosmosTendermint.get_node_info(
+            req
+        ).application_version.version
 
         if version[0] != "v":
             version = "v" + str(version)
@@ -222,7 +210,7 @@ class GrpcClient:
         """
         return self.get_latest_block().block.header.height
 
-    def get_account(self, address: str) -> Optional[auth_type.BaseAccount]:
+    def get_account(self, address: str) -> Optional[auth.BaseAccount]:
         """
         Returns the account info from address
 
@@ -230,14 +218,14 @@ class GrpcClient:
             address: the address of the account
 
         Returns:
-            Optional[auth_type.BaseAccount]: the account information, none if not found
+            Optional[auth.BaseAccount]: the account information, none if not found
 
         """
         try:
-            account_any = self.stubAuth.Account(
-                auth_query.QueryAccountRequest(address=address)
+            account_any = self.stubAuth.account(
+                auth.QueryAccountRequest(address=address)
             ).account
-            account = auth_type.BaseAccount()
+            account = auth.BaseAccount()
             if account_any.Is(account.DESCRIPTOR):
                 account_any.Unpack(account)
                 return account
@@ -245,7 +233,7 @@ class GrpcClient:
             return None
 
     def get_request_id_by_tx_hash(self, tx_hash: bytes) -> List[int]:
-        tx = self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
+        tx = self.stubTx.get_tx(pb_tx.GetTxRequest(hash=tx_hash))
         request_ids = []
         for tx in tx.tx_response.logs:
             request_event = [
@@ -267,8 +255,8 @@ class GrpcClient:
         self, tx_byte: bytes
     ) -> Tuple[Union[abci_type.SimulationResponse, grpc.RpcError], bool]:
         try:
-            req = tx_service.SimulateRequest(tx_bytes=tx_byte)
-            return self.stubTx.Simulate.__call__(req), True
+            req = pb_tx.SimulateRequest(tx_bytes=tx_byte)
+            return self.stubTx.simulate.__call__(req), True
         except grpc.RpcError as err:
             return err._state.details, False
 
@@ -283,10 +271,10 @@ class GrpcClient:
             abci_type.TxResponse: the tx response
 
         """
-        req = tx_service.BroadcastTxRequest(
-            tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_SYNC
+        req = pb_tx.BroadcastTxRequest(
+            tx_bytes=tx_byte, mode=pb_tx.BroadcastMode.BROADCAST_MODE_SYNC
         )
-        result = self.stubTx.BroadcastTx.__call__(req)
+        result = self.stubTx.broadcast_tx.__call__(req)
         return result.tx_response
 
     def send_tx_async_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
@@ -300,10 +288,10 @@ class GrpcClient:
             abci_type.TxResponse: the tx response
 
         """
-        req = tx_service.BroadcastTxRequest(
-            tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_ASYNC
+        req = pb_tx.BroadcastTxRequest(
+            tx_bytes=tx_byte, mode=pb_tx.BroadcastMode.BROADCAST_MODE_ASYNC
         )
-        result = self.stubTx.BroadcastTx.__call__(req)
+        result = self.stubTx.broadcast_tx.__call__(req)
         return result.tx_response
 
     def send_tx_block_mode(self, tx_byte: bytes) -> abci_type.TxResponse:
@@ -317,10 +305,10 @@ class GrpcClient:
             abci_type.TxResponse: the tx response
 
         """
-        req = tx_service.BroadcastTxRequest(
-            tx_bytes=tx_byte, mode=tx_service.BroadcastMode.BROADCAST_MODE_BLOCK
+        req = pb_tx.BroadcastTxRequest(
+            tx_bytes=tx_byte, mode=pb_tx.BroadcastMode.BROADCAST_MODE_BLOCK
         )
-        result = self.stubTx.BroadcastTx.__call__(req)
+        result = self.stubTx.broadcast_tx.__call__(req)
         return result.tx_response
 
     def get_chain_id(self) -> str:
@@ -335,8 +323,8 @@ class GrpcClient:
         return latest_block.block.header.chain_id
 
     def get_grants(self, granter: str, grantee: str, **kwargs):
-        return self.stubAuthz.Grants(
-            authz_query.QueryGrantsRequest(
+        return self.stubAuthz.grants(
+            authz.QueryGrantsRequest(
                 granter=granter,
                 grantee=grantee,
                 msg_type_url=kwargs.get("msg_type_url"),
@@ -354,9 +342,7 @@ class GrpcClient:
             dict: balances for each coin
         """
         return query_clients.deserialize(
-            self.stubBank.AllBalances(
-                bank_query.QueryAllBalancesRequest(address=address)
-            )
+            self.stubBank.all_balances(bank.QueryAllBalancesRequest(address=address))
         )
 
     def get_bank_balance(self, address: str, denom: str) -> dict:
@@ -371,7 +357,7 @@ class GrpcClient:
             dict: balance for the coin with denom, 'denom'
         """
         return query_clients.deserialize(
-            self.stubBank.Balance(
-                bank_query.QueryBalanceRequest(address=address, denom=denom)
+            self.stubBank.balance(
+                bank.QueryBalanceRequest(address=address, denom=denom)
             )
         )

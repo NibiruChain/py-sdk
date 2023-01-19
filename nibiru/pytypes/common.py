@@ -2,8 +2,8 @@ import abc
 import dataclasses
 from enum import Enum
 
-from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
-from nibiru_proto.proto.dex.v1.pool_pb2 import PoolType  # noqa
+from nibiru_proto.cosmos.base.v1beta1 import Coin as CoinPb
+from nibiru_proto.nibiru.dex.v1 import PoolType  # noqa
 
 import nibiru
 
@@ -65,7 +65,7 @@ class Coin:
             cosmos_base_coin_pb.Coin: the coin object as proto object
 
         """
-        return cosmos_base_coin_pb.Coin(amount=str(self.amount), denom=self.denom)
+        return CoinPb(amount=str(self.amount), denom=self.denom)
 
 
 @dataclasses.dataclass

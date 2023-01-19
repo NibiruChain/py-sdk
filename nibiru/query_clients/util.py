@@ -4,9 +4,9 @@ from typing import Dict, List, Optional, Union
 import grpc
 import grpc._channel
 from google.protobuf import json_format, message
-from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from nibiru_proto.proto.cosmos.tx.v1beta1.tx_pb2 import Tx
-from nibiru_proto.proto.tendermint.types.block_pb2 import Block
+from nibiru_proto.cosmos.base.query.v1beta1 import PageRequest
+from nibiru_proto.cosmos.tx.v1beta1 import Tx
+from nibiru_proto.tendermint.types import Block
 
 from nibiru import utils
 from nibiru.exceptions import QueryError
@@ -189,9 +189,7 @@ def get_msg_pb_by_type_url(type_url: str) -> Optional[message.Message]:
     try:
         type_url = type_url.replace("/", "")
         module_name, class_name = type_url.rsplit(".", 1)
-        if module_name.startswith("nibiru."):
-            module_name = module_name.split(".", 1)[1]
-        module_name = f"nibiru_proto.proto.{module_name}.tx_pb2"
+        module_name = f"nibiru_proto.{module_name}"
         module_ = importlib.import_module(module_name)
         class_ = getattr(module_, class_name)()
     except Exception:

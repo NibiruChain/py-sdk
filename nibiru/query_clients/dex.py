@@ -1,10 +1,9 @@
 from typing import List
 
+import nibiru_proto.nibiru.dex.v1 as pb_dex
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
-from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from nibiru_proto.proto.dex.v1 import query_pb2 as dex_type
-from nibiru_proto.proto.dex.v1 import query_pb2_grpc as dex_query
+from nibiru_proto.cosmos.base.query.v1beta1 import PageRequest
 
 from nibiru.pytypes import Coin
 from nibiru.query_clients.util import QueryClient
@@ -17,7 +16,7 @@ class DexQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = dex_query.QueryStub(channel)
+        self.api = pb_dex.QueryStub(channel)
 
     def params(self) -> dict:
         """
@@ -46,7 +45,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.Params,
-            req=dex_type.QueryParamsRequest(),
+            req=pb_dex.QueryParamsRequest(),
             should_deserialize=False,
         )
 
@@ -109,7 +108,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.Pools,
-            req=dex_type.QueryPoolsRequest(
+            req=pb_dex.QueryPoolsRequest(
                 pagination=PageRequest(
                     key=kwargs.get("key"),
                     offset=kwargs.get("offset"),
@@ -159,7 +158,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.TotalLiquidity,
-            req=dex_type.QueryTotalLiquidityRequest(),
+            req=pb_dex.QueryTotalLiquidityRequest(),
             should_deserialize=False,
         )
 
@@ -195,7 +194,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.TotalPoolLiquidity,
-            req=dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
+            req=pb_dex.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
             should_deserialize=False,
         )
 
@@ -225,7 +224,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.TotalShares,
-            req=dex_type.QueryTotalSharesRequest(pool_id=pool_id),
+            req=pb_dex.QueryTotalSharesRequest(pool_id=pool_id),
             should_deserialize=False,
         )
 
@@ -250,7 +249,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.SpotPrice,
-            req=dex_type.QuerySpotPriceRequest(
+            req=pb_dex.QuerySpotPriceRequest(
                 pool_id=pool_id,
                 token_in_denom=token_in_denom,
                 token_out_denom=token_out_denom,
@@ -286,7 +285,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.EstimateSwapExactAmountIn,
-            req=dex_type.QuerySwapExactAmountInRequest(
+            req=pb_dex.QuerySwapExactAmountInRequest(
                 pool_id=pool_id,
                 token_in=token_in._generate_proto_object(),
                 token_out_denom=token_out_denom,
@@ -326,7 +325,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.EstimateJoinExactAmountIn,
-            req=dex_type.QueryJoinExactAmountInRequest(
+            req=pb_dex.QueryJoinExactAmountInRequest(
                 pool_id=pool_id,
                 tokens_in=[
                     tokens_in._generate_proto_object() for tokens_in in tokens_ins
@@ -370,7 +369,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.EstimateExitExactAmountIn,
-            req=dex_type.QueryExitExactAmountInRequest(
+            req=pb_dex.QueryExitExactAmountInRequest(
                 pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
             ),
             should_deserialize=False,

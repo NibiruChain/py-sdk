@@ -1,7 +1,6 @@
+import nibiru_proto.cosmos.auth.v1beta1 as auth_type
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
-from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2 as auth_type
-from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query
 
 from nibiru.query_clients.util import QueryClient
 
@@ -12,7 +11,7 @@ class AuthQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = auth_query.QueryStub(channel)
+        self.api = auth_type.QueryStub(channel)
 
     def account(self, address: str) -> dict:
         """

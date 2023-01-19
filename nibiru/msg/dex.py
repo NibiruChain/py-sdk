@@ -1,8 +1,7 @@
 import dataclasses
 from typing import List, Union
 
-from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
-from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
+import nibiru_proto.nibiru.dex.v1 as pool_proto
 
 from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 
@@ -85,16 +84,16 @@ class MsgCreatePool(PythonMsg):
     pool_type: PoolType
     assets: List[PoolAsset]
 
-    def to_pb(self) -> pb.MsgCreatePool:
+    def to_pb(self) -> pool_proto.MsgCreatePool:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgCreatePool: The proto object.
+            pool_proto.MsgCreatePool: The proto object.
 
         """
         pool_assets = [
-            pool_tx_pb.PoolAsset(
+            pool_proto.PoolAsset(
                 token=a.token._generate_proto_object(), weight=str(int(a.weight * 1e6))
             )
             for a in self.assets
@@ -103,9 +102,9 @@ class MsgCreatePool(PythonMsg):
         swap_fee_dec = str(int(self.swap_fee * 1e18))
         exit_fee_dec = str(int(self.exit_fee * 1e18))
 
-        return pb.MsgCreatePool(
+        return pool_proto.MsgCreatePool(
             creator=self.creator,
-            pool_params=pool_tx_pb.PoolParams(
+            pool_params=pool_proto.PoolParams(
                 swap_fee=swap_fee_dec,
                 exit_fee=exit_fee_dec,
                 pool_type=self.pool_type,
@@ -130,17 +129,17 @@ class MsgJoinPool(PythonMsg):
     pool_id: int
     tokens: Union[Coin, List[Coin]]
 
-    def to_pb(self) -> pb.MsgJoinPool:
+    def to_pb(self) -> pool_proto.MsgJoinPool:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgJoinPool: The proto object.
+            pool_proto.MsgJoinPool: The proto object.
 
         """
         if isinstance(self.tokens, Coin):
             self.tokens = [self.tokens]
-        return pb.MsgJoinPool(
+        return pool_proto.MsgJoinPool(
             sender=self.sender,
             pool_id=self.pool_id,
             tokens_in=[token._generate_proto_object() for token in self.tokens],
@@ -162,15 +161,15 @@ class MsgExitPool(PythonMsg):
     pool_id: int
     pool_shares: Coin
 
-    def to_pb(self) -> pb.MsgExitPool:
+    def to_pb(self) -> pool_proto.MsgExitPool:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgExitPool: The proto object.
+            pool_proto.MsgExitPool: The proto object.
 
         """
-        return pb.MsgExitPool(
+        return pool_proto.MsgExitPool(
             sender=self.sender,
             pool_id=self.pool_id,
             pool_shares=self.pool_shares._generate_proto_object(),
@@ -194,15 +193,15 @@ class MsgSwapAssets(PythonMsg):
     token_in: Coin
     token_out_denom: str
 
-    def to_pb(self) -> pb.MsgSwapAssets:
+    def to_pb(self) -> pool_proto.MsgSwapAssets:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgSwapAssets: The proto object.
+            pool_proto.MsgSwapAssets: The proto object.
 
         """
-        return pb.MsgSwapAssets(
+        return pool_proto.MsgSwapAssets(
             sender=self.sender,
             pool_id=self.pool_id,
             token_in=self.token_in._generate_proto_object(),

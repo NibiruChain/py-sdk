@@ -1,7 +1,5 @@
+import nibiru_proto.nibiru.vpool.v1 as pb_vpool
 from grpc import Channel
-from nibiru_proto.proto.vpool.v1 import query_pb2 as vpool_type
-from nibiru_proto.proto.vpool.v1 import query_pb2_grpc as vpool_query
-from nibiru_proto.proto.vpool.v1.state_pb2 import Direction as pbDirection
 
 from nibiru.pytypes import Direction
 from nibiru.query_clients.util import QueryClient
@@ -13,7 +11,7 @@ class VpoolQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = vpool_query.QueryStub(channel)
+        self.api = pb_vpool.QueryStub(channel)
 
     def reserve_assets(self, pair: str):
         """
@@ -35,8 +33,8 @@ class VpoolQueryClient(QueryClient):
             dict: the reserves of the vpool
 
         """
-        req = vpool_type.QueryReserveAssetsRequest(pair=pair)
-        return self.query(self.api.ReserveAssets, req)
+        req = pb_vpool.QueryReserveAssetsRequest(pair=pair)
+        return self.query(self.api.reserve_assets, req)
 
     def all_pools(self):
         """
@@ -80,8 +78,8 @@ class VpoolQueryClient(QueryClient):
             dict: the list of existing pools
 
         """
-        req = vpool_type.QueryAllPoolsRequest()
-        resp = self.query(self.api.AllPools, req)
+        req = pb_vpool.QueryAllPoolsRequest()
+        resp = self.query(self.api.all_pools, req)
         for _, prices in enumerate(resp["prices"]):
             prices["index_price"] = cast_str_to_float_safely(prices["index_price"])
             prices["twap_mark"] = cast_str_to_float_safely(prices["twap_mark"])
@@ -107,16 +105,16 @@ class VpoolQueryClient(QueryClient):
         Returns:
             dict: the price of the asset in quote
         """
-        dir_pb = pbDirection.DIRECTION_UNSPECIFIED
+        dir_pb = pb_vpool.Direction.DIRECTION_UNSPECIFIED
         if direction == Direction.ADD:
-            dir_pb = pbDirection.ADD_TO_POOL
+            dir_pb = pb_vpool.Direction.ADD_TO_POOL
         elif direction == Direction.REMOVE:
-            dir_pb = pbDirection.REMOVE_FROM_POOL
+            dir_pb = pb_vpool.Direction.REMOVE_FROM_POOL
 
-        req = vpool_type.QueryBaseAssetPriceRequest(
+        req = pb_vpool.QueryBaseAssetPriceRequest(
             pair=pair, direction=dir_pb, base_asset_amount=base_asset_amount
         )
-        return self.query(self.api.BaseAssetPrice, req)
+        return self.query(self.api.base_asset_price, req)
 
 
 def cast_str_to_float_safely(number_str: str) -> float:

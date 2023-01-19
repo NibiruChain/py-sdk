@@ -2,12 +2,11 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
-from nibiru_proto.proto.dex.v1 import tx_pb2 as dex_events  # noqa
-from nibiru_proto.proto.lockup.v1 import tx_pb2 as lockup_events  # noqa
-from nibiru_proto.proto.perp.v1 import event_pb2 as perp_events
-from nibiru_proto.proto.pricefeed import tx_pb2 as pricefeed_events
-from nibiru_proto.proto.stablecoin import events_pb2 as stablecoin_events  # noqa
-from nibiru_proto.proto.vpool.v1 import event_pb2 as vpool_events
+import nibiru_proto.nibiru.dex.v1 as dex_events  # noqa
+import nibiru_proto.nibiru.lockup.v1 as lockup_events  # noqa
+import nibiru_proto.nibiru.perp.v1 as perp_events
+import nibiru_proto.nibiru.stablecoin as stablecoin_events  # noqa
+import nibiru_proto.nibiru.vpool.v1 as vpool_events
 
 
 class EventType(Enum):
@@ -36,10 +35,6 @@ class EventType(Enum):
     # LockEvent = lockup_events.EventLock
     # UnlockInitiatedEvent = lockup_events.EventUnlockInitiated
     # UnlockEvent = lockup_events.EventUnlock
-
-    # Pricefeed events
-    OracleUpdatePriceEvent = pricefeed_events.EventOracleUpdatePrice
-    PairPriceUpdatedEvent = pricefeed_events.EventPairPriceUpdated
 
     # Stablecoin events
     # TransferEvent = stablecoin_events.EventTransfer

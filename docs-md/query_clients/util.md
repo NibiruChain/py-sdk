@@ -80,7 +80,6 @@ Classes
     * nibiru.query_clients.dex.DexQueryClient
     * nibiru.query_clients.epoch.EpochQueryClient
     * nibiru.query_clients.perp.PerpQueryClient
-    * nibiru.query_clients.pricefeed.PricefeedQueryClient
     * nibiru.query_clients.staking.StakingQueryClient
     * nibiru.query_clients.vpool.VpoolQueryClient
 

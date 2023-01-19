@@ -106,7 +106,10 @@ def deserialize(pb_msg: message.Message, no_sdk_transformation: bool = False) ->
                 else:
                     serialized_output[str(attr)] = deserialize(val)
         elif custom_dtype is None and not attr_search:
-            serialized_output[str(attr)] = attr_search
+            if str(attr_search) == "[]":
+                serialized_output[str(attr)] = []
+            else:
+                serialized_output[str(attr)] = attr_search
         else:
             serialized_output[str(attr)] = deserialize(pb_msg.__getattribute__(attr))
 

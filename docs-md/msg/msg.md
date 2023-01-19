@@ -12,7 +12,6 @@ Classes
         bank: Methods for the Cosmos x/bank module.
         dex: Methods for the Nibiru Chain x/dex module.
         perp: Methods for the Nibiru Chain x/perp module
-        pricefeed: Methods for the Nibiru Chain x/perp module
         staking: Methods for the Cosmos x/staking and x/distribution modules.
 
     ### Class variables
@@ -40,12 +39,6 @@ Classes
         - close_position:
         - add_margin: Deleverages a position by adding margin to back it.
         - remove_margin: Increases the leverage of the position by removing margin.
-
-    `pricefeed`
-    :   Messages for the x/pricefeed module.
-
-        Methods:
-        - post_price
 
     `staking`
     :   Messages for the x/staking and x/distribution modules.

@@ -1249,14 +1249,14 @@ types-protobuf = ">=3.20.4"
 
 [[package]]
 name = "nibiru-proto"
-version = "0.16.3"
+version = "0.17.1"
 description = "Nibiru Chain Python SDK"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "nibiru_proto-0.16.3-py3-none-any.whl", hash = "sha256:33d2e444b0e3340d32c5053bc1bbb7a9cb4bcdc5fdc53048755043709b3fa781"},
-    {file = "nibiru_proto-0.16.3.tar.gz", hash = "sha256:ba7d38d36e3650fb8e879e3b5d45892985fd74da1b45f1bad38a6ac8c960c64c"},
+    {file = "nibiru_proto-0.17.1-py3-none-any.whl", hash = "sha256:3e8821f1c3990a9d6794c53b05ed5bdf54e74bc40d97e170190973c418e40bde"},
+    {file = "nibiru_proto-0.17.1.tar.gz", hash = "sha256:9973fba9855d39bf9760f099cdf0da648ecd0f87e5d16c41b29340b0d47d4707"},
 ]
 
 [package.dependencies]

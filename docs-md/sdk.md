@@ -41,7 +41,7 @@ Classes
     sdk = (
         Sdk.authorize(val_mnemonic)
         .with_config(tx_config)
-        .with_network(network, network_insecure)
+        .with_network(network)
     )
     ```
 

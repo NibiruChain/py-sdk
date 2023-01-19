@@ -5,7 +5,7 @@ import google.protobuf.message
 import nibiru_proto.nibiru.dex.v1 as dex_events  # noqa
 import nibiru_proto.nibiru.lockup.v1 as lockup_events  # noqa
 import nibiru_proto.nibiru.perp.v1 as perp_events
-import nibiru_proto.nibiru.stablecoin as stablecoin_events  # noqa
+import nibiru_proto.nibiru.stablecoin.v1 as stablecoin_events  # noqa
 import nibiru_proto.nibiru.vpool.v1 as vpool_events
 
 
@@ -25,11 +25,11 @@ class EventType(Enum):
     SwapOnVpoolEvent = vpool_events.SwapOnVpoolEvent
     MarkPriceChanged = vpool_events.MarkPriceChangedEvent
 
-    # # Dex event
-    # PoolJoinedEvent = dex_events.EventPoolJoined
-    # PoolCreatedEvent = dex_events.EventPoolCreated
-    # PoolExitedEvent = dex_events.EventPoolExited
-    # AssetsSwappedEvent = dex_events.EventAssetsSwapped
+    # Dex event
+    PoolJoinedEvent = dex_events.EventPoolJoined
+    PoolCreatedEvent = dex_events.EventPoolCreated
+    PoolExitedEvent = dex_events.EventPoolExited
+    AssetsSwappedEvent = dex_events.EventAssetsSwapped
 
     # Lockup event
     # LockEvent = lockup_events.EventLock
@@ -37,13 +37,13 @@ class EventType(Enum):
     # UnlockEvent = lockup_events.EventUnlock
 
     # Stablecoin events
-    # TransferEvent = stablecoin_events.EventTransfer
-    # MintStableEvent = stablecoin_events.EventMintStable
-    # BurnStableEvent = stablecoin_events.EventBurnStable
-    # MintNIBIEvent = stablecoin_events.EventMintNIBI
-    # BurnNIBIEvent = stablecoin_events.EventBurnNIBI
-    # RecollateralizeEvent = stablecoin_events.EventRecollateralize
-    # BuybackEvent = stablecoin_events.EventBuyback
+    TransferEvent = stablecoin_events.EventTransfer
+    MintStableEvent = stablecoin_events.EventMintStable
+    BurnStableEvent = stablecoin_events.EventBurnStable
+    MintNIBIEvent = stablecoin_events.EventMintNibi
+    BurnNIBIEvent = stablecoin_events.EventBurnNibi
+    RecollateralizeEvent = stablecoin_events.EventRecollateralize
+    BuybackEvent = stablecoin_events.EventBuyback
 
     # Bank
     Transfer = "transfer"

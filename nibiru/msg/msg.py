@@ -3,7 +3,6 @@ import dataclasses
 from nibiru.msg.bank import MsgsBank
 from nibiru.msg.dex import MsgsDex
 from nibiru.msg.perp import MsgsPerp
-from nibiru.msg.pricefeed import MsgsPricefeed
 from nibiru.msg.staking import MsgsStaking
 
 
@@ -17,14 +16,12 @@ class MsgClient:
         bank: Methods for the Cosmos x/bank module.
         dex: Methods for the Nibiru Chain x/dex module.
         perp: Methods for the Nibiru Chain x/perp module
-        pricefeed: Methods for the Nibiru Chain x/perp module
         staking: Methods for the Cosmos x/staking and x/distribution modules.
     """
 
     bank = MsgsBank
     dex = MsgsDex
     perp = MsgsPerp
-    pricefeed = MsgsPricefeed
     staking = MsgsStaking
 
 

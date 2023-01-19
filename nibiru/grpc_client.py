@@ -57,7 +57,6 @@ class GrpcClient:
 
         # Query services
         self.dex = query_clients.DexQueryClient(self.chain_channel)
-        self.pricefeed = query_clients.PricefeedQueryClient(self.chain_channel)
         self.perp = query_clients.PerpQueryClient(self.chain_channel)
         self.vpool = query_clients.VpoolQueryClient(self.chain_channel)
         self.epoch = query_clients.EpochQueryClient(self.chain_channel)

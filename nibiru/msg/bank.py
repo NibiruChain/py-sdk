@@ -1,7 +1,7 @@
 import dataclasses
 from typing import Iterable, List, Union
 
-import nibiru_proto.cosmos.bank.v1beta1 as pb
+import nibiru_proto.betterproto.cosmos.bank.v1beta1 as pb
 
 from nibiru.pytypes import Coin, PythonMsg
 

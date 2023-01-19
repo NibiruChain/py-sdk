@@ -2,7 +2,7 @@ import hashlib
 import json
 from typing import Tuple
 
-import nibiru_proto.cosmos.crypto.secp256k1 as PubKeyProto
+import nibiru_proto.betterproto.cosmos.crypto.secp256k1 as PubKeyProto
 import requests
 from bech32 import bech32_decode, bech32_encode, convertbits
 from bip32 import BIP32

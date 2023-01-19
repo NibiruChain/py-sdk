@@ -3,8 +3,8 @@ from typing import List
 from urllib.parse import ParseResult, urlparse
 
 import pytest
-from nibiru_proto.cosmos.bank.v1beta1 import MsgSend
-from nibiru_proto.nibiru.perp.v1 import MsgOpenPosition
+from nibiru_proto.betterproto.cosmos.bank.v1beta1 import MsgSend
+from nibiru_proto.betterproto.nibiru.perp.v1 import MsgOpenPosition
 
 import nibiru
 import tests

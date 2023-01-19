@@ -1,6 +1,6 @@
 import dataclasses
 
-import nibiru_proto.nibiru.perp.v1 as perp_proto
+import nibiru_proto.betterproto.nibiru.perp.v1 as perp_proto
 
 from nibiru.pytypes import Coin, PythonMsg, Side
 from nibiru.utils import to_sdk_dec, to_sdk_int

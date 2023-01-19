@@ -1,8 +1,9 @@
 from typing import Dict, List, Union
 
-import nibiru_proto.nibiru.perp.v1 as pb_perp
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
+from nibiru_proto.perp.v1 import query_pb2 as perp_type
+from nibiru_proto.perp.v1 import query_pb2_grpc as perp_query
 
 from nibiru.query_clients.util import QueryClient, deserialize
 from nibiru.utils import from_sdk_dec
@@ -14,7 +15,7 @@ class PerpQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = pb_perp.QueryStub(channel)
+        self.api = perp_query.QueryStub(channel)
 
     def params(self):
         """
@@ -36,9 +37,9 @@ class PerpQueryClient(QueryClient):
         Returns:
             dict: The current parameters for the perpetual module
         """
-        proto_output: pb_perp.QueryParamsResponse = self.query(
-            api_callable=self.api.params,
-            req=pb_perp.QueryParamsRequest(),
+        proto_output: perp_type.QueryParamsResponse = self.query(
+            api_callable=self.api.Params,
+            req=perp_type.QueryParamsRequest(),
             should_deserialize=False,
         )
 
@@ -91,13 +92,13 @@ class PerpQueryClient(QueryClient):
         Returns:
             dict: The output of the query
         """
-        req = pb_perp.QueryPositionRequest(
+        req = perp_type.QueryPositionRequest(
             token_pair=token_pair,
             trader=trader,
         )
 
-        proto_output: pb_perp.QueryPositionResponse = self.query(
-            api_callable=self.api.query_position, req=req, should_deserialize=False
+        proto_output: perp_type.QueryPositionResponse = self.query(
+            api_callable=self.api.QueryPosition, req=req, should_deserialize=False
         )
 
         return deserialize(proto_output)
@@ -133,12 +134,12 @@ class PerpQueryClient(QueryClient):
         }
         ```
         """
-        req = pb_perp.QueryPositionsRequest(
+        req = perp_type.QueryPositionsRequest(
             trader=trader,
         )
 
-        proto_output: pb_perp.QueryPositionsResponse = self.query(
-            api_callable=self.api.query_positions, req=req, should_deserialize=False
+        proto_output: perp_type.QueryPositionsResponse = self.query(
+            api_callable=self.api.QueryPositions, req=req, should_deserialize=False
         )
         proto_as_dict: dict[str, list] = deserialize(proto_output)
 

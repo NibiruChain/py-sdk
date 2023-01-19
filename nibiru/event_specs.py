@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
-import nibiru_proto.nibiru.dex.v1 as dex_events  # noqa
-import nibiru_proto.nibiru.lockup.v1 as lockup_events  # noqa
-import nibiru_proto.nibiru.perp.v1 as perp_events
-import nibiru_proto.nibiru.stablecoin.v1 as stablecoin_events  # noqa
-import nibiru_proto.nibiru.vpool.v1 as vpool_events
+import nibiru_proto.betterproto.nibiru.dex.v1 as dex_events  # noqa
+import nibiru_proto.betterproto.nibiru.lockup.v1 as lockup_events  # noqa
+import nibiru_proto.betterproto.nibiru.perp.v1 as perp_events
+import nibiru_proto.betterproto.nibiru.stablecoin.v1 as stablecoin_events  # noqa
+import nibiru_proto.betterproto.nibiru.vpool.v1 as vpool_events
 
 
 class EventType(Enum):

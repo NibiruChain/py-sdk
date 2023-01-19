@@ -1,7 +1,7 @@
 import dataclasses
 
-import nibiru_proto.cosmos.distribution.v1beta1 as pb_distribution
-import nibiru_proto.cosmos.staking.v1beta1 as pb_staking
+import nibiru_proto.betterproto.cosmos.distribution.v1beta1 as pb_distribution
+import nibiru_proto.betterproto.cosmos.staking.v1beta1 as pb_staking
 
 from nibiru.pytypes import Coin, PythonMsg
 

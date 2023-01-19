@@ -1,7 +1,7 @@
 import dataclasses
 from typing import List, Union
 
-import nibiru_proto.nibiru.dex.v1 as pool_proto
+import nibiru_proto.betterproto.nibiru.dex.v1 as pool_proto
 
 from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 

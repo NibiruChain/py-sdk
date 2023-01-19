@@ -10,13 +10,13 @@ from copy import deepcopy
 from numbers import Number
 from typing import Any, Callable, Iterable, List, Tuple, Union
 
-import nibiru_proto.cosmos.base.abci.v1beta1 as abci_type
-import nibiru_proto.cosmos.base.v1beta1 as cosmos_base_coin_pb
-import nibiru_proto.cosmos.tx.signing.v1beta1 as tx_sign
-import nibiru_proto.cosmos.tx.v1beta1 as cosmos_tx_type
+import nibiru_proto.betterproto.cosmos.base.abci.v1beta1 as abci_type
+import nibiru_proto.betterproto.cosmos.base.v1beta1 as cosmos_base_coin_pb
+import nibiru_proto.betterproto.cosmos.tx.signing.v1beta1 as tx_sign
+import nibiru_proto.betterproto.cosmos.tx.v1beta1 as cosmos_tx_type
 from google.protobuf import any_pb2, message
 from google.protobuf.json_format import MessageToDict
-from nibiru_proto.cosmos.base.v1beta1 import Coin
+from nibiru_proto.betterproto.cosmos.base.v1beta1 import Coin
 
 from nibiru import pytypes as pt
 from nibiru import wallet

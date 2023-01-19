@@ -1,6 +1,7 @@
-import nibiru_proto.nibiru.epochs.v1beta1 as pb_epoch
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
+from nibiru_proto.proto.epochs import query_pb2 as epoch_type
+from nibiru_proto.proto.epochs import query_pb2_grpc as epoch_query
 
 from nibiru.query_clients.util import QueryClient
 
@@ -13,7 +14,7 @@ class EpochQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api: pb_epoch.QueryStub = pb_epoch.QueryStub(channel)
+        self.api = epoch_query.QueryStub(channel)
 
     def current_epoch(self, epoch_identifier: str) -> dict:
         """
@@ -32,8 +33,8 @@ class EpochQueryClient(QueryClient):
 
         """
         proto_output = self.query(
-            api_callable=self.api.current_epoch,
-            req=pb_epoch.QueryCurrentEpochRequest(identifier=epoch_identifier),
+            api_callable=self.api.CurrentEpoch,
+            req=epoch_type.QueryCurrentEpochRequest(identifier=epoch_identifier),
             should_deserialize=False,
         )
 
@@ -75,8 +76,8 @@ class EpochQueryClient(QueryClient):
             dict: the list of epochs
         """
         proto_output = self.query(
-            api_callable=self.api.epoch_infos,
-            req=pb_epoch.QueryEpochsInfoRequest(),
+            api_callable=self.api.EpochInfos,
+            req=epoch_type.QueryEpochsInfoRequest(),
             should_deserialize=False,
         )
         output = MessageToDict(proto_output)

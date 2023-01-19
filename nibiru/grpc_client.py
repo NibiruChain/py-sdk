@@ -1,14 +1,22 @@
+import asyncio
 import logging
 import time
 from typing import Generator, List, Optional, Tuple, Union
 
 import grpc
-import nibiru_proto.cosmos.auth.v1beta1 as auth
-import nibiru_proto.cosmos.authz.v1beta1 as authz
-import nibiru_proto.cosmos.bank.v1beta1 as bank
-import nibiru_proto.cosmos.base.abci.v1beta1 as abci_type
-import nibiru_proto.cosmos.base.tendermint.v1beta1 as tendermint
-import nibiru_proto.cosmos.tx.v1beta1 as pb_tx
+import nibiru_proto.betterproto.cosmos.auth.v1beta1 as auth
+import nibiru_proto.betterproto.cosmos.authz.v1beta1 as authz
+import nibiru_proto.betterproto.cosmos.bank.v1beta1 as bank
+import nibiru_proto.betterproto.cosmos.base.abci.v1beta1 as abci_type
+import nibiru_proto.betterproto.cosmos.base.tendermint.v1beta1 as tendermint
+import nibiru_proto.betterproto.cosmos.tx.v1beta1 as pb_tx
+from nibiru_proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_grpc
+from nibiru_proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_grpc
+from nibiru_proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_grpc
+from nibiru_proto.cosmos.base.tendermint.v1beta1 import (
+    query_pb2_grpc as tendermint_grpc,
+)
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 from packaging import version
 
 from nibiru import pytypes, query_clients
@@ -47,11 +55,11 @@ class GrpcClient:
             else grpc.secure_channel(grpc_endpoint, credentials)
         )
 
-        self.stubCosmosTendermint = tendermint.ServiceStub(self.chain_channel)
-        self.stubAuth = auth.QueryStub(self.chain_channel)
-        self.stubAuthz = authz.QueryStub(self.chain_channel)
-        self.stubBank = bank.QueryStub(self.chain_channel)
-        self.stubTx = pb_tx.ServiceStub(self.chain_channel)
+        self.stubCosmosTendermint = tendermint_grpc.ServiceStub(self.chain_channel)
+        self.stubAuth = auth_grpc.QueryStub(self.chain_channel)
+        self.stubAuthz = authz_grpc.QueryStub(self.chain_channel)
+        self.stubBank = bank_grpc.QueryStub(self.chain_channel)
+        self.stubTx = tx_service_grpc.ServiceStub(self.chain_channel)
 
         self.timeout_height = 1
 
@@ -190,9 +198,11 @@ class GrpcClient:
 
         """
         req = tendermint.GetNodeInfoRequest()
-        version = self.stubCosmosTendermint.get_node_info(
-            req
-        ).application_version.version
+        version: tendermint.GetNodeInfoResponse = asyncio.run(
+            self.stubCosmosTendermint.get_node_info(req)
+        )
+
+        version = version.application_version.version
 
         if version[0] != "v":
             version = "v" + str(version)

@@ -57,13 +57,13 @@ class PerpQueryClient(QueryClient):
 
         return output
 
-    def position(self, token_pair: str, trader: str) -> dict:
+    def position(self, pair: str, trader: str) -> dict:
         """
         Get the trader position. Returns information about position notional, margin ratio
         unrealized pnl, size of the position etc.
 
         Args:
-            token_pair (str): The token pair
+            pair (str): The token pair
             trader (str): The trader address
 
         Example Return Value::
@@ -72,10 +72,7 @@ class PerpQueryClient(QueryClient):
         {
           "position": {
             "traderAddress": "nibi1zaavvzxez0elund",
-            "pair": {
-              "token0": "ubtc",
-              "token1": "unusd"
-            },
+            "pair": "ubtc:unusd",
             "size": 11.241446725317692,
             "margin": 45999.99999999999,
             "openNotional": 230000.0,
@@ -93,7 +90,7 @@ class PerpQueryClient(QueryClient):
             dict: The output of the query
         """
         req = perp_type.QueryPositionRequest(
-            token_pair=token_pair,
+            pair=pair,
             trader=trader,
         )
 
@@ -124,7 +121,7 @@ class PerpQueryClient(QueryClient):
             "latest_cumulative_premium_fraction": 17233.436302191654,
             "margin": 10.0,
             "open_notional": 100.0,
-            "pair": { "token0": "ubtc", "token1": "unusd" },
+            "pair": "ubtc:unusd",
             "size": -0.00545940925278242,
             "trader_address": "nibi10gm4kys9yyrlqpvj05vqvjwvje87gln8nsm8wa"
             },
@@ -149,8 +146,7 @@ class PerpQueryClient(QueryClient):
 
         positions_map: Dict[str, dict] = {}
         for position_resp in position_resps:
-            pair_as_dict: dict = position_resp["position"]["pair"]
-            pair: str = f'{pair_as_dict["token0"]}:{pair_as_dict["token1"]}'
+            pair = position_resp["position"]["pair"]
             positions_map[pair] = position_resp
 
         return positions_map

@@ -48,10 +48,7 @@ class VpoolQueryClient(QueryClient):
         {
             "pools": [
                 {
-                    "pair": {
-                        "token0": "ubtc",
-                        "token1": "unusd"
-                    },
+                    "pair": "ubtc:unusd",
                     "base_asset_reserve": "142621265.346706602199856348",
                     "quote_asset_reserve": "2401396363770.998849167876702560",
                     "config": {

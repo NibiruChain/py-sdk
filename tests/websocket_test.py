@@ -43,7 +43,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
         [
             Msg.perp.open_position(
                 sender=sdk_val.address,
-                token_pair=pair,
+                pair=pair,
                 is_long=True,
                 quote_asset_amount=10,
                 leverage=10,
@@ -61,7 +61,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     sdk_val.tx.execute_msgs(
         Msg.perp.close_position(
             sender=sdk_val.address,
-            token_pair=pair,
+            pair=pair,
         )
     )
 
@@ -115,7 +115,7 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
             [
                 Msg.perp.close_position(
                     sender=sdk_val.address,
-                    token_pair="abc:def",
+                    pair="abc:def",
                 ).to_pb()
             ]
         )

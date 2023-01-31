@@ -48,10 +48,7 @@ The mark price can be accessed for any market using the vpool submodule queries.
                 "base_asset_reserve": 500.0,
                 "fluctuation_limit_ratio": 1.0,
                 "max_oracle_spread_ratio": 1.0,
-                "pair": {
-                    "token0": "ubtc",
-                    "token1": "unusd"
-                },
+                "pair": "ubtc:unusd",
                 "quote_asset_reserve": 10000000.0,
                 "trade_limit_ratio": 1.0
             }
@@ -120,7 +117,7 @@ The python package helps to create and open short and long positions.
     trader.tx.execute_msgs(
         nib.msg.MsgOpenPosition(
             trader.address,                 # The address of the trader
-            token_pair="ubtc:unusd",     # The market to interact with
+            pair="ubtc:unusd",     # The market to interact with
             side=Side.BUY,                  # Either Side.BUY or Side.SELL
             quote_asset_amount=23000,       # Margin for the position
             leverage=5,                     # Leverage of the position
@@ -162,7 +159,7 @@ from the query call of the perp module.
 .. code:: python
 
     trader.query.perp.position(
-        token_pair="ubtc:unusd",
+        pair="ubtc:unusd",
         trader=trader.address
     )
 
@@ -175,10 +172,7 @@ from the query call of the perp module.
             "last_update_cumulative_premium_fraction": 0.0,
             "margin": 23000000000.0,
             "open_notional": 115000000000.0,
-            "pair": {
-                "token0": "ubtc",
-                "token1": "unusd"
-            },
+            "pair": "ubtc:unusd",
             "size": 5684626.791893228,
             "trader_address": "nibi1zaavvzxez0elundtn32qnk9lkm8kmcsz44g7xl"
         },

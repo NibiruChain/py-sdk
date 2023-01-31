@@ -1151,14 +1151,14 @@ types-protobuf = ">=3.20.4"
 
 [[package]]
 name = "nibiru-proto"
-version = "0.17.1"
+version = "0.18.0rc2"
 description = "Nibiru Chain Python SDK"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "nibiru_proto-0.17.1-py3-none-any.whl", hash = "sha256:3e8821f1c3990a9d6794c53b05ed5bdf54e74bc40d97e170190973c418e40bde"},
-    {file = "nibiru_proto-0.17.1.tar.gz", hash = "sha256:9973fba9855d39bf9760f099cdf0da648ecd0f87e5d16c41b29340b0d47d4707"},
+    {file = "nibiru_proto-0.18.0rc2-py3-none-any.whl", hash = "sha256:7bdc659b9b6066a12a884ef9bf8f2dbc70ff5152c262917088f48580397254a3"},
+    {file = "nibiru_proto-0.18.0rc2.tar.gz", hash = "sha256:bdffa159a05133279d2cfee304fb356e890a139ac73e7d23130979b6bf1f99e0"},
 ]
 
 [package.dependencies]
@@ -1167,7 +1167,7 @@ bech32 = ">=1.2.0,<2.0.0"
 grpcio = ">=1.51.1,<2.0.0"
 grpcio-tools = ">=1.51.1,<2.0.0"
 mypy-protobuf = ">=3.4.0,<4.0.0"
-protobuf = ">=4.21.11,<5.0.0"
+protobuf = ">=4.21.12,<5.0.0"
 types-protobuf = ">=4.21.0.2,<5.0.0.0"
 
 [[package]]
@@ -1799,4 +1799,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "933a681a4e353cd4a4b4320e2c3563f6cb370278e25dad3137bb2ad1df679890"
+content-hash = "cae678d8b23ba258eab29fb1bb950c2c344e2530d720ceb74c6c018306a20a8c"

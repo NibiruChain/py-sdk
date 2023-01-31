@@ -24,7 +24,6 @@ def delegate(sdk_val: Sdk):
                 amount=1,
             ),
         ],
-        True,
     )
 
 
@@ -37,7 +36,6 @@ def undelegate(sdk_val: Sdk):
                 amount=1,
             ),
         ],
-        True,
     )
 
 

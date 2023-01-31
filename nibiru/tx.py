@@ -45,7 +45,7 @@ class TxClient:
     def execute_msgs(
         self,
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
-        get_sequence_from_node: bool = True,
+        get_sequence_from_node: bool = False,
         **kwargs,
     ) -> pt.RawTxResp:
         """

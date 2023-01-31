@@ -34,7 +34,7 @@ You can create a new account using the CLI command.
     trader.tx.execute_msgs(
         nibiru.msg.MsgOpenPosition(
             sender=trader.address,
-            token_pair="ubtc:unusd",
+            pair="ubtc:unusd",
             side=nibiru.Side.BUY,
             quote_asset_amount=10,
             leverage=5,
@@ -43,7 +43,7 @@ You can create a new account using the CLI command.
     )
 
     # You can query the position with the queries of the perp module
-    print(trader.query.perp.position(token_pair="ubtc:unusd", trader=trader.address))
+    print(trader.query.perp.position(pair="ubtc:unusd", trader=trader.address))
 
 
 Using a different chain
@@ -88,7 +88,7 @@ that it was picked by a block. This behavior can be changed using the TxConfig o
     trader.tx.execute_msgs(
         nibiru.msg.MsgOpenPosition(
             sender=trader.address,
-            token_pair="ubtc:unusd",
+            pair="ubtc:unusd",
             side=nibiru.Side.BUY,
             quote_asset_amount=10,
             leverage=5,

@@ -125,7 +125,7 @@ from nibiru import Msg
 tx_resp = sdk.tx.execute_msgs(
     Msg.perp.open_position(
         sender=sdk.address,
-        token_pair="ubtc:unusd",
+        pair="ubtc:unusd",
         is_long=True,
         quote_asset_amount=10,
         leverage=10,

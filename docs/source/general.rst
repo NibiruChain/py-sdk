@@ -39,6 +39,6 @@ You can get information about your current position by running:
 .. code:: python
 
     trader.query.perp.position(
-        token_pair="ubtc:unusd",
+        pair="ubtc:unusd",
         trader=trader.address
     )

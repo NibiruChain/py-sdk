@@ -89,7 +89,7 @@ def network() -> Network:
 
 
 TX_CONFIG: TxConfig = TxConfig(
-    tx_type=TxType.BLOCK,
+    tx_type=TxType.SYNC,
     gas_multiplier=1.25,
     gas_price=0.25,
 )

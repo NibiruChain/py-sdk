@@ -30,16 +30,16 @@ jobs:
       # ----------------------------------------------
       - name: Check out the repo
         uses: actions/checkout@v3
-      - name: Set up Python 3.7
+      - name: Set up Python (3.8)
         id: setup-python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7.15
-          # 3.7.15 is the highest version available for this GitHub action.
-          #   See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json
-          #   to see the full list of supported Python versions.
-          # 3.7.16 is the highest 3.7 version available on pyenv
-          #   See `grep '3.7' <<< $(pyenv install -l)` to view the available list.
+          python-version: 3.8.16
+          # 3.8.16 is the highest version available for this GitHub action.
+          #   For the full list of supported Python versions, see:
+          #   https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json
+          # 3.8.16 is the highest 3.8 version available on pyenv
+          #   See `grep '3.8' <<< $(pyenv install -l)` to view the available list.
 
       - name: Run python
         run: python --version && python -c "print('hello')"

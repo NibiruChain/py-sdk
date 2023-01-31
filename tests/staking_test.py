@@ -23,7 +23,7 @@ def delegate(sdk_val: Sdk):
                 validator_address=get_validator_operator_address(sdk_val),
                 amount=1,
             ),
-        ]
+        ],
     )
 
 
@@ -35,7 +35,7 @@ def undelegate(sdk_val: Sdk):
                 validator_address=get_validator_operator_address(sdk_val),
                 amount=1,
             ),
-        ]
+        ],
     )
 
 

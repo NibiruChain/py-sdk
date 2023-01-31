@@ -21,36 +21,32 @@ class ERRORS:
 
 
 def test_open_position(sdk_val: nibiru.Sdk):
-    try:
-        tests.LOGGER.info("nibid tx perp open-position")
-        tx_output: pt.RawTxResp = sdk_val.tx.execute_msgs(
-            Msg.perp.open_position(
-                sender=sdk_val.address,
-                pair=PAIR,
-                is_long=False,
-                quote_asset_amount=10,
-                leverage=10,
-                base_asset_amount_limit=0,
-            )
+    tests.LOGGER.info("nibid tx perp open-position")
+    tx_output: pt.RawTxResp = sdk_val.tx.execute_msgs(
+        Msg.perp.open_position(
+            sender=sdk_val.address,
+            pair=PAIR,
+            is_long=False,
+            quote_asset_amount=10,
+            leverage=10,
+            base_asset_amount_limit=0,
         )
-        tests.LOGGER.info(
-            f"nibid tx perp open-position: {tests.format_response(tx_output)}"
-        )
-        tests.transaction_must_succeed(tx_output)
+    )
+    tests.LOGGER.info(
+        f"nibid tx perp open-position: {tests.format_response(tx_output)}"
+    )
+    tests.transaction_must_succeed(tx_output)
 
-        tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
-        assert "/nibiru.perp.v1.MsgOpenPosition" in tx_resp.rawLog[0].msgs
-        events_for_msg: List[str] = [
-            "nibiru.perp.v1.PositionChangedEvent",
-            "nibiru.vpool.v1.SwapOnVpoolEvent",
-            "nibiru.vpool.v1.MarkPriceChangedEvent",
-            "transfer",
-        ]
-        assert all(
-            [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
-        )
-    except BaseException as err:
-        tests.raises(ERRORS.bad_debt, err)
+    tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
+    assert "/nibiru.perp.v1.MsgOpenPosition" in tx_resp.rawLog[0].msgs
+    events_for_msg: List[str] = [
+        "nibiru.perp.v1.PositionChangedEvent",
+        "nibiru.vpool.v1.SwapOnVpoolEvent",
+        "nibiru.vpool.v1.MarkPriceChangedEvent",
+    ]
+    assert all(
+        [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
+    )
 
 
 @pytest.mark.order(after="test_open_position")

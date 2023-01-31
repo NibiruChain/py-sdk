@@ -45,7 +45,7 @@ class TxClient:
     def execute_msgs(
         self,
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
-        get_sequence_from_node: bool = False,
+        get_sequence_from_node: bool = True,
         **kwargs,
     ) -> pt.RawTxResp:
         """
@@ -100,6 +100,7 @@ class TxClient:
             ):
                 if not isinstance(msgs, list):
                     msgs = [msgs]
+                self.client.wait_for_next_block()
                 return self.execute_msgs(*msgs, get_sequence_from_node=True, **kwargs)
 
             if address:

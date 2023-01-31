@@ -16,12 +16,12 @@ from typing import Any, Dict, List, Optional
 import dotenv
 import pytest
 
-from nibiru import Network, Sdk
+from nibiru import Network, NetworkType, Sdk
 from nibiru.pytypes import TxConfig, TxType
-from tests.utils_test import can_ping, url_to_host
 
 PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
     VALIDATOR_MNEMONIC="",
+    CHAIN_ID="nibiru-localnet-0",
 )
 PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
     USE_LOCALNET=False,
@@ -29,8 +29,6 @@ PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
     GRPC_ENDPOINT="",
     TENDERMINT_RPC_ENDPOINT="",
     WEBSOCKET_ENDPOINT="",
-    DEVNET_NUMBER="1",
-    CHAIN_ID="",
 )
 PYTEST_GLOBALS: Dict[str, Any] = {
     **PYTEST_GLOBALS_REQUIRED,  # combines dictionaries
@@ -70,41 +68,24 @@ def pytest_configure(config):
 def get_network() -> Network:
     if PYTEST_GLOBALS["use_localnet"]:
         return Network.customnet()
-    return Network.devnet(int(os.getenv("DEVNET_NUMBER", "1")))
+
+    # Use the chain_id to choose which Network to use
+    chain_id: str = os.getenv("CHAIN_ID", "nibiru-localnet-0")
+    chain_id_elements: List[str] = chain_id.split("-")
+    assert len(chain_id_elements) == 3
+    prefix, chain_type, chain_number = chain_id_elements
+    chain_number = int(chain_number)
+
+    chain_types: List[str] = [enum_member.value for enum_member in NetworkType]
+    if chain_type in chain_types:
+        return Network.from_chain_id(chain_id=chain_id)
+    else:
+        return Network.localnet()
 
 
 @pytest.fixture
 def network() -> Network:
-    """
-    # TODO Use ping test like ts-sdk to check RPC and LCD connections
-    """
     return get_network()
-
-
-def pytest_sessionstart(session):
-    """
-    Called after the Session object has been created and
-    before performing collection and entering the run test loop.
-    """
-    network = get_network()
-
-    if not can_ping("www.google.com"):
-        raise TimeoutError(f"Cannot ping google.com")
-
-    if not can_ping(url_to_host(network.lcd_endpoint)):
-        raise TimeoutError(
-            f"Lcd Endpoint {url_to_host(network.lcd_endpoint)} timed out"
-        )
-
-    if not can_ping(url_to_host(network.grpc_endpoint)):
-        raise TimeoutError(
-            f"Grpc Endpoint {url_to_host(network.grpc_endpoint)} timed out"
-        )
-
-    if not can_ping(url_to_host(network.tendermint_rpc_endpoint)):
-        raise TimeoutError(
-            f"Tendermint Rpc Endpoint {url_to_host(network.tendermint_rpc_endpoint)} timed out"
-        )
 
 
 TX_CONFIG: TxConfig = TxConfig(

@@ -1,10 +1,12 @@
 # chain_info_test.py
+import dataclasses
 from typing import Any, Dict, List, Union
 
 import pytest
 import requests
 
 import nibiru
+import tests
 from nibiru import pytypes
 
 
@@ -105,3 +107,36 @@ def test_query(sdk_val: nibiru.Sdk):
     """
     assert isinstance(sdk_val.query.get_latest_block_height(), int)
     assert isinstance(sdk_val.query.get_version(), str)
+
+
+def test_Network_from_chain_id():
+    @dataclasses.dataclass
+    class Case:
+        chain_id_in: str
+        expected_fail: bool = False
+
+    def run_case(test_case: Case):
+        if test_case.expected_fail:
+            try:
+                _ = nibiru.Network.from_chain_id(test_case.chain_id_in)
+            except BaseException as err:
+                tests.raises(["invalid chain type", "invalid chain_id format"], err)
+        else:
+            network = nibiru.Network.from_chain_id(test_case.chain_id_in)
+            _, chain_type, _ = network.chain_id.split("-")
+
+            if chain_type == "localnet":
+                return
+
+            assert chain_type in network.tendermint_rpc_endpoint
+            assert chain_type in network.lcd_endpoint
+            assert chain_type in network.grpc_endpoint
+
+    for test_case in [
+        Case("nibiru-devnet-4"),
+        Case("nibiru-randnet-123", expected_fail=True),
+        Case("nibiru-testnet-685920"),
+        Case("xxx-yyy", expected_fail=True),
+        Case("nibiru-localnet-78"),
+    ]:
+        run_case(test_case=test_case)

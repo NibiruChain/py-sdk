@@ -11,7 +11,7 @@ maintainers = [
   "Unique-Divine <dev@nibiru.fi>",
 ]
 readme = "README.md" # similar to long_description in setuptools
-repository = "https://github.com/NibiruChain/sdk-py"
+repository = "https://github.com/NibiruChain/py-sdk"
 keywords = ["nibiru", "blockchain", "sdk", "python", "cosmos"]
 classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
@@ -20,7 +20,7 @@ classifiers = [
 packages = [{ include = "nibiru" }]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 asyncio = "^3.4.3"
 bech32 = "^1.2.0"
 python-dotenv = "^0.21.0"

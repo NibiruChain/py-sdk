@@ -3,7 +3,6 @@ from enum import Enum
 
 import google.protobuf.message
 from nibiru_proto.proto.dex.v1 import event_pb2 as dex_events
-from nibiru_proto.proto.lockup.v1 import tx_pb2 as lockup_events  # noqa
 from nibiru_proto.proto.perp.v1 import event_pb2 as perp_events
 from nibiru_proto.proto.stablecoin import events_pb2 as stablecoin_events  # noqa
 from nibiru_proto.proto.vpool.v1 import event_pb2 as vpool_events
@@ -30,11 +29,6 @@ class EventType(Enum):
     PoolCreatedEvent = dex_events.EventPoolCreated
     PoolExitedEvent = dex_events.EventPoolExited
     AssetsSwappedEvent = dex_events.EventAssetsSwapped
-
-    # Lockup event
-    # LockEvent = lockup_events.EventLock
-    # UnlockInitiatedEvent = lockup_events.EventUnlockInitiated
-    # UnlockEvent = lockup_events.EventUnlock
 
     # Stablecoin events
     TransferEvent = stablecoin_events.EventTransfer

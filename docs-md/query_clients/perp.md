@@ -32,12 +32,12 @@ Classes
         Returns:
             dict: The current parameters for the perpetual module
 
-    `position(self, token_pair: str, trader: str) ‑> dict`
+    `position(self, pair: str, trader: str) ‑> dict`
     :   Get the trader position. Returns information about position notional, margin ratio
         unrealized pnl, size of the position etc.
 
         Args:
-            token_pair (str): The token pair
+            pair (str): The token pair
             trader (str): The trader address
 
         Example Return Value::
@@ -46,10 +46,7 @@ Classes
         {
           "position": {
             "traderAddress": "nibi1zaavvzxez0elund",
-            "pair": {
-              "token0": "ubtc",
-              "token1": "unusd"
-            },
+            "pair": "ubtc:unusd",
             "size": 11.241446725317692,
             "margin": 45999.99999999999,
             "openNotional": 230000.0,

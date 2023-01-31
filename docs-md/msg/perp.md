@@ -4,12 +4,12 @@ Module nibiru.msg.perp
 Classes
 -------
 
-`MsgAddMargin(sender: str, token_pair: str, margin: nibiru.pytypes.common.Coin)`
-:   Add margin for the position (token_pair + trader)
+`MsgAddMargin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin)`
+:   Add margin for the position (pair + trader)
 
     Attributes:
         sender (str): The trader address
-        token_pair (str): The token pair
+        pair (str): The token pair
         margin (Coin): The margin to remove in a coin format
 
     ### Ancestors (in MRO)
@@ -25,7 +25,7 @@ Classes
     `sender: str`
     :
 
-    `token_pair: str`
+    `pair: str`
     :
 
     ### Methods
@@ -36,12 +36,12 @@ Classes
         Returns:
             pb.MsgAddMargin: The proto object.
 
-`MsgClosePosition(sender: str, token_pair: str)`
+`MsgClosePosition(sender: str, pair: str)`
 :   Close the position.
 
     Attributes:
         sender (str): The sender address
-        token_pair (str): The token pair
+        pair (str): The token pair
 
     ### Ancestors (in MRO)
 
@@ -53,7 +53,7 @@ Classes
     `sender: str`
     :
 
-    `token_pair: str`
+    `pair: str`
     :
 
     ### Methods
@@ -64,12 +64,12 @@ Classes
         Returns:
             pb.MsgClosePosition: The proto object.
 
-`MsgLiquidate(sender: str, token_pair: str, trader: str)`
+`MsgLiquidate(sender: str, pair: str, trader: str)`
 :   Close the position.
 
     Attributes:
         sender (str): The sender address
-        token_pair (str): The token pair
+        pair (str): The token pair
 
     ### Ancestors (in MRO)
 
@@ -81,7 +81,7 @@ Classes
     `sender: str`
     :
 
-    `token_pair: str`
+    `pair: str`
     :
 
     `trader: str`
@@ -95,12 +95,12 @@ Classes
         Returns:
             pb.MsgLiquidate: The proto object.
 
-`MsgOpenPosition(sender: str, token_pair: str, side: nibiru.pytypes.common.Side, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float)`
+`MsgOpenPosition(sender: str, pair: str, side: nibiru.pytypes.common.Side, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float)`
 :   Open a position using the specified parameters.
 
     Attributes:
         sender (str): The sender address
-        token_pair (str): The token pair
+        pair (str): The token pair
         side (Side): The side, either Side.BUY or Side.SELL
         quote_asset_amount (float): The quote amount you want to use to buy base
         leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
@@ -130,7 +130,7 @@ Classes
     `side: nibiru.pytypes.common.Side`
     :
 
-    `token_pair: str`
+    `pair: str`
     :
 
     ### Methods
@@ -141,12 +141,12 @@ Classes
         Returns:
             pb.MsgOpenPosition: The proto object.
 
-`MsgRemoveMargin(sender: str, token_pair: str, margin: nibiru.pytypes.common.Coin)`
-:   Remove margin for the position (token_pair + trader)
+`MsgRemoveMargin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin)`
+:   Remove margin for the position (pair + trader)
 
     Attributes:
         sender (str): The trader address
-        token_pair (str): The token pair
+        pair (str): The token pair
         margin (Coin): The margin to remove in a coin format
 
     ### Ancestors (in MRO)
@@ -162,7 +162,7 @@ Classes
     `sender: str`
     :
 
-    `token_pair: str`
+    `pair: str`
     :
 
     ### Methods
@@ -184,27 +184,27 @@ Classes
 
     ### Methods
 
-    `add_margin(sender: str, token_pair: str, margin: nibiru.pytypes.common.Coin) ‑> nibiru.msg.perp.MsgAddMargin`
-    :   Add margin for the position (token_pair + trader)
+    `add_margin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin) ‑> nibiru.msg.perp.MsgAddMargin`
+    :   Add margin for the position (pair + trader)
 
         Attributes:
             sender (str): The trader address
-            token_pair (str): The token pair
+            pair (str): The token pair
             margin (Coin): The margin to remove in a coin format
 
-    `close_position(sender: str, token_pair: str) ‑> nibiru.msg.perp.MsgClosePosition`
+    `close_position(sender: str, pair: str) ‑> nibiru.msg.perp.MsgClosePosition`
     :   Close the position.
 
         Attributes:
             sender (str): The sender address
-            token_pair (str): The token pair
+            pair (str): The token pair
 
-    `open_position(sender: str, token_pair: str, is_long: bool, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float) ‑> nibiru.msg.perp.MsgOpenPosition`
+    `open_position(sender: str, pair: str, is_long: bool, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float) ‑> nibiru.msg.perp.MsgOpenPosition`
     :   Open a posiiton using the specified parameters.
 
         Attributes:
             sender (str): The sender address
-            token_pair (str): The token pair
+            pair (str): The token pair
             is_long (bool): Determines whether to open with long or short exposure.
             quote_asset_amount (float): The quote amount you want to use to buy base
             leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
@@ -212,12 +212,12 @@ Classes
             base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
                 quote.
 
-    `remove_margin(sender: str, token_pair: str, margin: nibiru.pytypes.common.Coin) ‑> nibiru.msg.perp.MsgRemoveMargin`
-    :   Remove margin for the position (token_pair + trader)
+    `remove_margin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin) ‑> nibiru.msg.perp.MsgRemoveMargin`
+    :   Remove margin for the position (pair + trader)
 
         Attributes:
             sender (str): The trader address
-            token_pair (str): The token pair
+            pair (str): The token pair
             margin (Coin): The margin to remove in a coin format
 
 `perp()`

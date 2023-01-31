@@ -26,7 +26,7 @@ def test_open_position(sdk_val: nibiru.Sdk):
         tx_output: pt.RawTxResp = sdk_val.tx.execute_msgs(
             Msg.perp.open_position(
                 sender=sdk_val.address,
-                token_pair=PAIR,
+                pair=PAIR,
                 is_long=False,
                 quote_asset_amount=10,
                 leverage=10,
@@ -57,9 +57,7 @@ def test_open_position(sdk_val: nibiru.Sdk):
 def test_perp_query_position(sdk_val: nibiru.Sdk):
     try:
         # Trader position must be a dict with specific keys
-        position_res = sdk_val.query.perp.position(
-            trader=sdk_val.address, token_pair=PAIR
-        )
+        position_res = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
         tests.dict_keys_must_match(
             position_res,
             [
@@ -115,7 +113,7 @@ def test_perp_add_margin(sdk_val: nibiru.Sdk):
         tx_output = sdk_val.tx.execute_msgs(
             Msg.perp.add_margin(
                 sender=sdk_val.address,
-                token_pair=PAIR,
+                pair=PAIR,
                 margin=pt.Coin(10, "unusd"),
             ),
         )
@@ -134,7 +132,7 @@ def test_perp_remove_margin(sdk_val: nibiru.Sdk):
         tx_output = sdk_val.tx.execute_msgs(
             Msg.perp.remove_margin(
                 sender=sdk_val.address,
-                token_pair=PAIR,
+                pair=PAIR,
                 margin=pt.Coin(5, "unusd"),
             )
         )
@@ -156,7 +154,7 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
     try:
         # Transaction close_position must succeed
         tx_output = sdk_val.tx.execute_msgs(
-            Msg.perp.close_position(sender=sdk_val.address, token_pair=PAIR)
+            Msg.perp.close_position(sender=sdk_val.address, pair=PAIR)
         )
         tests.LOGGER.info(
             f"nibid tx perp close-position: \n{tests.format_response(tx_output)}"
@@ -167,7 +165,7 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
         with pytest.raises(
             (QueryError, BaseException), match=ERRORS.position_not_found
         ):
-            sdk_val.query.perp.position(trader=sdk_val.address, token_pair=PAIR)
+            sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
     except BaseException as err:
         expected_errors: List[str] = [
             ERRORS.position_not_found,

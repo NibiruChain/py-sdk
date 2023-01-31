@@ -14,19 +14,11 @@ repos:
           exclude: nibiru/proto/.+
 
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 22.12.0
     hooks:
       - id: black
         files: \.py$
         exclude: nibiru/proto/.+
-
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-        files: \.py$
-        exclude: nibiru/proto/.+
-        args: ["--profile", "black"]
 
   - repo: https://github.com/pycqa/flake8
     rev: 4.0.1

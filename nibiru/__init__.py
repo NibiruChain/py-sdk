@@ -20,8 +20,16 @@ import nibiru.exceptions  # noqa
 import nibiru.pytypes  # noqa
 from nibiru.grpc_client import GrpcClient  # noqa
 from nibiru.msg import Msg  # noqa
-from nibiru.pytypes import Network, NetworkType  # noqa
-from nibiru.pytypes import Coin, Direction, PoolAsset, Side, TxConfig, TxType  # noqa
+from nibiru.pytypes import (  # noqa
+    Coin,
+    Direction,
+    Network,
+    NetworkType,
+    PoolAsset,
+    Side,
+    TxConfig,
+    TxType,
+)
 from nibiru.sdk import Sdk  # noqa
 from nibiru.tx import Transaction  # noqa
 from nibiru.wallet import Address, PrivateKey, PublicKey  # noqa

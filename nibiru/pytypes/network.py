@@ -6,8 +6,8 @@ network by setting the values of the Network data class.
 
 """
 import dataclasses
-import os
 import enum
+import os
 from typing import Dict, Optional
 
 
@@ -179,7 +179,7 @@ class Network:
             fee_denom='unibi',
             env='devnet',
         )
-    
+
     @classmethod
     def from_chain_id(cls, chain_id: str) -> "Network":
         """
@@ -188,7 +188,9 @@ class Network:
 
         chain_id_elements: List[str] = chain_id.split("-")
         if len(chain_id_elements) != 3:
-            raise ValueError(f"invalid chain_id format: {chain_id}. Expected one like nibiru-testnet-2")
+            raise ValueError(
+                f"invalid chain_id format: {chain_id}. Expected one like nibiru-testnet-2"
+            )
 
         prefix, chain_type, chain_number = chain_id_elements
         chain_number = int(chain_number)
@@ -199,12 +201,16 @@ class Network:
             return Network.testnet(chain_number)
         elif chain_type == NetworkType.LOCALNET.value:
             return Network.localnet()
-        else: 
-            network_types: List[str] = [member.value for member in NetworkType] 
-            raise ValueError(f"invalid chain type: {chain_type}. Available options: {network_types}")
+        else:
+            network_types: List[str] = [member.value for member in NetworkType]
+            raise ValueError(
+                f"invalid chain type: {chain_type}. Available options: {network_types}"
+            )
+
 
 class NetworkType(enum.Enum):
     """Enum class for the available network types. E.g. 'testnet' and 'devnet'."""
+
     DEVNET = "devnet"
     TESTNET = "testnet"
     LOCALNET = "localnet"

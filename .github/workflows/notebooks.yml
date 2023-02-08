@@ -94,7 +94,7 @@ jobs:
       - name: Run the examples
         run: |
           pip install jupyter
-          pip install .
+          poetry run pip install .
           cd examples
           for filename in *; do
             if [[ $filename == *.ipynb ]]; then

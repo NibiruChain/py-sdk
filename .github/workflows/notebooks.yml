@@ -101,7 +101,7 @@ jobs:
             fi
           for filename in *; do
             if [[ $filename == *.py ]]; then
-              python "$filename" || exit 1
+              poetry run python "$filename" || exit 1
             fi
           done
           done

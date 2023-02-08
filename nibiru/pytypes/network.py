@@ -8,7 +8,7 @@ network by setting the values of the Network data class.
 import dataclasses
 import enum
 import os
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 
 @dataclasses.dataclass
@@ -160,7 +160,7 @@ class Network:
         return self.env
 
     @classmethod
-    def devnet(cls, chain_num: int = 2) -> "Network":
+    def devnet(cls, chain_num: int = 3) -> "Network":
         """
         Devnet is a network open to invited validators.
 

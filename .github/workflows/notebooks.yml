@@ -32,6 +32,7 @@ jobs:
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
+      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
     steps:
       # ----------------------------------------------
       # check-out repo and set-up python

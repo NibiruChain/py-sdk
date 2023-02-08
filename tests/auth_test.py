@@ -16,7 +16,6 @@ def test_query_auth_accounts(sdk_val: nibiru.Sdk):
     query_resp: dict = sdk_val.query.auth.accounts()
 
     for account in query_resp["accounts"]:
-
         assert all(
             [
                 key

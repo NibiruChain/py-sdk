@@ -146,7 +146,6 @@ class TxClient:
         return self._send_tx(tx_raw_bytes, conf.tx_type)
 
     def _send_tx(self, tx_raw_bytes: bytes, tx_type: pt.TxType) -> abci_type.TxResponse:
-
         broadcast_fn: Callable[[bytes], abci_type.TxResponse]
 
         if tx_type == pt.TxType.SYNC:
@@ -220,7 +219,7 @@ class TxClient:
         """
         config: pt.TxConfig = deepcopy(self.config)
         prop_names = dir(config)
-        for (k, v) in kwargs.items():
+        for k, v in kwargs.items():
             if k in prop_names:
                 setattr(config, k, v)
             else:

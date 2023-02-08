@@ -156,7 +156,6 @@ def R(a, b, c, d, e, Fj, Kj, sj, rj, X):
 
 
 def RMD160Transform(state, block):  # uint32 state[5], uchar block[64]
-
     x = [0] * 16
     assert (
         sys.byteorder == 'little'

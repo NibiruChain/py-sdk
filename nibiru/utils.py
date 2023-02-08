@@ -181,7 +181,6 @@ def toPbTimestamp(dt: datetime):
 
 
 class ColoredFormatter(logging.Formatter):
-
     fmt = "%(asctime)s|%(levelname)s|%(funcName)s| %(message)s"
 
     white = "\x1b[97;20m"

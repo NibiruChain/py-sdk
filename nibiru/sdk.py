@@ -54,6 +54,7 @@ class Sdk:
     network: pytypes.Network
     tx: TxClient
     tx_config: pytypes.TxConfig
+    mnemonic: str
 
     def __init__(self, _error_do_not_use_init_directly=None) -> None:
         """Unsupported, please use from_mnemonic to initialize."""
@@ -92,6 +93,7 @@ class Sdk:
             pk = PrivateKey.from_hex(key)
 
         self._with_priv_key(pk)
+        self.mnemonic = mnemonic if key is None else key
 
         return self
 

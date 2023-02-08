@@ -34,6 +34,13 @@ jobs:
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
     steps:
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.2.0
+        with:
+          ref: ${{ github.ref }}
+          check-name: "E2E 🐍 tests"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
       # ----------------------------------------------
       # check-out repo and set-up python
       # ----------------------------------------------

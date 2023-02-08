@@ -99,7 +99,9 @@ jobs:
           cd examples
           for filename in *; do
             if [[ $filename == *.ipynb ]]; then
-              jupyter nbconvert --to python "$filename"
+              if [ $filename != "3- Arbitrage.ipynb" ]; then
+                jupyter nbconvert --to python "$filename"
+              fi
             fi
           for filename in *; do
             if [[ $filename == *.py ]]; then

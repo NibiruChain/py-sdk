@@ -173,7 +173,6 @@ class NibiruWebsocket:
                 return value
 
         if event["type"] in self.captured_events_type:
-
             event_payload = {
                 decode(attribute["key"]): decode(attribute["value"]).strip('"')
                 for attribute in event["attributes"]
@@ -200,14 +199,12 @@ class NibiruWebsocket:
             self.queue.put(EventCaptured(event["type"], event_payload))
 
     def _subscribe(self):
-
         tm_events = {
             "new_block_value": "NewBlock",
             "tx_value": "Tx",
         }
 
         for _, event_name in tm_events.items():
-
             self._ws.send(
                 json.dumps(
                     {

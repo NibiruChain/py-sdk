@@ -74,12 +74,10 @@ def deserialize(pb_msg: message.Message, no_sdk_transformation: bool = False) ->
     expected_fields: List[str] = list(pb_msg.DESCRIPTOR.fields_by_name.keys())
 
     for _, attr in enumerate(expected_fields):
-
         attr_search = pb_msg.__getattribute__(attr)
         custom_dtype = custom_dtypes.get(str(attr_search))
 
         if custom_dtype is not None:
-
             if "sdk/types.Dec" in str(custom_dtype):
                 if no_sdk_transformation:
                     serialized_output[str(attr)] = float(pb_msg.__getattribute__(attr))
@@ -159,7 +157,6 @@ class QueryClient:
         req: message.Message,
         should_deserialize: bool = True,
     ) -> Union[dict, message.Message]:
-
         try:
             output: message.Message = api_callable(req)
             if should_deserialize:

@@ -1,6 +1,8 @@
-name: E2E 🐍 tests
+name: Examples testing
 
 on:
+  schedule:
+    - cron: "0 * * * *"
   pull_request:
     branches: ["master"]
     paths:
@@ -29,13 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
-      LCD_ENDPOINT: ${{ secrets.LCD_ENDPOINT }}
-      GRPC_ENDPOINT: ${{ secrets.GRPC_ENDPOINT }}
-      TENDERMINT_RPC_ENDPOINT: ${{ secrets.TENDERMINT_RPC_ENDPOINT }}
-      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
-      CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
+      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
     steps:
       # ----------------------------------------------
       # check-out repo and set-up python
@@ -67,12 +64,6 @@ jobs:
           key: poetry-0 # increment to reset cache
 
       # ----------------------------------------------
-      # Install ping for early tests
-      # ----------------------------------------------
-      - name: Install ping
-        run: sudo apt-get install -y iputils-ping
-
-      # ----------------------------------------------
       # Install & configure poetry
       # ----------------------------------------------
       - name: Install Poetry
@@ -97,21 +88,24 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
+
       #----------------------------------------------
-      # run tests
+      # run examples
       #----------------------------------------------
-      - name: Install unbuffer command for run step
-        run: sudo apt-get install -y expect-dev
-      - name: Run Python SDK tests
-        run: unbuffer poetry run pytest -s tests --cov=nibiru --log-cli-level=DEBUG 2>&1 | tee coverage.txt; exit "${PIPESTATUS[0]}"
-        # piping to tee lets us see stdout and write to a file simultaneously.
-        # unbuffer retains the colored text from pytest through the pipe to tee
-        # -s makes the output verbose to make logs more descriptive.
-        # --cov toggles on the coverage report at the specified path
-      #----------------------------------------------
-      # Upload test output and coverage report as a GitHub artifact
-      #----------------------------------------------
-      - uses: actions/upload-artifact@v3
-        with:
-          name: test-coverage
-          path: coverage.txt
+      - name: Run the examples
+        run: |
+          pip install jupyter
+          poetry run pip install .
+          cd examples
+          for filename in *; do
+            if [[ $filename == *.ipynb ]]; then
+              if [ $filename != "3- Arbitrage.ipynb" ]; then
+                jupyter nbconvert --to python "$filename"
+              fi
+            fi
+          for filename in *; do
+            if [[ $filename == *.py ]]; then
+              poetry run python "$filename" || exit 1
+            fi
+          done
+          done

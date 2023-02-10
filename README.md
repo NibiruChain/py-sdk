@@ -5,7 +5,7 @@
 <!-- Badges -->
 
 [![Nibiru Test workflow][tests-badge]][tests-workflow]
-[![Nibiru examples tests][tests-badge]][tests-example]
+[![Nibiru examples tests][examples-badge]][tests-example]
 [![PyPI Version][pypi-image]][pypi-url]
 [![][documentation-image]][documentation-url]
 [![][discord-badge]][discord-url]
@@ -26,6 +26,7 @@
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-link]: https://github.com/NibiruChain/py-sdk/blob/master/LICENSE
 [tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml/badge.svg
+[tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml/badge.svg
 [tests-workflow]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml
 [tests-example]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml
 

@@ -5,6 +5,7 @@
 <!-- Badges -->
 
 [![Nibiru Test workflow][tests-badge]][tests-workflow]
+[![Nibiru examples tests][examples-badge]][tests-example]
 [![PyPI Version][pypi-image]][pypi-url]
 [![][documentation-image]][documentation-url]
 [![][discord-badge]][discord-url]
@@ -25,7 +26,9 @@
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-link]: https://github.com/NibiruChain/py-sdk/blob/master/LICENSE
 [tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml/badge.svg
+[examples-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml/badge.svg
 [tests-workflow]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml
+[tests-example]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml
 
 The `nibiru` package allows you to index, query, and send transactions on Nibiru Chain using Python. It provides access to market data for analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
 

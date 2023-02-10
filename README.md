@@ -26,7 +26,7 @@
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-link]: https://github.com/NibiruChain/py-sdk/blob/master/LICENSE
 [tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml/badge.svg
-[tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml/badge.svg
+[examples-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml/badge.svg
 [tests-workflow]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml
 [tests-example]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml
 

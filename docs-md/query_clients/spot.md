@@ -1,11 +1,11 @@
-Module nibiru.query_clients.dex
+Module nibiru.query_clients.spot
 ===============================
 
 Classes
 -------
 
-`DexQueryClient(channel: grpc.Channel)`
-:   Dex allows to query the endpoints made available by the Nibiru Chain's DEX module.
+`SpotQueryClient(channel: grpc.Channel)`
+:   Spot allows to query the endpoints made available by the Nibiru Chain's SPOT module.
 
     ### Ancestors (in MRO)
 
@@ -102,10 +102,10 @@ Classes
             }
 
         Returns:
-            dict: The parameters fo the dex module.
+            dict: The parameters for the spot module.
 
     `pools(self, **kwargs)`
-    :   Return all available pools in the dex module.
+    :   Return all available pools in the spot module.
 
         Example Return Value::
 

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
-from nibiru_proto.proto.dex.v1 import event_pb2 as dex_events
 from nibiru_proto.proto.perp.v1 import event_pb2 as perp_events
+from nibiru_proto.proto.spot.v1 import event_pb2 as spot_events
 from nibiru_proto.proto.stablecoin import events_pb2 as stablecoin_events  # noqa
 from nibiru_proto.proto.vpool.v1 import event_pb2 as vpool_events
 
@@ -24,11 +24,11 @@ class EventType(Enum):
     SwapOnVpoolEvent = vpool_events.SwapOnVpoolEvent
     MarkPriceChanged = vpool_events.MarkPriceChangedEvent
 
-    # Dex event
-    PoolJoinedEvent = dex_events.EventPoolJoined
-    PoolCreatedEvent = dex_events.EventPoolCreated
-    PoolExitedEvent = dex_events.EventPoolExited
-    AssetsSwappedEvent = dex_events.EventAssetsSwapped
+    # Spot event
+    PoolJoinedEvent = spot_events.EventPoolJoined
+    PoolCreatedEvent = spot_events.EventPoolCreated
+    PoolExitedEvent = spot_events.EventPoolExited
+    AssetsSwappedEvent = spot_events.EventAssetsSwapped
 
     # Stablecoin events
     TransferEvent = stablecoin_events.EventTransfer

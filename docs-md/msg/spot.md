@@ -1,4 +1,4 @@
-Module nibiru.msg.dex
+Module nibiru.msg.spot
 =====================
 
 Classes
@@ -40,7 +40,7 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> dex.v1.tx_pb2.MsgCreatePool`
+    `to_pb(self) ‑> spot.v1.tx_pb2.MsgCreatePool`
     :   Returns the Message as protobuf object.
 
         Returns:
@@ -72,7 +72,7 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> dex.v1.tx_pb2.MsgExitPool`
+    `to_pb(self) ‑> spot.v1.tx_pb2.MsgExitPool`
     :   Returns the Message as protobuf object.
 
         Returns:
@@ -104,7 +104,7 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> dex.v1.tx_pb2.MsgJoinPool`
+    `to_pb(self) ‑> spot.v1.tx_pb2.MsgJoinPool`
     :   Returns the Message as protobuf object.
 
         Returns:
@@ -140,14 +140,14 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> dex.v1.tx_pb2.MsgSwapAssets`
+    `to_pb(self) ‑> spot.v1.tx_pb2.MsgSwapAssets`
     :   Returns the Message as protobuf object.
 
         Returns:
             pb.MsgSwapAssets: The proto object.
 
-`MsgsDex()`
-:   MsgsDex has methods for building messages for transactions on Nibi-Swap.
+`MsgsSpot()`
+:   MsgsSpot has methods for building messages for transactions on Nibi-Swap.
 
     Methods:
     - create_pool: Create a pool using the assets specified
@@ -157,31 +157,31 @@ Classes
 
     ### Methods
 
-    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.dex.MsgCreatePool`
+    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.spot.MsgCreatePool`
     :
 
-    `exit_pool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin) ‑> nibiru.msg.dex.MsgExitPool`
+    `exit_pool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin) ‑> nibiru.msg.spot.MsgExitPool`
     :
 
-    `join_pool(sender: str, pool_id: int, tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]) ‑> nibiru.msg.dex.MsgJoinPool`
+    `join_pool(sender: str, pool_id: int, tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]) ‑> nibiru.msg.spot.MsgJoinPool`
     :
 
-    `swap(sender: str, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str) ‑> nibiru.msg.dex.MsgSwapAssets`
+    `swap(sender: str, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str) ‑> nibiru.msg.spot.MsgSwapAssets`
     :
 
-`dex()`
-:   The dex class allows to create transactions for the decentralized spot exchange using the queries.
+`spot()`
+:   The spot class allows to create transactions for the decentralized spot exchange using the queries.
 
     ### Class variables
 
-    `create_pool: nibiru.msg.dex.MsgCreatePool`
+    `create_pool: nibiru.msg.spot.MsgCreatePool`
     :
 
-    `exit_pool: nibiru.msg.dex.MsgExitPool`
+    `exit_pool: nibiru.msg.spot.MsgExitPool`
     :
 
-    `join_pool: nibiru.msg.dex.MsgJoinPool`
+    `join_pool: nibiru.msg.spot.MsgJoinPool`
     :
 
-    `swap_assets: nibiru.msg.dex.MsgSwapAssets`
+    `swap_assets: nibiru.msg.spot.MsgSwapAssets`
     :

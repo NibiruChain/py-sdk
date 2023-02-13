@@ -12,10 +12,10 @@ nibiru.msg.bank module
    :undoc-members:
    :show-inheritance:
 
-nibiru.msg.dex module
+nibiru.msg.spot module
 ---------------------
 
-.. automodule:: nibiru.msg.dex
+.. automodule:: nibiru.msg.spot
    :members:
    :undoc-members:
    :show-inheritance:

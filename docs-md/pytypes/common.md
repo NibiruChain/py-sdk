@@ -52,10 +52,10 @@ Classes
     ### Descendants
 
     * nibiru.msg.bank.MsgSend
-    * nibiru.msg.dex.MsgCreatePool
-    * nibiru.msg.dex.MsgExitPool
-    * nibiru.msg.dex.MsgJoinPool
-    * nibiru.msg.dex.MsgSwapAssets
+    * nibiru.msg.spot.MsgCreatePool
+    * nibiru.msg.spot.MsgExitPool
+    * nibiru.msg.spot.MsgJoinPool
+    * nibiru.msg.spot.MsgSwapAssets
     * nibiru.msg.perp.MsgAddMargin
     * nibiru.msg.perp.MsgClosePosition
     * nibiru.msg.perp.MsgLiquidate

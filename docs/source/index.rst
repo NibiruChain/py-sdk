@@ -18,7 +18,7 @@ Contents
 
    overview
    perpetual
-   dex
+   spot
    general
    modules
 

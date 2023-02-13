@@ -1,7 +1,7 @@
-Decentralized Spot Exchange (Dex)
+Decentralized Spot Exchange (Spot)
 =================================
 
-The ``x/dex`` module is responsible for creating, joining, and
+The ``x/spot`` module is responsible for creating, joining, and
 exiting liquidity pools that are dictated by an AMM for swaps.
 
 
@@ -49,11 +49,11 @@ You can create a pool with the nibiru-py package with:
         )
     )
 
-You can then query the pools with the dex queries:
+You can then query the pools with the spot queries:
 
 .. code:: python
 
-    trader.query.dex.pools()
+    trader.query.spot.pools()
 
 
 Joining Pool
@@ -121,7 +121,7 @@ minus exit fees.
 
 .. code:: python
 
-    trader.tx.dex.exit_pool(
+    trader.tx.spot.exit_pool(
         sender=trader.address,
         pool_id=4,
         pool_shares=nib.Coin(denom="nibiru/pool/4",amount=50000000000000000000)
@@ -167,12 +167,12 @@ be putting in is done through the following formula.
         )
     )
 
-The queries in the dex query module can give estimate of the output of this command
+The queries in the spot query module can give estimate of the output of this command
 with the current reserves of the pool:
 
 .. code:: python
 
-    trader.query.dex.estimate_swap_exact_amount_in(
+    trader.query.spot.estimate_swap_exact_amount_in(
         pool_id=4,
         token_in=nib.Coin(denom="unibi", amount=10000),
         token_out_denom="unusd"
@@ -195,7 +195,7 @@ You can query the spot price with:
 
 .. code:: python
 
-    trader.query.dex.spot_price(
+    trader.query.spot.spot_price(
         pool_id=4,
         token_in_denom="unibi",
         token_out_denom="unusd"

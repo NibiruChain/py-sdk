@@ -3,25 +3,25 @@ from typing import List
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from nibiru_proto.proto.dex.v1 import query_pb2 as dex_type
-from nibiru_proto.proto.dex.v1 import query_pb2_grpc as dex_query
+from nibiru_proto.proto.spot.v1 import query_pb2 as spot_type
+from nibiru_proto.proto.spot.v1 import query_pb2_grpc as spot_query
 
 from nibiru.pytypes import Coin
 from nibiru.query_clients.util import QueryClient
 from nibiru.utils import format_fields_nested, from_sdk_dec_n
 
 
-class DexQueryClient(QueryClient):
+class SpotQueryClient(QueryClient):
     """
-    Dex allows to query the endpoints made available by the Nibiru Chain's DEX module.
+    Spot allows to query the endpoints made available by the Nibiru Chain's SPOT module.
     """
 
     def __init__(self, channel: Channel):
-        self.api = dex_query.QueryStub(channel)
+        self.api = spot_query.QueryStub(channel)
 
     def params(self) -> dict:
         """
-        Requests the parameters of the dex module.
+        Requests the parameters of the spot module.
 
         Example Return Value::
 
@@ -42,11 +42,11 @@ class DexQueryClient(QueryClient):
             }
 
         Returns:
-            dict: The parameters fo the dex module.
+            dict: The parameters fo the spot module.
         """
         proto_output = self.query(
             api_callable=self.api.Params,
-            req=dex_type.QueryParamsRequest(),
+            req=spot_type.QueryParamsRequest(),
             should_deserialize=False,
         )
 
@@ -60,7 +60,7 @@ class DexQueryClient(QueryClient):
 
     def pools(self, **kwargs):
         """
-        Return all available pools in the dex module.
+        Return all available pools in the spot module.
 
         Example Return Value::
 
@@ -109,7 +109,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.Pools,
-            req=dex_type.QueryPoolsRequest(
+            req=spot_type.QueryPoolsRequest(
                 pagination=PageRequest(
                     key=kwargs.get("key"),
                     offset=kwargs.get("offset"),
@@ -137,7 +137,7 @@ class DexQueryClient(QueryClient):
 
     def total_liquidity(self) -> dict:
         """
-        Returns the total amount of liquidity for the dex module
+        Returns the total amount of liquidity for the spot module
 
         Example Return Value::
 
@@ -159,7 +159,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.TotalLiquidity,
-            req=dex_type.QueryTotalLiquidityRequest(),
+            req=spot_type.QueryTotalLiquidityRequest(),
             should_deserialize=False,
         )
 
@@ -195,7 +195,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.TotalPoolLiquidity,
-            req=dex_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
+            req=spot_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
             should_deserialize=False,
         )
 
@@ -225,7 +225,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.TotalShares,
-            req=dex_type.QueryTotalSharesRequest(pool_id=pool_id),
+            req=spot_type.QueryTotalSharesRequest(pool_id=pool_id),
             should_deserialize=False,
         )
 
@@ -250,7 +250,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.SpotPrice,
-            req=dex_type.QuerySpotPriceRequest(
+            req=spot_type.QuerySpotPriceRequest(
                 pool_id=pool_id,
                 token_in_denom=token_in_denom,
                 token_out_denom=token_out_denom,
@@ -286,7 +286,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.EstimateSwapExactAmountIn,
-            req=dex_type.QuerySwapExactAmountInRequest(
+            req=spot_type.QuerySwapExactAmountInRequest(
                 pool_id=pool_id,
                 token_in=token_in._generate_proto_object(),
                 token_out_denom=token_out_denom,
@@ -326,7 +326,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.EstimateJoinExactAmountIn,
-            req=dex_type.QueryJoinExactAmountInRequest(
+            req=spot_type.QueryJoinExactAmountInRequest(
                 pool_id=pool_id,
                 tokens_in=[
                     tokens_in._generate_proto_object() for tokens_in in tokens_ins
@@ -370,7 +370,7 @@ class DexQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.EstimateExitExactAmountIn,
-            req=dex_type.QueryExitExactAmountInRequest(
+            req=spot_type.QueryExitExactAmountInRequest(
                 pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
             ),
             should_deserialize=False,

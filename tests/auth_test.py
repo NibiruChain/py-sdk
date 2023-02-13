@@ -9,7 +9,9 @@ def test_query_auth_account(sdk_val: nibiru.Sdk):
 
     query_resp: dict = sdk_val.query.auth.account(sdk_val.address)["account"]
 
-    tests.dict_keys_must_match(query_resp, ['@type', 'address', 'pubKey', 'sequence'])
+    tests.dict_keys_must_match(
+        query_resp, ['@type', 'address', 'pubKey', 'accountNumber', 'sequence']
+    )
 
 
 def test_query_auth_accounts(sdk_val: nibiru.Sdk):

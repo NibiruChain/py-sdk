@@ -10,7 +10,7 @@ Classes
 
     Attributes:
         bank: Methods for the Cosmos x/bank module.
-        dex: Methods for the Nibiru Chain x/dex module.
+        spot: Methods for the Nibiru Chain x/spot module.
         perp: Methods for the Nibiru Chain x/perp module
         staking: Methods for the Cosmos x/staking and x/distribution modules.
 
@@ -22,8 +22,8 @@ Classes
         Methods:
         - send: Send tokens from one account to another
 
-    `dex`
-    :   MsgsDex has methods for building messages for transactions on Nibi-Swap.
+    `spot`
+    :   MsgsSpot has methods for building messages for transactions on Nibi-Swap.
 
         Methods:
         - create_pool: Create a pool using the assets specified

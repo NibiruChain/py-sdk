@@ -13,21 +13,21 @@ from nibiru.pytypes import PoolType
 PRECISION = 6
 
 
-class DexErrors:
+class SpotErrors:
     same_denom = "a pool with the same denoms already exists"
     insufficient_funds = "smaller than 1000000000unibi: insufficient funds"
     swap_low_unusd_in_pool = "tokenIn (unusd) must be higher to perform a swap"
     no_pool_shares = "0nibiru/pool/"
 
 
-def test_dex_create_pool(sdk_val: nibiru.Sdk):
+def test_spot_create_pool(sdk_val: nibiru.Sdk):
     """
     Test the workflow for pools
     """
 
     try:
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.Msg.dex.create_pool(
+            nibiru.Msg.spot.create_pool(
                 creator=sdk_val.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
@@ -43,14 +43,14 @@ def test_dex_create_pool(sdk_val: nibiru.Sdk):
         tests.transaction_must_succeed(tx_output)
     except SimulationError as simulation_error:
         tests.raises(
-            [DexErrors.same_denom, DexErrors.insufficient_funds], simulation_error
+            [SpotErrors.same_denom, SpotErrors.insufficient_funds], simulation_error
         )
 
     """
     # # TODO fix: need usdc on-chain  to do this
     try:
         tx_output = sdk_val.tx.execute_msgs(
-            nibiru.Msg.dex.create_pool(
+            nibiru.Msg.spot.create_pool(
                 creator=sdk_val.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
@@ -70,7 +70,7 @@ def test_dex_create_pool(sdk_val: nibiru.Sdk):
 
 @pytest.fixture
 def pools(sdk_val: nibiru.Sdk) -> List[dict]:
-    return sdk_val.query.dex.pools()
+    return sdk_val.query.spot.pools()
 
 
 @pytest.fixture
@@ -111,8 +111,8 @@ def pool_ids(pools: List[dict]) -> Dict[str, int]:
     return pool_ids
 
 
-@pytest.mark.order(after="test_dex_create_pool")
-def test_dex_query_pools(pools: List[dict]):
+@pytest.mark.order(after="test_spot_create_pool")
+def test_spot_query_pools(pools: List[dict]):
     if not pools:
         return
 
@@ -122,12 +122,12 @@ def test_dex_query_pools(pools: List[dict]):
     utils.dict_keys_must_match(pool, keys)
 
 
-@pytest.mark.order(after="test_dex_query_pools")
-def test_dex_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
+@pytest.mark.order(after="test_spot_query_pools")
+def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
     try:
         tx_output = sdk_val.tx.execute_msgs(
             [
-                nibiru.Msg.dex.join_pool(
+                nibiru.Msg.spot.join_pool(
                     sender=sdk_val.address,
                     pool_id=pool_ids["unibi:unusd"],
                     tokens=[Coin(1000, "unibi"), Coin(100, "unusd")],
@@ -136,28 +136,28 @@ def test_dex_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
         )
         tests.transaction_must_succeed(tx_output)
     except BaseException as err:
-        tests.raises(DexErrors.no_pool_shares, err)
+        tests.raises(SpotErrors.no_pool_shares, err)
 
 
-@pytest.mark.order(after="test_dex_join_pool")
-def test_dex_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
+@pytest.mark.order(after="test_spot_join_pool")
+def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
     try:
         tx_output = sdk_val.tx.execute_msgs(
             [
                 # # TODO fix: need usdc on-chain  to do this
-                # nibiru.Msg.dex.join_pool(
+                # nibiru.Msg.spot.join_pool(
                 #     sender=sdk_agent.address,
                 #     pool_id=pool_ids["unusd:uusdc"],
                 #     tokens=[Coin(100, "uusdc"), Coin(100, "unusd")],
                 # ),
                 # # TODO fix: need usdc on-chain  to do this
-                # nibiru.Msg.dex.swap(
+                # nibiru.Msg.spot.swap(
                 #     sender=sdk_agent.address,
                 #     pool_id=pool_ids["unusd:uusdc"],
                 #     token_in=Coin(100, "uusdc"),
                 #     token_out_denom="unusd",
                 # ),
-                nibiru.Msg.dex.swap(
+                nibiru.Msg.spot.swap(
                     sender=sdk_val.address,
                     pool_id=pool_ids["unibi:unusd"],
                     token_in=Coin(100, "unusd"),
@@ -167,11 +167,11 @@ def test_dex_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
         )
         tests.transaction_must_succeed(tx_output)
     except BaseException as err:
-        tests.raises(DexErrors.swap_low_unusd_in_pool, err)
+        tests.raises(SpotErrors.swap_low_unusd_in_pool, err)
 
 
-@pytest.mark.order(after="test_dex_swap")
-def test_dex_exit_pool(sdk_val: nibiru.Sdk):
+@pytest.mark.order(after="test_spot_swap")
+def test_spot_exit_pool(sdk_val: nibiru.Sdk):
     balance = sdk_val.query.get_bank_balances(sdk_val.address)["balances"]
 
     pool_tokens: List[str] = [
@@ -180,7 +180,7 @@ def test_dex_exit_pool(sdk_val: nibiru.Sdk):
     if pool_tokens:
         tx_output = sdk_val.tx.execute_msgs(
             [
-                nibiru.Msg.dex.exit_pool(
+                nibiru.Msg.spot.exit_pool(
                     sender=sdk_val.address,
                     pool_id=int(pool_token["denom"].split("/")[-1]),
                     pool_shares=Coin(pool_token["amount"], pool_token["denom"]),
@@ -191,6 +191,6 @@ def test_dex_exit_pool(sdk_val: nibiru.Sdk):
         tests.transaction_must_succeed(tx_output)
     else:
         tests.LOGGER.info(
-            "skipped test for 'nibid tx dex exit-pool' because\n"
+            "skipped test for 'nibid tx spot exit-pool' because\n"
             + f"{sdk_val.address} did not have LP shares"
         )

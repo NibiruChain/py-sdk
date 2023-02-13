@@ -1,14 +1,14 @@
 import dataclasses
 from typing import List, Union
 
-from nibiru_proto.proto.dex.v1 import pool_pb2 as pool_tx_pb
-from nibiru_proto.proto.dex.v1 import tx_pb2 as pb
+from nibiru_proto.proto.spot.v1 import pool_pb2 as pool_tx_pb
+from nibiru_proto.proto.spot.v1 import tx_pb2 as pb
 
 from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 
 
-class MsgsDex:
-    """MsgsDex has methods for building messages for transactions on Nibi-Swap.
+class MsgsSpot:
+    """MsgsSpot has methods for building messages for transactions on Nibi-Swap.
 
     Methods:
     - create_pool: Create a pool using the assets specified
@@ -210,9 +210,9 @@ class MsgSwapAssets(PythonMsg):
         )
 
 
-class dex:
+class spot:
     """
-    The dex class allows to create transactions for the decentralized spot exchange using the queries.
+    The spot class allows to create transactions for the decentralized spot exchange using the queries.
     """
 
     create_pool: MsgCreatePool

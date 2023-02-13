@@ -1,4 +1,5 @@
 import dataclasses
+from typing import List
 
 from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
 from nibiru_proto.proto.perp.v1 import tx_pb2 as pb
@@ -251,20 +252,29 @@ class MsgClosePosition(PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgLiquidate(PythonMsg):
+class Liquidation:
+    """
+    Keeper of the pair/trader pairs for liquidations
+    """
+
+    pair: str
+    trader: str
+
+
+@dataclasses.dataclass
+class MsgMultiLiquidate(PythonMsg):
     """
     Close the position.
 
     Attributes:
         sender (str): The sender address
-        pair (str): The token pair
+        liquidations (Liquidation): The list of {pair, trader} pairs.
     """
 
     sender: str
-    pair: str
-    trader: str
+    liquidations: List[Liquidation]
 
-    def to_pb(self) -> pb.MsgLiquidate:
+    def to_pb(self) -> pb.MsgMultiLiquidate:
         """
         Returns the Message as protobuf object.
 
@@ -272,21 +282,26 @@ class MsgLiquidate(PythonMsg):
             pb.MsgLiquidate: The proto object.
 
         """
-        return pb.MsgLiquidate(
+        return pb.MsgMultiLiquidate(
             sender=self.sender,
-            pair=self.pair,
-            trader=self.trader,
+            liquidations=[
+                pb.MsgMultiLiquidate.MultiLiquidation(
+                    pair=liquidation.pair,
+                    trader=liquidation.trader,
+                )
+                for liquidation in self.liquidations
+            ],
         )
 
 
 class perp:
     """
-    The perp class allows you to generate transaction for the perpetual futures module using the different messages
-    available.
+    The perp class allows you to generate transaction for the perpetual futures module
+    using the different messages available.
     """
 
     remove_margin: MsgRemoveMargin
     add_margin: MsgAddMargin
     open_position: MsgOpenPosition
     close_position: MsgClosePosition
-    liquidate: MsgLiquidate
+    liquidate: MsgMultiLiquidate

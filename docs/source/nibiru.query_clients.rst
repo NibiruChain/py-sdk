@@ -4,10 +4,10 @@ nibiru.query\_clients package
 Submodules
 ----------
 
-nibiru.query\_clients.dex module
+nibiru.query\_clients.spot module
 --------------------------------
 
-.. automodule:: nibiru.query_clients.dex
+.. automodule:: nibiru.query_clients.spot
    :members:
    :undoc-members:
    :show-inheritance:

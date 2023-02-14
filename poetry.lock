@@ -953,14 +953,14 @@ ecdsa = ">=0.14.0"
 
 [[package]]
 name = "identify"
-version = "2.5.17"
+version = "2.5.18"
 description = "File identification library for Python"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "identify-2.5.17-py2.py3-none-any.whl", hash = "sha256:7d526dd1283555aafcc91539acc061d8f6f59adb0a7bba462735b0a318bff7ed"},
-    {file = "identify-2.5.17.tar.gz", hash = "sha256:93cc61a861052de9d4c541a7acb7e3dcc9c11b398a2144f6e52ae5285f5f4f06"},
+    {file = "identify-2.5.18-py2.py3-none-any.whl", hash = "sha256:93aac7ecf2f6abf879b8f29a8002d3c6de7086b8c28d88e1ad15045a15ab63f9"},
+    {file = "identify-2.5.18.tar.gz", hash = "sha256:89e144fa560cc4cffb6ef2ab5e9fb18ed9f9b3cb054384bab4b95c12f6c309fe"},
 ]
 
 [package.extras]
@@ -1234,14 +1234,14 @@ types-protobuf = ">=3.20.4"
 
 [[package]]
 name = "nibiru-proto"
-version = "0.19.0rc1"
+version = "0.19.0"
 description = "Nibiru Chain Python SDK"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "nibiru_proto-0.19.0rc1-py3-none-any.whl", hash = "sha256:500354edf55726be674d5ecaee1164a12612f0b3f3a873665101ca93cb4dc25d"},
-    {file = "nibiru_proto-0.19.0rc1.tar.gz", hash = "sha256:fb62397474b335db35e26a30680421d8f0fca30da78976fa20c0859fd006d4ad"},
+    {file = "nibiru_proto-0.19.0-py3-none-any.whl", hash = "sha256:b2c477fcfdd89926f8b218e10c5dada45ccac2267da6b6c0d7722fe1bec9d58c"},
+    {file = "nibiru_proto-0.19.0.tar.gz", hash = "sha256:7f159b72a1a3fcf269ebd8e5f9190b2be799dd54299d85cd8c68ef4d90d6402c"},
 ]
 
 [package.dependencies]
@@ -1612,14 +1612,14 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "setuptools"
-version = "67.2.0"
+version = "67.3.1"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "setuptools-67.2.0-py3-none-any.whl", hash = "sha256:16ccf598aab3b506593c17378473978908a2734d7336755a8769b480906bec1c"},
-    {file = "setuptools-67.2.0.tar.gz", hash = "sha256:b440ee5f7e607bb8c9de15259dba2583dd41a38879a7abc1d43a71c59524da48"},
+    {file = "setuptools-67.3.1-py3-none-any.whl", hash = "sha256:23c86b4e44432bfd8899384afc08872ec166a24f48a3f99f293b0a557e6a6b5d"},
+    {file = "setuptools-67.3.1.tar.gz", hash = "sha256:daec07fd848d80676694d6bf69c009d28910aeece68a38dbe88b7e1bb6dba12e"},
 ]
 
 [package.extras]
@@ -1882,4 +1882,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "2798c94a47e2b6ba17d9ee0fc46a559d4c7cfcbe20f6c8a5b2bf540cc40ed64a"
+content-hash = "836309a5df7d6de2aac73c139901a1446b9b8751fc7a8260c9aef67d0eb08acc"

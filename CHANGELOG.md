@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v0.19.0
+
+Compatible with NibiruChain/nibiru v0.19
+
+- [[#214]](https://github.com/NibiruChain/py-sdk/pull/214) chore: update protos to v0.19.0
+
+
 ## v0.17.0
 
 Compatible with NibiruChain/nibiru v0.17

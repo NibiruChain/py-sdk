@@ -8,6 +8,16 @@ from nibiru.pytypes import Coin, PythonMsg, Side
 from nibiru.utils import to_sdk_dec, to_sdk_int
 
 
+@dataclasses.dataclass
+class Liquidation:
+    """
+    Keeper of the pair/trader pairs for liquidations
+    """
+
+    pair: str
+    trader: str
+
+
 class MsgsPerp:
     """
     Messages for the Nibiru Chain x/perp module
@@ -106,7 +116,7 @@ class MsgsPerp:
         sender: str,
         pair: str,
         trader: str,
-    ) -> 'MsgLiquidate':
+    ) -> 'MsgMultiLiquidate':
         """
         Liquidates unhealthy position (pair + trader)
 
@@ -115,7 +125,22 @@ class MsgsPerp:
             pair (str): The token pair
             trader (str): The trader address
         """
-        return MsgLiquidate(sender=sender, pair=pair, trader=trader)
+        return MsgMultiLiquidate(
+            sender=sender, liquidations=[Liquidation(pair=pair, trader=trader)]
+        )
+
+    @staticmethod
+    def liquidate_multiple(
+        sender: str, liquidations: List[Liquidation]
+    ) -> 'MsgMultiLiquidate':
+        """
+        Liquidates multiple unhealthy positions (pair + trader)
+
+        Attributes:
+            sender (str): The liquidator address
+            liquidations (List[Liquidation]): list of pair/traders to liquidate
+        """
+        return MsgMultiLiquidate(sender=sender, liquidations=liquidations)
 
 
 @dataclasses.dataclass
@@ -252,16 +277,6 @@ class MsgClosePosition(PythonMsg):
 
 
 @dataclasses.dataclass
-class Liquidation:
-    """
-    Keeper of the pair/trader pairs for liquidations
-    """
-
-    pair: str
-    trader: str
-
-
-@dataclasses.dataclass
 class MsgMultiLiquidate(PythonMsg):
     """
     Close the position.
@@ -285,7 +300,7 @@ class MsgMultiLiquidate(PythonMsg):
         return pb.MsgMultiLiquidate(
             sender=self.sender,
             liquidations=[
-                pb.MsgMultiLiquidate.MultiLiquidation(
+                pb.MsgMultiLiquidate.Liquidation(
                     pair=liquidation.pair,
                     trader=liquidation.trader,
                 )

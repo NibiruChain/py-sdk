@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nibiru"
-version = "0.18.0rc2"
+version = "0.19.0"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <dev@nibiru.fi>"]
 license = "MIT"
@@ -34,9 +34,10 @@ pre-commit = "^2.20.0"
 shutup = "^0.2.0"
 websocket-client = "^1.4.1"
 packaging = "^21.3"
-nibiru-proto = {version = "0.19.0rc1", allow-prereleases = true}
+nibiru-proto = "==0.19.0"
 bip32 = "^3.3"
 importlib-metadata = "^5.0.0"
+jupyter = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-skip-slow = "^0.0.3"

@@ -1,0 +1,47 @@
+name: Colab notebook testing
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
+  cancel-in-progress: ${{ ! (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/release/')) }}
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
+      DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
+      VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+    steps:
+      # ----------------------------------------------
+      # check-out repo and set-up python
+      # ----------------------------------------------
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Set up Python (3.8)
+        id: setup-python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.16
+          # 3.8.16 is the highest version available for this GitHub action.
+          #   For the full list of supported Python versions, see:
+          #   https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json
+          # 3.8.16 is the highest 3.8 version available on pyenv
+          #   See `grep '3.8' <<< $(pyenv install -l)` to view the available list.
+
+      - name: Run python
+        run: python --version && python -c "print('hello')"
+
+      #----------------------------------------------
+      # run examples
+      #----------------------------------------------
+      - name: Run the examples
+        run: |
+          pip install jupyter
+          pip install nibiru
+          cd examples
+          jupyter nbconvert --to python colab_notebook.ipynb
+          poetry run python colab_notebook.ipynb || exit 1

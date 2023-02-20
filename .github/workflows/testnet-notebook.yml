@@ -44,4 +44,4 @@ jobs:
           pip install nibiru
           cd examples
           jupyter nbconvert --to python colab_notebook.ipynb
-          run python colab_notebook.py || exit 1
+          python colab_notebook.py || exit 1

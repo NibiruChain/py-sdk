@@ -181,6 +181,28 @@ class Network:
         )
 
     @classmethod
+    def incentivized_testnet(cls, chain_num: int = 1) -> "Network":
+        """
+        Testnet is a network open to invited validators. It is more stable than
+        devnet and provides a faucet to get some funds
+
+        Args:
+          chain_num (int): Testnet number
+
+        Returns:
+            Network: The updated Network object.
+        """
+        return cls(
+            lcd_endpoint=f'https://lcd.itn-1.nibiru.fi',
+            grpc_endpoint=f'tcp://grpc.itn-1.nibiru.fi:443',
+            tendermint_rpc_endpoint=f'https://rpc.itn-1.nibiru.fi',
+            websocket_endpoint=f'wss://rpc.itn-1.nibiru.fi/websocket',
+            chain_id=f'nibiru-itn-{chain_num}',
+            fee_denom='unibi',
+            env='incentivized',
+        )
+
+    @classmethod
     def from_chain_id(cls, chain_id: str) -> "Network":
         """
         Soon!
@@ -214,3 +236,4 @@ class NetworkType(enum.Enum):
     DEVNET = "devnet"
     TESTNET = "testnet"
     LOCALNET = "localnet"
+    ITN = "incentivized"

@@ -98,8 +98,8 @@ jobs:
           poetry run pip install .
           cd examples
           for filename in *; do
-            if [[ $filename == *.ipynb ]]; then
-              if [ $filename != "3- Arbitrage.ipynb" ]; then
+            if [[ $filename == *.ipynb ]] ; then
+              if [ $filename != "3- Arbitrage.ipynb" ] && [ $filename != "colab_notebook.ipynb" ]; then
                 jupyter nbconvert --to python "$filename"
               fi
             fi

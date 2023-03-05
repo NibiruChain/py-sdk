@@ -159,9 +159,17 @@ class QueryClient:
         api_callable: grpc.UnaryUnaryMultiCallable,
         req: message.Message,
         should_deserialize: bool = True,
+        height: Optional[int] = None,
     ) -> Union[dict, message.Message]:
         try:
-            output: message.Message = api_callable(req)
+            output: message.Message = api_callable(
+                req,
+                **(
+                    {"metadata": (('x-cosmos-block-height', str(height)),)}
+                    if height
+                    else {}
+                ),
+            )
             if should_deserialize:
                 return deserialize(output)
             return output

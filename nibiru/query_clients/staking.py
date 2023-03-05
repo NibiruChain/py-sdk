@@ -316,5 +316,6 @@ class StakingQueryClient(QueryClient):
                 pagination=get_page_request(kwargs),
             ),
             should_deserialize=False,
+            height=kwargs.get("height"),
         )
         return deserialize(proto_output)

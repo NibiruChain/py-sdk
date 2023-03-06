@@ -32,7 +32,7 @@ def camel_to_snake(camel: str):
 
 def dict_keys_from_camel_to_snake(d):
     """
-    Transform all keys from the dictionnary from camelcase to snake case.
+    Transform all keys from the dictionary from camelcase to snake case.
 
     Args:
         d (dict): The dictionary to transform

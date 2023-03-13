@@ -17,7 +17,12 @@ jobs:
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
       - name: Run chaosnet
-        uses: NibiruChain/run-chaosnet@v1
+        uses: NibiruChain/run-chaosnet
+        id: chaosnet
+        with:
+          services: nibiru pricefeeder liquidator
+          ghtoken: ${{ secrets.GITHUB_TOKEN }}
+          ghactor: ${{ github.actor }}
 
 #    steps:
 #      - name: Check out the repo

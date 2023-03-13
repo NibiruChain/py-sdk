@@ -3,7 +3,6 @@ name: E2E 🐍 tests
 on:
   pull_request:
 
-
 jobs:
   tests:
     runs-on: ubuntu-latest

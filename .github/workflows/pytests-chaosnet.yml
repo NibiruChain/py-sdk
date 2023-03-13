@@ -17,7 +17,7 @@ jobs:
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
       - name: Run chaosnet
-        uses: NibiruChain/run-chaosnet@v1
+        uses: NibiruChain/localnet-action@v1
         id: chaosnet
         with:
           services: nibiru pricefeeder liquidator

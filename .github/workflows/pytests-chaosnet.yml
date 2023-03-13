@@ -17,7 +17,7 @@ jobs:
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
       - name: Run chaosnet
-        uses: NibiruChain/localnet-action@v0.2
+        uses: NibiruChain/run-chaosnet@v1
 
 #    steps:
 #      - name: Check out the repo

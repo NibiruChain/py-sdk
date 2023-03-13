@@ -20,7 +20,7 @@ jobs:
         uses: NibiruChain/localnet-action@v1.1
         id: chaosnet
         with:
-          services: nibiru pricefeeder liquidator
+          services: nibiru pricefeeder
           ghtoken: ${{ secrets.GITHUB_TOKEN }}
           ghactor: ${{ github.actor }}
 

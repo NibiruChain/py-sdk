@@ -14,7 +14,7 @@ jobs:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       LCD_ENDPOINT: "http://localhost:1317"
       GRPC_ENDPOINT: "localhost:9090"
-      TENDERMINT_RPC_ENDPOINT: "localhost:26657"
+      TENDERMINT_RPC_ENDPOINT: "http://localhost:26657"
       USE_LOCALNET: true
       WEBSOCKET_ENDPOINT: "ws://localhost:26657/websocket"
       CHAIN_ID: ${{ secrets.CHAIN_ID }}

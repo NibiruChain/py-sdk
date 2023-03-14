@@ -88,3 +88,21 @@ jobs:
           services: nibiru pricefeeder
           ghtoken: ${{ secrets.GITHUB_TOKEN }}
           ghactor: ${{ github.actor }}
+      #----------------------------------------------
+      # run tests
+      #----------------------------------------------
+      - name: Install unbuffer command for run step
+        run: sudo apt-get install -y expect-dev
+      - name: Run Python SDK tests
+        run: unbuffer poetry run pytest -s tests --cov=nibiru --log-cli-level=DEBUG 2>&1 | tee coverage.txt; exit "${PIPESTATUS[0]}"
+        # piping to tee lets us see stdout and write to a file simultaneously.
+        # unbuffer retains the colored text from pytest through the pipe to tee
+        # -s makes the output verbose to make logs more descriptive.
+        # --cov toggles on the coverage report at the specified path
+      #----------------------------------------------
+      # Upload test output and coverage report as a GitHub artifact
+      #----------------------------------------------
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-coverage
+          path: coverage.txt

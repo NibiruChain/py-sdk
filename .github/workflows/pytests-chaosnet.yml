@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
-      LCD_ENDPOINT: "localhost:1317"
+      LCD_ENDPOINT: "http://localhost:1317"
       GRPC_ENDPOINT: "localhost:9090"
       TENDERMINT_RPC_ENDPOINT: "localhost:26657"
       USE_LOCALNET: true

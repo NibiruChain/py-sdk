@@ -16,7 +16,7 @@ jobs:
       GRPC_ENDPOINT: "localhost:9090"
       TENDERMINT_RPC_ENDPOINT: "localhost:26657"
       USE_LOCALNET: true
-      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
+      WEBSOCKET_ENDPOINT: "ws://localhost:26657/websocket"
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}

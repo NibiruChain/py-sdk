@@ -90,8 +90,8 @@ jobs:
           ghtoken: ${{ secrets.GITHUB_TOKEN }}
           ghactor: ${{ github.actor }}
 
-      - name: sleep 10 seconds
-        run: sleep 10
+      - name: sleep 30 seconds
+        run: sleep 30
       #----------------------------------------------
       # run tests
       #----------------------------------------------

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
+from nibiru_proto.proto.oracle.v1beta1 import event_pb2 as oracle_events
 from nibiru_proto.proto.perp.v1 import event_pb2 as perp_events
 from nibiru_proto.proto.spot.v1 import event_pb2 as spot_events
 from nibiru_proto.proto.stablecoin import events_pb2 as stablecoin_events  # noqa
@@ -38,6 +39,9 @@ class EventType(Enum):
     BurnNIBIEvent = stablecoin_events.EventBurnNIBI
     RecollateralizeEvent = stablecoin_events.EventRecollateralize
     BuybackEvent = stablecoin_events.EventBuyback
+
+    # Oracle events
+    PriceUpdate = oracle_events.OraclePriceUpdate
 
     # Bank
     Transfer = "transfer"

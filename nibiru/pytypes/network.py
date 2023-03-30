@@ -160,7 +160,7 @@ class Network:
         return self.env
 
     @classmethod
-    def devnet(cls, chain_num: int = 3) -> "Network":
+    def devnet(cls, chain_num: int = 2) -> "Network":
         """
         Devnet is a network open to invited validators.
 
@@ -182,10 +182,6 @@ class Network:
 
     @classmethod
     def from_chain_id(cls, chain_id: str) -> "Network":
-        """
-        Soon!
-        """
-
         chain_id_elements: List[str] = chain_id.split("-")
         if len(chain_id_elements) != 3:
             raise ValueError(

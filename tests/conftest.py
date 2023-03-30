@@ -39,8 +39,6 @@ PYTEST_GLOBALS: Dict[str, Any] = {
 def pytest_configure(config):
     dotenv.load_dotenv()
 
-    EXPECTED_ENV_VARS: List[str] = list(PYTEST_GLOBALS.keys())
-
     def set_pytest_global(name: str, value: Any):
         """Adds environment variables to the 'pytest' object and the 'PYTEST_GLOBALS'
         dictionary so that a central point of truth on what variables are set
@@ -51,14 +49,10 @@ def pytest_configure(config):
 
     use_localnet: Optional[str] = os.getenv("USE_LOCALNET")
     if use_localnet is not None:
-        if use_localnet.lower() == "true":
-            set_pytest_global("use_localnet", True)
-    if not use_localnet:
-        EXPECTED_ENV_VARS = [key for key in PYTEST_GLOBALS_REQUIRED]
-        set_pytest_global("use_localnet", False)
+        set_pytest_global("use_localnet", use_localnet.lower() == "true")
 
     # Set the expected environment variables. Raise a value error if one is missing
-    for env_var_name in EXPECTED_ENV_VARS:
+    for env_var_name in PYTEST_GLOBALS_REQUIRED.keys():
         env_var_value = os.getenv(env_var_name)
         if not env_var_value:
             raise ValueError(f"Environment variable {env_var_name} is missing!")

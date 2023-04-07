@@ -22,7 +22,7 @@
 [documentation-image]: https://readthedocs.org/projects/nibiru-py/badge/?version=latest
 [documentation-url]: https://nibiru-py.readthedocs.io/en/latest/?badge=latest
 [discord-badge]: https://dcbadge.vercel.app/api/server/sgPw8ZYfpQ?style=flat
-[discord-url]: https://discord.gg/sgPw8ZYfpQ
+[discord-url]: https://discord.gg/nibiruchain
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-link]: https://github.com/NibiruChain/py-sdk/blob/master/LICENSE
 [tests-badge]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml/badge.svg

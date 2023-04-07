@@ -21,7 +21,7 @@
 [stars-url]: https://github.com/NibiruChain
 [documentation-image]: https://readthedocs.org/projects/nibiru-py/badge/?version=latest
 [documentation-url]: https://nibiru-py.readthedocs.io/en/latest/?badge=latest
-[discord-badge]: https://dcbadge.vercel.app/api/server/sgPw8ZYfpQ?style=flat
+[discord-badge]: https://dcbadge.vercel.app/api/server/nibiruchain?style=flat
 [discord-url]: https://discord.gg/nibiruchain
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-link]: https://github.com/NibiruChain/py-sdk/blob/master/LICENSE

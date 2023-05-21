@@ -26,7 +26,6 @@ from nibiru.pytypes import (  # noqa
     Network,
     NetworkType,
     PoolAsset,
-    Side,
     TxConfig,
     TxType,
 )

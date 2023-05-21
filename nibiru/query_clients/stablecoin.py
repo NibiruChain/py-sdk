@@ -1,7 +1,7 @@
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
-from nibiru_proto.proto.stablecoin import query_pb2 as stablecoin_type
-from nibiru_proto.proto.stablecoin import query_pb2_grpc as stablecoin_query
+from nibiru_proto.proto.stablecoin.v1 import query_pb2 as stablecoin_type
+from nibiru_proto.proto.stablecoin.v1 import query_pb2_grpc as stablecoin_query
 
 from nibiru.query_clients.util import QueryClient, dict_keys_from_camel_to_snake
 from nibiru.utils import format_fields_nested, from_sdk_dec_n

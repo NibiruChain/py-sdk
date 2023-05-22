@@ -1,6 +1,6 @@
 # chain_info_test.py
 import dataclasses
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 import pytest
 import requests

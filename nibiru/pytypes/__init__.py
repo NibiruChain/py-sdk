@@ -8,7 +8,6 @@ from nibiru.pytypes.common import (  # noqa # TODO move constants to a constants
     PoolAsset,
     PoolType,
     PythonMsg,
-    Side,
     TxConfig,
     TxType,
 )

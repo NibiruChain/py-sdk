@@ -1,6 +1,6 @@
 # chain_info_test.py
 import dataclasses
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 import pytest
 import requests
@@ -51,18 +51,6 @@ def test_version_works(sdk_val: nibiru.Sdk):
                 sdk_val.query.assert_compatible_versions(*test["versions"])
         else:
             sdk_val.query.assert_compatible_versions(*test["versions"])
-
-
-def test_query_perp_params(sdk_val: nibiru.Sdk):
-    params: Dict[str, Union[float, str]] = sdk_val.query.perp.params()
-    perp_param_names: List[str] = [
-        "ecosystemFundFeeRatio",
-        "feePoolFeeRatio",
-        "liquidationFeeRatio",
-        "partialLiquidationRatio",
-        "twapLookbackWindow",
-    ]
-    assert all([(param_name in params) for param_name in perp_param_names])
 
 
 def test_block_getters(sdk_agent: nibiru.Sdk):

@@ -1,10 +1,10 @@
 import dataclasses
 from typing import List
 
-from nibiru_proto.proto.perp.v1 import state_pb2 as state_pb
-from nibiru_proto.proto.perp.v1 import tx_pb2 as pb
+from nibiru_proto.proto.perp.v2 import state_pb2 as state_pb
+from nibiru_proto.proto.perp.v2 import tx_pb2 as pb
 
-from nibiru.pytypes import Coin, PythonMsg, Side
+from nibiru.pytypes import Coin, Direction, PythonMsg
 from nibiru.utils import to_sdk_dec, to_sdk_int
 
 
@@ -51,15 +51,10 @@ class MsgsPerp:
             base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
                 quote.
         """
-        side: Side
-        if is_long:
-            side = Side.BUY
-        else:
-            side = Side.SELL
         return MsgOpenPosition(
             sender=sender,
             pair=pair,
-            side=side,
+            dir=Direction.LONG if is_long else Direction.SHORT,
             quote_asset_amount=quote_asset_amount,
             leverage=leverage,
             base_asset_amount_limit=base_asset_amount_limit,
@@ -221,7 +216,7 @@ class MsgOpenPosition(PythonMsg):
 
     sender: str
     pair: str
-    side: Side
+    dir: Direction
     quote_asset_amount: float
     leverage: float
     base_asset_amount_limit: float
@@ -234,7 +229,11 @@ class MsgOpenPosition(PythonMsg):
             pb.MsgOpenPosition: The proto object.
 
         """
-        pb_side = state_pb.Side.BUY if self.side == Side.BUY else state_pb.SELL
+        pb_side = (
+            state_pb.Direction.LONG
+            if self.dir == Direction.LONG
+            else state_pb.Direction.SHORT
+        )
         quote_asset_amount_pb = to_sdk_int(self.quote_asset_amount)
         base_asset_amount_limit_pb = to_sdk_int(self.base_asset_amount_limit)
         leverage_pb = to_sdk_dec(self.leverage)

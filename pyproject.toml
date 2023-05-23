@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nibiru"
-version = "0.20.0-rc1"
+version = "0.20.0b5"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <dev@nibiru.fi>"]
 license = "MIT"
@@ -34,7 +34,7 @@ pre-commit = "^2.20.0"
 shutup = "^0.2.0"
 websocket-client = "^1.4.1"
 packaging = "^21.3"
-nibiru-proto = "==0.20.0-rc1"
+nibiru-proto = "==0.20.0b5"
 bip32 = "^3.3"
 importlib-metadata = "^5.0.0"
 

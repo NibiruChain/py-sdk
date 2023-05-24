@@ -5,3 +5,4 @@ from nibiru.query_clients.spot import SpotQueryClient  # noqa
 from nibiru.query_clients.stablecoin import StablecoinQueryClient  # noqa
 from nibiru.query_clients.staking import StakingQueryClient  # noqa
 from nibiru.query_clients.util import *  # noqa
+from nibiru.query_clients.vpool import VpoolQueryClient  # noqa

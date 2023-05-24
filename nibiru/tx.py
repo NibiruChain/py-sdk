@@ -101,8 +101,7 @@ class TxClient:
                 if not isinstance(msgs, list):
                     msgs = [msgs]
                 self.client.wait_for_next_block()
-                kwargs["get_sequence_from_node"] = True
-                return self.execute_msgs(*msgs, **kwargs)
+                return self.execute_msgs(*msgs, get_sequence_from_node=True, **kwargs)
 
             if address:
                 address.decrease_sequence()

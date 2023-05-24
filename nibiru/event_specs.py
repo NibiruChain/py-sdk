@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
-from nibiru_proto.proto.oracle.v1 import event_pb2 as oracle_events
-from nibiru_proto.proto.perp.v2 import event_pb2 as perp_events
+from nibiru_proto.proto.perp.v1 import event_pb2 as perp_events
 from nibiru_proto.proto.spot.v1 import event_pb2 as spot_events
-from nibiru_proto.proto.stablecoin.v1 import events_pb2 as stablecoin_events  # noqa
+from nibiru_proto.proto.stablecoin import events_pb2 as stablecoin_events  # noqa
+from nibiru_proto.proto.vpool.v1 import event_pb2 as vpool_events
 
 
 class EventType(Enum):
@@ -18,6 +18,11 @@ class EventType(Enum):
     PositionSettledEvent = perp_events.PositionSettledEvent
     PositionLiquidatedEvent = perp_events.PositionLiquidatedEvent
     FundingRateChangedEvent = perp_events.FundingRateChangedEvent
+
+    # Vpool events
+    ReserveSnapshotSavedEvent = vpool_events.ReserveSnapshotSavedEvent
+    SwapOnVpoolEvent = vpool_events.SwapOnVpoolEvent
+    MarkPriceChanged = vpool_events.MarkPriceChangedEvent
 
     # Spot event
     PoolJoinedEvent = spot_events.EventPoolJoined
@@ -33,9 +38,6 @@ class EventType(Enum):
     BurnNIBIEvent = stablecoin_events.EventBurnNIBI
     RecollateralizeEvent = stablecoin_events.EventRecollateralize
     BuybackEvent = stablecoin_events.EventBuyback
-
-    # Oracle events
-    PriceUpdate = oracle_events.OraclePriceUpdate
 
     # Bank
     Transfer = "transfer"

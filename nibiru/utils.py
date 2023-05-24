@@ -76,6 +76,10 @@ def to_sdk_dec(dec: float) -> str:
     return combined_str
 
 
+def from_sdk_dec_24(dec_str: str) -> float:
+    return float(dec_str) * 1e-24
+
+
 def from_sdk_dec_n(dec_str: str, n: int = 6) -> float:
     return float(dec_str) * 10 ** (-n)
 

@@ -70,9 +70,11 @@ class GrpcClient:
         # Query services
         self.spot = query_clients.SpotQueryClient(self.chain_channel)
         self.perp = query_clients.PerpQueryClient(self.chain_channel)
+        self.vpool = query_clients.VpoolQueryClient(self.chain_channel)
         self.epoch = query_clients.EpochQueryClient(self.chain_channel)
         self.auth = query_clients.AuthQueryClient(self.chain_channel)
         self.staking = query_clients.StakingQueryClient(self.chain_channel)
+        self.util = query_clients.UtilQueryClient(self.chain_channel)
         self.stablecoin = query_clients.StablecoinQueryClient(self.chain_channel)
 
         if not bypass_version_check:

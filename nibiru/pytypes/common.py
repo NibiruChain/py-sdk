@@ -43,9 +43,14 @@ class TxType(Enum):
     """
 
 
+class Side(Enum):
+    BUY = 1
+    SELL = 2
+
+
 class Direction(Enum):
-    LONG = 1
-    SHORT = 2
+    ADD = 1
+    REMOVE = 2
 
 
 @dataclasses.dataclass

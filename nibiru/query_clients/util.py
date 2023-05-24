@@ -4,9 +4,12 @@ from typing import Dict, List, Optional, Union
 import grpc
 import grpc._channel
 from google.protobuf import json_format, message
+from grpc import Channel
 from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from nibiru_proto.proto.cosmos.tx.v1beta1.tx_pb2 import Tx
 from nibiru_proto.proto.tendermint.types.block_pb2 import Block
+from nibiru_proto.proto.util.v1 import query_pb2 as util_type
+from nibiru_proto.proto.util.v1 import query_pb2_grpc as util_query
 
 from nibiru import utils
 from nibiru.exceptions import QueryError
@@ -226,3 +229,43 @@ def get_block_messages(block: Block) -> List[dict]:
                     {"type_url": msg.type_url, "value": deserialize(msg_pb)}
                 )
     return messages
+
+
+class UtilQueryClient(QueryClient):
+    """
+    UtilQueryClient allows to query the endpoints made available by the util
+    module of Nibiru Chain.
+    """
+
+    def __init__(self, channel: Channel):
+        self.api = util_query.QueryStub(channel)
+
+    def module_accounts(self) -> dict:
+        """
+        Returns information module accounts like perp, vault etc.
+        Includes account name, address and balances.
+
+        Example Return Value:
+
+        ```json
+        {
+          "accounts": [
+            {
+              "name": "perp",
+              "address": "nibi1sr9a7yav4nu9n335atnkwgpcwz7s3p8puwaxgq",
+              "balance": []
+            },
+            {
+              "name": "vault",
+              "address": "nibi1umc2r7a58jy3jmw0e0hctyy0rx45chmurptawl",
+              "balance": []
+            }
+          ]
+        }
+        ```
+        """
+        return self.query(
+            api_callable=self.api.ModuleAccounts,
+            req=util_type.QueryModuleAccountsRequest(),
+            should_deserialize=True,
+        )

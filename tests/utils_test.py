@@ -4,7 +4,7 @@ from urllib.parse import ParseResult, urlparse
 
 import pytest
 from nibiru_proto.proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from nibiru_proto.proto.perp.v2.tx_pb2 import MsgOpenPosition
+from nibiru_proto.proto.perp.v1.tx_pb2 import MsgOpenPosition
 
 import nibiru
 import tests
@@ -73,7 +73,7 @@ def test_from_sdk_dec(test_name, sdk_dec_val, float_val, should_fail):
 @pytest.mark.parametrize(
     "type_url,cls",
     [
-        ("/nibiru.perp.v2.MsgOpenPosition", MsgOpenPosition),
+        ("/nibiru.perp.v1.MsgOpenPosition", MsgOpenPosition),
         ("/cosmos.bank.v1beta1.MsgSend", MsgSend),
     ],
 )

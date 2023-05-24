@@ -15,7 +15,7 @@ PAIR = "ubtc:unusd"
 
 
 class ERRORS:
-    position_not_found = "collections: not found: 'nibiru.perp.v2.Position'"
+    position_not_found = "collections: not found: 'nibiru.perp.v1.Position'"
     bad_debt = "bad debt"
     underwater_position = "underwater position"
 
@@ -38,13 +38,16 @@ def test_open_position(sdk_val: nibiru.Sdk):
     tests.transaction_must_succeed(tx_output)
 
     tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
-    assert "/nibiru.perp.v2.MsgOpenPosition" in tx_resp.rawLog[0].msgs
+    assert "/nibiru.perp.v1.MsgOpenPosition" in tx_resp.rawLog[0].msgs
     events_for_msg: List[str] = [
-        "nibiru.perp.v2.PositionChangedEvent",
+        "nibiru.perp.v1.PositionChangedEvent",
+        "nibiru.vpool.v1.SwapOnVpoolEvent",
+        "nibiru.vpool.v1.MarkPriceChangedEvent",
     ]
     assert all(
         [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
     )
+    
 
 
 @pytest.mark.order(after="test_open_position")

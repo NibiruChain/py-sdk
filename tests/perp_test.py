@@ -9,8 +9,6 @@ from nibiru import Msg
 from nibiru import pytypes as pt
 from nibiru.exceptions import QueryError
 
-PRECISION = 6
-
 PAIR = "ubtc:unusd"
 
 

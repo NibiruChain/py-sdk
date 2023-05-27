@@ -10,8 +10,6 @@ from nibiru import Coin, PoolAsset, utils
 from nibiru.exceptions import SimulationError
 from nibiru.pytypes import PoolType
 
-PRECISION = 6
-
 
 class SpotErrors:
     same_denom = "a pool with the same denoms already exists"

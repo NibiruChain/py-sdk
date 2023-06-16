@@ -53,8 +53,10 @@ def dict_keys_from_camel_to_snake(d):
     }
 
 
-def deserialize(pb_msg: message.Message, no_sdk_transformation: bool = False) -> dict:
-    """Deserializes a proto message into a dictionary.
+def message_to_dict(
+    pb_msg: message.Message, no_sdk_transformation: bool = False
+) -> dict:
+    """Converts a proto message into a dictionary.
 
     - sdk.Dec values are converted to floats.
     - sdk.Int values are converted to ints.
@@ -73,7 +75,7 @@ def deserialize(pb_msg: message.Message, no_sdk_transformation: bool = False) ->
         str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
         for field in pb_msg.ListFields()
     }
-    serialized_output = {}
+    output = {}
     expected_fields: List[str] = list(pb_msg.DESCRIPTOR.fields_by_name.keys())
 
     for _, attr in enumerate(expected_fields):
@@ -83,38 +85,38 @@ def deserialize(pb_msg: message.Message, no_sdk_transformation: bool = False) ->
         if custom_dtype is not None:
             if "sdk/types.Dec" in str(custom_dtype):
                 if no_sdk_transformation:
-                    serialized_output[str(attr)] = float(pb_msg.__getattribute__(attr))
+                    output[str(attr)] = float(pb_msg.__getattribute__(attr))
                 else:
-                    serialized_output[str(attr)] = utils.from_sdk_dec(
+                    output[str(attr)] = utils.from_sdk_dec(
                         pb_msg.__getattribute__(attr)
                     )
             elif "sdk/types.Int" in str(custom_dtype):
                 if no_sdk_transformation:
-                    serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
+                    output[str(attr)] = int(pb_msg.__getattribute__(attr))
                 else:
-                    serialized_output[str(attr)] = utils.from_sdk_int(
+                    output[str(attr)] = utils.from_sdk_int(
                         pb_msg.__getattribute__(attr)
                     )
             elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
-                serialized_output[str(attr)] = int(pb_msg.__getattribute__(attr))
+                output[str(attr)] = int(pb_msg.__getattribute__(attr))
             else:
                 val = pb_msg.__getattribute__(attr)
                 if hasattr(val, '__len__') and not isinstance(val, str):
                     updated_vals = []
                     for v in val:
-                        updated_vals.append(deserialize(v))
-                    serialized_output[str(attr)] = updated_vals
+                        updated_vals.append(message_to_dict(v))
+                    output[str(attr)] = updated_vals
                 else:
-                    serialized_output[str(attr)] = deserialize(val)
+                    output[str(attr)] = message_to_dict(val)
         elif custom_dtype is None and not attr_search:
             if str(attr_search) == "[]":
-                serialized_output[str(attr)] = []
+                output[str(attr)] = []
             else:
-                serialized_output[str(attr)] = attr_search
+                output[str(attr)] = attr_search
         else:
-            serialized_output[str(attr)] = deserialize(pb_msg.__getattribute__(attr))
+            output[str(attr)] = message_to_dict(pb_msg.__getattribute__(attr))
 
-    return serialized_output
+    return output
 
 
 def deserialize_exp(proto_message: message.Message) -> dict:
@@ -171,7 +173,7 @@ class QueryClient:
                 ),
             )
             if should_deserialize:
-                return deserialize(output)
+                return message_to_dict(output)
             return output
         except grpc._channel._InactiveRpcError as err:
             raise QueryError(
@@ -226,7 +228,7 @@ def get_block_messages(block: Block) -> List[dict]:
             if msg_pb:
                 msg_pb.ParseFromString(msg.value)
                 messages.append(
-                    {"type_url": msg.type_url, "value": deserialize(msg_pb)}
+                    {"type_url": msg.type_url, "value": message_to_dict(msg_pb)}
                 )
     return messages
 

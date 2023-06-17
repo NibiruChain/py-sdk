@@ -41,34 +41,37 @@ def pytest_configure():
         PYTEST_GLOBALS[env_var_name] = env_var_value
 
 
-def get_network() -> Network:
+@pytest.fixture
+def network() -> Network:
     return Network.customnet()
 
 
 @pytest.fixture
-def network() -> Network:
-    return get_network()
-
-
-TX_CONFIG: TxConfig = TxConfig(
-    tx_type=TxType.BLOCK,
-    gas_multiplier=1.25,
-    gas_price=0.25,
-)
-
-
-@pytest.fixture
 def sdk_val(network: Network) -> Sdk:
-    tx_config = TX_CONFIG
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
-        .with_config(tx_config)
+        .with_config(
+            TxConfig(
+                tx_type=TxType.BLOCK,
+                gas_multiplier=1.25,
+                gas_price=0.25,
+            )
+        )
         .with_network(network)
     )
 
 
 @pytest.fixture
 def sdk_agent(network: Network) -> Sdk:
-    tx_config = TX_CONFIG
-    agent = Sdk.authorize().with_config(tx_config).with_network(network)
+    agent = (
+        Sdk.authorize()
+        .with_config(
+            TxConfig(
+                tx_type=TxType.BLOCK,
+                gas_multiplier=1.25,
+                gas_price=0.25,
+            )
+        )
+        .with_network(network)
+    )
     return agent

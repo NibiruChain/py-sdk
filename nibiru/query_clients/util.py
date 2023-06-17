@@ -3,7 +3,7 @@ from typing import List, Optional, Union
 
 import grpc
 import grpc._channel
-from google.protobuf import json_format, message
+from google.protobuf import message
 from grpc import Channel
 from nibiru_proto.proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from nibiru_proto.proto.cosmos.tx.v1beta1.tx_pb2 import Tx
@@ -13,44 +13,6 @@ from nibiru_proto.proto.util.v1 import query_pb2_grpc as util_query
 
 from nibiru import utils
 from nibiru.exceptions import QueryError
-
-PROTOBUF_MSG_BASE_ATTRS: List[str] = (
-    dir(message.Message)
-    + ['Extensions', 'FindInitializationErrors', '_CheckCalledFromGeneratedFile']
-    + ['_extensions_by_name', '_extensions_by_number']
-)
-"""PROTOBUF_MSG_BASE_ATTRS (List[str]): The default attributes and methods of
-an instance of the 'protobuf.message.Message' class.
-"""
-
-
-def camel_to_snake(camel: str):
-    return ''.join(
-        ['_' + char.lower() if char.isupper() else char for char in camel]
-    ).lstrip('_')
-
-
-def dict_keys_from_camel_to_snake(d):
-    """
-    Transform all keys from the dictionary from camelcase to snake case.
-
-    Args:
-        d (dict): The dictionary to transform
-
-    Returns:
-        dict: The dictionary transformed
-    """
-    if isinstance(d, list):
-        return [
-            dict_keys_from_camel_to_snake(i) if isinstance(i, (dict, list)) else i
-            for i in d
-        ]
-    return {
-        camel_to_snake(a): dict_keys_from_camel_to_snake(b)
-        if isinstance(b, (dict, list))
-        else b
-        for a, b in d.items()
-    }
 
 
 def message_to_dict(pb_msg: message.Message) -> dict:
@@ -94,42 +56,6 @@ def message_to_dict(pb_msg: message.Message) -> dict:
     return output
 
 
-def deserialize_exp(proto_message: message.Message) -> dict:
-    """
-    Take a proto message and convert it into a dictionnary.
-    sdk.Dec values are converted to be consistent with txs.
-
-    Args:
-        proto_message (protobuf.message.Message)
-
-    Returns:
-        dict
-    """
-    output = json_format.MessageToDict(proto_message)
-
-    is_sdk_dec = {
-        field.camelcase_name: "types.Dec" in str(field.GetOptions())
-        for field in proto_message.DESCRIPTOR.fields
-    }
-
-    for field in proto_message.DESCRIPTOR.fields:
-        if field.message_type is not None:
-            # This is another proto object
-            try:
-                output[field.camelcase_name] = deserialize_exp(
-                    proto_message.__getattribute__(field.camelcase_name)
-                )
-            except AttributeError:
-                output[field.camelcase_name] = output[field.camelcase_name]
-
-        elif is_sdk_dec[field.camelcase_name]:
-            output[field.camelcase_name] = utils.from_sdk_dec(
-                output[field.camelcase_name]
-            )
-
-    return dict_keys_from_camel_to_snake(output)
-
-
 class QueryClient:
     def query(
         self,
@@ -156,7 +82,7 @@ class QueryClient:
             ) from None
 
 
-def get_page_request(kwargs):
+def get_page_request(kwargs) -> PageRequest:
     return PageRequest(
         key=kwargs.get("key"),
         offset=kwargs.get("offset"),

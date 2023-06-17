@@ -37,7 +37,7 @@ def pytest_configure():
         env_var_value = os.getenv(env_var_name)
         if not env_var_value:
             raise ValueError(f"Environment variable {env_var_name} is missing!")
-        setattr(pytest, env_var_name, __value=env_var_value)
+        setattr(pytest, env_var_name, env_var_value)
         PYTEST_GLOBALS[env_var_name] = env_var_value
 
 

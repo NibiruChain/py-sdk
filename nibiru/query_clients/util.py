@@ -1,5 +1,5 @@
 import importlib
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, Union
 
 import grpc
 import grpc._channel
@@ -53,9 +53,7 @@ def dict_keys_from_camel_to_snake(d):
     }
 
 
-def message_to_dict(
-    pb_msg: message.Message, no_sdk_transformation: bool = False
-) -> dict:
+def message_to_dict(pb_msg: message.Message) -> dict:
     """Converts a proto message into a dictionary.
 
     - sdk.Dec values are converted to floats.
@@ -64,57 +62,34 @@ def message_to_dict(
 
     Args:
         pb_msg (protobuf.message.Message)
-        no_sdk_transformation (bool): Wether to bypass the sdk transformation. Default to False
 
     Returns:
         dict: 'pb_msg' as a JSON-able dictionary.
     """
     if not isinstance(pb_msg, message.Message):
         return pb_msg
-    custom_dtypes: Dict[str, bytes] = {
-        str(field[1]): field[0].GetOptions().__getstate__().get("serialized", None)
-        for field in pb_msg.ListFields()
-    }
+
+    custom_types = {}  # map of field name to custom type
+    for field in pb_msg.ListFields():
+        field_options = field[0].GetOptions()
+        for field_option in field_options.ListFields():
+            if field_option[0].name == "customtype":
+                custom_types[field[0].name] = field_option[1]
+
     output = {}
-    expected_fields: List[str] = list(pb_msg.DESCRIPTOR.fields_by_name.keys())
 
-    for _, attr in enumerate(expected_fields):
-        attr_search = pb_msg.__getattribute__(attr)
-        custom_dtype = custom_dtypes.get(str(attr_search))
+    for attr_name in pb_msg.DESCRIPTOR.fields_by_name.keys():
+        custom_type = custom_types.get(attr_name)
+        val = getattr(pb_msg, attr_name)
 
-        if custom_dtype is not None:
-            if "sdk/types.Dec" in str(custom_dtype):
-                if no_sdk_transformation:
-                    output[str(attr)] = float(pb_msg.__getattribute__(attr))
-                else:
-                    output[str(attr)] = utils.from_sdk_dec(
-                        pb_msg.__getattribute__(attr)
-                    )
-            elif "sdk/types.Int" in str(custom_dtype):
-                if no_sdk_transformation:
-                    output[str(attr)] = int(pb_msg.__getattribute__(attr))
-                else:
-                    output[str(attr)] = utils.from_sdk_int(
-                        pb_msg.__getattribute__(attr)
-                    )
-            elif "Int" in str(custom_dtype):  # Used for sdk.Coin message normalization
-                output[str(attr)] = int(pb_msg.__getattribute__(attr))
-            else:
-                val = pb_msg.__getattribute__(attr)
-                if hasattr(val, '__len__') and not isinstance(val, str):
-                    updated_vals = []
-                    for v in val:
-                        updated_vals.append(message_to_dict(v))
-                    output[str(attr)] = updated_vals
-                else:
-                    output[str(attr)] = message_to_dict(val)
-        elif custom_dtype is None and not attr_search:
-            if str(attr_search) == "[]":
-                output[str(attr)] = []
-            else:
-                output[str(attr)] = attr_search
+        if custom_type == "github.com/cosmos/cosmos-sdk/types.Dec":
+            output[str(attr_name)] = utils.from_sdk_dec(val)
+        elif custom_type == "github.com/cosmos/cosmos-sdk/types.Int":
+            output[str(attr_name)] = utils.from_sdk_int(val)
+        elif hasattr(val, '__len__') and not isinstance(val, str):
+            output[str(attr_name)] = [message_to_dict(v) for v in val]
         else:
-            output[str(attr)] = message_to_dict(pb_msg.__getattribute__(attr))
+            output[str(attr_name)] = message_to_dict(val)
 
     return output
 

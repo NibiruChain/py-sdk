@@ -114,14 +114,16 @@ class TxClient:
         conf: pt.TxConfig = self.get_config(**kwargs)
 
         def compute_gas_wanted() -> float:
+
             # Related to https://github.com/cosmos/cosmos-sdk/issues/14405
             # TODO We should consider adding the behavior mentioned by tac0turtle.
-            gas_wanted = gas_estimate * 1.25  # apply gas multiplier
-            if conf.gas_wanted > 0:
+            gas_wanted = 50_000  # apply gas multiplier
+            gas_from_multiplier: float
+            if conf.gas_wanted > gas_wanted:
                 gas_wanted = conf.gas_wanted
             elif conf.gas_multiplier > 0:
-                gas_wanted = gas_estimate * conf.gas_multiplier
-            return gas_wanted
+                gas_from_multiplier = gas_estimate * conf.gas_multiplier
+            return max(gas_from_multiplier, gas_wanted)
 
         gas_wanted = compute_gas_wanted()
         gas_price = pt.GAS_PRICE if conf.gas_price <= 0 else conf.gas_price

@@ -2,7 +2,7 @@ name: E2E 🐍 tests
 
 on:
   pull_request:
-    branches: ["master"]
+    branches: ["master", "release/*"]
     paths:
       [
         "**.py",
@@ -11,7 +11,7 @@ on:
         ".github/workflows/pytests.yml",
       ]
   push:
-    branches: ["master"]
+    branches: ["master", "release/*"]
     paths:
       [
         "**.py",

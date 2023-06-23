@@ -92,7 +92,7 @@ class Sdk:
         elif len(key) > 0:
             pk = PrivateKey.from_hex(key)
 
-        self._with_priv_key(pk)
+        self.priv_key = pk
         self.mnemonic = mnemonic if key is None else key
 
         return self
@@ -112,8 +112,12 @@ class Sdk:
             Sdk: The updated sdk object
         """
         self.network = network
-        self._with_query_client(
-            GrpcClient(network, network.is_insecure, bypass_version_check)
+        self.query = GrpcClient(network, network.is_insecure, bypass_version_check)
+        self.tx = TxClient(
+            query_client=self.query,
+            network=self.network,
+            priv_key=self.priv_key,
+            config=self.tx_config,
         )
         return self
 
@@ -128,13 +132,6 @@ class Sdk:
             Sdk: The updated sdk object
         """
         self.tx_config = config
-        tx_client = TxClient(
-            client=self.query,
-            network=self.network,
-            priv_key=self.priv_key,
-            config=self.tx_config,
-        )
-        self._with_tx_client(tx_client)
         return self
 
     @property
@@ -147,23 +144,3 @@ class Sdk:
         """
         pub_key = self.priv_key.to_public_key()
         return pub_key.to_address().to_acc_bech32()
-
-    # Private methods
-    def _with_query_client(self, client: GrpcClient) -> "Sdk":
-        self.query = client
-        tx_client = TxClient(
-            client=self.query,
-            network=self.network,
-            priv_key=self.priv_key,
-            config=self.tx_config,
-        )
-        self._with_tx_client(tx_client)
-        return self
-
-    def _with_tx_client(self, tx_client: TxClient) -> "Sdk":
-        self.tx = tx_client
-        return self
-
-    def _with_priv_key(self, priv_key: PrivateKey) -> "Sdk":
-        self.priv_key = priv_key
-        return self

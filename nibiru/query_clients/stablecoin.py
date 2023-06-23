@@ -3,7 +3,7 @@ from grpc import Channel
 from nibiru_proto.proto.stablecoin import query_pb2 as stablecoin_type
 from nibiru_proto.proto.stablecoin import query_pb2_grpc as stablecoin_query
 
-from nibiru.query_clients.util import QueryClient, dict_keys_from_camel_to_snake
+from nibiru.query_clients.util import QueryClient
 from nibiru.utils import format_fields_nested, from_sdk_dec_n
 
 
@@ -23,41 +23,25 @@ class StablecoinQueryClient(QueryClient):
         Example Return Value:
         {
             "params": {
-            "coll_ratio": "140000",
-            "fee_ratio": "2000",
-            "ef_fee_ratio": "500000",
-            "bonus_rate_recoll": "2000",
-            "distr_epoch_identifier": "15 min",
-            "adjustment_step": "2500",
-            "price_lower_bound": "999900",
-            "price_upper_bound": "1000100",
-            "is_collateral_ratio_valid": true
+                "coll_ratio": "140000",
+                "fee_ratio": "2000",
+                "ef_fee_ratio": "500000",
+                "bonus_rate_recoll": "2000",
+                "distr_epoch_identifier": "15 min",
+                "adjustment_step": "2500",
+                "price_lower_bound": "999900",
+                "price_upper_bound": "1000100",
+                "is_collateral_ratio_valid": true
             }
         }
 
         Returns:
             dict: The parameters fo the stablecoin module.
         """
-        proto_output = self.query(
+        return self.query(
             api_callable=self.api.Params,
             req=stablecoin_type.QueryParamsRequest(),
-            should_deserialize=False,
-        )
-        output = MessageToDict(proto_output, including_default_value_fields=True)
-        return dict_keys_from_camel_to_snake(
-            format_fields_nested(
-                object=output,
-                fn=lambda x: from_sdk_dec_n(x, 6),
-                fields=[
-                    "collRatio",
-                    "feeRatio",
-                    "efFeeRatio",
-                    "bonusRateRecoll",
-                    "adjustmentStep",
-                    "priceLowerBound",
-                    "priceUpperBound",
-                ],
-            )
+            should_deserialize=True,
         )
 
     def circulating_supplies(self, **kwargs):

@@ -353,7 +353,7 @@ class GrpcClient:
         Returns
             dict: balances for each coin
         """
-        return query_clients.deserialize(
+        return query_clients.message_to_dict(
             self.stubBank.AllBalances(
                 bank_query.QueryAllBalancesRequest(address=address)
             )
@@ -370,7 +370,7 @@ class GrpcClient:
         Returns:
             dict: balance for the coin with denom, 'denom'
         """
-        return query_clients.deserialize(
+        return query_clients.message_to_dict(
             self.stubBank.Balance(
                 bank_query.QueryBalanceRequest(address=address, denom=denom)
             )

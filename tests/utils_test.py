@@ -1,16 +1,16 @@
 import subprocess
 from typing import List
 from urllib.parse import ParseResult, urlparse
-
+from nibiru_proto.proto.perp.v1 import query_pb2 as perp_type
+from nibiru_proto.proto.perp.v1 import state_pb2 as perp_state
 import pytest
 from nibiru_proto.proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from nibiru_proto.proto.perp.v1.tx_pb2 import MsgOpenPosition
-
-import nibiru
 import tests
-from nibiru import Coin, pytypes
+from nibiru import Coin, pytypes, Sdk, Msg
 from nibiru.query_clients.util import get_block_messages, get_msg_pb_by_type_url
 from nibiru.utils import from_sdk_dec, to_sdk_dec
+from nibiru.query_clients.util import message_to_dict
 
 
 @pytest.mark.parametrize(
@@ -81,9 +81,9 @@ def test_get_msg_pb_by_type_url(type_url, cls):
     assert get_msg_pb_by_type_url(type_url) == cls()
 
 
-def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
+def test_get_block_messages(sdk_val: Sdk, sdk_agent: Sdk):
     tx_output: pytypes.RawTxResp = sdk_val.tx.execute_msgs(
-        nibiru.Msg.bank.send(
+        Msg.bank.send(
             sdk_val.address,
             sdk_agent.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],
@@ -100,6 +100,52 @@ def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
         msg["value"],
         ["from_address", "to_address", "amount"],
     )
+
+
+def test_message_to_dict():
+    msg = perp_type.QueryPositionsResponse(
+        positions=[
+            perp_type.QueryPositionResponse(
+                unrealized_pnl="10",
+                block_number=1,
+                margin_ratio_index="11",
+                margin_ratio_mark="12",
+                position_notional="13",
+                position=perp_state.Position(
+                    block_number=1,
+                    latest_cumulative_premium_fraction="14",
+                    margin="15",
+                    open_notional="16",
+                    pair="ubtc:unusd",
+                    size="17",
+                    trader_address="nibi1foobar",
+                ),
+            )
+        ]
+    )
+
+    msg_dict = message_to_dict(msg)
+
+    assert msg_dict == {
+        "positions": [
+            {
+                "unrealized_pnl": 10e-18,
+                "block_number": 1,
+                "margin_ratio_index": 11e-18,
+                "margin_ratio_mark": 12e-18,
+                "position_notional": 13e-18,
+                "position": {
+                    "block_number": 1,
+                    "latest_cumulative_premium_fraction": 14e-18,
+                    "margin": 15e-18,
+                    "open_notional": 16e-18,
+                    "pair": "ubtc:unusd",
+                    "size": 17e-18,
+                    "trader_address": "nibi1foobar",
+                },
+            }
+        ]
+    }
 
 
 def can_ping(host) -> bool:

@@ -188,7 +188,7 @@ class NibiruWebsocket:
                     ignore_unknown_fields=True,
                 )
 
-                event_payload = nibiru.query_clients.util.deserialize(
+                event_payload = nibiru.query_clients.util.message_to_dict(
                     proto_message,
                     no_sdk_transformation=True,
                 )

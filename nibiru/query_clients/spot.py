@@ -126,13 +126,9 @@ class SpotQueryClient(QueryClient):
             output = {}
 
         return format_fields_nested(
-            object=format_fields_nested(
-                object=output,
-                fn=lambda x: from_sdk_dec_n(x, 18),
-                fields=["swapFee", "exitFee"],
-            ),
-            fn=lambda x: from_sdk_dec_n(x, 6),
-            fields=["amount"],
+            object=output,
+            fn=lambda x: from_sdk_dec_n(x, 18),
+            fields=["swapFee", "exitFee"],
         )
 
     def total_liquidity(self) -> dict:
@@ -164,9 +160,7 @@ class SpotQueryClient(QueryClient):
         )
 
         output = MessageToDict(proto_output)
-        return format_fields_nested(
-            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
-        )
+        return output
 
     def total_pool_liquidity(self, pool_id: int) -> dict:
         """
@@ -200,9 +194,7 @@ class SpotQueryClient(QueryClient):
         )
 
         output = MessageToDict(proto_output)
-        return format_fields_nested(
-            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
-        )
+        return output
 
     def total_shares(self, pool_id: int) -> dict:
         """
@@ -230,9 +222,7 @@ class SpotQueryClient(QueryClient):
         )
 
         output = MessageToDict(proto_output)
-        return format_fields_nested(
-            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
-        )
+        return output
 
     def spot_price(
         self, pool_id: int, token_in_denom: str, token_out_denom: str
@@ -295,9 +285,7 @@ class SpotQueryClient(QueryClient):
         )
 
         output = MessageToDict(proto_output)
-        return format_fields_nested(
-            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
-        )
+        return output
 
     def estimate_join_exact_amount_in(
         self, pool_id: int, tokens_ins: List[Coin]
@@ -336,11 +324,7 @@ class SpotQueryClient(QueryClient):
         )
 
         output = MessageToDict(proto_output)
-        return format_fields_nested(
-            object=output,
-            fn=lambda x: from_sdk_dec_n(x, 6),
-            fields=["amount", "poolSharesOut"],
-        )
+        return output
 
     def estimate_exit_exact_amount_in(self, pool_id: int, num_shares: int) -> dict:
         """
@@ -376,6 +360,4 @@ class SpotQueryClient(QueryClient):
             should_deserialize=False,
         )
         output = MessageToDict(proto_output)
-        return format_fields_nested(
-            object=output, fn=lambda x: from_sdk_dec_n(x, 6), fields=["amount"]
-        )
+        return output

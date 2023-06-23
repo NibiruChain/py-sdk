@@ -33,12 +33,12 @@ class TxClient:
         self,
         priv_key: wallet.PrivateKey,
         network: pt.Network,
-        client: GrpcClient,
+        query_client: GrpcClient,
         config: pt.TxConfig,
     ):
         self.priv_key = priv_key
         self.network = network
-        self.client = client
+        self.query_client = query_client
         self.address = None
         self.config = config
 
@@ -100,7 +100,7 @@ class TxClient:
             ):
                 if not isinstance(msgs, list):
                     msgs = [msgs]
-                self.client.wait_for_next_block()
+                self.query_client.wait_for_next_block()
                 return self.execute_msgs(*msgs, get_sequence_from_node=True, **kwargs)
 
             if address:
@@ -114,14 +114,16 @@ class TxClient:
         conf: pt.TxConfig = self.get_config(**kwargs)
 
         def compute_gas_wanted() -> float:
+
             # Related to https://github.com/cosmos/cosmos-sdk/issues/14405
             # TODO We should consider adding the behavior mentioned by tac0turtle.
-            gas_wanted = gas_estimate * 1.25  # apply gas multiplier
-            if conf.gas_wanted > 0:
+            gas_wanted = 50_000  # apply gas multiplier
+            gas_from_multiplier: float
+            if conf.gas_wanted > gas_wanted:
                 gas_wanted = conf.gas_wanted
             elif conf.gas_multiplier > 0:
-                gas_wanted = gas_estimate * conf.gas_multiplier
-            return gas_wanted
+                gas_from_multiplier = gas_estimate * conf.gas_multiplier
+            return max(gas_from_multiplier, gas_wanted)
 
         gas_wanted = compute_gas_wanted()
         gas_price = pt.GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
@@ -139,7 +141,7 @@ class TxClient:
             tx.with_gas_limit(gas_wanted)
             .with_fee(fee)
             .with_memo("")
-            .with_timeout_height(self.client.timeout_height)
+            .with_timeout_height(self.query_client.timeout_height)
         )
         tx_raw_bytes = tx.get_signed_tx_data()
 
@@ -149,11 +151,11 @@ class TxClient:
         broadcast_fn: Callable[[bytes], abci_type.TxResponse]
 
         if tx_type == pt.TxType.SYNC:
-            broadcast_fn = self.client.send_tx_sync_mode
+            broadcast_fn = self.query_client.send_tx_sync_mode
         elif tx_type == pt.TxType.ASYNC:
-            broadcast_fn = self.client.send_tx_async_mode
+            broadcast_fn = self.query_client.send_tx_async_mode
         else:
-            broadcast_fn = self.client.send_tx_block_mode
+            broadcast_fn = self.query_client.send_tx_block_mode
 
         return broadcast_fn(tx_raw_bytes)
 
@@ -167,7 +169,7 @@ class TxClient:
 
         pb_msgs = [msg.to_pb() for msg in msgs]
 
-        self.client.sync_timeout_height()
+        self.query_client.sync_timeout_height()
         address: wallet.Address = self.get_address_info()
         sequence: int = address.get_sequence(
             from_node=get_sequence_from_node,
@@ -199,7 +201,7 @@ class TxClient:
 
         sim_res: abci_type.SimulationResponse
         success: bool
-        sim_res, success = self.client.simulate_tx(sim_tx_raw_bytes)
+        sim_res, success = self.query_client.simulate_tx(sim_tx_raw_bytes)
         if not success:
             raise SimulationError(sim_res)
 

@@ -5,7 +5,7 @@ from grpc import Channel
 from nibiru_proto.proto.perp.v1 import query_pb2 as perp_type
 from nibiru_proto.proto.perp.v1 import query_pb2_grpc as perp_query
 
-from nibiru.query_clients.util import QueryClient, deserialize
+from nibiru.query_clients.util import QueryClient, message_to_dict
 from nibiru.utils import from_sdk_dec
 
 
@@ -98,7 +98,7 @@ class PerpQueryClient(QueryClient):
             api_callable=self.api.QueryPosition, req=req, should_deserialize=False
         )
 
-        return deserialize(proto_output)
+        return message_to_dict(proto_output)
 
     def all_positions(self, trader: str) -> Dict[str, dict]:
         """
@@ -138,7 +138,7 @@ class PerpQueryClient(QueryClient):
         proto_output: perp_type.QueryPositionsResponse = self.query(
             api_callable=self.api.QueryPositions, req=req, should_deserialize=False
         )
-        proto_as_dict: dict[str, list] = deserialize(proto_output)
+        proto_as_dict: dict[str, list] = message_to_dict(proto_output)
 
         position_resps: Union[List[dict], None] = proto_as_dict.get("positions")
         if position_resps is None:

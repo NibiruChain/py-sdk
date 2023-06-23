@@ -2,7 +2,7 @@ name: E2E 🐍 tests
 
 on:
   pull_request:
-    branches: ["master"]
+    branches: ["master", "release/*"]
     paths:
       [
         "**.py",
@@ -11,7 +11,7 @@ on:
         ".github/workflows/pytests.yml",
       ]
   push:
-    branches: ["master"]
+    branches: ["master", "release/*"]
     paths:
       [
         "**.py",
@@ -29,11 +29,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
-      LCD_ENDPOINT: ${{ secrets.LCD_ENDPOINT }}
-      GRPC_ENDPOINT: ${{ secrets.GRPC_ENDPOINT }}
-      TENDERMINT_RPC_ENDPOINT: ${{ secrets.TENDERMINT_RPC_ENDPOINT }}
-      WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
-      CHAIN_ID: ${{ secrets.CHAIN_ID }}
+      # LCD_ENDPOINT: ${{ secrets.LCD_ENDPOINT }}
+      # GRPC_ENDPOINT: ${{ secrets.GRPC_ENDPOINT }}
+      # TENDERMINT_RPC_ENDPOINT: ${{ secrets.TENDERMINT_RPC_ENDPOINT }}
+      # WEBSOCKET_ENDPOINT: ${{ secrets.WEBSOCKET_ENDPOINT }}
+      # CHAIN_ID: ${{ secrets.CHAIN_ID }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
@@ -42,6 +42,13 @@ jobs:
       # ----------------------------------------------
       - name: Check out the repo
         uses: actions/checkout@v3
+      - name: Install nibid
+        run: curl -s https://get.nibiru.fi/@v0.19.2! | bash
+        # Use https://get.nibiru.fi/ to get the most recent release.
+      - name: Run localnet.sh in the background
+        run: |
+          sh scripts/localnet.sh &
+
       - name: Set up Python (3.8)
         id: setup-python
         uses: actions/setup-python@v2

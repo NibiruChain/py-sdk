@@ -2,7 +2,7 @@ from grpc import Channel
 from nibiru_proto.proto.cosmos.staking.v1beta1 import query_pb2 as staking_type
 from nibiru_proto.proto.cosmos.staking.v1beta1 import query_pb2_grpc as staking_query
 
-from nibiru.query_clients.util import QueryClient, deserialize, get_page_request
+from nibiru.query_clients.util import QueryClient, message_to_dict, get_page_request
 
 
 class StakingQueryClient(QueryClient):
@@ -318,4 +318,4 @@ class StakingQueryClient(QueryClient):
             should_deserialize=False,
             height=kwargs.get("height"),
         )
-        return deserialize(proto_output)
+        return message_to_dict(proto_output)

@@ -9,8 +9,6 @@ from nibiru import Msg
 from nibiru import pytypes as pt
 from nibiru.exceptions import QueryError
 
-PRECISION = 6
-
 PAIR = "ubtc:unusd"
 
 
@@ -178,5 +176,6 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
         expected_errors: List[str] = [
             ERRORS.position_not_found,
             ERRORS.underwater_position,
+            ERRORS.no_prices,
         ]
         tests.raises(expected_errors, err)

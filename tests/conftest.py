@@ -20,11 +20,7 @@ from nibiru import Network, Sdk
 from nibiru.pytypes import TxConfig, TxType
 
 PYTEST_GLOBALS: Dict[str, str] = dict(
-    GRPC_ENDPOINT="",
-    TENDERMINT_RPC_ENDPOINT="",
-    WEBSOCKET_ENDPOINT="",
     VALIDATOR_MNEMONIC="",
-    CHAIN_ID="nibiru-localnet-0",
 )
 
 

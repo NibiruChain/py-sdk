@@ -112,6 +112,16 @@ poetry install
 
 This will resolve dependencies between each of the project's packages and install them into a virtual environment.
 
+## Developing with pricefeeder and localnet
+
+### Installation
+Run `bash scripts/get_nibid.sh` to install the nibid binary
+Run `bash scripts/get_nibid.sh` to install the pricefeeder binary
+
+### Running pricefeeder and localnet
+Run `bash scripts/localnet.sh` to initiate the localnet
+Run `bash scripts/run_pricefeed.sh` to initiate the pricefeeder
+
 ## Running tests
 
 #### Setting environment variables
@@ -162,6 +172,7 @@ poetry run pytest -p no:warnings # silences warnings
 
 poetry run pytest --slow -p no:warnings # to include slowly running tests
 ```
+
 
 #### (option B). Install the `nibiru` package with `pip`
 

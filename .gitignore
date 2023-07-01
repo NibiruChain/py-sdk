@@ -1,5 +1,6 @@
 .DS_Store
 coverage.txt
+examples/trading_bot.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

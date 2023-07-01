@@ -2,8 +2,8 @@ import abc
 import dataclasses
 from enum import Enum
 
-from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
-from nibiru_proto.proto.spot.v1.pool_pb2 import PoolType  # noqa
+from nibiru_proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+from nibiru_proto.nibiru.spot.v1.pool_pb2 import PoolType  # noqa
 
 import nibiru
 

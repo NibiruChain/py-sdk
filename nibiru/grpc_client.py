@@ -1,24 +1,34 @@
 import logging
+import sys
 import time
 from typing import Generator, List, Optional, Tuple, Union
 
 import grpc
-from nibiru_proto.proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
-from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
-from nibiru_proto.proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
-from nibiru_proto.proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
-from nibiru_proto.proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc
-from nibiru_proto.proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
-from nibiru_proto.proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
-from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2 as tendermint_query,
+
+sys.path.append(
+    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru"
 )
-from nibiru_proto.proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2_grpc as tendermint_query_grpc,
+sys.path.append(
+    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs"
 )
-from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
-from nibiru_proto.proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
+sys.path.append(
+    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs/v1"
+)
+print(sys.path)
+from nibiru_proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
+from nibiru_proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
+from nibiru_proto.cosmos.auth.v1beta1 import query_pb2 as auth_query_grpc
+from nibiru_proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
+from nibiru_proto.cosmos.authz.v1beta1 import query_pb2 as authz_query_grpc
+from nibiru_proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
+from nibiru_proto.cosmos.bank.v1beta1 import query_pb2 as bank_query_grpc
+from nibiru_proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
+from nibiru_proto.cosmos.base.tendermint.v1beta1 import query_pb2 as tendermint_query
+from nibiru_proto.cosmos.base.tendermint.v1beta1 import (
+    query_pb2 as tendermint_query_grpc,
+)
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service_grpc
 from packaging import version
 
 from nibiru import pytypes, query_clients

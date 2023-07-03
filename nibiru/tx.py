@@ -12,11 +12,11 @@ from typing import Any, Callable, Iterable, List, Tuple, Union
 
 from google.protobuf import any_pb2, message
 from google.protobuf.json_format import MessageToDict
-from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
-from nibiru_proto.proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from nibiru_proto.proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
-from nibiru_proto.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
+from nibiru_proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
+from nibiru_proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+from nibiru_proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from nibiru_proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
+from nibiru_proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
 from nibiru import pytypes as pt
 from nibiru import wallet

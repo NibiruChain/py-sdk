@@ -1,4 +1,17 @@
 """Tests package for the Nibiru Python SDK"""
+import sys
+
+sys.path.append(
+    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru"
+)
+sys.path.append(
+    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs"
+)
+sys.path.append(
+    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs/v1"
+)
+print(sys.path)
+
 import logging
 import pprint
 from typing import Iterable, List, Union

@@ -678,13 +678,13 @@ gmpy2 = ["gmpy2"]
 
 [[package]]
 name = "exceptiongroup"
-version = "1.1.1"
+version = "1.1.2"
 description = "Backport of PEP 654 (exception groups)"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "exceptiongroup-1.1.1-py3-none-any.whl", hash = "sha256:232c37c63e4f682982c8b6459f33a8981039e5fb8756b2074364e5055c498c9e"},
-    {file = "exceptiongroup-1.1.1.tar.gz", hash = "sha256:d484c3090ba2889ae2928419117447a14daf3c1231d5e30d0aae34f354f01785"},
+    {file = "exceptiongroup-1.1.2-py3-none-any.whl", hash = "sha256:e346e69d186172ca7cf029c8c1d16235aa0e04035e5750b4b95039e65204328f"},
+    {file = "exceptiongroup-1.1.2.tar.gz", hash = "sha256:12c3e887d6485d16943a309616de20ae5582633e0a2eda17f4e10fd61c1e8af5"},
 ]
 
 [package.extras]
@@ -1190,13 +1190,13 @@ types-protobuf = ">=3.20.4"
 
 [[package]]
 name = "nibiru-proto"
-version = "0.21.3b1"
+version = "0.21.3b4"
 description = "Nibiru Chain Python SDK"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "nibiru_proto-0.21.3b1-py3-none-any.whl", hash = "sha256:a1e919699a8d2b53d138ae5e587a504dfdf0f61a79588f386fd032a182a9587d"},
-    {file = "nibiru_proto-0.21.3b1.tar.gz", hash = "sha256:019c88a96bd117a4f222dda6a54619cbf9f1433045d2f3bda313b4212bab50d0"},
+    {file = "nibiru_proto-0.21.3b4-py3-none-any.whl", hash = "sha256:9ccd8fba8abac7cc422c18a6bd1a29cb03055a3ace059dcf09dd980274c5d5df"},
+    {file = "nibiru_proto-0.21.3b4.tar.gz", hash = "sha256:b700dc4de2169f962f20a702ef8a75c70a197f93acdd9edae86017fb5071bd68"},
 ]
 
 [package.dependencies]
@@ -1591,13 +1591,13 @@ files = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.7.0"
+version = "4.7.1"
 description = "Backported and Experimental Type Hints for Python 3.7+"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "typing_extensions-4.7.0-py3-none-any.whl", hash = "sha256:5d8c9dac95c27d20df12fb1d97b9793ab8b2af8a3a525e68c80e21060c161771"},
-    {file = "typing_extensions-4.7.0.tar.gz", hash = "sha256:935ccf31549830cda708b42289d44b6f74084d616a00be651601a4f968e77c82"},
+    {file = "typing_extensions-4.7.1-py3-none-any.whl", hash = "sha256:440d5dd3af93b060174bf433bccd69b0babc3b15b1a8dca43789fd7f61514b36"},
+    {file = "typing_extensions-4.7.1.tar.gz", hash = "sha256:b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"},
 ]
 
 [[package]]
@@ -1787,4 +1787,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "c6a167f1b1212cdf9ee0b9d9540df20e27214702a4205b7cc4ef4a5dde7ef101"
+content-hash = "f6818546ea9023efeb9190e92068bb1745658a5ec8669cb2d32284dc54a62c4c"

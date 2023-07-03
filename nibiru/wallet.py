@@ -8,7 +8,7 @@ from bip32 import BIP32
 from ecdsa import BadSignatureError, SECP256k1, SigningKey, VerifyingKey
 from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
-from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
+from nibiru_proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 from nibiru.crypto.ripemd160 import ripemd160
 

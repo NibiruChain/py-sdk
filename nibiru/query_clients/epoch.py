@@ -1,22 +1,11 @@
-import sys
 
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru"
-)
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs"
-)
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs/v1"
-)
 from nibiru_proto.nibiru.epochs.v1 import query_pb2 as epoch_query
 from nibiru_proto.nibiru.epochs.v1 import query_pb2_grpc as epoch_query_grpc
 
-# print(sys.path)
-from nibiru_proto.nibiru.inflation.v1 import inflation_pb2_grpc as infl
+# from nibiru_proto.nibiru.inflation.v1 import inflation_pb2_grpc as infl
 
 from nibiru.query_clients.util import QueryClient
 
@@ -49,7 +38,8 @@ class EpochQueryClient(QueryClient):
         """
         proto_output = self.query(
             api_callable=self.api.CurrentEpoch,
-            req=epoch_query.QueryCurrentEpochRequest(identifier=epoch_identifier),
+            req=epoch_query.QueryCurrentEpochRequest(
+                identifier=epoch_identifier),
             should_deserialize=False,
         )
 

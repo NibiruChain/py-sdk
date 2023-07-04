@@ -10,20 +10,6 @@ Fixtures available:
 - sdk_val
 - sdk_agent
 """
-
-import sys
-
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru"
-)
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs"
-)
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs/v1"
-)
-print(sys.path)
-
 import os
 from typing import Any, Dict, List, Optional
 
@@ -69,7 +55,8 @@ def pytest_configure(config):
     for env_var_name in PYTEST_GLOBALS_REQUIRED.keys():
         env_var_value = os.getenv(env_var_name)
         if not env_var_value:
-            raise ValueError(f"Environment variable {env_var_name} is missing!")
+            raise ValueError(
+                f"Environment variable {env_var_name} is missing!")
         set_pytest_global(env_var_name, env_var_value)
 
 

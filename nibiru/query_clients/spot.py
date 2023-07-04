@@ -3,8 +3,8 @@ from typing import List
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
 from nibiru_proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from nibiru_proto.spot.v1 import query_pb2 as spot_query
-from nibiru_proto.spot.v1 import query_pb2 as spot_type
+from nibiru_proto.nibiru.spot.v1 import query_pb2 as spot_query
+from nibiru_proto.nibiru.spot.v1 import query_pb2 as spot_type
 
 from nibiru.pytypes import Coin
 from nibiru.query_clients.util import QueryClient

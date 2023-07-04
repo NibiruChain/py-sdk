@@ -4,7 +4,7 @@ from urllib.parse import ParseResult, urlparse
 
 import pytest
 from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from nibiru_proto.perp.v2.tx_pb2 import MsgOpenPosition
+from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder
 
 import nibiru
 import tests
@@ -73,7 +73,7 @@ def test_from_sdk_dec(test_name, sdk_dec_val, float_val, should_fail):
 @pytest.mark.parametrize(
     "type_url,cls",
     [
-        ("/nibiru.perp.v2.MsgOpenPosition", MsgOpenPosition),
+        ("/nibiru.perp.v2.MsgMarketOrder", MsgMarketOrder),
         ("/cosmos.bank.v1beta1.MsgSend", MsgSend),
     ],
 )
@@ -122,7 +122,8 @@ def can_ping(host) -> bool:
 
 def url_to_host(url: str) -> str:
     """
-    Convert an url like "https://rpc.devnet-2.nibiru.fi:443" to "https://rpc.devnet-2.nibiru.fi"
+    Converts a url like "https://rpc.devnet-2.nibiru.fi:443" to
+    "https://rpc.devnet-2.nibiru.fi"
 
     Args:
         url (str): tue url to transform

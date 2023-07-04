@@ -197,13 +197,15 @@ def get_msg_pb_by_type_url(type_url: str) -> Optional[message.Message]:
     try:
         type_url = type_url.replace("/", "")
         module_name, class_name = type_url.rsplit(".", 1)
-        if module_name.startswith("nibiru."):
-            module_name = module_name.split(".", 1)[1]
+        #if module_name.startswith("nibiru."):
+        #    module_name = module_name.split(".", 1)[1]
+
         module_name = f"nibiru_proto.{module_name}.tx_pb2"
         module_ = importlib.import_module(module_name)
-        class_ = getattr(module_, class_name)()
-    except Exception:
-        pass
+        class_ = getattr(module_, class_name)
+        
+    except BaseException as err:
+        print(f"{err}")
 
     return class_ or None
 

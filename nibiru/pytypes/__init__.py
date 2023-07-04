@@ -13,4 +13,4 @@ from nibiru.pytypes.common import (  # noqa # TODO move constants to a constants
 )
 from nibiru.pytypes.event import Event, RawEvent, TxLogEvents  # noqa
 from nibiru.pytypes.network import Network, NetworkType  # noqa
-from nibiru.pytypes.tx_resp import RawTxResp, TxResp  # noqa
+from nibiru.pytypes.tx_resp import RawTxResp, TxResp, RawSyncTxResp  # noqa

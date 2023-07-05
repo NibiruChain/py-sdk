@@ -67,10 +67,11 @@ def test_spot_create_pool(sdk_val: nibiru.Sdk):
         assert has_reasonable_err(simulation_error), simulation_error
     """
 
+
 @pytest.mark.order(after="test_spot_create_pool")
 @pytest.fixture
 def pools(sdk_val: nibiru.Sdk) -> List[dict]:
-    pools_resp = sdk_val.query.spot.pools() 
+    pools_resp = sdk_val.query.spot.pools()
     if pools_resp:
         return sdk_val.query.spot.pools()
     else:
@@ -99,7 +100,7 @@ def pool_ids(pools: List[dict]) -> Dict[str, int]:
                 for pool in pools
             ]
         )
-       # breakpoint()
+        # breakpoint()
         pool_id = int(
             [
                 pool["id"]

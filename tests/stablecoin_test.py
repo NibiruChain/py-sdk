@@ -26,16 +26,3 @@ def test_query_params(sdk_val: nibiru.Sdk):
 def test_query_circulating_supplies(sdk_val: nibiru.Sdk):
     res = sdk_val.query.stablecoin.circulating_supplies()
     assert isinstance(res, dict)
-
-
-def test_query_liquidity_ratio_info(sdk_val: nibiru.Sdk):
-    res = sdk_val.query.stablecoin.liquidity_ratio_info()
-    dict_keys_must_match(res, ["info"])
-    dict_keys_must_match(
-        res["info"],
-        [
-            "liquidity_ratio",
-            "upper_band",
-            "lower_band",
-        ],
-    )

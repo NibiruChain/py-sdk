@@ -12,7 +12,7 @@ class AuthQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api =  auth_query_grpc.QueryStub(channel)
+        self.api = auth_query_grpc.QueryStub(channel)
 
     def account(self, address: str) -> dict:
         """

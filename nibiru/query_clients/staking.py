@@ -1,6 +1,6 @@
 from grpc import Channel
-from nibiru_proto.cosmos.staking.v1beta1 import query_pb2_grpc as staking_query
 from nibiru_proto.cosmos.staking.v1beta1 import query_pb2 as staking_type
+from nibiru_proto.cosmos.staking.v1beta1 import query_pb2_grpc as staking_query
 
 from nibiru.query_clients.util import QueryClient, deserialize, get_page_request
 

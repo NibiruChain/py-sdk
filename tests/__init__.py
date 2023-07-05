@@ -1,17 +1,4 @@
 """Tests package for the Nibiru Python SDK"""
-import sys
-
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru"
-)
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs"
-)
-sys.path.append(
-    "/Users/anishpalvai/Library/Caches/pypoetry/virtualenvs/nibiru-tfKa6q6O-py3.8/lib/python3.8/site-packages/nibiru_proto/nibiru/epochs/v1"
-)
-print(sys.path)
-
 import logging
 import pprint
 from typing import Iterable, List, Union
@@ -25,7 +12,7 @@ shutup.please()
 LOGGER: logging.Logger = logging.getLogger("test-logger")
 
 
-def raises(errs: Union[str, Iterable[str]], err: BaseException):
+def raises(ok_errs: Union[str, Iterable[str]], err: BaseException):
     """Makes sure one of the errors in 'errs' in contained in 'err'. If none of
     the given exceptions were raised, this function raises the original exception.
 
@@ -35,14 +22,14 @@ def raises(errs: Union[str, Iterable[str]], err: BaseException):
         err: (BaseException): The error that is actually raised.
 
     """
-    if isinstance(errs, str):
-        errs = [errs]
+    if isinstance(ok_errs, str):
+        ok_errs = [ok_errs]
     else:
-        errs = list(errs)
-    errs: List[str]
+        ok_errs = list(ok_errs)
+    ok_errs: List[str]
 
     err_string = str(err)
-    assert any([e in err_string for e in errs]), err_string
+    assert any([e in err_string for e in ok_errs]), err_string
 
 
 def format_response(resp: Union[dict, list, str]) -> str:

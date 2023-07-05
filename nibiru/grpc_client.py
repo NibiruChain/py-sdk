@@ -1,27 +1,25 @@
 import logging
 import time
-import grpc
+from typing import Generator, List, Optional, Tuple, Union
 
+import grpc
 from nibiru_proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
 from nibiru_proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
-from nibiru_proto.cosmos.auth.v1beta1 import query_pb2 as auth_query_grpc
+from nibiru_proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
 from nibiru_proto.cosmos.authz.v1beta1 import query_pb2 as authz_query
-from nibiru_proto.cosmos.authz.v1beta1 import query_pb2 as authz_query_grpc
+from nibiru_proto.cosmos.authz.v1beta1 import query_pb2_grpc as authz_query_grpc
 from nibiru_proto.cosmos.bank.v1beta1 import query_pb2 as bank_query
-from nibiru_proto.cosmos.bank.v1beta1 import query_pb2 as bank_query_grpc
+from nibiru_proto.cosmos.bank.v1beta1 import query_pb2_grpc as bank_query_grpc
 from nibiru_proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
+from nibiru_proto.cosmos.base.tendermint.v1beta1 import query_pb2 as tendermint_query
 from nibiru_proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2 as tendermint_query,
-)
-from nibiru_proto.cosmos.base.tendermint.v1beta1 import (
-    query_pb2 as tendermint_query_grpc,
+    query_pb2_grpc as tendermint_query_grpc,
 )
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
-from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service_grpc
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
 from packaging import version
 
 from nibiru import pytypes, query_clients
-from typing import Generator, List, Optional, Tuple, Union
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
 GITHUB_COMMIT_HASH_LEN = 40
@@ -73,8 +71,7 @@ class GrpcClient:
         self.epoch = query_clients.EpochQueryClient(self.chain_channel)
         self.auth = query_clients.AuthQueryClient(self.chain_channel)
         self.staking = query_clients.StakingQueryClient(self.chain_channel)
-        self.stablecoin = query_clients.StablecoinQueryClient(
-            self.chain_channel)
+        self.stablecoin = query_clients.StablecoinQueryClient(self.chain_channel)
 
         if not bypass_version_check:
             try:
@@ -204,8 +201,7 @@ class GrpcClient:
 
         """
         req = tendermint_query.GetNodeInfoRequest()
-        version = self.stubCosmosTendermint.GetNodeInfo(
-            req).application_version.version
+        version = self.stubCosmosTendermint.GetNodeInfo(req).application_version.version
 
         if version[0] != "v":
             version = "v" + str(version)
@@ -375,3 +371,15 @@ class GrpcClient:
                 bank_query.QueryBalanceRequest(address=address, denom=denom)
             )
         )
+
+    def tx_by_hash(self, tx_hash: str) -> tx_service.GetTxResponse:
+        """Fetches a tx by hash"""
+        breakpoint()
+        req = tx_service.GetTxRequest(hash=tx_hash)
+
+        proto_output: tx_service.GetTxResponse = self.query(
+            api_callable=self.api.GetTx, req=req, should_deserialize=False
+        )
+
+        return query_clients.deserialize(proto_output)
+        # return proto_output

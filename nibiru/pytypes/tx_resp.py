@@ -128,6 +128,6 @@ class RawSyncTxResp(dict):
 
     def __new__(cls, _dict: Dict[str, Any]) -> Dict[str, Union[str, list]]:
         """Verifies that the dictionary has the expected keys."""
-        keys_wanted = ["txhash","rawLog"]
+        keys_wanted = ["txhash", "rawLog"]
         utils.dict_keys_must_match(_dict, keys_wanted)
         return _dict

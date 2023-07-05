@@ -47,7 +47,7 @@ class TxClient:
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
         get_sequence_from_node: bool = False,
         **kwargs,
-    ) -> pt.RawTxResp:
+    ) -> pt.RawSyncTxResp:
         """
         Broadcasts messages to a node in a single transaction. This function first
         simulates the corresponding transaction to estimate the amount of gas needed.
@@ -66,16 +66,14 @@ class TxClient:
                 raw error logs from the blockchain.
 
         Returns:
-            Union[RawTxResp, Dict[str, Any]]: The transaction response as a dict
+            Union[RawSyncTxResp, Dict[str, Any]]: The transaction response as a dict
                 in proto3 JSON format.
         """
-
         tx: Transaction
         address: wallet.Address
         tx, address = self.build_tx(
             msgs=msgs, get_sequence_from_node=get_sequence_from_node
         )
-
         try:
             sim_res = self.simulate(tx)
             gas_estimate: float = sim_res.gas_info.gas_used
@@ -86,13 +84,12 @@ class TxClient:
             if tx_output.code != 0:
                 address.decrease_sequence()
                 raise TxError(tx_output.raw_log)
-
+            breakpoint()
             tx_output: dict[str, Any] = MessageToDict(tx_output)
-
             # Convert raw log into a dictionary
-            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
-            return pt.RawTxResp(tx_output)
 
+            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
+            return pt.RawSyncTxResp(tx_output)
         except SimulationError as err:
             if (
                 "account sequence mismatch, expected" in str(err)
@@ -100,13 +97,12 @@ class TxClient:
             ):
                 if not isinstance(msgs, list):
                     msgs = [msgs]
-                self.client.wait_for_next_block()
+                # self.client.wait_for_next_block()
                 kwargs["get_sequence_from_node"] = True
                 return self.execute_msgs(*msgs, **kwargs)
 
             if address:
                 address.decrease_sequence()
-
             raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
     def execute_tx(
@@ -149,12 +145,10 @@ class TxClient:
     def _send_tx(self, tx_raw_bytes: bytes, tx_type: pt.TxType) -> abci_type.TxResponse:
         broadcast_fn: Callable[[bytes], abci_type.TxResponse]
 
-        if tx_type == pt.TxType.SYNC:
-            broadcast_fn = self.client.send_tx_sync_mode
-        elif tx_type == pt.TxType.ASYNC:
+        if tx_type == pt.TxType.ASYNC:
             broadcast_fn = self.client.send_tx_async_mode
         else:
-            broadcast_fn = self.client.send_tx_block_mode
+            broadcast_fn = self.client.send_tx_sync_mode
 
         return broadcast_fn(tx_raw_bytes)
 

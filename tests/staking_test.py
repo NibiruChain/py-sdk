@@ -103,6 +103,8 @@ def test_historical_info(sdk_val: Sdk):
                     "unbonding_time",
                     "commission",
                     "min_self_delegation",
+                    "unbonding_on_hold_ref_count",
+                    "unbonding_ids",
                 ],
             )
     except QueryError:
@@ -200,6 +202,8 @@ def test_validators(sdk_val: Sdk):
             "unbonding_time",
             "commission",
             "min_self_delegation",
+            "unbonding_on_hold_ref_count",
+            "unbonding_ids",
         ],
     )
 
@@ -222,6 +226,8 @@ def test_validator(sdk_val: Sdk):
             "unbonding_time",
             "commission",
             "min_self_delegation",
+            "unbonding_on_hold_ref_count",
+            "unbonding_ids",
         ],
     )
 

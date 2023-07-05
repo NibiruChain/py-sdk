@@ -82,7 +82,7 @@ def test_get_msg_pb_by_type_url(type_url, cls):
 
 
 def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
-    breakpoint()
+
     out: pytypes.RawSyncTxResp = sdk_val.tx.execute_msgs(
         nibiru.Msg.bank.send(
             sdk_val.address,
@@ -90,9 +90,9 @@ def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
             [Coin(10000, "unibi"), Coin(100, "unusd")],
         )
     )
-    breakpoint()
+
     tx_output = sdk_val.query.tx_by_hash(tx_hash=out["txhash"])
-    breakpoint()
+
     height = int(tx_output["height"])
     block_resp = sdk_agent.query.get_block_by_height(height)
     messages: List[dict] = get_block_messages(block_resp.block)

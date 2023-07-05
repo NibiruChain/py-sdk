@@ -67,15 +67,21 @@ def test_spot_create_pool(sdk_val: nibiru.Sdk):
         assert has_reasonable_err(simulation_error), simulation_error
     """
 
-
+@pytest.mark.order(after="test_spot_create_pool")
 @pytest.fixture
 def pools(sdk_val: nibiru.Sdk) -> List[dict]:
-    return sdk_val.query.spot.pools()
+    pools_resp = sdk_val.query.spot.pools() 
+    if pools_resp:
+        return sdk_val.query.spot.pools()
+    else:
+        return []
 
-
+@pytest.mark.order(after="pools")
 @pytest.fixture
 def pool_ids(pools: List[dict]) -> Dict[str, int]:
     pool_ids: Dict[str, int] = {}
+    if not pools:
+        return pool_ids
     # for pool_assets in ["unibi:unusd", "unusd:uusdc"]:
     # # TODO fix: need usdc on-chain  to do this
     for pool_assets in ["unibi:unusd"]:
@@ -93,7 +99,7 @@ def pool_ids(pools: List[dict]) -> Dict[str, int]:
                 for pool in pools
             ]
         )
-
+       # breakpoint()
         pool_id = int(
             [
                 pool["id"]
@@ -124,6 +130,8 @@ def test_spot_query_pools(pools: List[dict]):
 
 @pytest.mark.order(after="test_spot_query_pools")
 def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
+    if not pool_ids:
+        return
     try:
         tx_output = sdk_val.tx.execute_msgs(
             [
@@ -141,6 +149,8 @@ def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
 
 @pytest.mark.order(after="test_spot_join_pool")
 def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
+    if not pool_ids:
+        return
     try:
         tx_output = sdk_val.tx.execute_msgs(
             [

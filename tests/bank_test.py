@@ -9,7 +9,7 @@ PRECISION = 6
 
 def test_send_multiple_msgs(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     """Tests the transfer of funds for a transaction with a multiple 'MsgSend' messages."""
-
+    
     tx_output = sdk_val.tx.execute_msgs(
         [
             nibiru.Msg.bank.send(

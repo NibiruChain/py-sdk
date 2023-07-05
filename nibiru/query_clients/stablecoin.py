@@ -43,8 +43,7 @@ class StablecoinQueryClient(QueryClient):
             req=stablecoin_type.QueryParamsRequest(),
             should_deserialize=False,
         )
-        output = MessageToDict(
-            proto_output, including_default_value_fields=True)
+        output = MessageToDict(proto_output, including_default_value_fields=True)
         return dict_keys_from_camel_to_snake(
             format_fields_nested(
                 object=output,

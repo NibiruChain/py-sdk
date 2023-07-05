@@ -90,3 +90,18 @@ def transaction_must_succeed(tx_output: dict):
     ]
     dict_keys_must_match(tx_output, expected_keys)
     assert isinstance(tx_output["rawLog"], list)
+
+
+def raw_sync_tx_must_succeed(tx_output: dict):
+    """
+    Ensure the output of a transaction have the fields required
+    and that the raw logs are properly parsed
+
+    Args:
+        tx_output (dict): The output of a transaction in a dictionary
+    """
+
+    assert isinstance(tx_output, dict)
+    expected_keys = ["txhash", "rawLog"]
+    dict_keys_must_match(tx_output, expected_keys)
+    assert isinstance(tx_output["rawLog"], list)

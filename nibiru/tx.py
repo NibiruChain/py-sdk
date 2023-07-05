@@ -8,7 +8,7 @@ import json
 import logging
 from copy import deepcopy
 from numbers import Number
-from typing import Any, Callable, Iterable, List, Tuple, Union
+from typing import Any, Callable, Iterable, List, Optional, Tuple, Union
 
 from google.protobuf import any_pb2, message
 from google.protobuf.json_format import MessageToDict
@@ -29,6 +29,8 @@ class TxClient:
     A client for building, simulating, and broadcasting transactions.
     """
 
+    address: Optional[wallet.Address]
+
     def __init__(
         self,
         priv_key: wallet.PrivateKey,
@@ -46,7 +48,9 @@ class TxClient:
         self,
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
         get_sequence_from_node: bool = False,
-        **kwargs,
+        sequence: Optional[int] = None,
+        tx_config: Optional[pt.TxConfig] = None,
+        try_decrease_seq: bool = False,
     ) -> pt.RawSyncTxResp:
         """
         Broadcasts messages to a node in a single transaction. This function first
@@ -69,22 +73,32 @@ class TxClient:
             Union[RawSyncTxResp, Dict[str, Any]]: The transaction response as a dict
                 in proto3 JSON format.
         """
+
         tx: Transaction
         address: wallet.Address
         tx, address = self.build_tx(
             msgs=msgs, get_sequence_from_node=get_sequence_from_node
         )
+        if sequence is not None:
+            ...
+        elif address:
+            address_seq = address.sequence
+            sequence = address_seq
+        else:
+            breakpoint()
+        tx = tx.with_sequence(sequence=sequence)
+
         try:
             sim_res = self.simulate(tx)
             gas_estimate: float = sim_res.gas_info.gas_used
             tx_output: abci_type.TxResponse = self.execute_tx(
-                tx, gas_estimate, **kwargs
+                tx, gas_estimate, tx_config=tx_config
             )
 
             if tx_output.code != 0:
                 address.decrease_sequence()
                 raise TxError(tx_output.raw_log)
-            breakpoint()
+
             tx_output: dict[str, Any] = MessageToDict(tx_output)
             # Convert raw log into a dictionary
 
@@ -92,23 +106,46 @@ class TxClient:
             return pt.RawSyncTxResp(tx_output)
         except SimulationError as err:
             if (
-                "account sequence mismatch, expected" in str(err)
-                and not get_sequence_from_node
+                "account sequence mismatch, expected"
+                in str(err)
+                # and not get_sequence_from_node
             ):
+
                 if not isinstance(msgs, list):
                     msgs = [msgs]
                 # self.client.wait_for_next_block()
-                kwargs["get_sequence_from_node"] = True
-                return self.execute_msgs(*msgs, **kwargs)
+                if try_decrease_seq:
+                    sequence -= 1
+                elif sequence == 1:
+                    get_sequence_from_node = True
+                    sequence += 1
+                # elif strikes > 10:
+                #     raise SimulationError(
+                #         f"Failed to simulate transaction: {err}"
+                #     ) from err
+                # else:
+                #     get_sequence_from_node = False
+                #     strikes += 1
+                err_str = str(err)
+                want_seq = int(err_str.split("expected ")[1].split(",")[0])
+                got_seq = int(err_str.split("got ")[1].split(":")[0])
+                sequence = want_seq
 
+                return self.execute_msgs(
+                    msgs=msgs,
+                    sequence=sequence,
+                    get_sequence_from_node=get_sequence_from_node,
+                    tx_config=tx_config,
+                )
+            # breakpoint()
             if address:
                 address.decrease_sequence()
             raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
     def execute_tx(
-        self, tx: "Transaction", gas_estimate: float, **kwargs
+        self, tx: "Transaction", gas_estimate: float, tx_config: pt.TxConfig = None
     ) -> abci_type.TxResponse:
-        conf: pt.TxConfig = self.get_config(**kwargs)
+        conf: pt.TxConfig = self.get_config(tx_config=tx_config)
 
         def compute_gas_wanted() -> float:
             # Related to https://github.com/cosmos/cosmos-sdk/issues/14405
@@ -208,18 +245,15 @@ class TxClient:
 
         return self.address
 
-    def get_config(self, **kwargs) -> pt.TxConfig:
+    def get_config(self, tx_config: pt.TxConfig = None) -> pt.TxConfig:
         """
         Properties in kwargs overwrite the self.config
         """
-        config: pt.TxConfig = deepcopy(self.config)
-        prop_names = dir(config)
-        for k, v in kwargs.items():
-            if k in prop_names:
-                setattr(config, k, v)
-            else:
-                logging.warning("%s is not a supported config property, ignoring", k)
-
+        config: pt.TxConfig
+        if tx_config is not None:
+            config = tx_config
+        else:
+            config = self.config
         return config
 
 

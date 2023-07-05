@@ -140,8 +140,7 @@ class PerpQueryClient(QueryClient):
         )
         proto_as_dict: dict[str, list] = deserialize(proto_output)
 
-        position_resps: Union[List[dict],
-                              None] = proto_as_dict.get("positions")
+        position_resps: Union[List[dict], None] = proto_as_dict.get("positions")
         if position_resps is None:
             return proto_as_dict
 

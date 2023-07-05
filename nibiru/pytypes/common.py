@@ -1,6 +1,7 @@
 import abc
 import dataclasses
 from enum import Enum
+from typing import List
 
 #
 from nibiru_proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
@@ -91,6 +92,14 @@ class TxConfig:
     gas_multiplier: float = 1.25
     gas_price: float = 0.25
     tx_type: TxType = TxType.BLOCK
+
+
+TX_CONFIG_ATTRS: List[str] = [
+    "gas_wanted",
+    "gas_multiplier",
+    "gas_price",
+    "tx_type",
+]
 
 
 class PythonMsg(abc.ABC):

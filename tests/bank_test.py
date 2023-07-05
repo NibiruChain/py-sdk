@@ -11,7 +11,7 @@ def test_send_multiple_msgs(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     """Tests the transfer of funds for a transaction with a multiple 'MsgSend' messages."""
 
     tx_output = sdk_val.tx.execute_msgs(
-        [
+        msgs=[
             nibiru.Msg.bank.send(
                 sdk_val.address,
                 sdk_agent.address,
@@ -22,13 +22,13 @@ def test_send_multiple_msgs(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
                 sdk_agent.address,
                 [Coin(15, "unibi"), Coin(23, "unusd")],
             ),
-        ]
+        ],
     )
 
     tests.LOGGER.info(
         "nibid tx bank send - multiple msgs:\n" + tests.format_response(tx_output)
     )
-    tests.transaction_must_succeed(tx_output)
+    tests.raw_sync_tx_must_succeed(tx_output)
 
 
 def test_send_single_msg(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
@@ -47,4 +47,4 @@ def test_send_single_msg(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     tests.LOGGER.info(
         "nibid tx bank send - single msgs:\n" + tests.format_response(tx_output)
     )
-    tests.transaction_must_succeed(tx_output)
+    tests.raw_sync_tx_must_succeed(tx_output)

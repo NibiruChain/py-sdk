@@ -374,12 +374,9 @@ class GrpcClient:
 
     def tx_by_hash(self, tx_hash: str) -> tx_service.GetTxResponse:
         """Fetches a tx by hash"""
-        breakpoint()
         req = tx_service.GetTxRequest(hash=tx_hash)
 
-        proto_output: tx_service.GetTxResponse = self.query(
-            api_callable=self.api.GetTx, req=req, should_deserialize=False
-        )
+        proto_output: tx_service.GetTxResponse = self.stubTx.GetTx(req)
 
         return query_clients.deserialize(proto_output)
         # return proto_output

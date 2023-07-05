@@ -295,7 +295,7 @@ class Address:
         the node.
 
         Args:
-            from_node (bool, optional): Wether to query or not from the node. Defaults to False.
+            from_node (bool, optional): Whether to query or not from the node. Defaults to False.
             lcd_endpoint (str, optional): The lcd endoint, needed for when from_node is set to true. Defaults to None.
 
         Returns:

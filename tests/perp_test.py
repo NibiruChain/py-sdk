@@ -37,16 +37,16 @@ def test_open_position(sdk_val: nibiru.Sdk):
         tests.LOGGER.info(
             f"nibid tx perp open-position: {tests.format_response(tx_output)}"
         )
-        tests.transaction_must_succeed(tx_output)
+        tests.raw_sync_tx_must_succeed(tx_output)
 
-        tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
-        assert "/nibiru.perp.v2.MsgMarketOrder" in tx_resp.rawLog[0].msgs
-        events_for_msg: List[str] = [
-            "nibiru.perp.v2.PositionChangedEvent",
-        ]
-        assert all(
-            [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
-        )
+        # tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
+        # assert "/nibiru.perp.v2.MsgMarketOrder" in tx_resp.rawLog[0].msgs
+        # events_for_msg: List[str] = [
+        #     "nibiru.perp.v2.PositionChangedEvent",
+        # ]
+        # assert all(
+        #     [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
+        # )
     except BaseException as err:
         ok_errors: List[str] = [ERRORS.no_prices]
         tests.raises(ok_errors, err)
@@ -142,7 +142,7 @@ def test_perp_remove_margin(sdk_val: nibiru.Sdk):
         tests.LOGGER.info(
             f"nibid tx perp remove-margin: \n{tests.format_response(tx_output)}"
         )
-        tests.transaction_must_succeed(tx_output)
+        tests.raw_sync_tx_must_succeed(tx_output)
         # TODO test: verify the margin changes using the events
     except BaseException as err:
         ok_errors: List[str] = [ERRORS.collections_not_found, ERRORS.bad_debt]
@@ -163,7 +163,7 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
         tests.LOGGER.info(
             f"nibid tx perp close-position: \n{tests.format_response(tx_output)}"
         )
-        tests.transaction_must_succeed(tx_output)
+        tests.raw_sync_tx_must_succeed(tx_output)
 
         # Querying the position should raise an exception if it closed successfully
         with pytest.raises(

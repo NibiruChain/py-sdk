@@ -101,7 +101,6 @@ def pool_ids(pools: List[dict]) -> Dict[str, int]:
                 for pool in pools
             ]
         )
-        # breakpoint()
         pool_id = int(
             [
                 pool["id"]

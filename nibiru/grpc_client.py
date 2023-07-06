@@ -327,6 +327,7 @@ class GrpcClient:
             str: the chain id
 
         """
+
         latest_block = self.get_latest_block()
         return latest_block.block.header.chain_id
 
@@ -358,7 +359,6 @@ class GrpcClient:
     def get_bank_balance(self, address: str, denom: str) -> dict:
         """
         Returns the balance of 'denom' for the given 'address'
-
         Args:
             address: the account address
             denom: the denom

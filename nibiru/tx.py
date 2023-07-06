@@ -79,6 +79,7 @@ class TxClient:
         tx, address = self.build_tx(
             msgs=msgs, get_sequence_from_node=get_sequence_from_node
         )
+        print("Msgs", msgs)
         if sequence is not None:
             ...
         elif address:
@@ -91,16 +92,16 @@ class TxClient:
         try:
             sim_res = self.simulate(tx)
             gas_estimate: float = sim_res.gas_info.gas_used
-            tx_output: abci_type.TxResponse = self.execute_tx(
+
+            tx_resp: abci_type.TxResponse = self.execute_tx(
                 tx, gas_estimate, tx_config=tx_config
             )
-
-            if tx_output.code != 0:
+            # Convert raw log into a dictionary
+            tx_resp: dict[str, Any] = MessageToDict(tx_resp)
+            tx_output = self.client.tx_by_hash(tx_hash=tx_resp["txhash"])
+            if tx_output.get("tx_response").get("code") != 0:
                 address.decrease_sequence()
                 raise TxError(tx_output.raw_log)
-
-            tx_output: dict[str, Any] = MessageToDict(tx_output)
-            # Convert raw log into a dictionary
 
             tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
             return pt.RawSyncTxResp(tx_output)
@@ -108,27 +109,13 @@ class TxClient:
             if (
                 "account sequence mismatch, expected"
                 in str(err)
-                # and not get_sequence_from_node
             ):
 
                 if not isinstance(msgs, list):
                     msgs = [msgs]
                 # self.client.wait_for_next_block()
-                if try_decrease_seq:
-                    sequence -= 1
-                elif sequence == 1:
-                    get_sequence_from_node = True
-                    sequence += 1
-                # elif strikes > 10:
-                #     raise SimulationError(
-                #         f"Failed to simulate transaction: {err}"
-                #     ) from err
-                # else:
-                #     get_sequence_from_node = False
-                #     strikes += 1
                 err_str = str(err)
                 want_seq = int(err_str.split("expected ")[1].split(",")[0])
-                got_seq = int(err_str.split("got ")[1].split(":")[0])
                 sequence = want_seq
 
                 return self.execute_msgs(
@@ -137,7 +124,6 @@ class TxClient:
                     get_sequence_from_node=get_sequence_from_node,
                     tx_config=tx_config,
                 )
-            # breakpoint()
             if address:
                 address.decrease_sequence()
             raise SimulationError(f"Failed to simulate transaction: {err}") from err

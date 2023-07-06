@@ -26,6 +26,7 @@ PYTEST_GLOBALS: Dict[str, str] = dict(
     WEBSOCKET_ENDPOINT="",
     VALIDATOR_MNEMONIC="",
     CHAIN_ID="nibiru-localnet-0",
+    VALIDATOR_MNEMONIC="",
 )
 
 

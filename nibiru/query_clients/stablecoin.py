@@ -14,7 +14,7 @@ class StablecoinQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = stablecoin_query.QueryStub(channel)
+        self.stub = stablecoin_query.QueryStub(channel)
 
     def params(self) -> dict:
         """
@@ -39,7 +39,7 @@ class StablecoinQueryClient(QueryClient):
             dict: The parameters fo the stablecoin module.
         """
         return self.query(
-            api_callable=self.api.Params,
+            api_callable=self.stub.Params,
             req=stablecoin_type.QueryParamsRequest(),
             should_deserialize=True,
         )
@@ -63,7 +63,7 @@ class StablecoinQueryClient(QueryClient):
             dict: The output of the query
         """
         proto_output = self.query(
-            api_callable=self.api.CirculatingSupplies,
+            api_callable=self.stub.CirculatingSupplies,
             req=stablecoin_type.QueryCirculatingSupplies(),
             should_deserialize=False,
         )
@@ -89,6 +89,6 @@ class StablecoinQueryClient(QueryClient):
             dict: liquidity ratio info.
         """
         return self.query(
-            api_callable=self.api.LiquidityRatioInfo,
+            api_callable=self.stub.LiquidityRatioInfo,
             req=stablecoin_type.QueryLiquidityRatioInfoRequest(),
         )

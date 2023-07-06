@@ -14,7 +14,7 @@ class EpochQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = epoch_query.QueryStub(channel)
+        self.stub = epoch_query.QueryStub(channel)
 
     def current_epoch(self, epoch_identifier: str) -> dict:
         """
@@ -33,7 +33,7 @@ class EpochQueryClient(QueryClient):
 
         """
         proto_output = self.query(
-            api_callable=self.api.CurrentEpoch,
+            api_callable=self.stub.CurrentEpoch,
             req=epoch_type.QueryCurrentEpochRequest(identifier=epoch_identifier),
             should_deserialize=False,
         )
@@ -76,7 +76,7 @@ class EpochQueryClient(QueryClient):
             dict: the list of epochs
         """
         proto_output = self.query(
-            api_callable=self.api.EpochInfos,
+            api_callable=self.stub.EpochInfos,
             req=epoch_type.QueryEpochsInfoRequest(),
             should_deserialize=False,
         )

@@ -15,7 +15,7 @@ class PerpQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = perp_query.QueryStub(channel)
+        self.stub = perp_query.QueryStub(channel)
 
     def params(self):
         """
@@ -38,7 +38,7 @@ class PerpQueryClient(QueryClient):
             dict: The current parameters for the perpetual module
         """
         proto_output: perp_type.QueryParamsResponse = self.query(
-            api_callable=self.api.Params,
+            api_callable=self.stub.Params,
             req=perp_type.QueryParamsRequest(),
             should_deserialize=False,
         )
@@ -95,7 +95,7 @@ class PerpQueryClient(QueryClient):
         )
 
         proto_output: perp_type.QueryPositionResponse = self.query(
-            api_callable=self.api.QueryPosition, req=req, should_deserialize=False
+            api_callable=self.stub.QueryPosition, req=req, should_deserialize=False
         )
 
         return message_to_dict(proto_output)
@@ -136,7 +136,7 @@ class PerpQueryClient(QueryClient):
         )
 
         proto_output: perp_type.QueryPositionsResponse = self.query(
-            api_callable=self.api.QueryPositions, req=req, should_deserialize=False
+            api_callable=self.stub.QueryPositions, req=req, should_deserialize=False
         )
         proto_as_dict: dict[str, list] = message_to_dict(proto_output)
 

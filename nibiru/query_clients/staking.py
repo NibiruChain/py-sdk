@@ -12,7 +12,7 @@ class StakingQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = staking_query.QueryStub(channel)
+        self.stub = staking_query.QueryStub(channel)
 
     def pool(self) -> dict:
         """
@@ -32,7 +32,7 @@ class StakingQueryClient(QueryClient):
 
         """
         return self.query(
-            api_callable=self.api.Pool,
+            api_callable=self.stub.Pool,
             req=staking_type.QueryPoolRequest(),
         )
 
@@ -64,7 +64,7 @@ class StakingQueryClient(QueryClient):
         ```
         """
         return self.query(
-            api_callable=self.api.Delegation,
+            api_callable=self.stub.Delegation,
             req=staking_type.QueryDelegationRequest(
                 delegator_addr=delegator_addr, validator_addr=validator_addr
             ),
@@ -100,7 +100,7 @@ class StakingQueryClient(QueryClient):
             dict: the delegations that de delegator has
         """
         return self.query(
-            api_callable=self.api.DelegatorDelegations,
+            api_callable=self.stub.DelegatorDelegations,
             req=staking_type.QueryDelegatorDelegationsRequest(
                 delegator_addr=delegator_addr,
                 pagination=get_page_request(kwargs),
@@ -137,7 +137,7 @@ class StakingQueryClient(QueryClient):
             dict: the list of delegations
         """
         return self.query(
-            api_callable=self.api.ValidatorDelegations,
+            api_callable=self.stub.ValidatorDelegations,
             req=staking_type.QueryValidatorDelegationsRequest(
                 validator_addr=validator_addr,
                 pagination=get_page_request(kwargs),
@@ -155,7 +155,7 @@ class StakingQueryClient(QueryClient):
             dict: the historical information
         """
         return self.query(
-            api_callable=self.api.HistoricalInfo,
+            api_callable=self.stub.HistoricalInfo,
             req=staking_type.QueryHistoricalInfoRequest(height=height),
         )
 
@@ -179,7 +179,7 @@ class StakingQueryClient(QueryClient):
             dict: the params of the module
         """
         return self.query(
-            api_callable=self.api.Params,
+            api_callable=self.stub.Params,
             req=staking_type.QueryParamsRequest(),
         )
 
@@ -194,7 +194,7 @@ class StakingQueryClient(QueryClient):
             dst_validator_addr: a validator address
         """
         return self.query(
-            api_callable=self.api.Redelegations,
+            api_callable=self.stub.Redelegations,
             req=staking_type.QueryRedelegationsRequest(
                 delegator_addr=delegator_addr,
                 dst_validator_addr=dst_validator_addr,
@@ -211,7 +211,7 @@ class StakingQueryClient(QueryClient):
             validator_addr: the validator address
         """
         return self.query(
-            api_callable=self.api.UnbondingDelegation,
+            api_callable=self.stub.UnbondingDelegation,
             req=staking_type.QueryUnbondingDelegationRequest(
                 validator_addr=validator_addr,
                 delegator_addr=delegator_addr,
@@ -226,7 +226,7 @@ class StakingQueryClient(QueryClient):
             delegator_addr: the delegator address
         """
         return self.query(
-            api_callable=self.api.DelegatorUnbondingDelegations,
+            api_callable=self.stub.DelegatorUnbondingDelegations,
             req=staking_type.QueryDelegatorUnbondingDelegationsRequest(
                 delegator_addr=delegator_addr,
                 pagination=get_page_request(kwargs),
@@ -241,7 +241,7 @@ class StakingQueryClient(QueryClient):
             validator_addr: the validator address
         """
         return self.query(
-            api_callable=self.api.ValidatorUnbondingDelegations,
+            api_callable=self.stub.ValidatorUnbondingDelegations,
             req=staking_type.QueryValidatorUnbondingDelegationsRequest(
                 validator_addr=validator_addr,
                 pagination=get_page_request(kwargs),
@@ -293,7 +293,7 @@ class StakingQueryClient(QueryClient):
             dict: the information from the validator
         """
         return self.query(
-            api_callable=self.api.Validator,
+            api_callable=self.stub.Validator,
             req=staking_type.QueryValidatorRequest(
                 validator_addr=validator_addr,
             ),
@@ -311,7 +311,7 @@ class StakingQueryClient(QueryClient):
 
         """
         proto_output = self.query(
-            api_callable=self.api.Validators,
+            api_callable=self.stub.Validators,
             req=staking_type.QueryValidatorsRequest(
                 pagination=get_page_request(kwargs),
             ),

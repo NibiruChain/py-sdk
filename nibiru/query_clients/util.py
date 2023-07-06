@@ -141,7 +141,7 @@ class UtilQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = util_query.QueryStub(channel)
+        self.stub = util_query.QueryStub(channel)
 
     def module_accounts(self) -> dict:
         """
@@ -168,7 +168,7 @@ class UtilQueryClient(QueryClient):
         ```
         """
         return self.query(
-            api_callable=self.api.ModuleAccounts,
+            api_callable=self.stub.ModuleAccounts,
             req=util_type.QueryModuleAccountsRequest(),
             should_deserialize=True,
         )

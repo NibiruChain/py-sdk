@@ -17,7 +17,7 @@ class SpotQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = spot_query.QueryStub(channel)
+        self.stub = spot_query.QueryStub(channel)
 
     def params(self) -> dict:
         """
@@ -45,7 +45,7 @@ class SpotQueryClient(QueryClient):
             dict: The parameters fo the spot module.
         """
         proto_output = self.query(
-            api_callable=self.api.Params,
+            api_callable=self.stub.Params,
             req=spot_type.QueryParamsRequest(),
             should_deserialize=False,
         )
@@ -108,7 +108,7 @@ class SpotQueryClient(QueryClient):
             dict: The output of the query
         """
         proto_output = self.query(
-            api_callable=self.api.Pools,
+            api_callable=self.stub.Pools,
             req=spot_type.QueryPoolsRequest(
                 pagination=PageRequest(
                     key=kwargs.get("key"),
@@ -154,7 +154,7 @@ class SpotQueryClient(QueryClient):
             dict: The total liquidity of the protocol
         """
         proto_output = self.query(
-            api_callable=self.api.TotalLiquidity,
+            api_callable=self.stub.TotalLiquidity,
             req=spot_type.QueryTotalLiquidityRequest(),
             should_deserialize=False,
         )
@@ -188,7 +188,7 @@ class SpotQueryClient(QueryClient):
             dict: The total liquidity for the pool
         """
         proto_output = self.query(
-            api_callable=self.api.TotalPoolLiquidity,
+            api_callable=self.stub.TotalPoolLiquidity,
             req=spot_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
             should_deserialize=False,
         )
@@ -216,7 +216,7 @@ class SpotQueryClient(QueryClient):
             dict: The amount of shares for the pool
         """
         proto_output = self.query(
-            api_callable=self.api.TotalShares,
+            api_callable=self.stub.TotalShares,
             req=spot_type.QueryTotalSharesRequest(pool_id=pool_id),
             should_deserialize=False,
         )
@@ -239,7 +239,7 @@ class SpotQueryClient(QueryClient):
             dict: _description_
         """
         proto_output = self.query(
-            api_callable=self.api.SpotPrice,
+            api_callable=self.stub.SpotPrice,
             req=spot_type.QuerySpotPriceRequest(
                 pool_id=pool_id,
                 token_in_denom=token_in_denom,
@@ -275,7 +275,7 @@ class SpotQueryClient(QueryClient):
             dict: The output of the query
         """
         proto_output = self.query(
-            api_callable=self.api.EstimateSwapExactAmountIn,
+            api_callable=self.stub.EstimateSwapExactAmountIn,
             req=spot_type.QuerySwapExactAmountInRequest(
                 pool_id=pool_id,
                 token_in=token_in._generate_proto_object(),
@@ -313,7 +313,7 @@ class SpotQueryClient(QueryClient):
             dict: The output of the query
         """
         proto_output = self.query(
-            api_callable=self.api.EstimateJoinExactAmountIn,
+            api_callable=self.stub.EstimateJoinExactAmountIn,
             req=spot_type.QueryJoinExactAmountInRequest(
                 pool_id=pool_id,
                 tokens_in=[
@@ -353,7 +353,7 @@ class SpotQueryClient(QueryClient):
             dict: The output of the query
         """
         proto_output = self.query(
-            api_callable=self.api.EstimateExitExactAmountIn,
+            api_callable=self.stub.EstimateExitExactAmountIn,
             req=spot_type.QueryExitExactAmountInRequest(
                 pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
             ),

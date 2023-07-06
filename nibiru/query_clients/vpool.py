@@ -13,7 +13,7 @@ class VpoolQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = vpool_query.QueryStub(channel)
+        self.stub = vpool_query.QueryStub(channel)
 
     def reserve_assets(self, pair: str):
         """
@@ -36,7 +36,7 @@ class VpoolQueryClient(QueryClient):
 
         """
         req = vpool_type.QueryReserveAssetsRequest(pair=pair)
-        return self.query(self.api.ReserveAssets, req)
+        return self.query(self.stub.ReserveAssets, req)
 
     def all_pools(self):
         """
@@ -78,7 +78,7 @@ class VpoolQueryClient(QueryClient):
 
         """
         req = vpool_type.QueryAllPoolsRequest()
-        resp = self.query(self.api.AllPools, req)
+        resp = self.query(self.stub.AllPools, req)
         for _, prices in enumerate(resp["prices"]):
             prices["index_price"] = cast_str_to_float_safely(prices["index_price"])
             prices["twap_mark"] = cast_str_to_float_safely(prices["twap_mark"])
@@ -113,7 +113,7 @@ class VpoolQueryClient(QueryClient):
         req = vpool_type.QueryBaseAssetPriceRequest(
             pair=pair, direction=dir_pb, base_asset_amount=base_asset_amount
         )
-        return self.query(self.api.BaseAssetPrice, req)
+        return self.query(self.stub.BaseAssetPrice, req)
 
 
 def cast_str_to_float_safely(number_str: str) -> float:

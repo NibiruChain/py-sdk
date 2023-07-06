@@ -12,7 +12,7 @@ class AuthQueryClient(QueryClient):
     """
 
     def __init__(self, channel: Channel):
-        self.api = auth_query.QueryStub(channel)
+        self.stub = auth_query.QueryStub(channel)
 
     def account(self, address: str) -> dict:
         """
@@ -37,7 +37,7 @@ class AuthQueryClient(QueryClient):
 
         """
         proto_output = self.query(
-            api_callable=self.api.Account,
+            api_callable=self.stub.Account,
             req=auth_type.QueryAccountRequest(address=address),
             should_deserialize=False,
         )
@@ -75,7 +75,7 @@ class AuthQueryClient(QueryClient):
 
         """
         proto_output = self.query(
-            api_callable=self.api.Accounts,
+            api_callable=self.stub.Accounts,
             req=auth_type.QueryAccountRequest(),
             should_deserialize=False,
         )

@@ -1,7 +1,7 @@
 # These import statements export the types to 'nibiru.pytypes'.
 
 from nibiru.pytypes.common import (  # noqa # TODO move constants to a constants.py file.; noqa
-    GAS_PRICE,
+    DEFAULT_GAS_PRICE,
     MAX_MEMO_CHARACTERS,
     Coin,
     Direction,

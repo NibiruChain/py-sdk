@@ -151,8 +151,8 @@ class Network:
 
     def string(self) -> str:
         """
-        Returns the current environment the network was initialized with. Will return `custom` if a custom network
-        was created
+        Returns the current environment the network was initialized with. Will
+        return `custom` if a custom network was created
 
         Returns:
             str: The name of the current environment.

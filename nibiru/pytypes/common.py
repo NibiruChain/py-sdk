@@ -10,38 +10,42 @@ from nibiru_proto.nibiru.spot.v1.pool_pb2 import PoolType  # noqa
 import nibiru
 
 MAX_MEMO_CHARACTERS = 256
-GAS_PRICE = 1 * pow(10, -3)
+DEFAULT_GAS_PRICE = 1 * pow(10, -3)
 
 
 class TxType(Enum):
     """
-    The TxType allows you to choose what type of synchronization you want to use
-    to send transaction
+    The TxType allows you to choose what type of synchronization you want to
+    use to send transaction
     """
 
     SYNC = 1
     """
-    The CLI waits for a CheckTx execution response only.
-    Each full-node that receives a transaction sends a CheckTx to the application layer to check for validity, and
-    receives an abci.ResponseCheckTx. If the Tx passes the checks, it is held in the nodes' Mempool , an in-memory pool
-    of transactions unique to each node pending inclusion in a block - honest nodes will discard Tx if it is found to
-    be invalid.
+    The CLI waits for a CheckTx execution response only. Each full-node that
+    receives a transaction sends a CheckTx to the application layer to check
+    for validity, and receives an abci.ResponseCheckTx. If the Tx passes the
+    checks, it is held in the nodes' Mempool , an in-memory pool of
+    transactions unique to each node pending inclusion in a block - honest
+    nodes will discard Tx if it is found to be invalid.
 
-    Prior to consensus, nodes continuously check incoming transactions and gossip them to their peers.
+    Prior to consensus, nodes continuously check incoming transactions and
+    gossip them to their peers.
     """
 
     ASYNC = 2
     """
-    The CLI returns immediately (transaction might fail silently).
-    If you send a transaction with this option, it is recommended to query the transaction output using the hash of the
-    transaction given by the output of the tx call.
+    The CLI returns immediately (transaction might fail silently). If you send
+    a transaction with this option, it is recommended to query the transaction
+    output using the hash of the transaction given by the output of the tx
+    call.
     """
 
     BLOCK = 3
     """
-    The tx function will wait unitl the tx is be committed in a block.
-    This have the effect of having the full log of the transaction available with the output of the method. These logs
-    will include information as to coin sent and received, states changed etc.
+    The tx function will wait unitl the tx is be committed in a block. This
+    have the effect of having the full log of the transaction available with
+    the output of the method. These logs will include information as to coin
+    sent and received, states changed etc.
     """
 
 

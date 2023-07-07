@@ -6,7 +6,7 @@ Classes:
 """
 import json
 import logging
-from copy import deepcopy
+import pprint
 from numbers import Number
 from typing import Any, Callable, Iterable, List, Optional, Tuple, Union
 
@@ -93,12 +93,15 @@ class TxClient:
             sim_res = self.simulate(tx)
             gas_estimate: float = sim_res.gas_info.gas_used
 
+            # breakpoint()
             tx_resp: abci_type.TxResponse = self.execute_tx(
                 tx, gas_estimate, tx_config=tx_config
             )
             # Convert raw log into a dictionary
             tx_resp: dict[str, Any] = MessageToDict(tx_resp)
             tx_output = self.client.tx_by_hash(tx_hash=tx_resp["txhash"])
+
+            # breakpoint()
             if tx_output.get("tx_response").get("code") != 0:
                 address.decrease_sequence()
                 raise TxError(tx_output.raw_log)
@@ -106,10 +109,7 @@ class TxClient:
             tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
             return pt.RawSyncTxResp(tx_output)
         except SimulationError as err:
-            if (
-                "account sequence mismatch, expected"
-                in str(err)
-            ):
+            if "account sequence mismatch, expected" in str(err):
 
                 if not isinstance(msgs, list):
                     msgs = [msgs]
@@ -144,7 +144,7 @@ class TxClient:
             return gas_wanted
 
         gas_wanted = compute_gas_wanted()
-        gas_price = pt.GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
+        gas_price = pt.DEFAULT_GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
 
         fee = [
             cosmos_base_coin_pb.Coin(
@@ -299,6 +299,20 @@ class Transaction:
         self.gas_limit = gas_limit
         self.memo = memo
         self.timeout_height = timeout_height
+
+    def __repr__(self) -> str:
+        self_as_dict = dict(
+            msgs=[self.msgs],
+            sequence=self.sequence,
+            account_num=self.account_num,
+            chain_id=self.chain_id,
+            fee=self.fee,
+            gas_limit=self.gas_limit,
+            memo=self.memo,
+            timeout_height=self.timeout_height,
+            priv_key=self.priv_key,
+        )
+        return pprint.pformat(self_as_dict, indent=2)
 
     @staticmethod
     def __convert_msgs(msgs: List[message.Message]) -> List[any_pb2.Any]:

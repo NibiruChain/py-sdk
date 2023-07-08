@@ -208,6 +208,11 @@ class PublicKey:
 
 
 class Address:
+
+    addr: bytes
+    number: int
+    sequence: int
+
     def __init__(self, addr: bytes) -> None:
         self.addr = addr
         self.number = 0

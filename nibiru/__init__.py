@@ -27,7 +27,7 @@ from nibiru.pytypes import (  # noqa
     NetworkType,
     PoolAsset,
     TxConfig,
-    TxType,
+    TxBroadcastMode,
 )
 from nibiru.sdk import Sdk  # noqa
 from nibiru.tx import Transaction  # noqa

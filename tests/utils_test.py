@@ -30,7 +30,12 @@ from nibiru.utils import from_sdk_dec, to_sdk_dec
         ('number 1574.00005', 1574.00005, '157400005' + '0' * 13, False),
     ],
 )
-def test_to_sdk_dec(test_name, float_val, sdk_dec_val, should_fail):
+def test_to_sdk_dec(
+    test_name: str,
+    float_val: float,
+    sdk_dec_val: str,
+    should_fail: bool,
+):
     try:
         res = to_sdk_dec(float_val)
         assert sdk_dec_val == res

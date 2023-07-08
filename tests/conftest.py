@@ -17,7 +17,7 @@ import dotenv
 import pytest
 
 from nibiru import Network, NetworkType, Sdk
-from nibiru.pytypes import TxConfig, TxType
+from nibiru.pytypes import TxConfig, TxBroadcastMode
 
 
 def pytest_configure(config):
@@ -104,8 +104,7 @@ def network() -> Network:
 
 
 TX_CONFIG_TEST: TxConfig = TxConfig(
-    tx_type=TxType.BLOCK,
-    # tx_type=TxType.SYNC,
+    broadcast_mode=TxBroadcastMode.SYNC,
     gas_multiplier=1.25,
     gas_price=0.25,
 )

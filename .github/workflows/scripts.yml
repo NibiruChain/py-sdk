@@ -35,4 +35,4 @@ jobs:
       - name: Run localnet.sh in the background.
         run: |
           curl -s https://get.nibiru.fi/@v0.21.5! | bash
-          bash scripts/localnet.sh --no-build
+          bash scripts/localnet.sh --no-build &

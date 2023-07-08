@@ -1,4 +1,4 @@
-name: Linting
+name: "Linting"
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  test:
+  lint-py:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

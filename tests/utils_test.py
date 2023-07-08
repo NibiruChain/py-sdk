@@ -1,16 +1,17 @@
 import subprocess
-from typing import List
 from urllib.parse import ParseResult, urlparse
 
 import pytest
+
+import tests
+import nibiru
+from nibiru import pytypes
+from nibiru import utils
+from nibiru.query_clients import util as query_util
+
+from nibiru import Coin
 from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder
-
-import nibiru
-import tests
-from nibiru import Coin, pytypes
-from nibiru.query_clients.util import get_block_messages, get_msg_pb_by_type_url
-from nibiru.utils import from_sdk_dec, to_sdk_dec
 
 
 @pytest.mark.parametrize(
@@ -37,7 +38,7 @@ def test_to_sdk_dec(
     should_fail: bool,
 ):
     try:
-        res = to_sdk_dec(float_val)
+        res = utils.to_sdk_dec(float_val)
         assert sdk_dec_val == res
         assert not should_fail
     except (TypeError, ValueError):
@@ -68,7 +69,7 @@ def test_to_sdk_dec(
 )
 def test_from_sdk_dec(test_name, sdk_dec_val, float_val, should_fail):
     try:
-        res = from_sdk_dec(sdk_dec_val)
+        res = utils.from_sdk_dec(sdk_dec_val)
         assert float_val == res
         assert not should_fail
     except (TypeError, ValueError):
@@ -83,7 +84,7 @@ def test_from_sdk_dec(test_name, sdk_dec_val, float_val, should_fail):
     ],
 )
 def test_get_msg_pb_by_type_url(type_url, cls):
-    assert get_msg_pb_by_type_url(type_url) == cls
+    assert query_util.get_msg_pb_by_type_url(type_url) == cls
 
 
 def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):

@@ -7,7 +7,6 @@ import nibiru
 import tests
 from nibiru import Msg
 from nibiru import pytypes as pt
-from nibiru.exceptions import QueryError
 
 PRECISION = 6
 
@@ -51,14 +50,16 @@ def test_open_position(sdk_val: nibiru.Sdk):
         ok_errors: List[str] = [ERRORS.no_prices]
         tests.raises(ok_errors, err)
         if ERRORS.no_prices in f"{err}":
-            tests.LOGGER.info("Exchange rates unavailable, please run pricefeeder")
+            tests.LOGGER.info(
+                "Exchange rates unavailable, please run pricefeeder")
 
 
 @pytest.mark.order(after="test_open_position")
 def test_perp_query_position(sdk_val: nibiru.Sdk):
     try:
         # Trader position must be a dict with specific keys
-        position_res = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
+        position_res = sdk_val.query.perp.position(
+            trader=sdk_val.address, pair=PAIR)
         tests.dict_keys_must_match(
             position_res,
             [
@@ -90,7 +91,8 @@ def test_perp_query_all_positions(sdk_val: nibiru.Sdk):
         return
 
     pair, position_resp = [item for item in positions_map.items()][0]
-    assert len(pair.split(":")) == 2  # check that pair is of form "token0:token1"
+    # check that pair is of form "token0:token1"
+    assert len(pair.split(":")) == 2
     tests.dict_keys_must_match(
         position_resp,
         [
@@ -159,11 +161,13 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
         )
         tests.raw_sync_tx_must_succeed(tx_output)
 
-        # Querying the position should raise an exception if it closed successfully
+        out = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
+        # Querying the position should raise an exception if it closed
+        # successfully
         # with pytest.raises(
         #      (QueryError, BaseException), match=ERRORS.collections_not_found
         # ):
-        out = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
+        assert out  # TODO: replace with actual checks.
 
     except BaseException as err:
         ok_errors: List[str] = [

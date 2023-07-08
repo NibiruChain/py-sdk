@@ -68,8 +68,7 @@ class SetupTestConfig:
         for env_var_name in self.PYTEST_GLOBALS_REQUIRED.keys():
             env_var_value = os.getenv(env_var_name)
             if not env_var_value:
-                raise ValueError(
-                    f"Environment variable {env_var_name} is missing!")
+                raise ValueError(f"Environment variable {env_var_name} is missing!")
             self._set_pytest_global(env_var_name, env_var_value)
 
     def set_optional_globals(self):

@@ -50,16 +50,14 @@ def test_open_position(sdk_val: nibiru.Sdk):
         ok_errors: List[str] = [ERRORS.no_prices]
         tests.raises(ok_errors, err)
         if ERRORS.no_prices in f"{err}":
-            tests.LOGGER.info(
-                "Exchange rates unavailable, please run pricefeeder")
+            tests.LOGGER.info("Exchange rates unavailable, please run pricefeeder")
 
 
 @pytest.mark.order(after="test_open_position")
 def test_perp_query_position(sdk_val: nibiru.Sdk):
     try:
         # Trader position must be a dict with specific keys
-        position_res = sdk_val.query.perp.position(
-            trader=sdk_val.address, pair=PAIR)
+        position_res = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
         tests.dict_keys_must_match(
             position_res,
             [

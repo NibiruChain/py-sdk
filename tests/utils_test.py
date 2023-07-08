@@ -2,16 +2,13 @@ import subprocess
 from urllib.parse import ParseResult, urlparse
 
 import pytest
-
-import tests
-import nibiru
-from nibiru import pytypes
-from nibiru import utils
-from nibiru.query_clients import util as query_util
-
-from nibiru import Coin
 from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder
+
+import nibiru
+import tests
+from nibiru import Coin, pytypes, utils
+from nibiru.query_clients import util as query_util
 
 
 @pytest.mark.parametrize(

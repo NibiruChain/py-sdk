@@ -20,9 +20,9 @@ from nibiru_proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
+from nibiru import exceptions
 from nibiru import pytypes as pt
 from nibiru import wallet
-from nibiru import exceptions
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.grpc_client import GrpcClient
 

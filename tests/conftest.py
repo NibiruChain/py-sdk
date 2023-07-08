@@ -17,7 +17,7 @@ import dotenv
 import pytest
 
 from nibiru import Network, NetworkType, Sdk
-from nibiru.pytypes import TxConfig, TxBroadcastMode
+from nibiru.pytypes import TxBroadcastMode, TxConfig
 
 
 def pytest_configure(config):

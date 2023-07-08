@@ -1,11 +1,11 @@
 import time
 
+import tests
 from nibiru import Msg, Network, Sdk
 from nibiru.event_specs import EventCaptured, EventType
 from nibiru.exceptions import QueryError, SimulationError
 from nibiru.websocket import NibiruWebsocket
 from tests import dict_keys_must_match, raw_sync_tx_must_succeed
-import tests
 
 
 def get_validator_operator_address(sdk_val: Sdk):

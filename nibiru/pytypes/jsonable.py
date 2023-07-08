@@ -2,7 +2,7 @@ import abc
 import copy
 import json
 from datetime import datetime
-from typing import Mapping, Any
+from typing import Any, Mapping
 
 
 def to_jsonable(obj: Any) -> Any:

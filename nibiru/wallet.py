@@ -8,7 +8,7 @@ from bip32 import BIP32
 from ecdsa import BadSignatureError, SECP256k1, SigningKey, VerifyingKey
 from ecdsa.util import sigencode_string_canonize
 from mnemonic import Mnemonic
-from nibiru_proto.proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
+from nibiru_proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as PubKeyProto
 
 from nibiru.crypto.ripemd160 import ripemd160
 
@@ -208,6 +208,11 @@ class PublicKey:
 
 
 class Address:
+
+    addr: bytes
+    number: int
+    sequence: int
+
     def __init__(self, addr: bytes) -> None:
         self.addr = addr
         self.number = 0
@@ -295,7 +300,7 @@ class Address:
         the node.
 
         Args:
-            from_node (bool, optional): Wether to query or not from the node. Defaults to False.
+            from_node (bool, optional): Whether to query or not from the node. Defaults to False.
             lcd_endpoint (str, optional): The lcd endoint, needed for when from_node is set to true. Defaults to None.
 
         Returns:

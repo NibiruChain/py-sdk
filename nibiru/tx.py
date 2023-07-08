@@ -1,23 +1,26 @@
 """
 Classes:
     TxClient: A client for building, simulating, and broadcasting transactions.
-    Transaction: Transactions trigger state changes based on messages. Each message
-        must be cryptographically signed before being broadcasted to the network.
+    Transaction: Transactions trigger state changes based on messages. Each
+        message must be cryptographically signed before being broadcasted to
+        the network.
 """
 import json
 import logging
-from copy import deepcopy
+import pprint
 from numbers import Number
-from typing import Any, Callable, Iterable, List, Tuple, Union
+from typing import Any, Iterable, List, Optional, Tuple, Union
 
 from google.protobuf import any_pb2, message
 from google.protobuf.json_format import MessageToDict
-from nibiru_proto.proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
-from nibiru_proto.proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
-from nibiru_proto.proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from nibiru_proto.proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
-from nibiru_proto.proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
+from nibiru_proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
+from nibiru_proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
+from nibiru_proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from nibiru_proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
+from nibiru_proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
+from nibiru import exceptions
 from nibiru import pytypes as pt
 from nibiru import wallet
 from nibiru.exceptions import SimulationError, TxError
@@ -27,7 +30,21 @@ from nibiru.grpc_client import GrpcClient
 class TxClient:
     """
     A client for building, simulating, and broadcasting transactions.
+
+    Attributes:
+        address (Optional[wallet.Address])
+        client (GrpcClient)
+        network (pt.Network)
+        priv_key (wallet.PrivateKey)
+        tx_config (pt.TxConfig)
+
     """
+
+    address: Optional[wallet.Address]
+    client: GrpcClient
+    network: pt.Network
+    priv_key: wallet.PrivateKey
+    tx_config: pt.TxConfig
 
     def __init__(
         self,
@@ -40,79 +57,115 @@ class TxClient:
         self.network = network
         self.client = client
         self.address = None
-        self.config = config
+        self.tx_config = config
 
     def execute_msgs(
         self,
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
-        get_sequence_from_node: bool = False,
-        **kwargs,
-    ) -> pt.RawTxResp:
+        sequence: Optional[int] = None,
+        tx_config: Optional[pt.TxConfig] = None,
+    ) -> pt.RawSyncTxResp:
         """
-        Broadcasts messages to a node in a single transaction. This function first
-        simulates the corresponding transaction to estimate the amount of gas needed.
+        Broadcasts messages to a node in a single transaction. This function
+        first simulates the corresponding transaction to estimate the amount of
+        gas needed.
 
-        If the transaction fails because of account sequence mismatch, we try to
-        query the sequence from the LCD endpoint and broadcast with the updated
-        sequence value.
+        If the transaction fails because of account sequence mismatch, we try
+        to query the sequence from the LCD endpoint and broadcast with the
+        updated sequence value.
 
         Args:
-            get_sequence_from_node (bool, optional): Specifies whether the sequence
-                comes from the local value or the lcd endpoint. Defaults to False.
+            msgs (Union[pt.PythonMsg, List[pt.PythonMsg]]):
+            sequence (Optional[int]): Account sequence for the tx. Sequence
+                is used to enforce tx ordering and prevent double-spending.
+                Each time a tx is procesed and committed to the blockchain,
+                the account sequence number is incremented.
+            tx_config (Optional[pt.TxConfig] = None)
+            get_sequence_from_node (bool, optional): Specifies whether the
+                sequence comes from the local value or the lcd endpoint.
+                Defaults to False.
 
         Raises:
             SimulationError: If broadcasting fails during the simulation.
-            TxError: If the response code is nonzero, the 'TxError' includes the
-                raw error logs from the blockchain.
+            TxError: If the response code is nonzero, the 'TxError' includes
+                the raw error logs from the blockchain.
 
         Returns:
-            Union[RawTxResp, Dict[str, Any]]: The transaction response as a dict
-                in proto3 JSON format.
+            Union[RawSyncTxResp, Dict[str, Any]]: The transaction response as
+                a dict in proto3 JSON format.
         """
 
         tx: Transaction
-        address: wallet.Address
+        address: wallet.Address = self.ensure_address_info()
         tx, address = self.build_tx(
-            msgs=msgs, get_sequence_from_node=get_sequence_from_node
+            msgs=msgs,
         )
+
+        # Validate account sequence
+        if sequence is None:
+            sequence = address.sequence
+        sequence_err: str = "sequence was not given or available on the wallet object."
+        assert address, sequence_err
+        assert sequence, sequence_err
+
+        tx = tx.with_sequence(sequence=sequence)
 
         try:
             sim_res = self.simulate(tx)
             gas_estimate: float = sim_res.gas_info.gas_used
-            tx_output: abci_type.TxResponse = self.execute_tx(
-                tx, gas_estimate, **kwargs
-            )
-
-            if tx_output.code != 0:
-                address.decrease_sequence()
-                raise TxError(tx_output.raw_log)
-
-            tx_output: dict[str, Any] = MessageToDict(tx_output)
-
-            # Convert raw log into a dictionary
-            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
-            return pt.RawTxResp(tx_output)
-
         except SimulationError as err:
-            if (
-                "account sequence mismatch, expected" in str(err)
-                and not get_sequence_from_node
-            ):
+            if "account sequence mismatch, expected" in str(err):
+
                 if not isinstance(msgs, list):
                     msgs = [msgs]
-                self.client.wait_for_next_block()
-                kwargs["get_sequence_from_node"] = True
-                return self.execute_msgs(*msgs, **kwargs)
+                # self.client.wait_for_next_block()
+                err_str = str(err)
+                want_seq = int(err_str.split("expected ")[1].split(",")[0])
+                sequence = want_seq
 
+                return self.execute_msgs(
+                    msgs=msgs,
+                    sequence=sequence,
+                    tx_config=tx_config,
+                )
             if address:
                 address.decrease_sequence()
-
             raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
+        try:
+            tx_resp: abci_type.TxResponse = self.execute_tx(
+                tx, gas_estimate, tx_config=tx_config
+            )
+            tx_resp: dict[str, Any] = MessageToDict(tx_resp)
+            tx_hash: Union[str, None] = tx_resp.get("txhash")
+            assert tx_hash, f"null txhash on tx_resp: {tx_resp}"
+            tx_output: tx_service.GetTxResponse = self.client.tx_by_hash(
+                tx_hash=tx_hash
+            )
+
+            if tx_output.get("tx_response").get("code") != 0:
+                address.decrease_sequence()
+                raise TxError(tx_output.raw_log)
+            breakpoint()
+
+            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
+            return pt.RawSyncTxResp(tx_output)
+        except exceptions.ErrorQueryTx as err:
+            logging.info("ErrorQueryTx")
+            logging.error(err)
+            raise err
+        except BaseException as err:
+            logging.info("BaseException")
+            logging.error(err)
+            raise err
+
     def execute_tx(
-        self, tx: "Transaction", gas_estimate: float, **kwargs
+        self,
+        tx: "Transaction",
+        gas_estimate: float,
+        tx_config: pt.TxConfig = None,
     ) -> abci_type.TxResponse:
-        conf: pt.TxConfig = self.get_config(**kwargs)
+        conf: pt.TxConfig = self.ensure_tx_config(new_tx_config=tx_config)
 
         def compute_gas_wanted() -> float:
             # Related to https://github.com/cosmos/cosmos-sdk/issues/14405
@@ -125,7 +178,7 @@ class TxClient:
             return gas_wanted
 
         gas_wanted = compute_gas_wanted()
-        gas_price = pt.GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
+        gas_price = pt.DEFAULT_GAS_PRICE if conf.gas_price <= 0 else conf.gas_price
 
         fee = [
             cosmos_base_coin_pb.Coin(
@@ -144,36 +197,67 @@ class TxClient:
         )
         tx_raw_bytes = tx.get_signed_tx_data()
 
-        return self._send_tx(tx_raw_bytes, conf.tx_type)
+        return self._broadcast_tx(tx_raw_bytes, conf.broadcast_mode)
 
-    def _send_tx(self, tx_raw_bytes: bytes, tx_type: pt.TxType) -> abci_type.TxResponse:
-        broadcast_fn: Callable[[bytes], abci_type.TxResponse]
+    def _broadcast_tx(
+        self,
+        tx_raw_bytes: bytes,
+        tx_type: pt.TxBroadcastMode = pt.TxBroadcastMode.SYNC,
+    ) -> abci_type.TxResponse:
+        """Broadcast the signed transaction to one or more nodes in the
+        network. The nodes in the network will receive the transaction
+        and validate its integrity by verifying the signature, checking
+        if the sender has sufficient funds or permissions, and running
+        the `ValidateBasic` check on each tx message.
 
-        if tx_type == pt.TxType.SYNC:
-            broadcast_fn = self.client.send_tx_sync_mode
-        elif tx_type == pt.TxType.ASYNC:
-            broadcast_fn = self.client.send_tx_async_mode
+        Args:
+            tx_raw_bytes (bytes): Signed transaction.
+            tx_type (pt.TxBroadcastMode): Broadcast mode for the transaction
+
+        Returns:
+            (abci_type.TxResponse)
+        """
+
+        broadcast_mode: tx_service.Broadcast
+        if tx_type == pt.TxBroadcastMode.ASYNC:
+            broadcast_mode = tx_service.BroadcastMode.BROADCAST_MODE_ASYNC
         else:
-            broadcast_fn = self.client.send_tx_block_mode
+            broadcast_mode = tx_service.BroadcastMode.BROADCAST_MODE_SYNC
+        return self.client.broadcast_tx(
+            tx_byte=tx_raw_bytes,
+            mode=broadcast_mode,
+        )
 
-        return broadcast_fn(tx_raw_bytes)
+    def build_tx_with_node_sequence(
+        self,
+        msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
+    ):
+        address: wallet.Address = self.ensure_address_info()
+        sequence: int = address.get_sequence(
+            from_node=True,
+            lcd_endpoint=self.network.lcd_endpoint,
+        )
+        return self.build_tx(msgs=msgs, sequence=sequence)
 
     def build_tx(
         self,
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
-        get_sequence_from_node: bool = False,
+        sequence: int = None,
     ) -> Tuple["Transaction", wallet.Address]:
         if not isinstance(msgs, list):
             msgs = [msgs]
 
         pb_msgs = [msg.to_pb() for msg in msgs]
-
         self.client.sync_timeout_height()
-        address: wallet.Address = self.get_address_info()
-        sequence: int = address.get_sequence(
-            from_node=get_sequence_from_node,
-            lcd_endpoint=self.network.lcd_endpoint,
-        )
+
+        address: wallet.Address = self.address
+        if self.address is None:
+            address = self.ensure_address_info()
+            self.address = address
+
+        if sequence is None:
+            sequence = self.address.sequence
+
         tx = (
             Transaction()
             .with_messages(pb_msgs)
@@ -190,8 +274,8 @@ class TxClient:
             tx (Transaction): The transaction being simulated.
 
         Returns:
-            SimulationResponse: SimulationResponse defines the response generated
-                when a transaction is simulated successfully.
+            SimulationResponse: SimulationResponse defines the response
+                generated when a transaction is simulated successfully.
 
         Raises:
             SimulationError
@@ -206,7 +290,12 @@ class TxClient:
 
         return sim_res
 
-    def get_address_info(self) -> wallet.Address:
+    def ensure_address_info(self) -> wallet.Address:
+        """Guarantees that the TxClient.address has been set and returns it.
+        If the wallet address has not been set prior to this function call,
+        (1) the address is derived from the 'priv_key' and
+        (2) the sequence is derived from the 'network.lcd_endpoint'.
+        """
         if self.address is None:
             pub_key: wallet.PublicKey = self.priv_key.to_public_key()
             self.address = pub_key.to_address()
@@ -214,22 +303,33 @@ class TxClient:
 
         return self.address
 
-    def get_config(self, **kwargs) -> pt.TxConfig:
+    def ensure_tx_config(
+        self,
+        new_tx_config: pt.TxConfig = None,
+    ) -> pt.TxConfig:
+        """Guarantees that the TxClient.tx_config has been set and returns it.
+
+        Args:
+            new_tx_config (Optional[pytypes.TxConfig]): Becomes the new value
+                for the tx config if given. Defaults to None.
+
+        Returns:
+            (pt.TxConfig): The new value for the TxClient.tx_config.
         """
-        Properties in kwargs overwrite the self.config
-        """
-        config: pt.TxConfig = deepcopy(self.config)
-        prop_names = dir(config)
-        for k, v in kwargs.items():
-            if k in prop_names:
-                setattr(config, k, v)
-            else:
-                logging.warning("%s is not a supported config property, ignoring", k)
+        tx_config: pt.TxConfig
+        if new_tx_config is not None:
+            tx_config = new_tx_config
+        elif self.tx_config is None:
+            # Set as the default if the TxConfig has not been initialized.
+            tx_config = pt.TxConfig()
+        else:
+            pass
+        tx_config = self.tx_config
+        return tx_config
 
-        return config
 
-
-class Transaction:
+# TODO: Refactor this into a dataclass for brevity.
+class Transaction(pt.Jsonable):
     """
     Transactions trigger state changes based on messages ('msgs'). Each message
     must be signed before being broadcasted to the network, included in a block,
@@ -259,9 +359,9 @@ class Transaction:
             convention, the signer from the first message is referred to as the
             primary signer and pays the fee for the whole transaction. We refer
             to this primary signer with 'priv_key'.
-        memo (str): Memo is a note or comment to be added to the transction.
-        timeout_height (int): Timeout height is the block height after which the
-            transaction will not be processed by the chain.
+        memo (str): Memo is a note or comment to be added to the transaction.
+        timeout_height (int): Timeout height is the block height after which
+            the transaction will not be processed by the chain.
     """
 
     def __init__(
@@ -285,6 +385,20 @@ class Transaction:
         self.gas_limit = gas_limit
         self.memo = memo
         self.timeout_height = timeout_height
+
+    def __repr__(self) -> str:
+        self_as_dict = dict(
+            msgs=[self.msgs],
+            sequence=self.sequence,
+            account_num=self.account_num,
+            chain_id=self.chain_id,
+            fee=self.fee,
+            gas_limit=self.gas_limit,
+            memo=self.memo,
+            timeout_height=self.timeout_height,
+            priv_key=self.priv_key,
+        )
+        return pprint.pformat(self_as_dict, indent=2)
 
     @staticmethod
     def __convert_msgs(msgs: List[message.Message]) -> List[any_pb2.Any]:
@@ -375,7 +489,7 @@ class Transaction:
         self, public_key: wallet.PublicKey = None
     ) -> cosmos_tx_type.SignDoc:
         if len(self.msgs) == 0:
-            raise ValueError("message is empty")
+            raise ValueError("no messages in the tx body")
 
         if self.account_num is None:
             raise RuntimeError("account_num should be defined")
@@ -414,4 +528,4 @@ class Transaction:
         pub_key = self.priv_key.to_public_key()
         sign_doc = self.get_sign_doc(pub_key)
         sig = self.priv_key.sign(sign_doc.SerializeToString())
-        return self.get_tx_data(sig, pub_key)
+        return self.get_tx_data(signature=sig, public_key=pub_key)

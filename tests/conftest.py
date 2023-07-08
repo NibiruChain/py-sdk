@@ -11,57 +11,80 @@ Fixtures available:
 - sdk_agent
 """
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import dotenv
 import pytest
 
 from nibiru import Network, NetworkType, Sdk
-from nibiru.pytypes import TxConfig, TxType
-
-PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
-    VALIDATOR_MNEMONIC="",
-    CHAIN_ID="nibiru-localnet-0",
-)
-PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
-    USE_LOCALNET=False,
-    LCD_ENDPOINT="",
-    GRPC_ENDPOINT="",
-    TENDERMINT_RPC_ENDPOINT="",
-    WEBSOCKET_ENDPOINT="",
-)
-PYTEST_GLOBALS: Dict[str, Any] = {
-    **PYTEST_GLOBALS_REQUIRED,  # combines dictionaries
-    **PYTEST_GLOBALS_OPTIONAL,
-}
+from nibiru.pytypes import TxBroadcastMode, TxConfig
 
 
 def pytest_configure(config):
-    dotenv.load_dotenv()
+    SetupTestConfig()
 
-    def set_pytest_global(name: str, value: Any):
+
+class SetupTestConfig:
+
+    PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
+        VALIDATOR_MNEMONIC="",
+    )
+    PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
+        CHAIN_ID="nibiru-localnet-0",
+        LCD_ENDPOINT="",
+        GRPC_ENDPOINT="",
+        TENDERMINT_RPC_ENDPOINT="",
+        WEBSOCKET_ENDPOINT="",
+    )
+
+    PYTEST_GLOBALS: Dict[str, Any]
+
+    def __init__(self):
+        self.PYTEST_GLOBALS = {}
+        dotenv.load_dotenv()
+        self.set_required_globals()
+        self.set_optional_globals()
+        self.set_PYTEST_GLOBALS()
+
+    def _set_pytest_global(self, name: str, value: Any):
         """Adds environment variables to the 'pytest' object and the 'PYTEST_GLOBALS'
         dictionary so that a central point of truth on what variables are set
         can be accessed from within tests.
         """
         setattr(pytest, name, value)  # pytest.<env_var> = val
-        PYTEST_GLOBALS[name] = value
+        self.PYTEST_GLOBALS[name] = value
 
-    use_localnet: Optional[str] = os.getenv("USE_LOCALNET")
-    if use_localnet is not None:
-        set_pytest_global("use_localnet", use_localnet.lower() == "true")
+    def set_PYTEST_GLOBALS(self):
+        """Combines the required and optional environment var dictionaries
+        and sets the result as the value for the PYTEST_GLOBALS field.
+        This is useful for inspecting the current relevant env vars in tests.
+        """
+        self.PYTEST_GLOBALS = {
+            **self.PYTEST_GLOBALS_REQUIRED,
+            **self.PYTEST_GLOBALS_OPTIONAL,
+        }
 
-    # Set the expected environment variables. Raise a value error if one is missing
-    for env_var_name in PYTEST_GLOBALS_REQUIRED.keys():
-        env_var_value = os.getenv(env_var_name)
-        if not env_var_value:
-            raise ValueError(f"Environment variable {env_var_name} is missing!")
-        set_pytest_global(env_var_name, env_var_value)
+    def set_required_globals(self):
+        for env_var_name in self.PYTEST_GLOBALS_REQUIRED.keys():
+            env_var_value = os.getenv(env_var_name)
+            if not env_var_value:
+                raise ValueError(f"Environment variable {env_var_name} is missing!")
+            self._set_pytest_global(env_var_name, env_var_value)
+
+    def set_optional_globals(self):
+        for env_var_name in self.PYTEST_GLOBALS_OPTIONAL.keys():
+            env_var_value = os.getenv(env_var_name)
+            if env_var_value:
+                self._set_pytest_global(env_var_name, env_var_value)
 
 
-def get_network() -> Network:
-    if PYTEST_GLOBALS["use_localnet"]:
-        return Network.customnet()
+@pytest.fixture
+def network() -> Network:
+    chain: Network = Network.customnet()
+    return chain
+
+    # TODO test: Restore functionalty for settings the tests to run against ITN
+    # or devnets for v0.21+
 
     # Use the chain_id to choose which Network to use
     chain_id: str = os.getenv("CHAIN_ID", "nibiru-localnet-0")
@@ -71,19 +94,17 @@ def get_network() -> Network:
     chain_number = int(chain_number)
 
     chain_types: List[str] = [enum_member.value for enum_member in NetworkType]
+
+    chain: Network
     if chain_type in chain_types:
-        return Network.from_chain_id(chain_id=chain_id)
+        chain = Network.from_chain_id(chain_id=chain_id)
     else:
-        return Network.localnet()
+        chain = Network.localnet()
+    return chain
 
 
-@pytest.fixture
-def network() -> Network:
-    return get_network()
-
-
-TX_CONFIG: TxConfig = TxConfig(
-    tx_type=TxType.BLOCK,
+TX_CONFIG_TEST: TxConfig = TxConfig(
+    broadcast_mode=TxBroadcastMode.SYNC,
     gas_multiplier=1.25,
     gas_price=0.25,
 )
@@ -91,7 +112,7 @@ TX_CONFIG: TxConfig = TxConfig(
 
 @pytest.fixture
 def sdk_val(network: Network) -> Sdk:
-    tx_config = TX_CONFIG
+    tx_config = TX_CONFIG_TEST
     return (
         Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
         .with_config(tx_config)
@@ -101,6 +122,6 @@ def sdk_val(network: Network) -> Sdk:
 
 @pytest.fixture
 def sdk_agent(network: Network) -> Sdk:
-    tx_config = TX_CONFIG
+    tx_config = TX_CONFIG_TEST
     agent = Sdk.authorize().with_config(tx_config).with_network(network)
     return agent

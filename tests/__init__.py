@@ -12,7 +12,7 @@ shutup.please()
 LOGGER: logging.Logger = logging.getLogger("test-logger")
 
 
-def raises(errs: Union[str, Iterable[str]], err: BaseException):
+def raises(ok_errs: Union[str, Iterable[str]], err: BaseException):
     """Makes sure one of the errors in 'errs' in contained in 'err'. If none of
     the given exceptions were raised, this function raises the original exception.
 
@@ -22,14 +22,14 @@ def raises(errs: Union[str, Iterable[str]], err: BaseException):
         err: (BaseException): The error that is actually raised.
 
     """
-    if isinstance(errs, str):
-        errs = [errs]
+    if isinstance(ok_errs, str):
+        ok_errs = [ok_errs]
     else:
-        errs = list(errs)
-    errs: List[str]
+        ok_errs = list(ok_errs)
+    ok_errs: List[str]
 
     err_string = str(err)
-    assert any([e in err_string for e in errs]), err_string
+    assert any([e in err_string for e in ok_errs]), err_string
 
 
 def format_response(resp: Union[dict, list, str]) -> str:
@@ -88,5 +88,20 @@ def transaction_must_succeed(tx_output: dict):
         "gasUsed",
         "events",
     ]
+    dict_keys_must_match(tx_output, expected_keys)
+    assert isinstance(tx_output["rawLog"], list)
+
+
+def raw_sync_tx_must_succeed(tx_output: dict):
+    """
+    Ensure the output of a transaction have the fields required
+    and that the raw logs are properly parsed
+
+    Args:
+        tx_output (dict): The output of a transaction in a dictionary
+    """
+
+    assert isinstance(tx_output, dict)
+    expected_keys = ["txhash", "rawLog"]
     dict_keys_must_match(tx_output, expected_keys)
     assert isinstance(tx_output["rawLog"], list)

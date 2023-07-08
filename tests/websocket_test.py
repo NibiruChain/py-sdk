@@ -108,7 +108,7 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
 
     # Send failing closing transaction without simulation
     sdk_val.tx.client.sync_timeout_height()
-    address = sdk_val.tx.get_address_info()
+    address = sdk_val.tx.ensure_address_info()
     tx = (
         Transaction()
         .with_messages(

@@ -69,11 +69,15 @@ class Sdk:
     @classmethod
     def authorize(cls, key: str = None) -> "Sdk":
         """
-        Authorize allows the user to generate or recover a wallet and register it as an Sdk object.
-        If a key is provided, the wallet will be recovered. Otherwise, a new wallet is created.
+        Authorize allows the user to generate or recover a wallet and register
+        it as an Sdk object.
+
+        If a key is provided, the wallet will be recovered. Otherwise, a new
+        wallet is created.
 
         Args:
-            key (str, optional): The mnemonic if recover needed. Defaults to None.
+            key (str, optional): The mnemonic if recover needed.
+              Defaults to None.
 
         Returns:
             Sdk: The updated sdk object

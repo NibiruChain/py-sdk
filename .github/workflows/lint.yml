@@ -1,19 +1,21 @@
 name: "Linting"
 on:
-  push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - master
+    branches: ["master"]
+  push:
+    branches: ["master"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
+  cancel-in-progress: ${{ ! (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/release/')) }}
 
 jobs:
   lint-py:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 2
     steps:
-      - name: "Check out repository code"
-        uses: actions/checkout@v2
+      - name: Check out the repo
+        uses: actions/checkout@v3
 
       - name: "Setup Python"
         uses: actions/setup-python@v2

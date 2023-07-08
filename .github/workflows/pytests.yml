@@ -29,12 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
-      LCD_ENDPOINT: "http://localhost:1317"
-      GRPC_ENDPOINT: "localhost:9090"
-      TENDERMINT_RPC_ENDPOINT: "http://localhost:26657"
-      USE_LOCALNET: true
-      WEBSOCKET_ENDPOINT: "ws://localhost:26657/websocket"
-      CHAIN_ID: "nibiru-localnet-0"
       VALIDATOR_MNEMONIC: "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
     steps:
@@ -54,7 +48,7 @@ jobs:
           # 3.8.16 is the highest 3.8 version available on pyenv
           #   See `grep '3.8' <<< $(pyenv install -l)` to view the available list.
 
-      - name: Run python
+      - name: Run python # sanity check on the installation.
         run: python --version && python -c "print('hello')"
 
       # ----------------------------------------------
@@ -99,13 +93,18 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      - name: Run chaosnet
-        uses: NibiruChain/localnet-action@v1.1
-        id: chaosnet
-        with:
-          services: nibiru pricefeeder
-          ghtoken: ${{ secrets.GITHUB_TOKEN }}
-          ghactor: ${{ github.actor }}
+      - name: Run localnet.sh in the background.
+        run: |
+          curl -s https://get.nibiru.fi/@v0.21.5! | bash
+          bash scrips/localnet.sh --no-build &
+
+      # - name: Run chaosnet
+      #   uses: NibiruChain/localnet-action@v1.1
+      #   id: chaosnet
+      #   with:
+      #     services: nibiru pricefeeder
+      #     ghtoken: ${{ secrets.GITHUB_TOKEN }}
+      #     ghactor: ${{ github.actor }}
 
       - name: sleep 30 seconds
         run: sleep 30

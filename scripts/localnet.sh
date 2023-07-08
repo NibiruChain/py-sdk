@@ -34,13 +34,38 @@ echo_success() {
   echo "${reset}"
 }
 
-echo_info "Building from source..."
-if make install; then
-  echo_success "Successfully built binary"
-else
-  echo_error "Could not build binary. Failed to make install."
-  exit 1
+# Flag parsing: --flag-name (BASH_VAR_NAME)
+#
+# --no-build ($FLAG_NO_BUILD): toggles whether to build from source. The default 
+#   behavior of the script is to run make install. 
+FLAG_NO_BUILD=false 
+
+build_from_source() {
+  echo_info "Building from source..."
+  if make install; then
+    echo_success "Successfully built binary"
+  else
+    echo_error "Could not build binary. Failed to make install."
+    exit 1
+  fi
+}
+
+echo_info "Parsing flags for the script..."
+
+# Iterate over all arguments to the script
+for arg in "$@"
+do
+  if [ "$arg" == "--no-build" ] ; then
+    FLAG_NO_BUILD=true
+  fi
+done
+
+
+# Check if FLAG_NO_BUILD was set to true
+if ! $FLAG_NO_BUILD ; then
+  build_from_source
 fi
+
 
 # Set localnet settings
 BINARY="nibid"
@@ -53,10 +78,15 @@ CHAIN_DIR="$HOME/.nibid"
 echo "CHAIN_DIR: $CHAIN_DIR"
 echo "CHAIN_ID: $CHAIN_ID"
 
+
 SEDOPTION=""
 if [[ "$OSTYPE" == "darwin"* ]]; then
   SEDOPTION="''"
 fi
+
+# ------------------------------------------------------------------------
+echo_info "Successfully finished localnet script setup."
+# ------------------------------------------------------------------------
 
 # Stop nibid if it is already running
 if pgrep -x "$BINARY" >/dev/null; then

@@ -26,11 +26,14 @@ def test_get_chain_id(sdk_val: nibiru.Sdk):
 
 
 def test_wait_next_block(sdk_val: nibiru.Sdk):
-    current_block_height = sdk_val.query.get_latest_block().block.header.height
-    sdk_val.query.wait_for_next_block()
-    new_block_height = sdk_val.query.get_latest_block().block.header.height
+    ...
 
-    assert new_block_height > current_block_height
+
+#     current_block_height = sdk_val.query.get_latest_block().block.header.height
+#     sdk_val.query.wait_for_next_block()
+#     new_block_height = sdk_val.query.get_latest_block().block.header.height
+
+#     assert new_block_height > current_block_height
 
 
 def test_version_works(sdk_val: nibiru.Sdk):

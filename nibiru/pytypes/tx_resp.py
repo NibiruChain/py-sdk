@@ -109,3 +109,25 @@ class RawTxResp(dict):
         ]
         utils.dict_keys_must_match(_dict, keys_wanted)
         return _dict
+
+
+# from typing import TypedDict  # not available in Python 3.7
+# class RawTxResp(TypedDict):
+class RawSyncTxResp(dict):
+    """Proxy for a 'TypedDict' representing a transaction response.
+    - The 'TxResponse' type is defined in
+    [cosmos-sdk/types/abci.pb.go](https://github.com/cosmos/cosmos-sdk/blob/v0.45.10/types/abci.pb.go)
+
+    ### Keys (ValueType):
+
+    - txhash (str): unique identifier for the transaction
+    - rawLog (list): Raw output of the SDK application's logger.
+        Possibly non-deterministic. This output also contains the events emitted
+        during the processing of the transaction, which is equivalently
+    """
+
+    def __new__(cls, _dict: Dict[str, Any]) -> Dict[str, Union[str, list]]:
+        """Verifies that the dictionary has the expected keys."""
+        keys_wanted = ["txhash", "rawLog"]
+        utils.dict_keys_must_match(_dict, keys_wanted)
+        return _dict

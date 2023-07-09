@@ -1,0 +1,38 @@
+name: "py-sdk/scripts"
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      [
+        "scripts",
+        "**.py",
+        "pyproject.toml",
+        "poetry.lock",
+        ".github/workflows/pytests.yml",
+      ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
+  cancel-in-progress: ${{ ! (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')) }}
+
+jobs:
+  localnet:
+  # The localnet job verifies that the repo's script for starting a local Nibiru
+  # chain runs without errors.
+    runs-on: ubuntu-latest
+    env:
+      # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
+      VALIDATOR_MNEMONIC: "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
+      DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
+    steps:
+      # ----------------------------------------------
+      # check-out repo and set-up python
+      # ----------------------------------------------
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Run localnet.sh in the background.
+        run: |
+          curl -s https://get.nibiru.fi/@v0.21.5! | bash
+          bash scripts/localnet.sh --no-build &

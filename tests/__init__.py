@@ -1,18 +1,21 @@
 """Tests package for the Nibiru Python SDK"""
 import logging
+import os
 import pprint
 from typing import Iterable, List, Union
 
 import shutup
 
-from nibiru import utils
+import nibiru
+from nibiru import pytypes, tx, utils
 
 shutup.please()
+
 
 LOGGER: logging.Logger = logging.getLogger("test-logger")
 
 
-def raises(errs: Union[str, Iterable[str]], err: BaseException):
+def raises(ok_errs: Union[str, Iterable[str]], err: BaseException):
     """Makes sure one of the errors in 'errs' in contained in 'err'. If none of
     the given exceptions were raised, this function raises the original exception.
 
@@ -22,14 +25,14 @@ def raises(errs: Union[str, Iterable[str]], err: BaseException):
         err: (BaseException): The error that is actually raised.
 
     """
-    if isinstance(errs, str):
-        errs = [errs]
+    if isinstance(ok_errs, str):
+        ok_errs = [ok_errs]
     else:
-        errs = list(errs)
-    errs: List[str]
+        ok_errs = list(ok_errs)
+    ok_errs: List[str]
 
     err_string = str(err)
-    assert any([e in err_string for e in errs]), err_string
+    assert any([e in err_string for e in ok_errs]), err_string
 
 
 def format_response(resp: Union[dict, list, str]) -> str:
@@ -90,3 +93,59 @@ def transaction_must_succeed(tx_output: dict):
     ]
     dict_keys_must_match(tx_output, expected_keys)
     assert isinstance(tx_output["rawLog"], list)
+
+
+def broadcast_tx_must_succeed(res: tx.ExecuteTxResp):
+    """
+    Ensure the output of a transaction have the fields required
+    and that the raw logs are properly parsed
+
+    Args:
+        tx_output (dict): The output of a transaction in a dictionary
+    """
+
+    assert isinstance(res, tx.ExecuteTxResp)
+    assert res.code == 0
+    assert res.tx_hash
+
+
+def raw_sync_tx_must_succeed(tx_output: dict):
+    """
+    Ensure the output of a transaction have the fields required
+    and that the raw logs are properly parsed
+
+    Args:
+        tx_output (dict): The output of a transaction in a dictionary
+    """
+
+    assert isinstance(tx_output, dict)
+    expected_keys = ["txhash", "rawLog"]
+    dict_keys_must_match(tx_output, expected_keys)
+    assert isinstance(tx_output["rawLog"], list)
+
+
+TX_CONFIG_TEST: pytypes.TxConfig = pytypes.TxConfig(
+    broadcast_mode=pytypes.TxBroadcastMode.SYNC,
+    gas_multiplier=1.25,
+    gas_price=0.25,
+)
+
+
+def fixture_network() -> nibiru.Network:
+    return nibiru.Network.customnet()
+
+
+def fixture_sdk_val() -> nibiru.Sdk:
+    return (
+        nibiru.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
+        .with_config(TX_CONFIG_TEST)
+        .with_network(fixture_network())
+    )
+
+
+def fixture_sdk_other() -> nibiru.Sdk:
+    return (
+        nibiru.Sdk.authorize()
+        .with_config(TX_CONFIG_TEST)
+        .with_network(fixture_network())
+    )

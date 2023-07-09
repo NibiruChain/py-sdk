@@ -1,8 +1,8 @@
 import dataclasses
 from typing import List, Union
 
-from nibiru_proto.proto.spot.v1 import pool_pb2 as pool_tx_pb
-from nibiru_proto.proto.spot.v1 import tx_pb2 as pb
+from nibiru_proto.nibiru.spot.v1 import pool_pb2 as pool_tx_pb
+from nibiru_proto.nibiru.spot.v1 import tx_pb2 as pb
 
 from nibiru.pytypes import Coin, PoolAsset, PoolType, PythonMsg
 

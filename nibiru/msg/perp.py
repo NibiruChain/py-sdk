@@ -1,8 +1,8 @@
 import dataclasses
 from typing import List
 
-from nibiru_proto.proto.perp.v2 import state_pb2 as state_pb
-from nibiru_proto.proto.perp.v2 import tx_pb2 as pb
+from nibiru_proto.nibiru.perp.v2 import state_pb2 as state_pb
+from nibiru_proto.nibiru.perp.v2 import tx_pb2 as pb
 
 from nibiru.pytypes import Coin, Direction, PythonMsg
 from nibiru.utils import to_sdk_dec, to_sdk_int
@@ -37,7 +37,7 @@ class MsgsPerp:
         quote_asset_amount: float,
         leverage: float,
         base_asset_amount_limit: float,
-    ) -> 'MsgOpenPosition':
+    ) -> 'MsgMarketOrder':
         """
         Open a posiiton using the specified parameters.
 
@@ -51,7 +51,7 @@ class MsgsPerp:
             base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
                 quote.
         """
-        return MsgOpenPosition(
+        return MsgMarketOrder(
             sender=sender,
             pair=pair,
             dir=Direction.LONG if is_long else Direction.SHORT,
@@ -199,7 +199,7 @@ class MsgAddMargin(PythonMsg):
 
 
 @dataclasses.dataclass
-class MsgOpenPosition(PythonMsg):
+class MsgMarketOrder(PythonMsg):
     """
     Open a position using the specified parameters.
 
@@ -221,12 +221,12 @@ class MsgOpenPosition(PythonMsg):
     leverage: float
     base_asset_amount_limit: float
 
-    def to_pb(self) -> pb.MsgOpenPosition:
+    def to_pb(self) -> pb.MsgMarketOrder:
         """
         Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgOpenPosition: The proto object.
+            pb.MsgMarketOrder: The proto object.
 
         """
         pb_side = (
@@ -238,7 +238,7 @@ class MsgOpenPosition(PythonMsg):
         base_asset_amount_limit_pb = to_sdk_int(self.base_asset_amount_limit)
         leverage_pb = to_sdk_dec(self.leverage)
 
-        return pb.MsgOpenPosition(
+        return pb.MsgMarketOrder(
             sender=self.sender,
             pair=self.pair,
             side=pb_side,
@@ -316,6 +316,6 @@ class perp:
 
     remove_margin: MsgRemoveMargin
     add_margin: MsgAddMargin
-    open_position: MsgOpenPosition
+    open_position: MsgMarketOrder
     close_position: MsgClosePosition
     liquidate: MsgMultiLiquidate

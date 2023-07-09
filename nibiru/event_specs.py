@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
-from nibiru_proto.proto.oracle.v1 import event_pb2 as oracle_events
-from nibiru_proto.proto.perp.v2 import event_pb2 as perp_events
-from nibiru_proto.proto.spot.v1 import event_pb2 as spot_events
-from nibiru_proto.proto.stablecoin.v1 import events_pb2 as stablecoin_events  # noqa
+from nibiru_proto.nibiru.oracle.v1 import event_pb2 as oracle_events
+from nibiru_proto.nibiru.perp.v2 import event_pb2 as perp_events
+from nibiru_proto.nibiru.spot.v1 import event_pb2 as spot_events
+from nibiru_proto.nibiru.stablecoin.v1 import events_pb2 as stablecoin_events  # noqa
 
 
 class EventType(Enum):
@@ -35,7 +35,10 @@ class EventType(Enum):
     BuybackEvent = stablecoin_events.EventBuyback
 
     # Oracle events
-    PriceUpdate = oracle_events.OraclePriceUpdate
+    PriceUpdate = oracle_events.EventPriceUpdate
+    EventDelegateFeederConsent = oracle_events.EventDelegateFeederConsent
+    EventAggregateVote = oracle_events.EventAggregateVote
+    EventAggregatePrevote = oracle_events.EventAggregatePrevote
 
     # Bank
     Transfer = "transfer"

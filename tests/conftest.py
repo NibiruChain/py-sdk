@@ -16,8 +16,8 @@ from typing import Any, Dict, List
 import dotenv
 import pytest
 
+import tests
 from nibiru import Network, NetworkType, Sdk
-from nibiru.pytypes import TxBroadcastMode, TxConfig
 
 
 def pytest_configure(config):
@@ -80,8 +80,7 @@ class SetupTestConfig:
 
 @pytest.fixture
 def network() -> Network:
-    chain: Network = Network.customnet()
-    return chain
+    return tests.fixture_network()
 
     # TODO test: Restore functionalty for settings the tests to run against ITN
     # or devnets for v0.21+
@@ -103,25 +102,20 @@ def network() -> Network:
     return chain
 
 
-TX_CONFIG_TEST: TxConfig = TxConfig(
-    broadcast_mode=TxBroadcastMode.SYNC,
-    gas_multiplier=1.25,
-    gas_price=0.25,
-)
-
-
 @pytest.fixture
 def sdk_val(network: Network) -> Sdk:
-    tx_config = TX_CONFIG_TEST
-    return (
-        Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
-        .with_config(tx_config)
-        .with_network(network)
-    )
+    return tests.fixture_sdk_val()
+    # tx_config = tests.TX_CONFIG_TEST
+    # return (
+    #     Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
+    #     .with_config(tx_config)
+    #     .with_network(network)
+    # )
 
 
 @pytest.fixture
 def sdk_agent(network: Network) -> Sdk:
-    tx_config = TX_CONFIG_TEST
-    agent = Sdk.authorize().with_config(tx_config).with_network(network)
-    return agent
+    return tests.fixture_sdk_other()
+    # tx_config = tests.TX_CONFIG_TEST
+    # agent = Sdk.authorize().with_config(tx_config).with_network(network)
+    # return agent

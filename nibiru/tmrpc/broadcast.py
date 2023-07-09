@@ -1,4 +1,5 @@
 import abc
+import base64
 import dataclasses
 import json
 from typing import Any, Callable, Dict, Optional, Tuple, Union
@@ -51,12 +52,23 @@ class BroadcastTxSync(jsonrpc.JsonRPCRequest):
             )
 
     def create(
-        tx_raw_bytes: bytes,
+        tx_raw_bytes: Union[bytes, str],
         id=None,
     ) -> jsonrpc.JsonRPCRequest:
+        tx_raw: str
+        if isinstance(tx_raw_bytes, bytes):
+            tx_raw = base64.b64encode(tx_raw_bytes).decode()
+        elif isinstance(tx_raw_bytes, str):
+            tx_raw = base64.b64decode(tx_raw_bytes).decode()
+        else:
+            raise TypeError(
+                "expected 'tx_raw_bytes' of type Union[str, bytes]"
+                + f", got type {type(tx_raw_bytes)}"
+            )
+
         return jsonrpc.JsonRPCRequest(
             method="broadcast_tx_sync",
-            params=dict(tx=tx_raw_bytes),
+            params=dict(tx=tx_raw),
             id=id,
         )
 

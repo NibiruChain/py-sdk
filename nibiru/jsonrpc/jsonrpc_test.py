@@ -114,7 +114,7 @@ def test_rpc_block_query():
     Ref: https://docs.tendermint.com/v0.37/rpc/#/jsonrpc-http:~:text=block%3Fheight%3D5-,JSONRPC,-/HTTP
     """
 
-    jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_json_rpc_request(
+    jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_jsonrpc_request(
         data=dict(method="block", params=["5"], id=1),
     )
     assert isinstance(jsonrpc_resp, jsonrpc.JsonRPCResponse)

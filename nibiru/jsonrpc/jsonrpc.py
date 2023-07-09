@@ -213,14 +213,17 @@ class JsonRPCResponse:
             ]
         )
 
+    def ok(self) -> bool:
+        return all([self.error is None, self.result is not None])
 
-def do_json_rpc_request(
+
+def do_jsonrpc_request(
     data: Union[JsonRPCRequest, RawJsonRPCRequest],
     endpoint: str = "http://localhost:26657",
     headers: Dict[str, str] = {"Content-Type": "application/json"},
 ) -> JsonRPCResponse:
     return JsonRPCResponse.from_raw_dict(
-        raw=do_json_rpc_request_raw(
+        raw=do_jsonrpc_request_raw(
             data=data,
             endpoint=endpoint,
             headers=headers,
@@ -228,7 +231,7 @@ def do_json_rpc_request(
     )
 
 
-def do_json_rpc_request_raw(
+def do_jsonrpc_request_raw(
     data: Union[JsonRPCRequest, RawJsonRPCRequest],
     endpoint: str = "http://localhost:26657",
     headers: Dict[str, str] = {"Content-Type": "application/json"},

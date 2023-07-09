@@ -3,7 +3,10 @@ import json
 from typing import List, Optional
 
 import tests
-from nibiru.tm_rpc import broadcast
+from nibiru import Transaction, pytypes
+from nibiru.jsonrpc import jsonrpc
+from nibiru.msg import bank
+from nibiru.tmrpc import broadcast
 
 
 # This class CANNOT include "Test" in its name because pytest will think it's
@@ -76,3 +79,36 @@ def test_init_BroadcastTxSync():
             if tc.err_str:
                 tests.raises(ok_errs=[tc.err_str], err=err)
             assert not tc.happy, "expected test case to pass"
+
+
+def test_do_BroadcastTxSync():
+    sdk_val = tests.fixture_sdk_val()
+    sdk_other = tests.fixture_sdk_other()
+    assert sdk_val.tx.ensure_address_info()
+    assert sdk_val.tx.ensure_tx_config()
+    tx: Transaction
+    tx, _ = sdk_val.tx.build_tx(
+        msgs=[
+            bank.MsgsBank.send(
+                sdk_val.address,
+                sdk_other.address,
+                [pytypes.Coin(7, "unibi"), pytypes.Coin(70, "unusd")],
+            ),
+            bank.MsgsBank.send(
+                sdk_val.address,
+                sdk_other.address,
+                [pytypes.Coin(15, "unibi"), pytypes.Coin(23, "unusd")],
+            ),
+        ]
+    )
+    tx_raw_bytes: bytes = tx.raw_bytes
+
+    jsonrpc_req: jsonrpc.JsonRPCRequest = broadcast.BroadcastTxSync.create(
+        tx_raw_bytes=tx_raw_bytes,
+        id=420,
+    )
+
+    jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_jsonrpc_request(
+        data=jsonrpc_req,
+    )
+    assert jsonrpc_resp.ok()

@@ -1,18 +1,20 @@
 """
 Classes:
+    ExecuteTxResp: TODO docs
     TxClient: A client for building, simulating, and broadcasting transactions.
     Transaction: Transactions trigger state changes based on messages. Each
         message must be cryptographically signed before being broadcasted to
         the network.
 """
-import json
+import dataclasses
 import logging
 import pprint
 from numbers import Number
-from typing import Any, Iterable, List, Optional, Tuple, Union
+from typing import Iterable, List, Optional, Tuple, Union
 
 from google.protobuf import any_pb2, message
-from google.protobuf.json_format import MessageToDict
+
+# from google.protobuf.json_format import MessageToDict
 from nibiru_proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru_proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru_proto.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -20,11 +22,18 @@ from nibiru_proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
 
-from nibiru import exceptions
+from nibiru import exceptions, jsonrpc
 from nibiru import pytypes as pt
-from nibiru import wallet
+from nibiru import tmrpc, wallet
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.grpc_client import GrpcClient
+
+
+@dataclasses.dataclass
+class ExecuteTxResp:
+    code: Optional[int]
+    tx_hash: Optional[str]
+    log: str
 
 
 class TxClient:
@@ -64,7 +73,7 @@ class TxClient:
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
         sequence: Optional[int] = None,
         tx_config: Optional[pt.TxConfig] = None,
-    ) -> pt.RawSyncTxResp:
+    ) -> ExecuteTxResp:
         """
         Broadcasts messages to a node in a single transaction. This function
         first simulates the corresponding transaction to estimate the amount of
@@ -133,23 +142,37 @@ class TxClient:
             raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
         try:
-            tx_resp: abci_type.TxResponse = self.execute_tx(
-                tx, gas_estimate, tx_config=tx_config
+            jsonrcp_resp: jsonrpc.jsonrpc.JsonRPCResponse = self.execute_tx(
+                tx=tx,
+                gas_estimate=gas_estimate,
+                tx_config=tx_config,
+                use_tmrpc=True,
             )
-            tx_resp: dict[str, Any] = MessageToDict(tx_resp)
-            tx_hash: Union[str, None] = tx_resp.get("txhash")
-            assert tx_hash, f"null txhash on tx_resp: {tx_resp}"
-            tx_output: tx_service.GetTxResponse = self.client.tx_by_hash(
-                tx_hash=tx_hash
+            execute_resp = ExecuteTxResp(
+                code=jsonrcp_resp.result.get("code"),
+                tx_hash=jsonrcp_resp.result.get("hash"),
+                log=jsonrcp_resp.result.get("log"),
             )
-
-            if tx_output.get("tx_response").get("code") != 0:
+            if execute_resp.code != 0:
                 address.decrease_sequence()
-                raise TxError(tx_output.raw_log)
-            breakpoint()
-
-            tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
-            return pt.RawSyncTxResp(tx_output)
+                raise TxError(execute_resp.log)
+            return execute_resp
+            # ------------------------------------------------
+            # gRPC version: TODO - add back as feature.
+            # ------------------------------------------------
+            # tx_resp: dict[str, Any] = MessageToDict(tx_resp)
+            # tx_hash: Union[str, None] = tx_resp.get("txhash")
+            # assert tx_hash, f"null txhash on tx_resp: {tx_resp}"
+            # tx_output: tx_service.GetTxResponse = self.client.tx_by_hash(
+            #     tx_hash=tx_hash
+            # )
+            #
+            # if tx_output.get("tx_response").get("code") != 0:
+            #     address.decrease_sequence()
+            #     raise TxError(tx_output.raw_log)
+            #
+            # tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
+            # return pt.RawSyncTxResp(tx_output)
         except exceptions.ErrorQueryTx as err:
             logging.info("ErrorQueryTx")
             logging.error(err)
@@ -163,8 +186,9 @@ class TxClient:
         self,
         tx: "Transaction",
         gas_estimate: float,
+        use_tmrpc: bool = True,
         tx_config: pt.TxConfig = None,
-    ) -> abci_type.TxResponse:
+    ) -> Union[jsonrpc.jsonrpc.JsonRPCResponse, abci_type.TxResponse]:
         conf: pt.TxConfig = self.ensure_tx_config(new_tx_config=tx_config)
 
         def compute_gas_wanted() -> float:
@@ -195,11 +219,30 @@ class TxClient:
             .with_memo("")
             .with_timeout_height(self.client.timeout_height)
         )
-        tx_raw_bytes = tx.get_signed_tx_data()
+        tx_raw_bytes: bytes = tx.get_signed_tx_data()
 
-        return self._broadcast_tx(tx_raw_bytes, conf.broadcast_mode)
+        if use_tmrpc:
+            return self._broadcast_tx_jsonrpc(
+                tx_raw_bytes=tx_raw_bytes,
+            )
+        else:
+            return self._broadcast_tx_grpc(
+                tx_raw_bytes=tx_raw_bytes, tx_type=conf.broadcast_mode
+            )
 
-    def _broadcast_tx(
+    def _broadcast_tx_jsonrpc(
+        self,
+        tx_raw_bytes: bytes,
+        tx_type: pt.TxBroadcastMode = pt.TxBroadcastMode.SYNC,
+    ) -> jsonrpc.jsonrpc.JsonRPCResponse:
+
+        jsonrpc_req: jsonrpc.JsonRPCRequest = tmrpc.BroadcastTxSync.create(
+            tx_raw_bytes=tx_raw_bytes,
+            id=420,
+        )
+        return jsonrpc.jsonrpc.do_jsonrpc_request(data=jsonrpc_req)
+
+    def _broadcast_tx_grpc(
         self,
         tx_raw_bytes: bytes,
         tx_type: pt.TxBroadcastMode = pt.TxBroadcastMode.SYNC,
@@ -399,6 +442,10 @@ class Transaction(pt.Jsonable):
             priv_key=self.priv_key,
         )
         return pprint.pformat(self_as_dict, indent=2)
+
+    @property
+    def raw_bytes(self) -> bytes:
+        return self.get_signed_tx_data()
 
     @staticmethod
     def __convert_msgs(msgs: List[message.Message]) -> List[any_pb2.Any]:

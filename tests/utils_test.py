@@ -93,7 +93,7 @@ def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
             [Coin(10000, "unibi"), Coin(100, "unusd")],
         )
     )
-    tests.raw_sync_tx_must_succeed(out)
+    tests.broadcast_tx_must_succeed(out)
     # tx_output = sdk_val.query.tx_by_hash(tx_hash=out["txhash"])
 
     # height = int(tx_output["height"])

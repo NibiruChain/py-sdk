@@ -1,13 +1,16 @@
 """Tests package for the Nibiru Python SDK"""
 import logging
+import os
 import pprint
 from typing import Iterable, List, Union
 
 import shutup
 
-from nibiru import utils
+import nibiru
+from nibiru import pytypes, tx, utils
 
 shutup.please()
+
 
 LOGGER: logging.Logger = logging.getLogger("test-logger")
 
@@ -92,6 +95,20 @@ def transaction_must_succeed(tx_output: dict):
     assert isinstance(tx_output["rawLog"], list)
 
 
+def broadcast_tx_must_succeed(res: tx.ExecuteTxResp):
+    """
+    Ensure the output of a transaction have the fields required
+    and that the raw logs are properly parsed
+
+    Args:
+        tx_output (dict): The output of a transaction in a dictionary
+    """
+
+    assert isinstance(res, tx.ExecuteTxResp)
+    assert res.code == 0
+    assert res.tx_hash
+
+
 def raw_sync_tx_must_succeed(tx_output: dict):
     """
     Ensure the output of a transaction have the fields required
@@ -105,3 +122,30 @@ def raw_sync_tx_must_succeed(tx_output: dict):
     expected_keys = ["txhash", "rawLog"]
     dict_keys_must_match(tx_output, expected_keys)
     assert isinstance(tx_output["rawLog"], list)
+
+
+TX_CONFIG_TEST: pytypes.TxConfig = pytypes.TxConfig(
+    broadcast_mode=pytypes.TxBroadcastMode.SYNC,
+    gas_multiplier=1.25,
+    gas_price=0.25,
+)
+
+
+def fixture_network() -> nibiru.Network:
+    return nibiru.Network.customnet()
+
+
+def fixture_sdk_val() -> nibiru.Sdk:
+    return (
+        nibiru.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
+        .with_config(TX_CONFIG_TEST)
+        .with_network(fixture_network())
+    )
+
+
+def fixture_sdk_other() -> nibiru.Sdk:
+    return (
+        nibiru.Sdk.authorize()
+        .with_config(TX_CONFIG_TEST)
+        .with_network(fixture_network())
+    )

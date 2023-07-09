@@ -5,7 +5,7 @@ from nibiru import Msg, Network, Sdk
 from nibiru.event_specs import EventCaptured, EventType
 from nibiru.exceptions import QueryError, SimulationError
 from nibiru.websocket import NibiruWebsocket
-from tests import dict_keys_must_match, raw_sync_tx_must_succeed
+from tests import broadcast_tx_must_succeed, dict_keys_must_match
 
 
 def get_validator_operator_address(sdk_val: Sdk):
@@ -47,7 +47,7 @@ def test_query_vpool(sdk_val: Sdk):
 
 
 def test_query_delegation(sdk_val: Sdk):
-    raw_sync_tx_must_succeed(delegate(sdk_val))
+    broadcast_tx_must_succeed(delegate(sdk_val))
     query_resp = sdk_val.query.staking.delegation(
         sdk_val.address, get_validator_operator_address(sdk_val)
     )
@@ -61,7 +61,7 @@ def test_query_delegation(sdk_val: Sdk):
 
 
 def test_query_delegations(sdk_val: Sdk):
-    raw_sync_tx_must_succeed(delegate(sdk_val))
+    broadcast_tx_must_succeed(delegate(sdk_val))
     query_resp = sdk_val.query.staking.delegations(sdk_val.address)
     dict_keys_must_match(
         query_resp["delegation_responses"][0],
@@ -73,7 +73,7 @@ def test_query_delegations(sdk_val: Sdk):
 
 
 def test_query_delegations_to(sdk_val: Sdk):
-    raw_sync_tx_must_succeed(delegate(sdk_val))
+    broadcast_tx_must_succeed(delegate(sdk_val))
     query_resp = sdk_val.query.staking.delegations_to(
         get_validator_operator_address(sdk_val)
     )
@@ -135,7 +135,7 @@ def test_redelegations(sdk_val: Sdk):
 
 
 def test_unbonding_delegation(sdk_val: Sdk):
-    raw_sync_tx_must_succeed(delegate(sdk_val))
+    broadcast_tx_must_succeed(delegate(sdk_val))
     try:
         undelegate(sdk_val)
         query_resp = sdk_val.query.staking.unbonding_delegation(
@@ -155,7 +155,7 @@ def test_unbonding_delegation(sdk_val: Sdk):
 
 
 def test_unbonding_delegations(sdk_val: Sdk):
-    raw_sync_tx_must_succeed(delegate(sdk_val))
+    broadcast_tx_must_succeed(delegate(sdk_val))
     try:
         undelegate(sdk_val)
     except SimulationError as ex:
@@ -173,7 +173,7 @@ def test_unbonding_delegations(sdk_val: Sdk):
 
 
 def test_unbonding_delegations_from(sdk_val: Sdk):
-    raw_sync_tx_must_succeed(delegate(sdk_val))
+    broadcast_tx_must_succeed(delegate(sdk_val))
     try:
         undelegate(sdk_val)
     except SimulationError as ex:

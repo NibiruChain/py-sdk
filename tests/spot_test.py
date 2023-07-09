@@ -40,7 +40,7 @@ def test_spot_create_pool(sdk_val: nibiru.Sdk):
             )
         )
 
-        tests.raw_sync_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(tx_output)
     except SimulationError as simulation_error:
         tests.raises(
             [SpotErrors.same_denom, SpotErrors.insufficient_funds], simulation_error
@@ -143,7 +143,7 @@ def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
                 ),
             ]
         )
-        tests.raw_sync_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(tx_output)
     except BaseException as err:
         tests.raises(SpotErrors.no_pool_shares, err)
 
@@ -176,7 +176,7 @@ def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
                 ),
             ]
         )
-        tests.raw_sync_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(tx_output)
     except BaseException as err:
         tests.raises(SpotErrors.swap_low_unusd_in_pool, err)
 
@@ -199,7 +199,7 @@ def test_spot_exit_pool(sdk_val: nibiru.Sdk):
                 for pool_token in pool_tokens
             ]
         )
-        tests.raw_sync_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(tx_output)
     else:
         tests.LOGGER.info(
             "skipped test for 'nibid tx spot exit-pool' because\n"

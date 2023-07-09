@@ -29,7 +29,7 @@ def to_iso(dt: datetime) -> str:
     )
 
 
-def dict_to_jsonable(d: Mapping):
+def dict_to_jsonable(d: Mapping) -> "Jsonable":
     """Recursively calls to_jsonable on each element of the given map."""
     return {key: to_jsonable(val) for key, val in d.items()}
 

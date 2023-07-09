@@ -1,6 +1,6 @@
 # chain_info_test.py
 import dataclasses
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import pytest
 import requests
@@ -37,7 +37,7 @@ def test_wait_next_block(sdk_val: nibiru.Sdk):
 
 
 def test_version_works(sdk_val: nibiru.Sdk):
-    tests = [
+    test_cases: List[Dict[str, Union[bool, List[str]]]] = [
         {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},
         {"should_fail": False, "versions": ["0.3.2", "0.3.4"]},
         {"should_fail": True, "versions": ["0.3.2", "0.4.1"]},
@@ -48,12 +48,14 @@ def test_version_works(sdk_val: nibiru.Sdk):
         },
     ]
 
-    for test in tests:
-        if test["should_fail"]:
+    for tc in test_cases:
+        if tc["should_fail"]:
             with pytest.raises(AssertionError, match="Version error"):
-                sdk_val.query.assert_compatible_versions(*test["versions"])
+                assert isinstance(tc["versions"], list)
+                sdk_val.query.assert_compatible_versions(*tc["versions"])
         else:
-            sdk_val.query.assert_compatible_versions(*test["versions"])
+            assert isinstance(tc["versions"], list)
+            sdk_val.query.assert_compatible_versions(*tc["versions"])
 
 
 def test_block_getters(sdk_agent: nibiru.Sdk):

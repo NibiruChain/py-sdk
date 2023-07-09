@@ -10,6 +10,7 @@ These objects can be set using the Network and TxConfig classes from the
 nibiru/pytypes package.
 """
 import logging
+from typing import Optional
 
 from nibiru import pytypes
 from nibiru.grpc_client import GrpcClient
@@ -67,7 +68,7 @@ class Sdk:
         self.tx_config = pytypes.TxConfig()
 
     @classmethod
-    def authorize(cls, key: str = None) -> "Sdk":
+    def authorize(cls, key: Optional[str] = None) -> "Sdk":
         """
         Authorize allows the user to generate or recover a wallet and register
         it as an Sdk object.

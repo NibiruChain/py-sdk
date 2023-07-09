@@ -1,6 +1,6 @@
 from typing import List
 
-from google.protobuf.json_format import MessageToDict
+from google.protobuf import json_format, message
 from grpc import Channel
 from nibiru_proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from nibiru_proto.nibiru.spot.v1 import query_pb2 as spot_type
@@ -44,13 +44,17 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The parameters fo the spot module.
         """
-        proto_output = self.query(
+        from typing import Union
+
+        proto_output: Union[dict, message.Message] = self.query(
             api_callable=self.api.Params,
             req=spot_type.QueryParamsRequest(),
             should_deserialize=False,
         )
+        if not isinstance(proto_output, message.Message):
+            raise TypeError()
 
-        return MessageToDict(proto_output)["params"]
+        return json_format.MessageToDict(proto_output)["params"]
 
     def pools(self, **kwargs):
         """
@@ -101,7 +105,7 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The output of the query
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.Pools,
             req=spot_type.QueryPoolsRequest(
                 pagination=PageRequest(
@@ -115,7 +119,7 @@ class SpotQueryClient(QueryClient):
             should_deserialize=False,
         )
 
-        output: dict = MessageToDict(proto_output).get("pools")
+        output: dict = json_format.MessageToDict(proto_output).get("pools")
         if output is None:
             output = {}
 
@@ -147,13 +151,13 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The total liquidity of the protocol
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.TotalLiquidity,
             req=spot_type.QueryTotalLiquidityRequest(),
             should_deserialize=False,
         )
 
-        return MessageToDict(proto_output)
+        return json_format.MessageToDict(proto_output)
 
     def total_pool_liquidity(self, pool_id: int) -> dict:
         """
@@ -180,13 +184,13 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The total liquidity for the pool
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.TotalPoolLiquidity,
             req=spot_type.QueryTotalPoolLiquidityRequest(pool_id=pool_id),
             should_deserialize=False,
         )
 
-        return MessageToDict(proto_output)
+        return json_format.MessageToDict(proto_output)
 
     def total_shares(self, pool_id: int) -> dict:
         """
@@ -207,13 +211,13 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The amount of shares for the pool
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.TotalShares,
             req=spot_type.QueryTotalSharesRequest(pool_id=pool_id),
             should_deserialize=False,
         )
 
-        return MessageToDict(proto_output)
+        return json_format.MessageToDict(proto_output)
 
     def spot_price(
         self, pool_id: int, token_in_denom: str, token_out_denom: str
@@ -229,7 +233,7 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: _description_
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.SpotPrice,
             req=spot_type.QuerySpotPriceRequest(
                 pool_id=pool_id,
@@ -239,7 +243,7 @@ class SpotQueryClient(QueryClient):
             should_deserialize=False,
         )
 
-        output = MessageToDict(proto_output)
+        output = json_format.MessageToDict(proto_output)
         return format_fields_nested(object=output, fn=float, fields=["spotPrice"])
 
     def estimate_swap_exact_amount_in(
@@ -265,7 +269,7 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The output of the query
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.EstimateSwapExactAmountIn,
             req=spot_type.QuerySwapExactAmountInRequest(
                 pool_id=pool_id,
@@ -275,7 +279,7 @@ class SpotQueryClient(QueryClient):
             should_deserialize=False,
         )
 
-        return MessageToDict(proto_output)
+        return json_format.MessageToDict(proto_output)
 
     def estimate_join_exact_amount_in(
         self, pool_id: int, tokens_ins: List[Coin]
@@ -302,7 +306,7 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The output of the query
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.EstimateJoinExactAmountIn,
             req=spot_type.QueryJoinExactAmountInRequest(
                 pool_id=pool_id,
@@ -313,7 +317,7 @@ class SpotQueryClient(QueryClient):
             should_deserialize=False,
         )
 
-        output = MessageToDict(proto_output)
+        output = json_format.MessageToDict(proto_output)
         return format_fields_nested(
             object=output,
             fn=lambda x: from_sdk_dec_n(x, 18),
@@ -346,11 +350,11 @@ class SpotQueryClient(QueryClient):
         Returns:
             dict: The output of the query
         """
-        proto_output = self.query(
+        proto_output: message.Message = self.query(
             api_callable=self.api.EstimateExitExactAmountIn,
             req=spot_type.QueryExitExactAmountInRequest(
                 pool_id=pool_id, pool_shares_in=str(num_shares * 1e6)
             ),
             should_deserialize=False,
         )
-        return MessageToDict(proto_output)
+        return json_format.MessageToDict(proto_output)

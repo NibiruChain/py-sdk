@@ -1,4 +1,6 @@
 # These import statements export the types to 'nibiru.pytypes'.
+import dataclasses
+from typing import Optional
 
 from nibiru.pytypes.common import (  # noqa # TODO move constants to a constants.py file.; noqa
     DEFAULT_GAS_PRICE,
@@ -15,3 +17,10 @@ from nibiru.pytypes.event import Event, RawEvent, TxLogEvents  # noqa
 from nibiru.pytypes.jsonable import Jsonable  # noqa
 from nibiru.pytypes.network import Network, NetworkType  # noqa
 from nibiru.pytypes.tx_resp import RawSyncTxResp, RawTxResp, TxResp  # noqa
+
+
+@dataclasses.dataclass
+class ExecuteTxResp:
+    code: Optional[int]
+    tx_hash: Optional[str]
+    log: str

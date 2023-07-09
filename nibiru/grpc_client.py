@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Generator, List, Optional, Tuple, Union
+from typing import Dict, Generator, List, Literal, Optional, Tuple, Union
 
 import grpc
 from nibiru_proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
@@ -345,7 +345,9 @@ class GrpcClient:
             )
         )
 
-    def get_bank_balances(self, address: str) -> dict:
+    def get_bank_balances(
+        self, address: str
+    ) -> Dict[str, List[Dict[Literal["denom", "amount"], Union[str, int]]]]:
         """
         Returns the balances of all coins for the given 'address'
 

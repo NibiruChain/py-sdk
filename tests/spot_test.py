@@ -1,6 +1,6 @@
 # perp_test.py
 
-from typing import Dict, List
+from typing import Dict, List, Literal, Union, cast
 
 import pytest
 
@@ -183,24 +183,34 @@ def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
 
 @pytest.mark.order(after="test_spot_swap")
 def test_spot_exit_pool(sdk_val: nibiru.Sdk):
-    balance = sdk_val.query.get_bank_balances(sdk_val.address)["balances"]
+    all_balance_maps = sdk_val.query.get_bank_balances(sdk_val.address)["balances"]
 
-    pool_tokens: List[str] = [
-        pool_token for pool_token in balance if "nibiru/pool" in pool_token
+    balance_maps: List[Dict[Literal["denom", "amount"], Union[str, int]]] = [
+        balance_map
+        for balance_map in all_balance_maps
+        if "nibiru/pool" in cast(str, balance_map["denom"])
     ]
-    if pool_tokens:
-        tx_output = sdk_val.tx.execute_msgs(
-            [
-                nibiru.Msg.spot.exit_pool(
-                    sender=sdk_val.address,
-                    pool_id=int(pool_token["denom"].split("/")[-1]),
-                    pool_shares=Coin(pool_token["amount"], pool_token["denom"]),
-                )
-                for pool_token in pool_tokens
-            ]
+    msgs = []
+    for pool_token in balance_maps:
+        denom = pool_token.get("denom")
+        assert isinstance(denom, str)
+
+        pool_id = denom.split("/")[-1]
+        assert isinstance(pool_id, str)
+
+        amount = pool_token.get("amount")
+        assert isinstance(amount, (str, int))
+        msgs.append(
+            nibiru.Msg.spot.exit_pool(
+                sender=sdk_val.address,
+                pool_id=int(pool_id),
+                pool_shares=Coin(int(amount), denom),
+            )
         )
-        tests.broadcast_tx_must_succeed(tx_output)
-    else:
+    if balance_maps:
+        broadcast_resp = sdk_val.tx.execute_msgs(msgs=msgs)
+        tests.broadcast_tx_must_succeed(res=broadcast_resp)
+    if not balance_maps:
         tests.LOGGER.info(
             "skipped test for 'nibid tx spot exit-pool' because\n"
             + f"{sdk_val.address} did not have LP shares"

@@ -1,13 +1,15 @@
 """Tests package for the Nibiru Python SDK"""
+import dataclasses
 import logging
 import os
 import pprint
-from typing import Iterable, List, Union
+from typing import Iterable, List, Optional, Union
 
-import shutup
+import shutup  # type: ignore
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 
 import nibiru
-from nibiru import pytypes, tx, utils
+from nibiru import pytypes, utils
 
 shutup.please()
 
@@ -29,7 +31,8 @@ def raises(ok_errs: Union[str, Iterable[str]], err: BaseException):
         ok_errs = [ok_errs]
     else:
         ok_errs = list(ok_errs)
-    ok_errs: List[str]
+    assert isinstance(ok_errs, list)
+    # ok_errs: List[str]
 
     err_string = str(err)
     assert any([e in err_string for e in ok_errs]), err_string
@@ -95,7 +98,7 @@ def transaction_must_succeed(tx_output: dict):
     assert isinstance(tx_output["rawLog"], list)
 
 
-def broadcast_tx_must_succeed(res: tx.ExecuteTxResp):
+def broadcast_tx_must_succeed(res: pytypes.ExecuteTxResp):
     """
     Ensure the output of a transaction have the fields required
     and that the raw logs are properly parsed
@@ -104,7 +107,7 @@ def broadcast_tx_must_succeed(res: tx.ExecuteTxResp):
         tx_output (dict): The output of a transaction in a dictionary
     """
 
-    assert isinstance(res, tx.ExecuteTxResp)
+    assert isinstance(res, pytypes.ExecuteTxResp)
     assert res.code == 0
     assert res.tx_hash
 
@@ -149,3 +152,15 @@ def fixture_sdk_other() -> nibiru.Sdk:
         .with_config(TX_CONFIG_TEST)
         .with_network(fixture_network())
     )
+
+
+@dataclasses.dataclass
+class FullTxStory:
+    broadcast_resp: pytypes.ExecuteTxResp
+    query_tx_resp: Optional[tx_service.GetTxResponse] = None
+
+    def save(self):
+        FULL_TX_STORIES.append(self)
+
+
+FULL_TX_STORIES: List[FullTxStory] = []

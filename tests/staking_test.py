@@ -260,7 +260,7 @@ def test_staking_events(sdk_val: Sdk, network: Network):
     success: bool = False
     nibiru_websocket.queue.put(None)
     while True:
-        if nibiru_websocket.captured_events_type.get("delegate"):
+        if nibiru_websocket.captured_event_types_map.get("delegate"):
             success = True  # Event Captured! Success
         event: EventCaptured = nibiru_websocket.queue.get()
         time.sleep(1)

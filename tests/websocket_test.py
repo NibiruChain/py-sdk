@@ -19,9 +19,6 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     pair = "ubtc:unusd"
 
     expected_events_tx = [
-        # Vpool
-        EventType.SwapOnVpoolEvent,
-        EventType.MarkPriceChanged,
         # Perp
         EventType.PositionChangedEvent,
         # Bank
@@ -124,7 +121,7 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
         .with_chain_id(network.chain_id)
         .with_signer(sdk_val.tx.priv_key)
     )
-    sdk_val.tx.execute_tx_grpc(tx, 300000)
+    sdk_val.tx.execute_tx(tx, gas_estimate=300000)
 
     time.sleep(3)
 
@@ -139,4 +136,5 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
             fail_event_found = True
             break
 
+    breakpoint()
     assert fail_event_found, "Transaction failure not captured"

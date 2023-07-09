@@ -31,7 +31,8 @@ def test_send_multiple_msgs(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     #     "nibid tx bank send - multiple msgs:\n" +
     #     tests.format_response(tx_output)
     # )
-    tests.broadcast_tx_must_succeed(tx_output)
+    tests.broadcast_tx_must_succeed(res=tx_output)
+    tests.FullTxStory(broadcast_resp=tx_output).save()
 
 
 def test_send_single_msg(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
@@ -54,4 +55,5 @@ def test_send_single_msg(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
     #     "nibid tx bank send - single msgs:\n" +
     #     tests.format_response(tx_output)
     # )
-    tests.broadcast_tx_must_succeed(tx_output)
+    tests.broadcast_tx_must_succeed(res=tx_output)
+    tests.FullTxStory(broadcast_resp=tx_output).save()

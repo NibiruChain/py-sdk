@@ -23,7 +23,7 @@ class ERRORS:
 def test_open_position(sdk_val: nibiru.Sdk):
     tests.LOGGER.info("nibid tx perp open-position")
     try:
-        tx_output: pt.RawTxResp = sdk_val.tx.execute_msgs(
+        tx_output: pt.ExecuteTxResp = sdk_val.tx.execute_msgs(
             Msg.perp.open_position(
                 sender=sdk_val.address,
                 pair=PAIR,
@@ -33,7 +33,7 @@ def test_open_position(sdk_val: nibiru.Sdk):
                 base_asset_amount_limit=0,
             )
         )
-        tests.broadcast_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(res=tx_output)
 
         # TODO deprecated
         # tests.LOGGER.info(
@@ -141,7 +141,7 @@ def test_perp_remove_margin(sdk_val: nibiru.Sdk):
         # tests.LOGGER.info(
         #     f"nibid tx perp remove-margin: \n{tests.format_response(tx_output)}"
         # )
-        tests.broadcast_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(res=tx_output)
         # TODO test: verify the margin changes using the events
     except BaseException as err:
         ok_errors: List[str] = [ERRORS.collections_not_found, ERRORS.bad_debt]
@@ -163,7 +163,7 @@ def test_perp_close_posititon(sdk_val: nibiru.Sdk):
         # tests.LOGGER.info(
         #     f"nibid tx perp close-position: \n{tests.format_response(tx_output)}"
         # )
-        tests.broadcast_tx_must_succeed(tx_output)
+        tests.broadcast_tx_must_succeed(res=tx_output)
 
         out = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
         # Querying the position should raise an exception if it closed

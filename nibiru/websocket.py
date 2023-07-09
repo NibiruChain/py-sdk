@@ -1,11 +1,13 @@
 import base64
+import dataclasses
 import json
 import logging
 import threading
 import time
+from dataclasses import field
 from json import JSONDecodeError
 from multiprocessing import Queue
-from typing import List
+from typing import Any, Callable, Dict, List, Optional
 
 import google.protobuf.json_format
 import google.protobuf.message
@@ -19,39 +21,33 @@ from nibiru.utils import clean_nested_dict
 ERROR_TIMEOUT_SLEEP = 3
 
 
+@dataclasses.dataclass
 class NibiruWebsocket:
-    queue: Queue = None
-    tx_fail_queue: Queue = None
-    captured_events_type: List[List[str]]
+    network: Network
+    captured_event_types: List[EventType] = field(default_factory=list)
+    queue: Queue = Queue()
+    tx_fail_queue: Queue = Queue()
+    captured_event_types_map: Dict[str, EventType] = field(default_factory=dict)
+    logger: logging.Logger = logging.getLogger("ws-logger")
 
-    def __init__(
-        self,
-        network: Network,
-        captured_events_type: List[EventType] = [],
-        tx_fail_queue: Queue = None,
-    ):
+    def __post_init__(self):
         """
         The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru
         chain.
         """
 
-        self.websocket_url = network.websocket_endpoint
+        self.websocket_url = self.network.websocket_endpoint
         if self.websocket_url is None:
             raise ValueError(
-                "No websocket endpoint provided. "
-                "Construct the network object setting up the "
-                "`websocket_endpoint` endpoint"
+                f"No websocket endpoint provided for network {self.network}."
+                + "\nConstruct the network object with a valid `websocket_endpoint`"
             )
 
         # We use a dictionary for faster search
-        self.captured_events_type: dict[str, EventType] = {
+        self.captured_event_types_map: dict[str, EventType] = {
             captured_event.get_full_path(): captured_event
-            for captured_event in captured_events_type
+            for captured_event in self.captured_event_types
         }
-        self.queue = Queue()
-        if tx_fail_queue:
-            self.tx_fail_queue = tx_fail_queue
-        self.logger = logging.getLogger("ws-logger")
 
     def start(self):
         """
@@ -118,9 +114,9 @@ class NibiruWebsocket:
                 block_height=block_height, tx_hash=None, event=event, base64_decode=True
             )
 
-    def _handle_txs(self, log: dict):
+    def _handle_txs(self, log: Dict[str, Any]):
         """
-        Read the log for the transactions in a block and put relevant events in the queue.
+        Read the log for each tx in a block and put relevant events in the queue.
 
         Args:
             log (dict): The logs
@@ -148,7 +144,11 @@ class NibiruWebsocket:
             self._handle_event(block_height, tx_hash, event)
 
     def _handle_event(
-        self, block_height: int, tx_hash: str, event: dict, base64_decode: bool = False
+        self,
+        block_height: int,
+        tx_hash: Optional[str],
+        event: dict,
+        base64_decode: bool = False,
     ):
         """
         Read an event and put it in the queue if it's part of the captured event type.
@@ -162,29 +162,31 @@ class NibiruWebsocket:
         """
         # This below is faster since self.captured_events_type.keys() are hashed
 
+        def decode_base64(value: Any) -> str:
+            return base64.b64decode(value).decode('utf-8')
+
+        def decode_mock(value: str) -> str:
+            return value
+
+        decode_fn: Callable[[Any], str]
         if base64_decode:
-
-            def decode(value):
-                return base64.b64decode(value).decode('utf-8')
-
+            decode_fn = decode_base64
         else:
+            decode_fn = decode_mock
 
-            def decode(value):
-                return value
-
-        if event["type"] in self.captured_events_type:
+        if event["type"] in self.captured_event_types_map:
             event_payload = {
-                decode(attribute["key"]): decode(attribute["value"]).strip('"')
+                decode_fn(attribute["key"]): decode_fn(attribute["value"]).strip('"')
                 for attribute in event["attributes"]
             }
 
             if not isinstance(
-                self.captured_events_type[event["type"]].value,
+                self.captured_event_types_map[event["type"]].value,
                 str,
             ):
                 proto_message = google.protobuf.json_format.Parse(
                     json.dumps(clean_nested_dict(event_payload)),
-                    self.captured_events_type[event["type"]].value(),
+                    self.captured_event_types_map[event["type"]].value(),
                     ignore_unknown_fields=True,
                 )
 
@@ -199,7 +201,7 @@ class NibiruWebsocket:
             self.queue.put(EventCaptured(event["type"], event_payload))
 
     def _subscribe(self):
-        tm_events = {
+        tm_events: Dict[str, str] = {
             "new_block_value": "NewBlock",
             "tx_value": "Tx",
         }

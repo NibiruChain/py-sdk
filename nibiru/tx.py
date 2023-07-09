@@ -1,12 +1,10 @@
 """
 Classes:
-    ExecuteTxResp: TODO docs
     TxClient: A client for building, simulating, and broadcasting transactions.
     Transaction: Transactions trigger state changes based on messages. Each
         message must be cryptographically signed before being broadcasted to
         the network.
 """
-import dataclasses
 import logging
 import pprint
 from numbers import Number
@@ -27,13 +25,6 @@ from nibiru import pytypes as pt
 from nibiru import tmrpc, wallet
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.grpc_client import GrpcClient
-
-
-@dataclasses.dataclass
-class ExecuteTxResp:
-    code: Optional[int]
-    tx_hash: Optional[str]
-    log: str
 
 
 class TxClient:
@@ -73,7 +64,7 @@ class TxClient:
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
         sequence: Optional[int] = None,
         tx_config: Optional[pt.TxConfig] = None,
-    ) -> ExecuteTxResp:
+    ) -> pt.ExecuteTxResp:
         """
         Broadcasts messages to a node in a single transaction. This function
         first simulates the corresponding transaction to estimate the amount of
@@ -142,13 +133,13 @@ class TxClient:
             raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
         try:
-            jsonrcp_resp: jsonrpc.jsonrpc.JsonRPCResponse = self.execute_tx(
+            jsonrcp_resp: jsonrpc.JsonRPCResponse = self.execute_tx(
                 tx=tx,
                 gas_estimate=gas_estimate,
                 tx_config=tx_config,
                 use_tmrpc=True,
             )
-            execute_resp = ExecuteTxResp(
+            execute_resp = pt.ExecuteTxResp(
                 code=jsonrcp_resp.result.get("code"),
                 tx_hash=jsonrcp_resp.result.get("hash"),
                 log=jsonrcp_resp.result.get("log"),
@@ -187,8 +178,8 @@ class TxClient:
         tx: "Transaction",
         gas_estimate: float,
         use_tmrpc: bool = True,
-        tx_config: pt.TxConfig = None,
-    ) -> Union[jsonrpc.jsonrpc.JsonRPCResponse, abci_type.TxResponse]:
+        tx_config: Optional[pt.TxConfig] = None,
+    ) -> Union[jsonrpc.JsonRPCResponse, abci_type.TxResponse]:
         conf: pt.TxConfig = self.ensure_tx_config(new_tx_config=tx_config)
 
         def compute_gas_wanted() -> float:
@@ -285,7 +276,7 @@ class TxClient:
     def build_tx(
         self,
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
-        sequence: int = None,
+        sequence: Optional[int] = None,
     ) -> Tuple["Transaction", wallet.Address]:
         if not isinstance(msgs, list):
             msgs = [msgs]
@@ -293,10 +284,13 @@ class TxClient:
         pb_msgs = [msg.to_pb() for msg in msgs]
         self.client.sync_timeout_height()
 
-        address: wallet.Address = self.address
+        address: wallet.Address
         if self.address is None:
             address = self.ensure_address_info()
             self.address = address
+        else:
+            assert isinstance(self.address, wallet.Address)
+            address = self.address
 
         if sequence is None:
             sequence = self.address.sequence

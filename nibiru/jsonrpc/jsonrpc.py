@@ -1,5 +1,7 @@
 import dataclasses
-from typing import Union, Optional, Set, Any, Dict
+from typing import Any, Dict, Optional, Set, Union
+
+import requests
 
 from nibiru import pytypes
 from nibiru.jsonrpc import rpc_error
@@ -38,8 +40,7 @@ class JsonRPCRequest:
         if not isinstance(method, str):
             raise ValueError("Method must be a string.")
         if method.startswith("rpc."):
-            raise ValueError(
-                "Method names beginning with 'rpc.' are reserved.")
+            raise ValueError("Method names beginning with 'rpc.' are reserved.")
 
     @staticmethod
     def _validate_id(id: Optional[Union[str, int]]):
@@ -47,8 +48,7 @@ class JsonRPCRequest:
         if id_ is not None and not isinstance(id_, (str, int, type(None))):
             raise ValueError("id must be a string, number, or None.")
         if isinstance(id_, int) and id_ != int(id_):
-            raise ValueError(
-                "id as number should not contain fractional parts.")
+            raise ValueError("id as number should not contain fractional parts.")
 
     def to_dict(self) -> Dict[str, Any]:
         request = {"jsonrpc": self.jsonrpc, "method": self.method}
@@ -66,8 +66,10 @@ class JsonRPCRequest:
 
         # Check for the required fields
         for field in ['jsonrpc', 'method']:
-            if field not in raw:
+            if field not in raw and field != "jsonrpc":
                 raise ValueError(f"Missing required field {field}")
+            elif field == "jsonrpc":
+                raw["jsonrpc"] = cls.jsonrpc
 
         # Create a JsonRPCRequest object from the raw dictionary
         jsonrpc = raw.get('jsonrpc')
@@ -202,9 +204,44 @@ class JsonRPCResponse:
         return cls(jsonrpc=jsonrpc, id=id, result=result, error=error)
 
     def __eq__(self, other) -> bool:
-        return all([
-            self.id == other.id,
-            self.jsonrpc == other.jsonrpc,
-            self.result == other.result,
-            self.error == other.error,
-        ])
+        return all(
+            [
+                self.id == other.id,
+                self.jsonrpc == other.jsonrpc,
+                self.result == other.result,
+                self.error == other.error,
+            ]
+        )
+
+
+def do_json_rpc_request(
+    data: Union[JsonRPCRequest, RawJsonRPCRequest],
+    endpoint: str = "http://localhost:26657",
+    headers: Dict[str, str] = {"Content-Type": "application/json"},
+) -> JsonRPCResponse:
+    return JsonRPCResponse.from_raw_dict(
+        raw=do_json_rpc_request_raw(
+            data=data,
+            endpoint=endpoint,
+            headers=headers,
+        )
+    )
+
+
+def do_json_rpc_request_raw(
+    data: Union[JsonRPCRequest, RawJsonRPCRequest],
+    endpoint: str = "http://localhost:26657",
+    headers: Dict[str, str] = {"Content-Type": "application/json"},
+) -> RawJsonRPCResponse:
+    if isinstance(data, dict):
+        data = JsonRPCRequest.from_raw_dict(data)
+    elif isinstance(data, JsonRPCRequest):
+        ...
+    # elif  TODO: feat: add a fn that checks the attrs at runtime to
+    # assemble a valid JsonRPCRequest even if the class type is not dict
+    # or JSONRPCRequest
+
+    resp: requests.Response = requests.post(
+        url=endpoint, json=data.to_dict(), headers=headers
+    )
+    return resp.json()

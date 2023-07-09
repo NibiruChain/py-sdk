@@ -1,10 +1,9 @@
 import json
+from typing import Callable, Dict, Tuple, Union
+
 import pytest
 
-from nibiru.jsonrpc import jsonrpc
-from nibiru.jsonrpc import rpc_error
-
-from typing import Tuple, Dict, Callable, Union
+from nibiru.jsonrpc import jsonrpc, rpc_error
 
 
 def mock_rpc_method_subtract(params):
@@ -32,7 +31,7 @@ def handle_request(request_json: str) -> jsonrpc.JsonRPCResponse:
         return jsonrpc.JsonRPCResponse(
             error=rpc_error.InvalidRequestError(),
             result=None,
-            id=request_dict.get("id")
+            id=request_dict.get("id"),
         )
 
     method: Union[Callable, None] = MOCK_METHODS.get(request.method)
@@ -98,3 +97,27 @@ def test_rpc_calls(request_json: str, response_json: str):
 
     # Check with __eq__ method
     assert got_resp == want_resp
+
+
+def test_rpc_block_query():
+    """
+    Runs the example query JSON-RPC query from the Tendermint documentation:
+    The following exampl
+
+    ```bash
+    curl --header "Content-Type: application/json" \
+      --request POST \
+      --data '{"method": "block" , "params": ["5"], "id": 1}' \
+      localhost:26657
+    ```
+
+    Ref: https://docs.tendermint.com/v0.37/rpc/#/jsonrpc-http:~:text=block%3Fheight%3D5-,JSONRPC,-/HTTP
+    """
+
+    jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_json_rpc_request(
+        data=dict(method="block", params=["5"], id=1),
+    )
+    assert isinstance(jsonrpc_resp, jsonrpc.JsonRPCResponse)
+    assert jsonrpc_resp.error is None
+    assert jsonrpc_resp.result
+    assert jsonrpc.JsonRPCResponse.from_raw_dict(raw=jsonrpc_resp.to_dict())

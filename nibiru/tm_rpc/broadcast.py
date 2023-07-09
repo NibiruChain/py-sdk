@@ -1,20 +1,20 @@
 import abc
-import json
 import dataclasses
+import json
+from typing import Any, Callable, Dict, Optional, Tuple, Union
+
 from nibiru.jsonrpc import jsonrpc
-from typing import Dict, Callable, Any, Optional, Tuple, Union
 
 
 class TypedJsonRpcRequest(abc.ABC, jsonrpc.JsonRPCRequest):
-
     @abc.abstractmethod
-    def create(cls, *args) -> jsonrpc.JsonRPCRequest: ...
-    # TODO docs
+    def create(cls, *args) -> jsonrpc.JsonRPCRequest:
+        """TODO docs"""
 
     @classmethod
     @abc.abstractmethod
-    def _validate_tm_rpc_request(*args): ...
-    # TODO docs
+    def _validate_tm_rpc_request(*args):
+        """TODO docs"""
 
 
 @dataclasses.dataclass
@@ -26,19 +26,22 @@ class BroadcastTxSync(jsonrpc.JsonRPCRequest):
             parsed as a jsonrpc.JsonRPCRequest.
     """
 
-    def __new__(cls, req: Union[jsonrpc.JsonRPCRequest, str, dict],
-                ) -> "BroadcastTxSync":
+    def __new__(
+        cls,
+        req: Union[jsonrpc.JsonRPCRequest, str, dict],
+    ) -> "BroadcastTxSync":
         if isinstance(req, jsonrpc.JsonRPCRequest):
             cls._validate_tm_rpc_request(json_rpc_req=req)
             return req
         elif isinstance(req, dict):
-            json_rpc_req: jsonrpc.JsonRPCRequest = \
-                jsonrpc.JsonRPCRequest.from_raw_dict(raw=req)
+            json_rpc_req: jsonrpc.JsonRPCRequest = jsonrpc.JsonRPCRequest.from_raw_dict(
+                raw=req
+            )
             return cls(req=json_rpc_req)
         elif isinstance(req, str):
             req_dict: dict = json.loads(req)
-            json_rpc_req: jsonrpc.JsonRPCRequest = (
-                jsonrpc.JsonRPCRequest.from_raw_dict(raw=req_dict)
+            json_rpc_req: jsonrpc.JsonRPCRequest = jsonrpc.JsonRPCRequest.from_raw_dict(
+                raw=req_dict
             )
             return cls(req=json_rpc_req)
         else:
@@ -48,7 +51,8 @@ class BroadcastTxSync(jsonrpc.JsonRPCRequest):
             )
 
     def create(
-        tx_raw_bytes: bytes, id=None,
+        tx_raw_bytes: bytes,
+        id=None,
     ) -> jsonrpc.JsonRPCRequest:
         return jsonrpc.JsonRPCRequest(
             method="broadcast_tx_sync",

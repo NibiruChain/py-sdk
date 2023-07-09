@@ -130,8 +130,7 @@ class TxClient:
                 )
             if address:
                 address.decrease_sequence()
-            raise SimulationError(
-                f"Failed to simulate transaction: {err}") from err
+            raise SimulationError(f"Failed to simulate transaction: {err}") from err
 
         try:
             tx_resp: abci_type.TxResponse = self.execute_tx(
@@ -467,14 +466,12 @@ class Transaction(pt.Jsonable):
 
         body_bytes = body.SerializeToString()
         mode_info = cosmos_tx_type.ModeInfo(
-            single=cosmos_tx_type.ModeInfo.Single(
-                mode=tx_sign.SIGN_MODE_DIRECT)
+            single=cosmos_tx_type.ModeInfo.Single(mode=tx_sign.SIGN_MODE_DIRECT)
         )
 
         if public_key:
             any_public_key = any_pb2.Any()
-            any_public_key.Pack(
-                public_key.to_public_key_proto(), type_url_prefix="")
+            any_public_key.Pack(public_key.to_public_key_proto(), type_url_prefix="")
             signer_info = cosmos_tx_type.SignerInfo(
                 mode_info=mode_info, sequence=self.sequence, public_key=any_public_key
             )
@@ -483,8 +480,7 @@ class Transaction(pt.Jsonable):
                 mode_info=mode_info, sequence=self.sequence
             )
 
-        auth_info = cosmos_tx_type.AuthInfo(
-            signer_infos=[signer_info], fee=self.fee)
+        auth_info = cosmos_tx_type.AuthInfo(signer_infos=[signer_info], fee=self.fee)
         auth_info_bytes = auth_info.SerializeToString()
 
         return body_bytes, auth_info_bytes

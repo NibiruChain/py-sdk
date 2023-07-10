@@ -5,18 +5,18 @@ on:
     branches: ["main", "release/*"]
     paths:
       [
-        "**.py",
-        "pyproject.toml",
-        "poetry.lock",
+        "pysdk/**.py",
+        "pysdk/pyproject.toml",
+        "pysdk/poetry.lock",
         ".github/workflows/pytests.yml",
       ]
   push:
     branches: ["main", "release/*"]
     paths:
       [
-        "**.py",
-        "pyproject.toml",
-        "poetry.lock",
+        "pysdk/**.py",
+        "pysdk/pyproject.toml",
+        "pysdk/poetry.lock",
         ".github/workflows/pytests.yml",
       ]
 
@@ -27,6 +27,11 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    # `jobs.<job_id>.defaults`: 
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
+    defaults:
+      run:
+        working-directory: "pysdk"
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       VALIDATOR_MNEMONIC: "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
@@ -91,7 +96,7 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
       - name: Run localnet.sh in the background.

@@ -8,7 +8,7 @@ network by setting the values of the Network data class.
 import dataclasses
 import enum
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 
 @dataclasses.dataclass
@@ -24,7 +24,8 @@ class Network:
         chain_id (str): .
         websocket_endpoint (str): .
         env (Optional[str]): TODO docs
-        fee_denom (Optional[str]): Denom for the coin used to pay gas fees. Defaults to "unibi".
+        fee_denom (Optional[str]): Denom for the coin used to pay gas fees.
+            Defaults to "unibi".
 
     Methods:
         customnet: A custom Nibiru network based on environment variables.
@@ -63,12 +64,13 @@ class Network:
         Defaults to localnet if no ENV variables are provided.
 
         Raises:
-            KeyError: If the values are not set in the testing environment, this will raise an exception.
+            KeyError: If the values are not set in the testing environment,
+                this will raise an exception.
 
         Returns:
             Network: The updated Network object.
         """
-        chain_config: Dict[str, Optional[str]] = {
+        chain_config: Dict[str, str] = {
             "LCD_ENDPOINT": os.getenv("LCD_ENDPOINT", "http://localhost:1317"),
             "GRPC_ENDPOINT": os.getenv("GRPC_ENDPOINT", "localhost:9090"),
             "TENDERMINT_RPC_ENDPOINT": os.getenv(
@@ -81,14 +83,13 @@ class Network:
         }
         for name, env_var in chain_config.items():
             if env_var is None:
-                raise KeyError(
-                    "\n".join(
-                        [
-                            f"Environment variable {name} is needed for devnet.",
-                            f"Please set {name} in your .env file.",
-                        ]
-                    )
+                err_msg: str = "\n".join(
+                    [
+                        f"Environment variable {name} is needed for devnet.",
+                        f"Please set {name} in your .env file.",
+                    ]
                 )
+                raise KeyError(err_msg)
 
         return cls(
             lcd_endpoint=chain_config["LCD_ENDPOINT"],
@@ -189,12 +190,12 @@ class Network:
             )
 
         prefix, chain_type, chain_number = chain_id_elements
-        chain_number = int(chain_number)
+        chain_number_int = int(chain_number)
 
         if chain_type == NetworkType.DEVNET.value:
-            return Network.devnet(chain_number)
+            return Network.devnet(chain_number_int)
         elif chain_type == NetworkType.TESTNET.value:
-            return Network.testnet(chain_number)
+            return Network.testnet(chain_number_int)
         elif chain_type == NetworkType.LOCALNET.value:
             return Network.localnet()
         else:

@@ -31,7 +31,7 @@ jobs:
       - name: "Install and run flake8"
         run: |
           python -m pip install flake8
-          flake8 nibiru
+          flake8 pysdk
           flake8 tests
           flake8 examples
 
@@ -110,5 +110,8 @@ jobs:
 
       - name: "poetry run mypy [files ...] [-h] [-v]"
         run: |
-          poetry run mypy tests
-          # TODO: epic(pysdk): Add static type checking
+          poetry run mypy --version
+          # poetry run mypy tests --exclude 'pysdk/*'
+
+          # TODO: epic(pysdk): Add static type checking for pysdk (uncomment above)
+          # https://github.com/NibiruChain/py-sdk/issues/245

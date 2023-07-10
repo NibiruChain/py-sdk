@@ -60,7 +60,7 @@ class Event:
     @staticmethod
     def parse_attributes(raw_attributes: List[Dict[str, str]]) -> Dict[str, str]:
         try:
-            attributes: dict[str, str] = {
+            attributes: Dict[str, str] = {
                 kv_dict['key']: kv_dict['value'] for kv_dict in raw_attributes
             }
             return attributes

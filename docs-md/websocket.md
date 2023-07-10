@@ -1,22 +1,30 @@
-Module nibiru.websocket
-=======================
+Module pysdk.websocket
+======================
 
 Classes
 -------
 
-`NibiruWebsocket(network: nibiru.pytypes.network.Network, captured_events_type: List[nibiru.event_specs.EventType] = [], tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f707f675ed0>> = None)`
-:   The nibiru listener provides an interface to easily connect and handle subscription to the events of a nibiru
-    chain.
+`NibiruWebsocket(network: pysdk.pytypes.network.Network, captured_event_types: List[pysdk.event_specs.EventType] = <factory>, queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f49907cc4c0>> = <multiprocessing.queues.Queue object>, tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f49907cc4c0>> = <multiprocessing.queues.Queue object>, captured_event_types_map: Dict[str, pysdk.event_specs.EventType] = <factory>, logger: logging.Logger = <Logger ws-logger (WARNING)>)`
+:   NibiruWebsocket(network: pysdk.pytypes.network.Network, captured_event_types: List[pysdk.event_specs.EventType] = <factory>, queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f49907cc4c0>> = <multiprocessing.queues.Queue object at 0x7f49908a3f70>, tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f49907cc4c0>> = <multiprocessing.queues.Queue object at 0x7f499076c460>, captured_event_types_map: Dict[str, pysdk.event_specs.EventType] = <factory>, logger: logging.Logger = <Logger ws-logger (WARNING)>)
 
     ### Class variables
 
-    `captured_events_type: List[List[str]]`
+    `captured_event_types: List[pysdk.event_specs.EventType]`
     :
 
-    `queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f707f675ed0>>`
+    `captured_event_types_map: Dict[str, pysdk.event_specs.EventType]`
     :
 
-    `tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f707f675ed0>>`
+    `logger: logging.Logger`
+    :
+
+    `network: pysdk.pytypes.network.Network`
+    :
+
+    `queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f49907cc4c0>>`
+    :
+
+    `tx_fail_queue: <bound method BaseContext.Queue of <multiprocessing.context.DefaultContext object at 0x7f49907cc4c0>>`
     :
 
     ### Methods

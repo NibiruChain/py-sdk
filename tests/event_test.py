@@ -2,7 +2,7 @@ from typing import Dict, List, cast
 
 import pytest
 
-from nibiru import pytypes
+from pysdk import pytypes
 
 
 class TestEvent:

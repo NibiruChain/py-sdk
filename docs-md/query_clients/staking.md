@@ -1,5 +1,5 @@
-Module nibiru.query_clients.staking
-===================================
+Module pysdk.query_clients.staking
+==================================
 
 Classes
 -------
@@ -10,7 +10,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.query_clients.util.QueryClient
+    * pysdk.query_clients.util.QueryClient
 
     ### Methods
 

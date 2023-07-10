@@ -17,7 +17,7 @@ import dotenv
 import pytest
 
 import tests
-from nibiru import Network, NetworkType, Sdk
+from pysdk import Network, NetworkType, Sdk
 
 
 def pytest_configure(config):
@@ -25,12 +25,11 @@ def pytest_configure(config):
 
 
 class SetupTestConfig:
-
     PYTEST_GLOBALS_REQUIRED: Dict[str, str] = dict(
         VALIDATOR_MNEMONIC="",
     )
     PYTEST_GLOBALS_OPTIONAL: Dict[str, Any] = dict(
-        CHAIN_ID="nibiru-localnet-0",
+        CHAIN_ID="pysdk.localnet-0",
         LCD_ENDPOINT="",
         GRPC_ENDPOINT="",
         TENDERMINT_RPC_ENDPOINT="",
@@ -86,7 +85,7 @@ def network() -> Network:
     # or devnets for v0.21+
 
     # Use the chain_id to choose which Network to use
-    chain_id: str = os.getenv("CHAIN_ID", "nibiru-localnet-0")
+    chain_id: str = os.getenv("CHAIN_ID", "pysdk.localnet-0")
     chain_id_elements: List[str] = chain_id.split("-")
     assert len(chain_id_elements) == 3
     prefix, chain_type, chain_number = chain_id_elements

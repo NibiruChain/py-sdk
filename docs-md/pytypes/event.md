@@ -1,10 +1,10 @@
-Module nibiru.pytypes.event
-===========================
+Module pysdk.pytypes.event
+==========================
 
 Classes
 -------
 
-`Event(raw_event: nibiru.pytypes.event.RawEvent)`
+`Event(raw_event: pysdk.pytypes.event.RawEvent)`
 :   A Tendermint event. An event contains a type and set of attributes.
     Events allow application developers to attach additional information to the
     'ResponseBeginBlock', 'ResponseEndBlock', 'ResponseCheckTx', and 'ResponseDeliverTx'
@@ -78,7 +78,7 @@ Classes
     * collections.abc.Iterable
     * collections.abc.Container
 
-`TxLogEvents(events_raw: List[nibiru.pytypes.event.RawEvent] = [])`
+`TxLogEvents(events_raw: List[pysdk.pytypes.event.RawEvent] = [])`
 :   An element of 'TxResp.rawLog'. This object contains events and messages.
 
     Keys (KeyType):
@@ -99,10 +99,10 @@ Classes
     `event_types: List[str]`
     :
 
-    `events: List[nibiru.pytypes.event.Event]`
+    `events: List[pysdk.pytypes.event.Event]`
     :
 
-    `events_raw: List[nibiru.pytypes.event.RawEvent]`
+    `events_raw: List[pysdk.pytypes.event.RawEvent]`
     :
 
     `msgs: List[str]`

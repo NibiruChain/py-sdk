@@ -14,7 +14,7 @@ repos:
           exclude: nibiru/proto/.+
 
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 22.12.0
     hooks:
       - id: black
         files: \.py$

@@ -3,10 +3,10 @@ from typing import Dict, List
 
 import pytest
 
-import nibiru
+import pysdk
 import tests
-from nibiru import Msg
-from nibiru import pytypes as pt
+from pysdk import Msg
+from pysdk import pytypes as pt
 
 PRECISION = 6
 
@@ -20,7 +20,7 @@ class ERRORS:
     no_prices = "no valid prices available"
 
 
-def test_open_position(sdk_val: nibiru.Sdk):
+def test_open_position(sdk_val: pysdk.Sdk):
     tests.LOGGER.info("nibid tx perp open-position")
     try:
         tx_output: pt.ExecuteTxResp = sdk_val.tx.execute_msgs(
@@ -40,9 +40,9 @@ def test_open_position(sdk_val: nibiru.Sdk):
         #     f"nibid tx perp open-position: {tests.format_response(tx_output)}"
         # )
         # tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
-        # assert "/nibiru.perp.v2.MsgMarketOrder" in tx_resp.rawLog[0].msgs
+        # assert "/pysdk.perp.v2.MsgMarketOrder" in tx_resp.rawLog[0].msgs
         # events_for_msg: List[str] = [
-        #     "nibiru.perp.v2.PositionChangedEvent",
+        #     "pysdk.perp.v2.PositionChangedEvent",
         # ]
         # assert all(
         #     [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
@@ -55,7 +55,7 @@ def test_open_position(sdk_val: nibiru.Sdk):
 
 
 @pytest.mark.order(after="test_open_position")
-def test_perp_query_position(sdk_val: nibiru.Sdk):
+def test_perp_query_position(sdk_val: pysdk.Sdk):
     try:
         # Trader position must be a dict with specific keys
         position_res = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
@@ -82,7 +82,7 @@ def test_perp_query_position(sdk_val: nibiru.Sdk):
 
 
 @pytest.mark.order(after="test_perp_query_position")
-def test_perp_query_all_positions(sdk_val: nibiru.Sdk):
+def test_perp_query_all_positions(sdk_val: pysdk.Sdk):
     positions_map: Dict[str, dict] = sdk_val.query.perp.all_positions(
         trader=sdk_val.address
     )
@@ -105,7 +105,7 @@ def test_perp_query_all_positions(sdk_val: nibiru.Sdk):
 
 
 @pytest.mark.order(after="test_perp_query_all_positions")
-def test_perp_add_margin(sdk_val: nibiru.Sdk):
+def test_perp_add_margin(sdk_val: pysdk.Sdk):
     try:
         # Transaction add_margin must succeed
         tx_output = sdk_val.tx.execute_msgs(
@@ -128,7 +128,7 @@ def test_perp_add_margin(sdk_val: nibiru.Sdk):
 
 
 @pytest.mark.order(after="test_perp_add_margin")
-def test_perp_remove_margin(sdk_val: nibiru.Sdk):
+def test_perp_remove_margin(sdk_val: pysdk.Sdk):
     try:
         tx_output = sdk_val.tx.execute_msgs(
             Msg.perp.remove_margin(
@@ -149,7 +149,7 @@ def test_perp_remove_margin(sdk_val: nibiru.Sdk):
 
 
 @pytest.mark.order(after="test_perp_remove_margin")
-def test_perp_close_posititon(sdk_val: nibiru.Sdk):
+def test_perp_close_posititon(sdk_val: pysdk.Sdk):
     """
     Open a position and ensure output is correct
     """

@@ -1,17 +1,19 @@
-Module nibiru
-=============
+Module pysdk
+============
 
 Sub-modules
 -----------
-* nibiru.crypto
-* nibiru.event_specs
-* nibiru.exceptions
-* nibiru.grpc_client
-* nibiru.msg
-* nibiru.pytypes
-* nibiru.query_clients
-* nibiru.sdk
-* nibiru.tx
-* nibiru.utils
-* nibiru.wallet
-* nibiru.websocket
+* pysdk.crypto
+* pysdk.event_specs
+* pysdk.exceptions
+* pysdk.grpc_client
+* pysdk.jsonrpc
+* pysdk.msg
+* pysdk.pytypes
+* pysdk.query_clients
+* pysdk.sdk
+* pysdk.tmrpc
+* pysdk.tx
+* pysdk.utils
+* pysdk.wallet
+* pysdk.websocket

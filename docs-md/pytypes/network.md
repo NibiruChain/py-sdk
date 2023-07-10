@@ -1,5 +1,5 @@
-Module nibiru.pytypes.network
-=============================
+Module pysdk.pytypes.network
+============================
 The network class allows the user to defines the network the sdk interface should connect to.
 
 There are some default values set for devnet, testnet, mainet and localnet, but the user cna also define its own
@@ -34,7 +34,7 @@ Classes
         mainnet: NotImplemented.
 
     Examples:
-    >>> from nibiru import Network
+    >>> from pysdk import Network
     >>> network = Network.devnet(2)
     >>> network.is_insecure
     True
@@ -64,7 +64,7 @@ Classes
 
     ### Static methods
 
-    `customnet() ‑> nibiru.pytypes.network.Network`
+    `customnet() ‑> pysdk.pytypes.network.Network`
     :   Custom is the network configured from ENV variables.
         Defaults to localnet if no ENV variables are provided.
 
@@ -74,7 +74,7 @@ Classes
         Returns:
             Network: The updated Network object.
 
-    `devnet(chain_num: int = 2) ‑> nibiru.pytypes.network.Network`
+    `devnet(chain_num: int = 2) ‑> pysdk.pytypes.network.Network`
     :   Devnet is a network open to invited validators.
 
         Args:
@@ -83,7 +83,10 @@ Classes
         Returns:
             Network: The updated Network object.
 
-    `localnet() ‑> nibiru.pytypes.network.Network`
+    `from_chain_id(chain_id: str) ‑> pysdk.pytypes.network.Network`
+    :
+
+    `localnet() ‑> pysdk.pytypes.network.Network`
     :   Localnet is the network you would expect to connect to if you run `make localnet` from the nibiru repository.
         It allows you to update locally the golang codebase to checkout the behavior of the chain with different changes
         applied.
@@ -91,10 +94,10 @@ Classes
         Returns:
             Network: The updated Network object.
 
-    `mainnet() ‑> nibiru.pytypes.network.Network`
+    `mainnet() ‑> pysdk.pytypes.network.Network`
     :   Soon!
 
-    `testnet(chain_num: int = 2) ‑> nibiru.pytypes.network.Network`
+    `testnet(chain_num: int = 2) ‑> pysdk.pytypes.network.Network`
     :   Testnet is a network open to invited validators. It is more stable than
         devnet and provides a faucet to get some funds
 
@@ -112,8 +115,26 @@ Classes
     ### Methods
 
     `string(self) ‑> str`
-    :   Returns the current environment the network was initialized with. Will return `custom` if a custom network
-        was created
+    :   Returns the current environment the network was initialized with. Will
+        return `custom` if a custom network was created
 
         Returns:
             str: The name of the current environment.
+
+`NetworkType(value, names=None, *, module=None, qualname=None, type=None, start=1)`
+:   Enum class for the available network types. E.g. 'testnet' and 'devnet'.
+
+    ### Ancestors (in MRO)
+
+    * enum.Enum
+
+    ### Class variables
+
+    `DEVNET`
+    :
+
+    `LOCALNET`
+    :
+
+    `TESTNET`
+    :

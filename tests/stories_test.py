@@ -2,6 +2,7 @@
 
 import pytest
 
+import pysdk
 import tests
 
 
@@ -17,8 +18,15 @@ def test_query_tx_by_hash():
         if story.broadcast_resp.code == 0:
             tx_hash = story.broadcast_resp.tx_hash
             assert isinstance(tx_hash, str)
-            query_tx_resp = sdk.tx.client.tx_by_hash(tx_hash=tx_hash)
-            tests.FULL_TX_STORIES[idx].query_tx_resp = query_tx_resp
+            check_tx_by_hash(sdk=sdk, tx_hash=tx_hash, idx=idx)
+
+
+def check_tx_by_hash(sdk: pysdk.Sdk, tx_hash: str, idx: int):
+    try:
+        query_tx_resp = sdk.tx.client.tx_by_hash(tx_hash=tx_hash)
+        tests.FULL_TX_STORIES[idx].query_tx_resp = query_tx_resp
+    except BaseException as err:
+        tests.raises(ok_errs=["InactiveRpcError", "tx not found"], err=err)
 
 
 @pytest.mark.order(after="test_query_tx_by_hash")

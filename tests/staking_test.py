@@ -1,14 +1,15 @@
 import time
 
+import pysdk
 import tests
-from nibiru import Msg, Network, Sdk
-from nibiru.event_specs import EventCaptured, EventType
-from nibiru.exceptions import QueryError, SimulationError
-from nibiru.websocket import NibiruWebsocket
+from pysdk import Msg
+from pysdk.event_specs import EventCaptured, EventType
+from pysdk.exceptions import QueryError, SimulationError
+from pysdk.websocket import NibiruWebsocket
 from tests import broadcast_tx_must_succeed, dict_keys_must_match
 
 
-def get_validator_operator_address(sdk_val: Sdk):
+def get_validator_operator_address(sdk_val: pysdk.Sdk):
     """
     Return the first validator and delegator
     """
@@ -16,7 +17,7 @@ def get_validator_operator_address(sdk_val: Sdk):
     return validator["operator_address"]
 
 
-def delegate(sdk_val: Sdk):
+def delegate(sdk_val: pysdk.Sdk):
     return sdk_val.tx.execute_msgs(
         [
             Msg.staking.delegate(
@@ -28,7 +29,7 @@ def delegate(sdk_val: Sdk):
     )
 
 
-def undelegate(sdk_val: Sdk):
+def undelegate(sdk_val: pysdk.Sdk):
     return sdk_val.tx.execute_msgs(
         [
             Msg.staking.undelegate(
@@ -40,13 +41,13 @@ def undelegate(sdk_val: Sdk):
     )
 
 
-def test_query_vpool(sdk_val: Sdk):
+def test_query_vpool(sdk_val: pysdk.Sdk):
     query_resp = sdk_val.query.staking.pool()
     assert query_resp["pool"]["bonded_tokens"] >= 0
     assert query_resp["pool"]["not_bonded_tokens"] >= 0
 
 
-def test_query_delegation(sdk_val: Sdk):
+def test_query_delegation(sdk_val: pysdk.Sdk):
     broadcast_tx_must_succeed(delegate(sdk_val))
     query_resp = sdk_val.query.staking.delegation(
         sdk_val.address, get_validator_operator_address(sdk_val)
@@ -60,7 +61,7 @@ def test_query_delegation(sdk_val: Sdk):
     )
 
 
-def test_query_delegations(sdk_val: Sdk):
+def test_query_delegations(sdk_val: pysdk.Sdk):
     broadcast_tx_must_succeed(delegate(sdk_val))
     query_resp = sdk_val.query.staking.delegations(sdk_val.address)
     dict_keys_must_match(
@@ -72,7 +73,7 @@ def test_query_delegations(sdk_val: Sdk):
     )
 
 
-def test_query_delegations_to(sdk_val: Sdk):
+def test_query_delegations_to(sdk_val: pysdk.Sdk):
     broadcast_tx_must_succeed(delegate(sdk_val))
     query_resp = sdk_val.query.staking.delegations_to(
         get_validator_operator_address(sdk_val)
@@ -86,7 +87,7 @@ def test_query_delegations_to(sdk_val: Sdk):
     )
 
 
-def test_historical_info(sdk_val: Sdk):
+def test_historical_info(sdk_val: pysdk.Sdk):
     try:
         hist_info = sdk_val.query.staking.historical_info(1)
         if hist_info["hist"]["valset"]:
@@ -112,7 +113,7 @@ def test_historical_info(sdk_val: Sdk):
         pass
 
 
-def test_params(sdk_val: Sdk):
+def test_params(sdk_val: pysdk.Sdk):
     query_resp = sdk_val.query.staking.params()
     dict_keys_must_match(
         query_resp["params"],
@@ -127,14 +128,14 @@ def test_params(sdk_val: Sdk):
     )
 
 
-def test_redelegations(sdk_val: Sdk):
+def test_redelegations(sdk_val: pysdk.Sdk):
     query_resp = sdk_val.query.staking.redelegations(
         sdk_val.address, get_validator_operator_address(sdk_val)
     )
     dict_keys_must_match(query_resp, ["redelegation_responses", "pagination"])
 
 
-def test_unbonding_delegation(sdk_val: Sdk):
+def test_unbonding_delegation(sdk_val: pysdk.Sdk):
     broadcast_tx_must_succeed(delegate(sdk_val))
     try:
         undelegate(sdk_val)
@@ -154,7 +155,7 @@ def test_unbonding_delegation(sdk_val: Sdk):
         )
 
 
-def test_unbonding_delegations(sdk_val: Sdk):
+def test_unbonding_delegations(sdk_val: pysdk.Sdk):
     broadcast_tx_must_succeed(delegate(sdk_val))
     try:
         undelegate(sdk_val)
@@ -172,7 +173,7 @@ def test_unbonding_delegations(sdk_val: Sdk):
         assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
-def test_unbonding_delegations_from(sdk_val: Sdk):
+def test_unbonding_delegations_from(sdk_val: pysdk.Sdk):
     broadcast_tx_must_succeed(delegate(sdk_val))
     try:
         undelegate(sdk_val)
@@ -192,7 +193,7 @@ def test_unbonding_delegations_from(sdk_val: Sdk):
         assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
-def test_validators(sdk_val: Sdk):
+def test_validators(sdk_val: pysdk.Sdk):
     query_resp = sdk_val.query.staking.validators()
     dict_keys_must_match(query_resp, ["validators", "pagination"])
     assert query_resp["pagination"]["total"] > 0
@@ -217,7 +218,7 @@ def test_validators(sdk_val: Sdk):
     )
 
 
-def test_validator(sdk_val: Sdk):
+def test_validator(sdk_val: pysdk.Sdk):
     validator = sdk_val.query.staking.validators()["validators"][0]
     query_resp = sdk_val.query.staking.validator(validator["operator_address"])
 
@@ -241,28 +242,28 @@ def test_validator(sdk_val: Sdk):
     )
 
 
-def test_staking_events(sdk_val: Sdk, network: Network):
+def test_staking_events(sdk_val: pysdk.Sdk, network: pysdk.Network):
     """
     Check staking events are properly filtered
     """
     expected_events_tx = [EventType.Delegate]
     expected_events = expected_events_tx
 
-    nibiru_websocket = NibiruWebsocket(
+    pysdk.websocket = NibiruWebsocket(
         network,
         expected_events,
     )
-    nibiru_websocket.start()
+    pysdk.websocket.start()
     time.sleep(1)
 
     delegate(sdk_val)
     time.sleep(5)
     success: bool = False
-    nibiru_websocket.queue.put(None)
+    pysdk.websocket.queue.put(None)
     while True:
-        if nibiru_websocket.captured_event_types_map.get("delegate"):
+        if pysdk.websocket.captured_event_types_map.get("delegate"):
             success = True  # Event Captured! Success
-        event: EventCaptured = nibiru_websocket.queue.get()
+        event: EventCaptured = pysdk.websocket.queue.get()
         time.sleep(1)
         if event is None:
             break

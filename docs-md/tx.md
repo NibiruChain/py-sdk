@@ -1,14 +1,15 @@
-Module nibiru.tx
-================
+Module pysdk.tx
+===============
 Classes:
     TxClient: A client for building, simulating, and broadcasting transactions.
-    Transaction: Transactions trigger state changes based on messages. Each message
-        must be cryptographically signed before being broadcasted to the network.
+    Transaction: Transactions trigger state changes based on messages. Each
+        message must be cryptographically signed before being broadcasted to
+        the network.
 
 Classes
 -------
 
-`Transaction(msgs: Tuple[google.protobuf.message.Message, ...] = None, account_num: int = None, priv_key: nibiru.wallet.PrivateKey = None, sequence: int = None, chain_id: str = None, fee: List[cosmos.base.v1beta1.coin_pb2.Coin] = None, gas_limit: int = 0, memo: str = '', timeout_height: int = 0)`
+`Transaction(msgs: Tuple[google.protobuf.message.Message, ...] = None, account_num: int = None, priv_key: pysdk.wallet.PrivateKey = None, sequence: int = None, chain_id: str = None, fee: List[cosmos.base.v1beta1.coin_pb2.Coin] = None, gas_limit: int = 0, memo: str = '', timeout_height: int = 0)`
 :   Transactions trigger state changes based on messages ('msgs'). Each message
     must be signed before being broadcasted to the network, included in a block,
     validated, and approved through the consensus process.
@@ -37,96 +38,151 @@ Classes
             convention, the signer from the first message is referred to as the
             primary signer and pays the fee for the whole transaction. We refer
             to this primary signer with 'priv_key'.
-        memo (str): Memo is a note or comment to be added to the transction.
-        timeout_height (int): Timeout height is the block height after which the
-            transaction will not be processed by the chain.
+        memo (str): Memo is a note or comment to be added to the transaction.
+        timeout_height (int): Timeout height is the block height after which
+            the transaction will not be processed by the chain.
+
+    ### Ancestors (in MRO)
+
+    * pysdk.pytypes.jsonable.Jsonable
+    * abc.ABC
+
+    ### Instance variables
+
+    `raw_bytes: bytes`
+    :
 
     ### Methods
 
-    `get_sign_doc(self, public_key: nibiru.wallet.PublicKey = None) ‑> cosmos.tx.v1beta1.tx_pb2.SignDoc`
+    `get_sign_doc(self, public_key: pysdk.wallet.PublicKey = None) ‑> cosmos.tx.v1beta1.tx_pb2.SignDoc`
     :
 
     `get_signed_tx_data(self) ‑> bytes`
     :
 
-    `get_tx_data(self, signature: bytes, public_key: nibiru.wallet.PublicKey = None) ‑> bytes`
+    `get_tx_data(self, signature: bytes, public_key: pysdk.wallet.PublicKey = None) ‑> bytes`
     :
 
-    `with_account_num(self, account_num: int) ‑> nibiru.tx.Transaction`
+    `with_account_num(self, account_num: int) ‑> pysdk.tx.Transaction`
     :
 
-    `with_chain_id(self, chain_id: str) ‑> nibiru.tx.Transaction`
+    `with_chain_id(self, chain_id: str) ‑> pysdk.tx.Transaction`
     :
 
-    `with_fee(self, fee: List[cosmos.base.v1beta1.coin_pb2.Coin]) ‑> nibiru.tx.Transaction`
+    `with_fee(self, fee: List[cosmos.base.v1beta1.coin_pb2.Coin]) ‑> pysdk.tx.Transaction`
     :
 
-    `with_gas_limit(self, gas: numbers.Number) ‑> nibiru.tx.Transaction`
+    `with_gas_limit(self, gas: numbers.Number) ‑> pysdk.tx.Transaction`
     :
 
-    `with_memo(self, memo: str) ‑> nibiru.tx.Transaction`
+    `with_memo(self, memo: str) ‑> pysdk.tx.Transaction`
     :
 
-    `with_messages(self, msgs: Iterable[google.protobuf.message.Message]) ‑> nibiru.tx.Transaction`
+    `with_messages(self, msgs: Iterable[google.protobuf.message.Message]) ‑> pysdk.tx.Transaction`
     :
 
-    `with_sender(self, client: nibiru.grpc_client.GrpcClient, sender: str) ‑> nibiru.tx.Transaction`
+    `with_sender(self, client: pysdk.grpc_client.GrpcClient, sender: str) ‑> pysdk.tx.Transaction`
     :
 
-    `with_sequence(self, sequence: int) ‑> nibiru.tx.Transaction`
+    `with_sequence(self, sequence: int) ‑> pysdk.tx.Transaction`
     :
 
-    `with_signer(self, priv_key: nibiru.wallet.PrivateKey)`
+    `with_signer(self, priv_key: pysdk.wallet.PrivateKey)`
     :
 
-    `with_timeout_height(self, timeout_height: int) ‑> nibiru.tx.Transaction`
+    `with_timeout_height(self, timeout_height: int) ‑> pysdk.tx.Transaction`
     :
 
-`TxClient(priv_key: nibiru.wallet.PrivateKey, network: nibiru.pytypes.network.Network, client: nibiru.grpc_client.GrpcClient, config: nibiru.pytypes.common.TxConfig)`
+`TxClient(priv_key: pysdk.wallet.PrivateKey, network: pysdk.pytypes.network.Network, client: pysdk.grpc_client.GrpcClient, config: pysdk.pytypes.common.TxConfig)`
 :   A client for building, simulating, and broadcasting transactions.
+
+    Attributes:
+        address (Optional[wallet.Address])
+        client (GrpcClient)
+        network (pt.Network)
+        priv_key (wallet.PrivateKey)
+        tx_config (pt.TxConfig)
+
+    ### Class variables
+
+    `address: Optional[pysdk.wallet.Address]`
+    :
+
+    `client: pysdk.grpc_client.GrpcClient`
+    :
+
+    `network: pysdk.pytypes.network.Network`
+    :
+
+    `priv_key: pysdk.wallet.PrivateKey`
+    :
+
+    `tx_config: pysdk.pytypes.common.TxConfig`
+    :
 
     ### Methods
 
-    `build_tx(self, msgs: Union[nibiru.pytypes.common.PythonMsg, List[nibiru.pytypes.common.PythonMsg]], get_sequence_from_node: bool = False) ‑> Tuple[nibiru.tx.Transaction, nibiru.wallet.Address]`
+    `build_tx(self, msgs: Union[pysdk.pytypes.common.PythonMsg, List[pysdk.pytypes.common.PythonMsg]], sequence: Optional[int] = None) ‑> Tuple[pysdk.tx.Transaction, pysdk.wallet.Address]`
     :
 
-    `execute_msgs(self, msgs: Union[nibiru.pytypes.common.PythonMsg, List[nibiru.pytypes.common.PythonMsg]], get_sequence_from_node: bool = False, **kwargs) ‑> nibiru.pytypes.tx_resp.RawTxResp`
-    :   Broadcasts messages to a node in a single transaction. This function first
-        simulates the corresponding transaction to estimate the amount of gas needed.
+    `build_tx_with_node_sequence(self, msgs: Union[pysdk.pytypes.common.PythonMsg, List[pysdk.pytypes.common.PythonMsg]])`
+    :
 
-        If the transaction fails because of account sequence mismatch, we try to
-        query the sequence from the LCD endpoint and broadcast with the updated
-        sequence value.
+    `ensure_address_info(self) ‑> pysdk.wallet.Address`
+    :   Guarantees that the TxClient.address has been set and returns it.
+        If the wallet address has not been set prior to this function call,
+        (1) the address is derived from the 'priv_key' and
+        (2) the sequence is derived from the 'network.lcd_endpoint'.
+
+    `ensure_tx_config(self, new_tx_config: pysdk.pytypes.common.TxConfig = None) ‑> pysdk.pytypes.common.TxConfig`
+    :   Guarantees that the TxClient.tx_config has been set and returns it.
 
         Args:
-            get_sequence_from_node (bool, optional): Specifies whether the sequence
-                comes from the local value or the lcd endpoint. Defaults to False.
+            new_tx_config (Optional[pytypes.TxConfig]): Becomes the new value
+                for the tx config if given. Defaults to None.
+
+        Returns:
+            (pt.TxConfig): The new value for the TxClient.tx_config.
+
+    `execute_msgs(self, msgs: Union[pysdk.pytypes.common.PythonMsg, List[pysdk.pytypes.common.PythonMsg]], sequence: Optional[int] = None, tx_config: Optional[pysdk.pytypes.common.TxConfig] = None) ‑> pysdk.pytypes.tx_resp.ExecuteTxResp`
+    :   Broadcasts messages to a node in a single transaction. This function
+        first simulates the corresponding transaction to estimate the amount of
+        gas needed.
+
+        If the transaction fails because of account sequence mismatch, we try
+        to query the sequence from the LCD endpoint and broadcast with the
+        updated sequence value.
+
+        Args:
+            msgs (Union[pt.PythonMsg, List[pt.PythonMsg]]):
+            sequence (Optional[int]): Account sequence for the tx. Sequence
+                is used to enforce tx ordering and prevent double-spending.
+                Each time a tx is procesed and committed to the blockchain,
+                the account sequence number is incremented.
+            tx_config (Optional[pt.TxConfig] = None)
+            get_sequence_from_node (bool, optional): Specifies whether the
+                sequence comes from the local value or the lcd endpoint.
+                Defaults to False.
 
         Raises:
             SimulationError: If broadcasting fails during the simulation.
-            TxError: If the response code is nonzero, the 'TxError' includes the
-                raw error logs from the blockchain.
+            TxError: If the response code is nonzero, the 'TxError' includes
+                the raw error logs from the blockchain.
 
         Returns:
-            Union[RawTxResp, Dict[str, Any]]: The transaction response as a dict
-                in proto3 JSON format.
+            Union[RawSyncTxResp, Dict[str, Any]]: The transaction response as
+                a dict in proto3 JSON format.
 
-    `execute_tx(self, tx: Transaction, gas_estimate: float, **kwargs) ‑> cosmos.base.abci.v1beta1.abci_pb2.TxResponse`
+    `execute_tx(self, tx: Transaction, gas_estimate: float, use_tmrpc: bool = True, tx_config: Optional[pysdk.pytypes.common.TxConfig] = None) ‑> Union[pysdk.jsonrpc.jsonrpc.JsonRPCResponse, cosmos.base.abci.v1beta1.abci_pb2.TxResponse]`
     :
-
-    `get_address_info(self) ‑> nibiru.wallet.Address`
-    :
-
-    `get_config(self, **kwargs) ‑> nibiru.pytypes.common.TxConfig`
-    :   Properties in kwargs overwrite the self.config
 
     `simulate(self, tx: Transaction) ‑> cosmos.base.abci.v1beta1.abci_pb2.SimulationResponse`
     :   Args:
             tx (Transaction): The transaction being simulated.
 
         Returns:
-            SimulationResponse: SimulationResponse defines the response generated
-                when a transaction is simulated successfully.
+            SimulationResponse: SimulationResponse defines the response
+                generated when a transaction is simulated successfully.
 
         Raises:
             SimulationError

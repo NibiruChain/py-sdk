@@ -28,7 +28,7 @@ The mark price can be accessed for any market using the vpool submodule queries.
 
 .. code:: python
 
-    from nibiru import Sdk, TxConfig
+    from pysdk import Sdk, TxConfig
     from nibiru.common import TxType
     import nibiru as nib
 

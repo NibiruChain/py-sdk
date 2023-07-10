@@ -4,15 +4,15 @@ from typing import List
 
 import pytest
 
-import nibiru
-from nibiru import Msg, Network, Sdk, Transaction
-from nibiru.event_specs import EventCaptured
-from nibiru.websocket import EventType, NibiruWebsocket
+import pysdk
+from pysdk import Msg, Network, Sdk, Transaction
+from pysdk.event_specs import EventCaptured
+from pysdk.websocket import EventType, NibiruWebsocket
 from tests import LOGGER
 
 
 @pytest.mark.slow
-def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
+def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
     """
     Open a position and ensure output is correct
     """
@@ -27,11 +27,11 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
 
     expected_events = expected_events_tx
 
-    nibiru_websocket = NibiruWebsocket(
+    pysdk.websocket = NibiruWebsocket(
         network,
         expected_events,
     )
-    nibiru_websocket.start()
+    pysdk.websocket.start()
     time.sleep(1)
 
     # Open a position from the validator node
@@ -49,7 +49,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
             Msg.bank.send(
                 from_address=sdk_val.address,
                 to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
-                coins=nibiru.Coin(amount=10, denom="unibi"),
+                coins=pysdk.Coin(amount=10, denom="unibi"),
             ),
         ]
     )
@@ -66,10 +66,10 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     LOGGER.info("Sent txs, waiting for websocket to pick it up")
     time.sleep(3)
 
-    nibiru_websocket.queue.put(None)
+    pysdk.websocket.queue.put(None)
     events: List[EventCaptured] = []
     while True:
-        event = nibiru_websocket.queue.get()
+        event = pysdk.websocket.queue.get()
         if event is None:
             break
         events.append(event)
@@ -95,12 +95,12 @@ def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
     """
     tx_fail_queue = Queue()
 
-    nibiru_websocket = NibiruWebsocket(
+    pysdk.websocket = NibiruWebsocket(
         network,
         [EventType.PositionChangedEvent],
         tx_fail_queue,
     )
-    nibiru_websocket.start()
+    pysdk.websocket.start()
     time.sleep(1)
 
     # Send failing closing transaction without simulation

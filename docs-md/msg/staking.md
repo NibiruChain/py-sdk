@@ -1,5 +1,5 @@
-Module nibiru.msg.staking
-=========================
+Module pysdk.msg.staking
+========================
 
 Classes
 -------
@@ -14,7 +14,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -46,7 +46,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -77,7 +77,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -104,9 +104,9 @@ Classes
     - undelegate: Undelegate tokens from a validator
     - withdraw_delegator_reward: Withdraw the reward from a validator
 
-    ### Methods
+    ### Static methods
 
-    `delegate(delegator_address: str, validator_address: str, amount: float) ‑> nibiru.msg.staking.MsgDelegate`
+    `delegate(delegator_address: str, validator_address: str, amount: float) ‑> pysdk.msg.staking.MsgDelegate`
     :   Delegate tokens to a validator
 
         Attributes:
@@ -117,7 +117,7 @@ Classes
         Returns:
             MsgDelegate: PythonMsg for type 'cosmos.staking.v1beta1.MsgDelegate'
 
-    `undelegate(delegator_address: str, validator_address: str, amount: float) ‑> nibiru.msg.staking.MsgUndelegate`
+    `undelegate(delegator_address: str, validator_address: str, amount: float) ‑> pysdk.msg.staking.MsgUndelegate`
     :   Undelegate tokens from a validator
 
         Attributes:
@@ -125,7 +125,7 @@ Classes
             validator_address (str): Bech32 valoper address
             amount (float): Amount of unibi to undelegate.
 
-    `withdraw_delegator_reward(delegator_address: str, validator_address: str) ‑> nibiru.msg.staking.MsgWithdrawDelegatorReward`
+    `withdraw_delegator_reward(delegator_address: str, validator_address: str) ‑> pysdk.msg.staking.MsgWithdrawDelegatorReward`
     :   TODO
         Withdraw the reward from a validator
 

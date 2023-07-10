@@ -1,5 +1,5 @@
-Module nibiru.query_clients.epoch
-=================================
+Module pysdk.query_clients.epoch
+================================
 
 Classes
 -------
@@ -11,7 +11,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.query_clients.util.QueryClient
+    * pysdk.query_clients.util.QueryClient
 
     ### Methods
 

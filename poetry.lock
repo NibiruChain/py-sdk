@@ -1253,13 +1253,13 @@ types-protobuf = ">=3.20.4"
 
 [[package]]
 name = "nibiru-proto"
-version = "0.21.7b1"
+version = "0.21.3b7"
 description = "Nibiru Chain Python SDK"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "nibiru_proto-0.21.7b1-py3-none-any.whl", hash = "sha256:a76cbf32b0cfe510a3ef5dcf0f29bb4f8ca34e14dcb664b36eab3e5a8dfcd12c"},
-    {file = "nibiru_proto-0.21.7b1.tar.gz", hash = "sha256:669bfa0538cd4eaf5a6474b902a8d1a351ee97aed0554634f3cc66d4f4ef0a5d"},
+    {file = "nibiru_proto-0.21.3b7-py3-none-any.whl", hash = "sha256:d89dd94f5de062f25c20530a42729f968e3a41dc2817c47a27e47f91e6c25d9a"},
+    {file = "nibiru_proto-0.21.3b7.tar.gz", hash = "sha256:c8014ff44e150268cf0c13e6d02cd4ac25909740063bd5610035a944f20d1e07"},
 ]
 
 [package.dependencies]
@@ -1875,4 +1875,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "c3c8878e7cbddf31b186fc21750e9bc1bdbd68d42eae04bafd26ce01329ad2e0"
+content-hash = "2c9a25e49dd35580fb6c385b7a4f5f59ac6c50ea4075823644f01bf68543a2be"

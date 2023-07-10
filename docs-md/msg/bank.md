@@ -1,10 +1,10 @@
-Module nibiru.msg.bank
-======================
+Module pysdk.msg.bank
+=====================
 
 Classes
 -------
 
-`MsgSend(from_address: str, to_address: str, coins: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]])`
+`MsgSend(from_address: str, to_address: str, coins: Union[pysdk.pytypes.common.Coin, List[pysdk.pytypes.common.Coin]])`
 :   Send tokens from one account to another. PythonMsg corresponding to the
     'cosmos.bank.v1beta1.MsgSend' message.
 
@@ -15,12 +15,12 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
 
-    `coins: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]`
+    `coins: Union[pysdk.pytypes.common.Coin, List[pysdk.pytypes.common.Coin]]`
     :
 
     `from_address: str`
@@ -43,9 +43,9 @@ Classes
     Methods:
     - send: Send tokens from one account to another
 
-    ### Methods
+    ### Static methods
 
-    `send(from_address: str, to_address: str, coins: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]) ‑> nibiru.msg.bank.MsgSend`
+    `send(from_address: str, to_address: str, coins: Union[pysdk.pytypes.common.Coin, List[pysdk.pytypes.common.Coin]]) ‑> pysdk.msg.bank.MsgSend`
     :   Send tokens from one account to another
 
         Attributes:

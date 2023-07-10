@@ -1,10 +1,10 @@
-Module nibiru.msg
-=================
+Module pysdk.msg
+================
 
 Sub-modules
 -----------
-* nibiru.msg.bank
-* nibiru.msg.spot
-* nibiru.msg.msg
-* nibiru.msg.perp
-* nibiru.msg.staking
+* pysdk.msg.bank
+* pysdk.msg.msg
+* pysdk.msg.perp
+* pysdk.msg.spot
+* pysdk.msg.staking

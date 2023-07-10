@@ -1,9 +1,10 @@
-Module nibiru.pytypes
-=====================
+Module pysdk.pytypes
+====================
 
 Sub-modules
 -----------
-* nibiru.pytypes.common
-* nibiru.pytypes.event
-* nibiru.pytypes.network
-* nibiru.pytypes.tx_resp
+* pysdk.pytypes.common
+* pysdk.pytypes.event
+* pysdk.pytypes.jsonable
+* pysdk.pytypes.network
+* pysdk.pytypes.tx_resp

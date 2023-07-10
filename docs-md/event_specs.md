@@ -1,15 +1,15 @@
-Module nibiru.event_specs
-=========================
+Module pysdk.event_specs
+========================
 
 Classes
 -------
 
-`EventCaptured(event_type: nibiru.event_specs.EventType, payload: dict)`
-:   EventCaptured(event_type: nibiru.event_specs.EventType, payload: dict)
+`EventCaptured(event_type: pysdk.event_specs.EventType, payload: dict)`
+:   EventCaptured(event_type: pysdk.event_specs.EventType, payload: dict)
 
     ### Class variables
 
-    `event_type: nibiru.event_specs.EventType`
+    `event_type: pysdk.event_specs.EventType`
     :
 
     `payload: dict`
@@ -24,19 +24,46 @@ Classes
 
     ### Class variables
 
+    `AssetsSwappedEvent`
+    :
+
+    `BurnNIBIEvent`
+    :
+
+    `BurnStableEvent`
+    :
+
+    `BuybackEvent`
+    :
+
     `Delegate`
+    :
+
+    `EventAggregatePrevote`
+    :
+
+    `EventAggregateVote`
+    :
+
+    `EventDelegateFeederConsent`
     :
 
     `FundingRateChangedEvent`
     :
 
-    `MarkPriceChanged`
+    `MintNIBIEvent`
     :
 
-    `OracleUpdatePriceEvent`
+    `MintStableEvent`
     :
 
-    `PairPriceUpdatedEvent`
+    `PoolCreatedEvent`
+    :
+
+    `PoolExitedEvent`
+    :
+
+    `PoolJoinedEvent`
     :
 
     `PositionChangedEvent`
@@ -48,16 +75,19 @@ Classes
     `PositionSettledEvent`
     :
 
+    `PriceUpdate`
+    :
+
+    `RecollateralizeEvent`
+    :
+
     `Redelegate`
     :
 
-    `ReserveSnapshotSavedEvent`
-    :
-
-    `SwapOnVpoolEvent`
-    :
-
     `Transfer`
+    :
+
+    `TransferEvent`
     :
 
     `Unbond`

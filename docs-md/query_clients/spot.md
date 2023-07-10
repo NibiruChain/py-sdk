@@ -1,4 +1,4 @@
-Module nibiru.query_clients.spot
+Module pysdk.query_clients.spot
 ===============================
 
 Classes
@@ -9,7 +9,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.query_clients.util.QueryClient
+    * pysdk.query_clients.util.QueryClient
 
     ### Methods
 
@@ -38,7 +38,7 @@ Classes
         Returns:
             dict: The output of the query
 
-    `estimate_join_exact_amount_in(self, pool_id: int, tokens_ins: List[nibiru.pytypes.common.Coin]) ‑> dict`
+    `estimate_join_exact_amount_in(self, pool_id: int, tokens_ins: List[pysdk.pytypes.common.Coin]) ‑> dict`
     :   Estimate the number of share given for a join pool operation
 
         Example Return Value::
@@ -60,7 +60,7 @@ Classes
         Returns:
             dict: The output of the query
 
-    `estimate_swap_exact_amount_in(self, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str) ‑> dict`
+    `estimate_swap_exact_amount_in(self, pool_id: int, token_in: pysdk.pytypes.common.Coin, token_out_denom: str) ‑> dict`
     :   Estimate the output of the swap with the current reserves
 
         Example Return Value::
@@ -81,7 +81,7 @@ Classes
             dict: The output of the query
 
     `params(self) ‑> dict`
-    :   Requests the parameters of the dex module.
+    :   Requests the parameters of the spot module.
 
         Example Return Value::
 
@@ -102,7 +102,7 @@ Classes
             }
 
         Returns:
-            dict: The parameters for the spot module.
+            dict: The parameters fo the spot module.
 
     `pools(self, **kwargs)`
     :   Return all available pools in the spot module.
@@ -164,7 +164,7 @@ Classes
             dict: _description_
 
     `total_liquidity(self) ‑> dict`
-    :   Returns the total amount of liquidity for the dex module
+    :   Returns the total amount of liquidity for the spot module
 
         Example Return Value::
 

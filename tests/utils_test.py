@@ -5,10 +5,10 @@ import pytest
 from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder
 
-import nibiru
+import pysdk
 import tests
-from nibiru import Coin, pytypes, utils
-from nibiru.query_clients import util as query_util
+from pysdk import Coin, pytypes, utils
+from pysdk.query_clients import util as query_util
 
 
 @pytest.mark.parametrize(
@@ -84,10 +84,9 @@ def test_get_msg_pb_by_type_url(type_url, cls):
     assert query_util.get_msg_pb_by_type_url(type_url) == cls
 
 
-def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
-
+def test_get_block_messages(sdk_val: pysdk.Sdk, sdk_agent: pysdk.Sdk):
     out: pytypes.RawSyncTxResp = sdk_val.tx.execute_msgs(
-        nibiru.Msg.bank.send(
+        pysdk.Msg.bank.send(
             sdk_val.address,
             sdk_agent.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],

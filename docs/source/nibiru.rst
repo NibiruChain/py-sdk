@@ -29,10 +29,10 @@ nibiru.common module
    :undoc-members:
    :show-inheritance:
 
-nibiru.exceptions module
+pysdk.exceptions module
 ------------------------
 
-.. automodule:: nibiru.exceptions
+.. automodule:: pysdk.exceptions
    :members:
    :undoc-members:
    :show-inheritance:

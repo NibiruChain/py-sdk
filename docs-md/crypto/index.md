@@ -1,6 +1,6 @@
-Module nibiru.crypto
-====================
+Module pysdk.crypto
+===================
 
 Sub-modules
 -----------
-* nibiru.crypto.ripemd160
+* pysdk.crypto.ripemd160

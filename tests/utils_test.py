@@ -2,13 +2,13 @@ import subprocess
 from urllib.parse import ParseResult, urlparse
 
 import pytest
-from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder
+from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend  # type: ignore
+from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder  # type: ignore
 
-import nibiru
+import pysdk
 import tests
-from nibiru import Coin, pytypes, utils
-from nibiru.query_clients import util as query_util
+from pysdk import Coin, pytypes, utils
+from pysdk.query_clients import util as query_util
 
 
 @pytest.mark.parametrize(
@@ -84,16 +84,15 @@ def test_get_msg_pb_by_type_url(type_url, cls):
     assert query_util.get_msg_pb_by_type_url(type_url) == cls
 
 
-def test_get_block_messages(sdk_val: nibiru.Sdk, sdk_agent: nibiru.Sdk):
-
-    out: pytypes.RawSyncTxResp = sdk_val.tx.execute_msgs(
-        nibiru.Msg.bank.send(
+def test_get_block_messages(sdk_val: pysdk.Sdk, sdk_agent: pysdk.Sdk):
+    out: pytypes.ExecuteTxResp = sdk_val.tx.execute_msgs(
+        pysdk.Msg.bank.send(
             sdk_val.address,
             sdk_agent.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],
         )
     )
-    tests.broadcast_tx_must_succeed(out)
+    tests.broadcast_tx_must_succeed(res=out)
     # tx_output = sdk_val.query.tx_by_hash(tx_hash=out["txhash"])
 
     # height = int(tx_output["height"])
@@ -138,8 +137,7 @@ def url_to_host(url: str) -> str:
     Returns:
         str: an url that can be pinged
     """
-    url: ParseResult = urlparse(url)
-
-    assert url.hostname, ReferenceError(f"Url {url} hostname is empty.")
-
-    return url.hostname
+    parsed_url: ParseResult = urlparse(url)
+    if not parsed_url.hostname:
+        raise ReferenceError(f"Url {parsed_url} hostname is empty.")
+    return parsed_url.hostname

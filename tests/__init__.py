@@ -1,13 +1,20 @@
-"""Tests package for the Nibiru Python SDK"""
+"""Tests package for the pysdk.Python SDK"""
+import dataclasses
 import logging
 import os
 import pprint
-from typing import Iterable, List, Union
+from typing import Iterable, List, Optional, Union
 
-import shutup
+# mypy skips analysis when there's a "type: ignore" comment.
+# This is used when we want to skip static analysis because of missing library
+# stubs or py.typed marker.
+# NOTE: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mis
+import shutup  # type: ignore
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service  # type: ignore
 
-import nibiru
-from nibiru import pytypes, tx, utils
+import pysdk
+from pysdk import utils
+from pysdk.pytypes import common, tx_resp
 
 shutup.please()
 
@@ -29,7 +36,8 @@ def raises(ok_errs: Union[str, Iterable[str]], err: BaseException):
         ok_errs = [ok_errs]
     else:
         ok_errs = list(ok_errs)
-    ok_errs: List[str]
+    assert isinstance(ok_errs, list)
+    # ok_errs: List[str]
 
     err_string = str(err)
     assert any([e in err_string for e in ok_errs]), err_string
@@ -95,7 +103,7 @@ def transaction_must_succeed(tx_output: dict):
     assert isinstance(tx_output["rawLog"], list)
 
 
-def broadcast_tx_must_succeed(res: tx.ExecuteTxResp):
+def broadcast_tx_must_succeed(res: tx_resp.ExecuteTxResp):
     """
     Ensure the output of a transaction have the fields required
     and that the raw logs are properly parsed
@@ -104,7 +112,7 @@ def broadcast_tx_must_succeed(res: tx.ExecuteTxResp):
         tx_output (dict): The output of a transaction in a dictionary
     """
 
-    assert isinstance(res, tx.ExecuteTxResp)
+    assert isinstance(res, tx_resp.ExecuteTxResp)
     assert res.code == 0
     assert res.tx_hash
 
@@ -124,28 +132,40 @@ def raw_sync_tx_must_succeed(tx_output: dict):
     assert isinstance(tx_output["rawLog"], list)
 
 
-TX_CONFIG_TEST: pytypes.TxConfig = pytypes.TxConfig(
-    broadcast_mode=pytypes.TxBroadcastMode.SYNC,
+TX_CONFIG_TEST: common.TxConfig = common.TxConfig(
+    broadcast_mode=common.TxBroadcastMode.SYNC,
     gas_multiplier=1.25,
     gas_price=0.25,
 )
 
 
-def fixture_network() -> nibiru.Network:
-    return nibiru.Network.customnet()
+def fixture_network() -> pysdk.Network:
+    return pysdk.Network.customnet()
 
 
-def fixture_sdk_val() -> nibiru.Sdk:
+def fixture_sdk_val() -> pysdk.Sdk:
     return (
-        nibiru.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
+        pysdk.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
         .with_config(TX_CONFIG_TEST)
         .with_network(fixture_network())
     )
 
 
-def fixture_sdk_other() -> nibiru.Sdk:
+def fixture_sdk_other() -> pysdk.Sdk:
     return (
-        nibiru.Sdk.authorize()
+        pysdk.Sdk.authorize()
         .with_config(TX_CONFIG_TEST)
         .with_network(fixture_network())
     )
+
+
+@dataclasses.dataclass
+class FullTxStory:
+    broadcast_resp: tx_resp.ExecuteTxResp
+    query_tx_resp: Optional[tx_service.GetTxResponse] = None
+
+    def save(self):
+        FULL_TX_STORIES.append(self)
+
+
+FULL_TX_STORIES: List[FullTxStory] = []

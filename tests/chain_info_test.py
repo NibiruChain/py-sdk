@@ -1,13 +1,13 @@
 # chain_info_test.py
 import dataclasses
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import pytest
 import requests
 
-import nibiru
+import pysdk
 import tests
-from nibiru import pytypes
+from pysdk import pytypes
 
 
 def test_genesis_block_ping(network: pytypes.Network):
@@ -21,11 +21,11 @@ def test_genesis_block_ping(network: pytypes.Network):
     assert all([key in query_resp.keys() for key in ["jsonrpc", "id", "result"]])
 
 
-def test_get_chain_id(sdk_val: nibiru.Sdk):
+def test_get_chain_id(sdk_val: pysdk.Sdk):
     assert sdk_val.network.chain_id == sdk_val.query.get_chain_id()
 
 
-def test_wait_next_block(sdk_val: nibiru.Sdk):
+def test_wait_next_block(sdk_val: pysdk.Sdk):
     ...
 
 
@@ -36,8 +36,8 @@ def test_wait_next_block(sdk_val: nibiru.Sdk):
 #     assert new_block_height > current_block_height
 
 
-def test_version_works(sdk_val: nibiru.Sdk):
-    tests = [
+def test_version_works(sdk_val: pysdk.Sdk):
+    test_cases: List[Dict[str, Union[bool, List[str]]]] = [
         {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},
         {"should_fail": False, "versions": ["0.3.2", "0.3.4"]},
         {"should_fail": True, "versions": ["0.3.2", "0.4.1"]},
@@ -48,15 +48,17 @@ def test_version_works(sdk_val: nibiru.Sdk):
         },
     ]
 
-    for test in tests:
-        if test["should_fail"]:
+    for tc in test_cases:
+        if tc["should_fail"]:
             with pytest.raises(AssertionError, match="Version error"):
-                sdk_val.query.assert_compatible_versions(*test["versions"])
+                assert isinstance(tc["versions"], list)
+                sdk_val.query.assert_compatible_versions(*tc["versions"])
         else:
-            sdk_val.query.assert_compatible_versions(*test["versions"])
+            assert isinstance(tc["versions"], list)
+            sdk_val.query.assert_compatible_versions(*tc["versions"])
 
 
-def test_block_getters(sdk_agent: nibiru.Sdk):
+def test_block_getters(sdk_agent: pysdk.Sdk):
     """Tests queries from the Tendemint gRPC channel
     - GetBlockByHeight
     - GetLatestBlock
@@ -75,7 +77,7 @@ def test_block_getters(sdk_agent: nibiru.Sdk):
         ), "missing attributes on the 'block' field"
 
 
-def test_blocks_getters(sdk_agent: nibiru.Sdk):
+def test_blocks_getters(sdk_agent: pysdk.Sdk):
     """Tests queries from the Tendemint gRPC channel
     - GetBlocksByHeight
     """
@@ -92,7 +94,7 @@ def test_blocks_getters(sdk_agent: nibiru.Sdk):
         ), "missing attributes on the 'block' field"
 
 
-def test_query(sdk_val: nibiru.Sdk):
+def test_query(sdk_val: pysdk.Sdk):
     """
     Open a position and ensure output is correct
     """
@@ -109,11 +111,11 @@ def test_Network_from_chain_id():
     def run_case(test_case: Case):
         if test_case.expected_fail:
             try:
-                _ = nibiru.Network.from_chain_id(test_case.chain_id_in)
+                _ = pysdk.Network.from_chain_id(test_case.chain_id_in)
             except BaseException as err:
                 tests.raises(["invalid chain type", "invalid chain_id format"], err)
         else:
-            network = nibiru.Network.from_chain_id(test_case.chain_id_in)
+            network = pysdk.Network.from_chain_id(test_case.chain_id_in)
             _, chain_type, _ = network.chain_id.split("-")
 
             if chain_type == "localnet":

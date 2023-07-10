@@ -1,5 +1,5 @@
-Module nibiru.query_clients.auth
-================================
+Module pysdk.query_clients.auth
+===============================
 
 Classes
 -------
@@ -9,7 +9,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.query_clients.util.QueryClient
+    * pysdk.query_clients.util.QueryClient
 
     ### Methods
 

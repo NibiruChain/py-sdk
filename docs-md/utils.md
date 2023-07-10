@@ -1,5 +1,5 @@
-Module nibiru.utils
-===================
+Module pysdk.utils
+==================
 
 Functions
 ---------
@@ -93,36 +93,12 @@ Functions
 :
 
 
-`from_sdk_dec_24(dec_str: str) ‑> float`
-:
-
-
 `from_sdk_dec_n(dec_str: str, n: int = 6) ‑> float`
 :
 
 
 `from_sdk_int(int_str: str) ‑> int`
 :
-
-
-`init_logger(name: str) ‑> logging.Logger`
-:   Simple logger to use throughout the test suite.
-
-    Examples:
-    ```python
-    from nibiru.utils import init_logger
-    LOGGER = init_logger("test-logger")
-    LOGGER.info("successfully executed tx staking command")
-    LOGGER.debug("debugging error message")
-    ```
-
-    Log levels include: [debug, info, warning, error, critical]
-
-    Args:
-        name (str): Name of the logger
-
-    Returns:
-        logging.Logger: The logger object
 
 
 `toPbTimestamp(dt: datetime.datetime)`
@@ -151,14 +127,14 @@ Functions
 Classes
 -------
 
-`ColoredFormatter(fmt=None, datefmt=None, style='%')`
+`ColoredFormatter(fmt=None, datefmt=None, style='%', validate=True)`
 :   Formatter instances are used to convert a LogRecord to text.
 
     Formatters need to know how a LogRecord is constructed. They are
     responsible for converting a LogRecord to (usually) a string which can
     be interpreted by either a human or an external system. The base Formatter
     allows a formatting string to be specified. If none is supplied, the
-    the style-dependent default value, "%(message)s", "{message}", or
+    style-dependent default value, "%(message)s", "{message}", or
     "${message}", is used.
 
     The Formatter can be initialized with a format string which makes use of

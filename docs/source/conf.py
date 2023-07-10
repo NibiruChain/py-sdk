@@ -57,4 +57,4 @@ epub_show_urls = 'footnote'
 # napoleon_type_aliases = None
 # napoleon_attr_annotations = True
 
-exclude_patterns = ["nibiru/proto/", "nibiru/exceptions.py" "nibiru/constant.py"]
+exclude_patterns = ["nibiru/proto/", "pysdk.exceptions.py" "nibiru/constant.py"]

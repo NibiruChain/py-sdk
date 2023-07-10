@@ -1,5 +1,5 @@
-Module nibiru.query_clients.perp
-================================
+Module pysdk.query_clients.perp
+===============================
 
 Classes
 -------
@@ -9,9 +9,39 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.query_clients.util.QueryClient
+    * pysdk.query_clients.util.QueryClient
 
     ### Methods
+
+    `all_positions(self, trader: str) ‑> Dict[str, dict]`
+    :   Args:
+            trader (str): Address of the owner of the positions
+
+        Returns:
+            Dict[str, dict]: All of the open positions for the 'trader'.
+
+        Example Return Value:
+
+        ```json
+        {
+          "ubtc:unusd": {
+            "block_number": 1137714,
+            "margin_ratio_index": 0.0,
+            "margin_ratio_mark": 0.09999999999655101,
+            "position": {
+            "block_number": 1137714,
+            "latest_cumulative_premium_fraction": 17233.436302191654,
+            "margin": 10.0,
+            "open_notional": 100.0,
+            "pair": "ubtc:unusd",
+            "size": -0.00545940925278242,
+            "trader_address": "nibi10gm4kys9yyrlqpvj05vqvjwvje87gln8nsm8wa"
+            },
+            "position_notional": 100.0,
+            "unrealized_pnl": -5.079e-15
+          }
+        }
+        ```
 
     `params(self)`
     :   Get the parameters of the perp module.

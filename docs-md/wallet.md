@@ -1,5 +1,5 @@
-Module nibiru.wallet
-====================
+Module pysdk.wallet
+===================
 
 Classes
 -------
@@ -7,15 +7,26 @@ Classes
 `Address(addr: bytes)`
 :
 
+    ### Class variables
+
+    `addr: bytes`
+    :
+
+    `number: int`
+    :
+
+    `sequence: int`
+    :
+
     ### Static methods
 
-    `from_acc_bech32(bech: str) ‑> nibiru.wallet.Address`
+    `from_acc_bech32(bech: str) ‑> pysdk.wallet.Address`
     :   Create an address instance from a bech32-encoded account address
 
-    `from_cons_bech32(bech: str) ‑> nibiru.wallet.Address`
+    `from_cons_bech32(bech: str) ‑> pysdk.wallet.Address`
     :   Create an address instance from a bech32-encoded consensus address
 
-    `from_val_bech32(bech: str) ‑> nibiru.wallet.Address`
+    `from_val_bech32(bech: str) ‑> pysdk.wallet.Address`
     :   Create an address instance from a bech32-encoded validator address
 
     ### Methods
@@ -31,7 +42,7 @@ Classes
         the node.
 
         Args:
-            from_node (bool, optional): Wether to query or not from the node. Defaults to False.
+            from_node (bool, optional): Whether to query or not from the node. Defaults to False.
             lcd_endpoint (str, optional): The lcd endoint, needed for when from_node is set to true. Defaults to None.
 
         Returns:
@@ -40,7 +51,7 @@ Classes
     `get_subaccount_id(self, index: int) ‑> str`
     :   Return a hex representation of address
 
-    `init_num_seq(self, lcd_endpoint: str) ‑> nibiru.wallet.Address`
+    `init_num_seq(self, lcd_endpoint: str) ‑> pysdk.wallet.Address`
     :
 
     `to_acc_bech32(self) ‑> str`
@@ -65,10 +76,10 @@ Classes
 
     ### Static methods
 
-    `from_hex(priv: str) ‑> nibiru.wallet.PrivateKey`
+    `from_hex(priv: str) ‑> pysdk.wallet.PrivateKey`
     :
 
-    `from_mnemonic(words: str, path="m/44'/118'/0'/0/0") ‑> nibiru.wallet.PrivateKey`
+    `from_mnemonic(words: str, path="m/44'/118'/0'/0/0") ‑> pysdk.wallet.PrivateKey`
     :   Create a PrivateKey instance from a given mnemonic phrase and a HD derivation path.
         If path is not given, default to Band's HD prefix 494 and all other indexes being zeroes.
 
@@ -77,7 +88,7 @@ Classes
 
         :return: Initialized PrivateKey object
 
-    `generate(path="m/44'/118'/0'/0/0") ‑> Tuple[str, nibiru.wallet.PrivateKey]`
+    `generate(path="m/44'/118'/0'/0/0") ‑> Tuple[str, pysdk.wallet.PrivateKey]`
     :   Generate new private key with random mnemonic phrase
 
         :param path: the HD path that follows the BIP32 standard
@@ -97,7 +108,7 @@ Classes
     `to_hex(self) ‑> str`
     :   Return a hex representation of signing key.
 
-    `to_public_key(self) ‑> nibiru.wallet.PublicKey`
+    `to_public_key(self) ‑> pysdk.wallet.PublicKey`
     :   Return the PublicKey associated with this private key.
 
         :return: a PublicKey that can be used to verify the signatures made with this PrivateKey
@@ -126,13 +137,13 @@ Classes
 
     ### Static methods
 
-    `from_acc_bech32(bech: str) ‑> nibiru.wallet.PublicKey`
+    `from_acc_bech32(bech: str) ‑> pysdk.wallet.PublicKey`
     :
 
-    `from_cons_bech32(bech: str) ‑> nibiru.wallet.PublicKey`
+    `from_cons_bech32(bech: str) ‑> pysdk.wallet.PublicKey`
     :
 
-    `from_val_bech32(bech: str) ‑> nibiru.wallet.PublicKey`
+    `from_val_bech32(bech: str) ‑> pysdk.wallet.PublicKey`
     :
 
     ### Methods
@@ -140,7 +151,7 @@ Classes
     `to_acc_bech32(self) ‑> str`
     :   Return bech32-encoded with account public key prefix
 
-    `to_address(self) ‑> nibiru.wallet.Address`
+    `to_address(self) ‑> pysdk.wallet.Address`
     :   Return address instance from this public key
 
     `to_cons_bech32(self) ‑> str`

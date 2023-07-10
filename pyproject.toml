@@ -17,7 +17,7 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Intended Audience :: Developers",
 ]
-packages = [{ include = "nibiru" }]
+packages = [{ include = "pysdk" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -37,6 +37,7 @@ packaging = "^21.3"
 nibiru-proto = "==0.21.3b7"
 bip32 = "^3.3"
 importlib-metadata = "^5.0.0"
+types-protobuf = "^4.23.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest-skip-slow = "^0.0.3"
@@ -47,6 +48,8 @@ black = "^22.10.0"
 pytest-cov = "^4.0.0"
 isort = "^5.12.0"
 types-requests = "^2.31.0.1"
+mypy = "^1.4.1"
+types-protobuf = "^4.23.0.1"
 
 [tool.black]
 line-length = 88

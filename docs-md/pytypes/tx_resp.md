@@ -1,8 +1,38 @@
-Module nibiru.pytypes.tx_resp
-=============================
+Module pysdk.pytypes.tx_resp
+============================
 
 Classes
 -------
+
+`ExecuteTxResp(code: Optional[int], tx_hash: Optional[str], log: str)`
+:   ExecuteTxResp(code: Union[int, NoneType], tx_hash: Union[str, NoneType], log: str)
+
+    ### Class variables
+
+    `code: Optional[int]`
+    :
+
+    `log: str`
+    :
+
+    `tx_hash: Optional[str]`
+    :
+
+`RawSyncTxResp(*args, **kwargs)`
+:   Proxy for a 'TypedDict' representing a transaction response.
+    - The 'TxResponse' type is defined in
+    [cosmos-sdk/types/abci.pb.go](https://github.com/cosmos/cosmos-sdk/blob/v0.45.10/types/abci.pb.go)
+
+    ### Keys (ValueType):
+
+    - txhash (str): unique identifier for the transaction
+    - rawLog (list): Raw output of the SDK application's logger.
+        Possibly non-deterministic. This output also contains the events emitted
+        during the processing of the transaction, which is equivalently
+
+    ### Ancestors (in MRO)
+
+    * builtins.dict
 
 `RawTxResp(*args, **kwargs)`
 :   Proxy for a 'TypedDict' representing a transaction response.
@@ -31,7 +61,7 @@ Classes
 
     * builtins.dict
 
-`TxResp(height: int, txhash: str, data: str, rawLog: List[nibiru.pytypes.event.TxLogEvents], logs: list, gasWanted: int, gasUsed: int, events: list, _raw: RawTxResp)`
+`TxResp(height: int, txhash: str, data: str, rawLog: List[pysdk.pytypes.event.TxLogEvents], logs: list, gasWanted: int, gasUsed: int, events: list, _raw: RawTxResp)`
 :   A 'TxResp' represents the response payload from a successful transaction.
 
     The 'TxResponse' type is defined in
@@ -76,7 +106,7 @@ Classes
     `logs: list`
     :
 
-    `rawLog: List[nibiru.pytypes.event.TxLogEvents]`
+    `rawLog: List[pysdk.pytypes.event.TxLogEvents]`
     :
 
     `txhash: str`
@@ -84,5 +114,5 @@ Classes
 
     ### Static methods
 
-    `from_raw(raw_tx_resp: RawTxResp) ‑> nibiru.pytypes.tx_resp.TxResp`
+    `from_raw(raw_tx_resp: RawTxResp) ‑> pysdk.pytypes.tx_resp.TxResp`
     :

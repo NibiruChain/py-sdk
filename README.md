@@ -5,7 +5,7 @@
 <!-- Badges -->
 
 [![Nibiru Test workflow][tests-badge]][tests-workflow]
-[![Nibiru examples tests][examples-badge]][tests-example]
+[![Examples tests][examples-badge]][tests-example]
 [![PyPI Version][pypi-image]][pypi-url]
 [![][documentation-image]][documentation-url]
 [![][discord-badge]][discord-url]
@@ -71,7 +71,7 @@ python -m pip install --upgrade pip
 ### Ex: Creating a wallet and SDK client
 
 ```python
-from nibiru import wallet
+from pysdk import wallet
 
 # Save the mnemonic for later
 mnemonic, private_key = wallet.PrivateKey.generate()
@@ -123,7 +123,7 @@ print(query_resp)
 
 ```python
 # version 0.16.3
-from nibiru import Msg
+from pysdk import Msg
 
 tx_resp = sdk.tx.execute_msgs(
     Msg.perp.open_position(

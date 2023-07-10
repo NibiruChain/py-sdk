@@ -1,5 +1,5 @@
-Module nibiru.crypto.ripemd160
-==============================
+Module pysdk.crypto.ripemd160
+=============================
 Implementing SHA-256 from scratch was fun, but for RIPEMD160 I am
 taking an existing implementation and made some cleanups and api changes.
 

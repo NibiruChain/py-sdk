@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.local
-          key: poetry-0 # increment to reset cache
+          key: poetry-2 # increment to reset cache
 
       # ----------------------------------------------
       # Install ping for early tests
@@ -77,6 +77,7 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
           version: latest
+
       #----------------------------------------------
       # load cached venv if cache exists
       #----------------------------------------------

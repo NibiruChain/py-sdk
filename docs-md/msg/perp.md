@@ -1,10 +1,21 @@
-Module nibiru.msg.perp
-======================
+Module pysdk.msg.perp
+=====================
 
 Classes
 -------
 
-`MsgAddMargin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin)`
+`Liquidation(pair: str, trader: str)`
+:   Keeper of the pair/trader pairs for liquidations
+
+    ### Class variables
+
+    `pair: str`
+    :
+
+    `trader: str`
+    :
+
+`MsgAddMargin(sender: str, pair: str, margin: pysdk.pytypes.common.Coin)`
 :   Add margin for the position (pair + trader)
 
     Attributes:
@@ -14,23 +25,23 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
 
-    `margin: nibiru.pytypes.common.Coin`
-    :
-
-    `sender: str`
+    `margin: pysdk.pytypes.common.Coin`
     :
 
     `pair: str`
     :
 
+    `sender: str`
+    :
+
     ### Methods
 
-    `to_pb(self) ‑> perp.v1.tx_pb2.MsgAddMargin`
+    `to_pb(self) ‑> nibiru.perp.v2.tx_pb2.MsgAddMargin`
     :   Returns the Message as protobuf object.
 
         Returns:
@@ -45,57 +56,26 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
 
-    `sender: str`
+    `pair: str`
     :
 
-    `pair: str`
+    `sender: str`
     :
 
     ### Methods
 
-    `to_pb(self) ‑> perp.v1.tx_pb2.MsgClosePosition`
+    `to_pb(self) ‑> nibiru.perp.v2.tx_pb2.MsgClosePosition`
     :   Returns the Message as protobuf object.
 
         Returns:
             pb.MsgClosePosition: The proto object.
 
-`MsgLiquidate(sender: str, pair: str, trader: str)`
-:   Close the position.
-
-    Attributes:
-        sender (str): The sender address
-        pair (str): The token pair
-
-    ### Ancestors (in MRO)
-
-    * nibiru.pytypes.common.PythonMsg
-    * abc.ABC
-
-    ### Class variables
-
-    `sender: str`
-    :
-
-    `pair: str`
-    :
-
-    `trader: str`
-    :
-
-    ### Methods
-
-    `to_pb(self) ‑> perp.v1.tx_pb2.MsgLiquidate`
-    :   Returns the Message as protobuf object.
-
-        Returns:
-            pb.MsgLiquidate: The proto object.
-
-`MsgOpenPosition(sender: str, pair: str, side: nibiru.pytypes.common.Side, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float)`
+`MsgMarketOrder(sender: str, pair: str, dir: pysdk.pytypes.common.Direction, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float)`
 :   Open a position using the specified parameters.
 
     Attributes:
@@ -110,7 +90,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -118,7 +98,13 @@ Classes
     `base_asset_amount_limit: float`
     :
 
+    `dir: pysdk.pytypes.common.Direction`
+    :
+
     `leverage: float`
+    :
+
+    `pair: str`
     :
 
     `quote_asset_amount: float`
@@ -127,21 +113,43 @@ Classes
     `sender: str`
     :
 
-    `side: nibiru.pytypes.common.Side`
+    ### Methods
+
+    `to_pb(self) ‑> nibiru.perp.v2.tx_pb2.MsgMarketOrder`
+    :   Returns the Message as protobuf object.
+
+        Returns:
+            pb.MsgMarketOrder: The proto object.
+
+`MsgMultiLiquidate(sender: str, liquidations: List[pysdk.msg.perp.Liquidation])`
+:   Close the position.
+
+    Attributes:
+        sender (str): The sender address
+        liquidations (Liquidation): The list of {pair, trader} pairs.
+
+    ### Ancestors (in MRO)
+
+    * pysdk.pytypes.common.PythonMsg
+    * abc.ABC
+
+    ### Class variables
+
+    `liquidations: List[pysdk.msg.perp.Liquidation]`
     :
 
-    `pair: str`
+    `sender: str`
     :
 
     ### Methods
 
-    `to_pb(self) ‑> perp.v1.tx_pb2.MsgOpenPosition`
+    `to_pb(self) ‑> nibiru.perp.v2.tx_pb2.MsgMultiLiquidate`
     :   Returns the Message as protobuf object.
 
         Returns:
-            pb.MsgOpenPosition: The proto object.
+            pb.MsgLiquidate: The proto object.
 
-`MsgRemoveMargin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin)`
+`MsgRemoveMargin(sender: str, pair: str, margin: pysdk.pytypes.common.Coin)`
 :   Remove margin for the position (pair + trader)
 
     Attributes:
@@ -151,23 +159,23 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
 
-    `margin: nibiru.pytypes.common.Coin`
-    :
-
-    `sender: str`
+    `margin: pysdk.pytypes.common.Coin`
     :
 
     `pair: str`
     :
 
+    `sender: str`
+    :
+
     ### Methods
 
-    `to_pb(self) ‑> perp.v1.tx_pb2.MsgRemoveMargin`
+    `to_pb(self) ‑> nibiru.perp.v2.tx_pb2.MsgRemoveMargin`
     :   Returns the Message as protobuf object.
 
         Returns:
@@ -182,9 +190,9 @@ Classes
     - add_margin: Deleverages a position by adding margin to back it.
     - remove_margin: Increases the leverage of the position by removing margin.
 
-    ### Methods
+    ### Static methods
 
-    `add_margin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin) ‑> nibiru.msg.perp.MsgAddMargin`
+    `add_margin(sender: str, pair: str, margin: pysdk.pytypes.common.Coin) ‑> pysdk.msg.perp.MsgAddMargin`
     :   Add margin for the position (pair + trader)
 
         Attributes:
@@ -192,14 +200,29 @@ Classes
             pair (str): The token pair
             margin (Coin): The margin to remove in a coin format
 
-    `close_position(sender: str, pair: str) ‑> nibiru.msg.perp.MsgClosePosition`
+    `close_position(sender: str, pair: str) ‑> pysdk.msg.perp.MsgClosePosition`
     :   Close the position.
 
         Attributes:
             sender (str): The sender address
             pair (str): The token pair
 
-    `open_position(sender: str, pair: str, is_long: bool, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float) ‑> nibiru.msg.perp.MsgOpenPosition`
+    `liquidate(sender: str, pair: str, trader: str) ‑> pysdk.msg.perp.MsgMultiLiquidate`
+    :   Liquidates unhealthy position (pair + trader)
+
+        Attributes:
+            sender (str): The liquidator address
+            pair (str): The token pair
+            trader (str): The trader address
+
+    `liquidate_multiple(sender: str, liquidations: List[pysdk.msg.perp.Liquidation]) ‑> pysdk.msg.perp.MsgMultiLiquidate`
+    :   Liquidates multiple unhealthy positions (pair + trader)
+
+        Attributes:
+            sender (str): The liquidator address
+            liquidations (List[Liquidation]): list of pair/traders to liquidate
+
+    `open_position(sender: str, pair: str, is_long: bool, quote_asset_amount: float, leverage: float, base_asset_amount_limit: float) ‑> pysdk.msg.perp.MsgMarketOrder`
     :   Open a posiiton using the specified parameters.
 
         Attributes:
@@ -212,7 +235,7 @@ Classes
             base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
                 quote.
 
-    `remove_margin(sender: str, pair: str, margin: nibiru.pytypes.common.Coin) ‑> nibiru.msg.perp.MsgRemoveMargin`
+    `remove_margin(sender: str, pair: str, margin: pysdk.pytypes.common.Coin) ‑> pysdk.msg.perp.MsgRemoveMargin`
     :   Remove margin for the position (pair + trader)
 
         Attributes:
@@ -221,22 +244,22 @@ Classes
             margin (Coin): The margin to remove in a coin format
 
 `perp()`
-:   The perp class allows you to generate transaction for the perpetual futures module using the different messages
-    available.
+:   The perp class allows you to generate transaction for the perpetual futures module
+    using the different messages available.
 
     ### Class variables
 
-    `add_margin: nibiru.msg.perp.MsgAddMargin`
+    `add_margin: pysdk.msg.perp.MsgAddMargin`
     :
 
-    `close_position: nibiru.msg.perp.MsgClosePosition`
+    `close_position: pysdk.msg.perp.MsgClosePosition`
     :
 
-    `liquidate: nibiru.msg.perp.MsgLiquidate`
+    `liquidate: pysdk.msg.perp.MsgMultiLiquidate`
     :
 
-    `open_position: nibiru.msg.perp.MsgOpenPosition`
+    `open_position: pysdk.msg.perp.MsgMarketOrder`
     :
 
-    `remove_margin: nibiru.msg.perp.MsgRemoveMargin`
+    `remove_margin: pysdk.msg.perp.MsgRemoveMargin`
     :

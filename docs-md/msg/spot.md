@@ -1,10 +1,10 @@
-Module nibiru.msg.spot
+Module pysdk.msg.spot
 =====================
 
 Classes
 -------
 
-`MsgCreatePool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>, assets: List[nibiru.pytypes.common.PoolAsset])`
+`MsgCreatePool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f49922c6dc0>, assets: List[pysdk.pytypes.common.PoolAsset])`
 :   Create a pool using the assets specified
 
     Attributes:
@@ -15,7 +15,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -23,7 +23,7 @@ Classes
     `a: int`
     :
 
-    `assets: List[nibiru.pytypes.common.PoolAsset]`
+    `assets: List[pysdk.pytypes.common.PoolAsset]`
     :
 
     `creator: str`
@@ -32,7 +32,7 @@ Classes
     `exit_fee: float`
     :
 
-    `pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>`
+    `pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f49922c6dc0>`
     :
 
     `swap_fee: float`
@@ -40,13 +40,13 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> spot.v1.tx_pb2.MsgCreatePool`
+    `to_pb(self) ‑> nibiru.spot.v1.tx_pb2.MsgCreatePool`
     :   Returns the Message as protobuf object.
 
         Returns:
             pb.MsgCreatePool: The proto object.
 
-`MsgExitPool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin)`
+`MsgExitPool(sender: str, pool_id: int, pool_shares: pysdk.pytypes.common.Coin)`
 :   Exit a pool using the specified pool shares
 
     Attributes:
@@ -56,7 +56,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -64,7 +64,7 @@ Classes
     `pool_id: int`
     :
 
-    `pool_shares: nibiru.pytypes.common.Coin`
+    `pool_shares: pysdk.pytypes.common.Coin`
     :
 
     `sender: str`
@@ -72,13 +72,13 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> spot.v1.tx_pb2.MsgExitPool`
+    `to_pb(self) ‑> nibiru.spot.v1.tx_pb2.MsgExitPool`
     :   Returns the Message as protobuf object.
 
         Returns:
             pb.MsgExitPool: The proto object.
 
-`MsgJoinPool(sender: str, pool_id: int, tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]])`
+`MsgJoinPool(sender: str, pool_id: int, tokens: Union[pysdk.pytypes.common.Coin, List[pysdk.pytypes.common.Coin]])`
 :   Join a pool using the specified tokens
 
     Attributes:
@@ -88,7 +88,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -99,18 +99,18 @@ Classes
     `sender: str`
     :
 
-    `tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]`
+    `tokens: Union[pysdk.pytypes.common.Coin, List[pysdk.pytypes.common.Coin]]`
     :
 
     ### Methods
 
-    `to_pb(self) ‑> spot.v1.tx_pb2.MsgJoinPool`
+    `to_pb(self) ‑> nibiru.spot.v1.tx_pb2.MsgJoinPool`
     :   Returns the Message as protobuf object.
 
         Returns:
             pb.MsgJoinPool: The proto object.
 
-`MsgSwapAssets(sender: str, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str)`
+`MsgSwapAssets(sender: str, pool_id: int, token_in: pysdk.pytypes.common.Coin, token_out_denom: str)`
 :   Swap the assets provided for the denom specified
 
     Attributes:
@@ -121,7 +121,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * nibiru.pytypes.common.PythonMsg
+    * pysdk.pytypes.common.PythonMsg
     * abc.ABC
 
     ### Class variables
@@ -132,7 +132,7 @@ Classes
     `sender: str`
     :
 
-    `token_in: nibiru.pytypes.common.Coin`
+    `token_in: pysdk.pytypes.common.Coin`
     :
 
     `token_out_denom: str`
@@ -140,7 +140,7 @@ Classes
 
     ### Methods
 
-    `to_pb(self) ‑> spot.v1.tx_pb2.MsgSwapAssets`
+    `to_pb(self) ‑> nibiru.spot.v1.tx_pb2.MsgSwapAssets`
     :   Returns the Message as protobuf object.
 
         Returns:
@@ -155,18 +155,18 @@ Classes
     - join_pool: Join a pool using the specified tokens
     - swap: Swap the assets provided for the denom specified
 
-    ### Methods
+    ### Static methods
 
-    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f7080fa6bd0>, assets: List[nibiru.pytypes.common.PoolAsset]) ‑> nibiru.msg.spot.MsgCreatePool`
+    `create_pool(creator: str, swap_fee: float, exit_fee: float, a: int, pool_type: <google.protobuf.internal.enum_type_wrapper.EnumTypeWrapper object at 0x7f49922c6dc0>, assets: List[pysdk.pytypes.common.PoolAsset]) ‑> pysdk.msg.spot.MsgCreatePool`
     :
 
-    `exit_pool(sender: str, pool_id: int, pool_shares: nibiru.pytypes.common.Coin) ‑> nibiru.msg.spot.MsgExitPool`
+    `exit_pool(sender: str, pool_id: int, pool_shares: pysdk.pytypes.common.Coin) ‑> pysdk.msg.spot.MsgExitPool`
     :
 
-    `join_pool(sender: str, pool_id: int, tokens: Union[nibiru.pytypes.common.Coin, List[nibiru.pytypes.common.Coin]]) ‑> nibiru.msg.spot.MsgJoinPool`
+    `join_pool(sender: str, pool_id: int, tokens: Union[pysdk.pytypes.common.Coin, List[pysdk.pytypes.common.Coin]]) ‑> pysdk.msg.spot.MsgJoinPool`
     :
 
-    `swap(sender: str, pool_id: int, token_in: nibiru.pytypes.common.Coin, token_out_denom: str) ‑> nibiru.msg.spot.MsgSwapAssets`
+    `swap(sender: str, pool_id: int, token_in: pysdk.pytypes.common.Coin, token_out_denom: str) ‑> pysdk.msg.spot.MsgSwapAssets`
     :
 
 `spot()`
@@ -174,14 +174,14 @@ Classes
 
     ### Class variables
 
-    `create_pool: nibiru.msg.spot.MsgCreatePool`
+    `create_pool: pysdk.msg.spot.MsgCreatePool`
     :
 
-    `exit_pool: nibiru.msg.spot.MsgExitPool`
+    `exit_pool: pysdk.msg.spot.MsgExitPool`
     :
 
-    `join_pool: nibiru.msg.spot.MsgJoinPool`
+    `join_pool: pysdk.msg.spot.MsgJoinPool`
     :
 
-    `swap_assets: nibiru.msg.spot.MsgSwapAssets`
+    `swap_assets: pysdk.msg.spot.MsgSwapAssets`
     :

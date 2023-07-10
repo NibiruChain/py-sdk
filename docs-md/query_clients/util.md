@@ -1,5 +1,5 @@
-Module nibiru.query_clients.util
-================================
+Module pysdk.query_clients.util
+===============================
 
 Variables
 ---------
@@ -44,7 +44,7 @@ Functions
 
 
 `dict_keys_from_camel_to_snake(d)`
-:   Transform all keys from the dictionnary from camelcase to snake case.
+:   Transform all keys from the dictionary from camelcase to snake case.
 
     Args:
         d (dict): The dictionary to transform
@@ -76,14 +76,14 @@ Classes
 
     ### Descendants
 
-    * nibiru.query_clients.auth.AuthQueryClient
-    * nibiru.query_clients.dex.DexQueryClient
-    * nibiru.query_clients.epoch.EpochQueryClient
-    * nibiru.query_clients.perp.PerpQueryClient
-    * nibiru.query_clients.staking.StakingQueryClient
-    * nibiru.query_clients.vpool.VpoolQueryClient
+    * pysdk.query_clients.auth.AuthQueryClient
+    * pysdk.query_clients.epoch.EpochQueryClient
+    * pysdk.query_clients.perp.PerpQueryClient
+    * pysdk.query_clients.spot.SpotQueryClient
+    * pysdk.query_clients.stablecoin.StablecoinQueryClient
+    * pysdk.query_clients.staking.StakingQueryClient
 
     ### Methods
 
-    `query(self, api_callable: grpc.UnaryUnaryMultiCallable, req: google.protobuf.message.Message, should_deserialize: bool = True) ‑> Union[dict, google.protobuf.message.Message]`
+    `query(self, api_callable: grpc.UnaryUnaryMultiCallable, req: google.protobuf.message.Message, should_deserialize: bool = True, height: Optional[int] = None) ‑> Union[dict, google.protobuf.message.Message]`
     :

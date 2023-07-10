@@ -1,5 +1,5 @@
-Module nibiru.sdk
-=================
+Module pysdk.sdk
+================
 The "Sdk" is the main interface to the blockchain. Each "Sdk" object needs to be
 authorized with a wallet/signer.
 
@@ -8,7 +8,7 @@ and a query client for sending gRPC queries.
 
 This object depends on the network and transaction configuration the users want.
 These objects can be set using the Network and TxConfig classes from the
-nibiru/pytypes package.
+pysdk.pytypes package.
 
 Classes
 -------
@@ -49,26 +49,33 @@ Classes
 
     ### Class variables
 
-    `network: nibiru.pytypes.network.Network`
+    `mnemonic: str`
     :
 
-    `query: nibiru.grpc_client.GrpcClient`
+    `network: pysdk.pytypes.network.Network`
     :
 
-    `tx: nibiru.tx.TxClient`
+    `query: pysdk.grpc_client.GrpcClient`
     :
 
-    `tx_config: nibiru.pytypes.common.TxConfig`
+    `tx: pysdk.tx.TxClient`
+    :
+
+    `tx_config: pysdk.pytypes.common.TxConfig`
     :
 
     ### Static methods
 
-    `authorize(key: str = None) ‑> nibiru.sdk.Sdk`
-    :   Authorize allows the user to generate or recover a wallet and register it as an Sdk object.
-        If a key is provided, the wallet will be recovered. Otherwise, a new wallet is created.
+    `authorize(key: Optional[str] = None) ‑> pysdk.sdk.Sdk`
+    :   Authorize allows the user to generate or recover a wallet and register
+        it as an Sdk object.
+
+        If a key is provided, the wallet will be recovered. Otherwise, a new
+        wallet is created.
 
         Args:
-            key (str, optional): The mnemonic if recover needed. Defaults to None.
+            key (str, optional): The mnemonic if recover needed.
+              Defaults to None.
 
         Returns:
             Sdk: The updated sdk object
@@ -83,7 +90,7 @@ Classes
 
     ### Methods
 
-    `with_config(self, config: nibiru.pytypes.common.TxConfig) ‑> nibiru.sdk.Sdk`
+    `with_config(self, config: pysdk.pytypes.common.TxConfig) ‑> pysdk.sdk.Sdk`
     :   Change the configuration for trasnactions for the sdk to the specified config.
 
         Args:
@@ -92,7 +99,7 @@ Classes
         Returns:
             Sdk: The updated sdk object
 
-    `with_network(self, network: nibiru.pytypes.network.Network, bypass_version_check: bool = False) ‑> nibiru.sdk.Sdk`
+    `with_network(self, network: pysdk.pytypes.network.Network, bypass_version_check: bool = False) ‑> pysdk.sdk.Sdk`
     :   Change the network of the sdk to the specified network.
 
         Args:

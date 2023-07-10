@@ -1,5 +1,5 @@
-Module nibiru.msg.msg
-=====================
+Module pysdk.msg.msg
+====================
 
 Classes
 -------
@@ -22,15 +22,6 @@ Classes
         Methods:
         - send: Send tokens from one account to another
 
-    `spot`
-    :   MsgsSpot has methods for building messages for transactions on Nibi-Swap.
-
-        Methods:
-        - create_pool: Create a pool using the assets specified
-        - exit_pool: Exit a pool using the specified pool shares
-        - join_pool: Join a pool using the specified tokens
-        - swap: Swap the assets provided for the denom specified
-
     `perp`
     :   Messages for the Nibiru Chain x/perp module
 
@@ -39,6 +30,15 @@ Classes
         - close_position:
         - add_margin: Deleverages a position by adding margin to back it.
         - remove_margin: Increases the leverage of the position by removing margin.
+
+    `spot`
+    :   MsgsSpot has methods for building messages for transactions on Nibi-Swap.
+
+        Methods:
+        - create_pool: Create a pool using the assets specified
+        - exit_pool: Exit a pool using the specified pool shares
+        - join_pool: Join a pool using the specified tokens
+        - swap: Swap the assets provided for the denom specified
 
     `staking`
     :   Messages for the x/staking and x/distribution modules.

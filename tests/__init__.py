@@ -5,8 +5,12 @@ import os
 import pprint
 from typing import Iterable, List, Optional, Union
 
+# mypy skips analysis when there's a "type: ignore" comment.
+# This is used when we want to skip static analysis because of missing library
+# stubs or py.typed marker.
+# NOTE: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mis
 import shutup  # type: ignore
-from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service  # type: ignore
 
 import pysdk
 from pysdk import utils

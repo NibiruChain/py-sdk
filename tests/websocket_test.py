@@ -1,41 +1,39 @@
+import multiprocessing as mp
 import time
-from multiprocessing import Queue
 from typing import List
 
 import pytest
 
 import pysdk
-from pysdk import Msg, Network, Sdk, Transaction
-from pysdk.event_specs import EventCaptured
-from pysdk.websocket import EventType, NibiruWebsocket
-from tests import LOGGER
+import tests
+from pysdk import Msg, Network, event_specs
+from pysdk import websocket as ws
 
 
 @pytest.mark.slow
 def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
-    """
-    Open a position and ensure output is correct
-    """
+    """Open a position and ensure output is correct"""
     pair = "ubtc:unusd"
 
     expected_events_tx = [
         # Perp
-        EventType.PositionChangedEvent,
+        ws.EventType.PositionChangedEvent,
         # Bank
-        EventType.Transfer,
+        ws.EventType.Transfer,
     ]
 
     expected_events = expected_events_tx
 
-    pysdk.websocket = NibiruWebsocket(
+    websocket = ws.NibiruWebsocket(
         network,
         expected_events,
     )
-    pysdk.websocket.start()
+    websocket.start()
     time.sleep(1)
 
     # Open a position from the validator node
-    LOGGER.info("Opening position")
+    tests.LOGGER.info("Opening position")
+    random_address: str = "nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p"
     sdk_val.tx.execute_msgs(
         [
             Msg.perp.open_position(
@@ -48,13 +46,13 @@ def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
             ),
             Msg.bank.send(
                 from_address=sdk_val.address,
-                to_address="nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p",  # random address
+                to_address=random_address,
                 coins=pysdk.Coin(amount=10, denom="unibi"),
             ),
         ]
     )
 
-    LOGGER.info("Closing position")
+    tests.LOGGER.info("Closing position")
     sdk_val.tx.execute_msgs(
         Msg.perp.close_position(
             sender=sdk_val.address,
@@ -63,51 +61,53 @@ def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
     )
 
     # Give time for events to come
-    LOGGER.info("Sent txs, waiting for websocket to pick it up")
+    tests.LOGGER.info("Sent txs, waiting for websocket to pick it up")
     time.sleep(3)
 
-    pysdk.websocket.queue.put(None)
-    events: List[EventCaptured] = []
+    websocket.queue.put(None)
+    events: List[event_specs.EventCaptured] = []
     while True:
-        event = pysdk.websocket.queue.get()
+        event: event_specs.EventCaptured = websocket.queue.get()
         if event is None:
             break
         events.append(event)
 
-    # Asserting for truth because test are running in parallel in the same chain and might result in
-    # duplication of markpricechanged events.
+        # Asserting for truth because test are running in parallel in the same
+        # chain and might result in duplication of markpricechanged events.
 
-    received_events = [event.event_type for event in events]
+        received_events: List[event_specs.EventType] = [
+            event.event_type for event in events
+        ]
 
-    missing_events = [
-        event
-        for event in map(lambda x: x.get_full_path(), expected_events)
-        if event not in received_events
-    ]
+        missing_events = [
+            event
+            for event in map(lambda x: x.get_full_path(), expected_events)
+            if event not in received_events
+        ]
 
-    assert not missing_events, f"Missing events: {missing_events}"
+        assert not missing_events, f"Missing events: {missing_events}"
 
 
 @pytest.mark.slow
-def test_websocket_tx_fail_queue(sdk_val: Sdk, network: Network):
+def test_websocket_tx_fail_queue(sdk_val: pysdk.Sdk, network: Network):
     """
     Try executing failing TXs and get errors from tx_fail_queue
     """
-    tx_fail_queue = Queue()
+    tx_fail_queue: mp.Queue = mp.Queue()
 
-    pysdk.websocket = NibiruWebsocket(
+    websocket = ws.NibiruWebsocket(
         network,
-        [EventType.PositionChangedEvent],
+        [ws.EventType.PositionChangedEvent],
         tx_fail_queue,
     )
-    pysdk.websocket.start()
+    websocket.start()
     time.sleep(1)
 
     # Send failing closing transaction without simulation
     sdk_val.tx.client.sync_timeout_height()
     address = sdk_val.tx.ensure_address_info()
     tx = (
-        Transaction()
+        pysdk.Transaction()
         .with_messages(
             [
                 Msg.perp.close_position(

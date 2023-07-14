@@ -144,8 +144,9 @@ def fixture_network() -> pysdk.Network:
 
 
 def fixture_sdk_val() -> pysdk.Sdk:
+    VALIDATOR_MNEMONIC = "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
     return (
-        pysdk.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
+        pysdk.Sdk.authorize(key=VALIDATOR_MNEMONIC)
         .with_config(TX_CONFIG_TEST)
         .with_network(fixture_network())
     )

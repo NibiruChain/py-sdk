@@ -23,6 +23,7 @@ class ERRORS:
 def test_open_position(sdk_val: pysdk.Sdk):
     tests.LOGGER.info("nibid tx perp open-position")
     try:
+        
         tx_output: pt.ExecuteTxResp = sdk_val.tx.execute_msgs(
             Msg.perp.open_position(
                 sender=sdk_val.address,

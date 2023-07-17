@@ -1,4 +1,3 @@
-
 import pysdk
 import pysdk.msg  # Messages package for transactions
 import json
@@ -12,64 +11,34 @@ import tests
 import time
 from pysdk.pytypes import common
 import math
-import re
 
 class TradingBot:
-    # tuning parameters 
-    # discrepancy proportion = abs(index - mark)/index
-    network = pysdk.Network.customnet()
-    pair = "ubtc:unusd"
-    wait_time = 60
-    has_positions:bool = False
-    should_trade:bool = False
-    pos_size:float = 0
-    isLong:bool = False
-    is_against_market:bool = False
-    unrealized_pnl: float = 0
-    pos_market_delta: float = 0
-    pos_dict:Dict = {"positions": [], "errors": []}
-    VALIDATOR_MNEMONIC = "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
 
-    tx_config = pysdk.TxConfig(broadcast_mode=common.TxBroadcastMode.SYNC, gas_multiplier=1.25, gas_price=0.25)
-
-    validator = (
-    pysdk.Sdk.authorize(
-        VALIDATOR_MNEMONIC
-    )  # This allows us to recover the wallet with a mnemonic
-    .with_network(network)
-    .with_config(tx_config)
-    )
-    sdk_val: pysdk.Sdk = tests.fixture_sdk_val()
-    
     def __init__(self):
+        # No need to have global-like variables here; remove them from the constructor
+        self.pair = "ubtc:unusd"
+        self.wait_time = 60
+        self.has_positions = False
+        self.should_trade = False
+        self.pos_size = 0
+        self.isLong = False
+        self.is_against_market = False
+        self.unrealized_pnl = 0
+        self.pos_market_delta = 0
+        self.pos_dict = {"positions": [], "errors": []}
+        self.VALIDATOR_MNEMONIC = "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
+        self.tx_config = pysdk.TxConfig(broadcast_mode=common.TxBroadcastMode.SYNC, gas_multiplier=1.25, gas_price=0.25)
+        self.network = pysdk.Network.customnet()
 
-        mark_quote, quote_asset_reserve, net_position, price_multiplier = self.find_mark_quote()
-        index_quote = self.find_index_quote()
+        # Move the SDK instantiation into the constructor
+        self.validator = (
+            pysdk.Sdk.authorize(self.VALIDATOR_MNEMONIC)
+            .with_network(self.network)
+            .with_config(self.tx_config)
+        )
+        self.sdk_val = tests.fixture_sdk_val()
 
-        print("Market Bias:", net_position)
-        quote_to_move_price = self.quote_needed_to_move_price(current_price=mark_quote, target_price=index_quote, quote_reserve=quote_asset_reserve)
-        should_trade = self.should_make_position(quote_to_move_price, quote_asset_reserve, net_position)
-        if should_trade:
-            self.pos_size, self.unrealized_pnl = self.make_position(quote_to_move_price/100)
-            # add functionality to close for unrealized pnl and reopen
-        if self.has_positions:
-            self.is_against_market = self.is_pos_against_market(index_quote, mark_quote)
-            self.pos_market_delta = abs((mark_quote - index_quote) * price_multiplier * self.pos_size)
-
-        if not should_trade and self.is_against_market and self.pos_market_delta > 0.1*index_quote:
-            self.close_position()
-        
-        if not self.is_against_market and self.unrealized_pnl > 0.1*self.pos_size:
-            self.close_position()
-            self.make_position(quote_to_move_price/100)
-
-        #time.sleep(30)
-        
-
-    def quote_needed_to_move_price(self, current_price:float, target_price:float, quote_reserve:float) -> float: 
-        qp = target_price / current_price
-        return -(quote_reserve / math.sqrt(qp) - quote_reserve)
-
+    # Other methods remain unchanged
 
     def should_make_position(self, quote_needed_to_move_price:float, reserves:float, net_position:float) -> float:
         # Check discrepency between mark and index price
@@ -83,7 +52,6 @@ class TradingBot:
     def close_position(self):
         if self.has_positions:
             try:
-
                 positions_map: Dict[str, dict] = self.sdk_val.query.perp.all_positions(
                     trader=self.sdk_val.address
                 )
@@ -179,7 +147,39 @@ class TradingBot:
                 against_market = True
         return against_market
 
-if __name__ == "__main__":
-    #Write test to check if functions work with asserts
+    def quote_needed_to_move_price(self, current_price:float, target_price:float, quote_reserve:float) -> float: 
+        qp = target_price / current_price
+        return -(quote_reserve / math.sqrt(qp) - quote_reserve)
+
+
+def main():
+    # Instantiate the TradingBot class within the main() function
     bot = TradingBot()
-    print("pos_dict", bot.pos_dict)
+
+    # The rest of the logic that was previously in the constructor is now moved here
+    mark_quote, quote_asset_reserve, net_position, price_multiplier = bot.find_mark_quote()
+    index_quote = bot.find_index_quote()
+
+    print("Market Bias:", net_position)
+    quote_to_move_price = bot.quote_needed_to_move_price(current_price=mark_quote, target_price=index_quote, quote_reserve=quote_asset_reserve)
+    should_trade = bot.should_make_position(quote_to_move_price, quote_asset_reserve, net_position)
+
+    if should_trade:
+        bot.pos_size, bot.unrealized_pnl = bot.make_position(quote_to_move_price/100)
+
+    if bot.has_positions:
+        bot.is_against_market = bot.is_pos_against_market(index_quote, mark_quote)
+        bot.pos_market_delta = abs((mark_quote - index_quote) * price_multiplier * bot.pos_size)
+
+    if not should_trade and bot.is_against_market and bot.pos_market_delta > 0.1*index_quote:
+        bot.close_position()
+
+    if not bot.is_against_market and bot.unrealized_pnl > 0.1*bot.pos_size:
+        bot.close_position()
+        bot.make_position(quote_to_move_price/100)
+
+    print(bot.pos_dict)
+
+if __name__ == "__main__":
+    main()
+    #Write test to check if functions work with asserts

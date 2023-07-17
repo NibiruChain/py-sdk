@@ -73,6 +73,7 @@ def test_perp_query_position(sdk_val: pysdk.Sdk):
         # tests.LOGGER.info(
         #     f"nibid query perp trader-position: \n{tests.format_response(position_res)}"
         # )
+        
         position = position_res["position"]
         assert position["margin"]
         assert position["open_notional"]

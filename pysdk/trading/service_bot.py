@@ -4,8 +4,7 @@ import json
 import math
 from pysdk import Msg
 import subprocess
-from typing import Dict, List
-import subprocess
+from typing import Dict, List, Tuple
 from pysdk import pytypes as pt
 import tests
 import time
@@ -15,7 +14,6 @@ import math
 class TradingBot:
 
     def __init__(self):
-        # No need to have global-like variables here; remove them from the constructor
         self.pair = "ubtc:unusd"
         self.wait_time = 60
         self.has_positions = False
@@ -29,18 +27,23 @@ class TradingBot:
         self.VALIDATOR_MNEMONIC = "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
         self.tx_config = pysdk.TxConfig(broadcast_mode=common.TxBroadcastMode.SYNC, gas_multiplier=1.25, gas_price=0.25)
         self.network = pysdk.Network.customnet()
+        self.connected = False
 
-        # Move the SDK instantiation into the constructor
-        self.validator = (
-            pysdk.Sdk.authorize(self.VALIDATOR_MNEMONIC)
-            .with_network(self.network)
-            .with_config(self.tx_config)
-        )
-        self.sdk_val = tests.fixture_sdk_val()
+        while not self.connected:
+            # Keeps trying to connect to chain if not currently running
+            try: 
+                self.validator = (
+                    pysdk.Sdk.authorize(self.VALIDATOR_MNEMONIC)
+                    .with_network(self.network)
+                    .with_config(self.tx_config)
+                )
+                self.sdk_val = tests.fixture_sdk_val()
+                self.connected = True 
+            except BaseException as err:
+                print("error: ", err)
+                time.sleep(10)
 
-    # Other methods remain unchanged
-
-    def should_make_position(self, quote_needed_to_move_price:float, reserves:float, net_position:float) -> float:
+    def should_make_position(self, quote_needed_to_move_price:float, reserves:float, net_position:float) -> bool:
         # Check discrepency between mark and index price
         print("Quote To Move Price: ", quote_needed_to_move_price)
         if abs(quote_needed_to_move_price) < 0.05*reserves:
@@ -48,24 +51,27 @@ class TradingBot:
             return False
         else:
             return True
-        
+
+    # Closes the existing position if the bot has any and logs it   
     def close_position(self):
         if self.has_positions:
-            try:
+            try:   
+                # Query before closing to store detailed logs
                 positions_map: Dict[str, dict] = self.sdk_val.query.perp.all_positions(
                     trader=self.sdk_val.address
                 )
 
-                tx_output = self.sdk_val.tx.execute_msgs(
+                self.sdk_val.tx.execute_msgs(
                     Msg.perp.close_position(sender=self.sdk_val.address, pair=self.pair)
                 )
+
                 self.pos_dict.get("positions").append("CLOSED POSITION: " + str(positions_map))
                 self.has_positions = False
             except BaseException as err:
                 self.pos_dict.get("errors").append(str(err))
 
-    def make_position(self,quote_to_move:int):
-        # Make position progressively
+    # Opens a new position based on the provided quote_to_move and logs it
+    def make_position(self, quote_to_move:int):
         if quote_to_move < 0:
             isLong = False
         else:
@@ -81,6 +87,8 @@ class TradingBot:
                     base_asset_amount_limit=0,
                 )
             )
+
+            # Query position to store detailed logs
             positions_map: Dict[str, dict] = self.sdk_val.query.perp.all_positions(
                 trader=self.sdk_val.address
             )
@@ -95,7 +103,7 @@ class TradingBot:
             unrealized_pnl = 0
         return pos_size, unrealized_pnl
        
- 
+    # Fetch the index from chain
     def find_index_quote(self) -> float:
         process = subprocess.Popen("nibid q oracle exchange-rates", shell=True, stdout=subprocess.PIPE)
         process.wait()
@@ -113,8 +121,9 @@ class TradingBot:
         else:
             self.pos_dict["errors"].append(err)
         return index_quote
-
-    def find_mark_quote(self):
+    
+    # Fetch the mark, price_mult, quote reserves, and market bias from chain
+    def find_mark_quote(self) -> Tuple[float, float, float, float]:
         process = subprocess.Popen("nibid q perp markets", shell=True, stdout=subprocess.PIPE)
         process.wait()
         data, err = process.communicate()
@@ -134,7 +143,8 @@ class TradingBot:
             self.pos_dict["errors"].append(err)
         return mark_quote, quote_asset_reserve, net_position, price_mult
     
-    def is_pos_against_market(self, index, mark):
+    # Check if the position is against the market based on mark & index
+    def is_pos_against_market(self, index, mark) -> bool:
         if mark>index:
             if(self.isLong) == True:
                 against_market = True
@@ -146,40 +156,45 @@ class TradingBot:
             else:
                 against_market = True
         return against_market
-
+        
+        
+    # Calculate the quote needed to move the price to reach the target price
     def quote_needed_to_move_price(self, current_price:float, target_price:float, quote_reserve:float) -> float: 
         qp = target_price / current_price
-        return -(quote_reserve / math.sqrt(qp) - quote_reserve)
+        return -(quote_reserve / math.sqrt(qp) - quote_reserve)  
 
 
 def main():
     # Instantiate the TradingBot class within the main() function
-    bot = TradingBot()
+    while True:
+        bot = TradingBot()
 
-    # The rest of the logic that was previously in the constructor is now moved here
-    mark_quote, quote_asset_reserve, net_position, price_multiplier = bot.find_mark_quote()
-    index_quote = bot.find_index_quote()
+        mark_quote, quote_asset_reserve, net_position, price_multiplier = bot.find_mark_quote()
+        index_quote = bot.find_index_quote()
 
-    print("Market Bias:", net_position)
-    quote_to_move_price = bot.quote_needed_to_move_price(current_price=mark_quote, target_price=index_quote, quote_reserve=quote_asset_reserve)
-    should_trade = bot.should_make_position(quote_to_move_price, quote_asset_reserve, net_position)
+        print("Market Bias:", net_position)
+        quote_to_move_price = bot.quote_needed_to_move_price(current_price=mark_quote, target_price=index_quote, quote_reserve=quote_asset_reserve)
+        should_trade = bot.should_make_position(quote_to_move_price, quote_asset_reserve, net_position)
 
-    if should_trade:
-        bot.pos_size, bot.unrealized_pnl = bot.make_position(quote_to_move_price/100)
+        if should_trade and not bot.has_positions:
+            bot.pos_size, bot.unrealized_pnl = bot.make_position(quote_to_move_price/100)
 
-    if bot.has_positions:
-        bot.is_against_market = bot.is_pos_against_market(index_quote, mark_quote)
-        bot.pos_market_delta = abs((mark_quote - index_quote) * price_multiplier * bot.pos_size)
+        if bot.has_positions:
+            bot.is_against_market = bot.is_pos_against_market(index_quote, mark_quote)
+            bot.pos_market_delta = abs((mark_quote - index_quote) * price_multiplier * bot.pos_size)
 
-    if not should_trade and bot.is_against_market and bot.pos_market_delta > 0.1*index_quote:
-        bot.close_position()
+        if not should_trade and bot.is_against_market and bot.pos_market_delta > 0.1*index_quote:
+            bot.close_position()
 
-    if not bot.is_against_market and bot.unrealized_pnl > 0.1*bot.pos_size:
-        bot.close_position()
-        bot.make_position(quote_to_move_price/100)
+        if not bot.is_against_market and bot.unrealized_pnl > 0.1*abs(bot.pos_size):
+            bot.close_position()
+            bot.make_position(quote_to_move_price/100)
 
-    print(bot.pos_dict)
+        print("LOGS: " + str(bot.pos_dict))
+
+        time.sleep(15)
 
 if __name__ == "__main__":
     main()
     #Write test to check if functions work with asserts
+

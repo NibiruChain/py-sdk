@@ -23,7 +23,7 @@ class ERRORS:
 def test_open_position(sdk_val: pysdk.Sdk):
     tests.LOGGER.info("nibid tx perp open-position")
     try:
-        
+
         tx_output: pt.ExecuteTxResp = sdk_val.tx.execute_msgs(
             Msg.perp.open_position(
                 sender=sdk_val.address,
@@ -73,7 +73,7 @@ def test_perp_query_position(sdk_val: pysdk.Sdk):
         # tests.LOGGER.info(
         #     f"nibid query perp trader-position: \n{tests.format_response(position_res)}"
         # )
-        
+
         position = position_res["position"]
         assert position["margin"]
         assert position["open_notional"]

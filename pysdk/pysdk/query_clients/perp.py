@@ -6,12 +6,13 @@ from nibiru_proto.nibiru.perp.v2 import query_pb2 as perp_type
 from nibiru_proto.nibiru.perp.v2 import query_pb2_grpc as perp_query
 
 from pysdk.query_clients.util import QueryClient, deserialize
-from pysdk.utils import from_sdk_dec
+from pysdk.utils import from_sdk_dec, update_nested_fields
 
 
 class PerpQueryClient(QueryClient):
     """
-    Perp allows to query the endpoints made available by the Nibiru Chain's PERP module.
+    Perp allows to query the endpoints made available by the Nibiru Chain's
+    PERP module.
     """
 
     def __init__(self, channel: Channel):
@@ -57,9 +58,41 @@ class PerpQueryClient(QueryClient):
 
         return output
 
+    def markets(self):
+        """
+        Get the all markets infromation.
+        """
+        proto_output: perp_type.QueryMarketsResponse = self.query(
+            api_callable=self.api.QueryMarkets,
+            req=perp_type.QueryMarketsRequest(),
+            should_deserialize=False,
+        )
+
+        output = MessageToDict(proto_output)
+
+        fields = [
+            "ammMarkets.amm.baseReserve",
+            "ammMarkets.amm.quoteReserve",
+            "ammMarkets.amm.sqrtDepth",
+            "ammMarkets.amm.priceMultiplier",
+            "ammMarkets.amm.totalLong",
+            "ammMarkets.amm.totalShort",
+            "ammMarkets.market.maintenanceMarginRatio",
+            "ammMarkets.market.maxLeverage",
+            "ammMarkets.market.latestCumulativePremiumFraction",
+            "ammMarkets.market.exchangeFeeRatio",
+            "ammMarkets.market.ecosystemFundFeeRatio",
+            "ammMarkets.market.liquidationFeeRatio",
+            "ammMarkets.market.partialLiquidationRatio",
+        ]
+
+        output = update_nested_fields(output, fields, from_sdk_dec)
+        return output
+
     def position(self, pair: str, trader: str) -> dict:
         """
-        Get the trader position. Returns information about position notional, margin ratio
+        Get the trader position. Returns information about position notional,
+        margin ratio
         unrealized pnl, size of the position etc.
 
         Args:

@@ -1,5 +1,4 @@
 # perp_test.py
-import json
 from typing import Dict, List
 
 import pytest

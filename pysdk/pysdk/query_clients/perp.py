@@ -11,7 +11,8 @@ from pysdk.utils import from_sdk_dec, update_nested_fields
 
 class PerpQueryClient(QueryClient):
     """
-    Perp allows to query the endpoints made available by the Nibiru Chain's PERP module.
+    Perp allows to query the endpoints made available by the Nibiru Chain's
+    PERP module.
     """
 
     def __init__(self, channel: Channel):
@@ -90,7 +91,8 @@ class PerpQueryClient(QueryClient):
 
     def position(self, pair: str, trader: str) -> dict:
         """
-        Get the trader position. Returns information about position notional, margin ratio
+        Get the trader position. Returns information about position notional,
+        margin ratio
         unrealized pnl, size of the position etc.
 
         Args:

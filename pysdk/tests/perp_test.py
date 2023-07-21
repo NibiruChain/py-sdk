@@ -1,4 +1,5 @@
 # perp_test.py
+import json
 from typing import Dict, List
 
 import pytest
@@ -7,6 +8,7 @@ import pysdk
 import tests
 from pysdk import Msg
 from pysdk import pytypes as pt
+from pysdk.utils import assert_subset
 
 PRECISION = 6
 
@@ -81,6 +83,66 @@ def test_perp_query_position(sdk_val: pysdk.Sdk):
         tests.raises(ok_errors, err)
 
 
+def test_perp_query_market(sdk_val: pysdk.Sdk):
+    output = sdk_val.query.perp.markets()
+
+    expected_to_be_equal = {
+        "ammMarkets": [
+            {
+                "market": {
+                    "pair": "ubtc:unusd",
+                    "enabled": True,
+                    "maintenanceMarginRatio": 0.0625,
+                    "maxLeverage": 10.0,
+                    "latestCumulativePremiumFraction": 0.0,
+                    "exchangeFeeRatio": 0.001,
+                    "ecosystemFundFeeRatio": 0.001,
+                    "liquidationFeeRatio": 0.05,
+                    "partialLiquidationRatio": 0.5,
+                    "fundingRateEpochId": "30 min",
+                    "twapLookbackWindow": "1800s",
+                    "prepaidBadDebt": {"denom": "unusd", "amount": "0"},
+                },
+                "amm": {
+                    "pair": "ubtc:unusd",
+                    "baseReserve": 30000000000000.0,
+                    "quoteReserve": 30000000000000.0,
+                    "sqrtDepth": 30000000000000.0,
+                    "totalLong": 0.0,
+                    "totalShort": 0.0,
+                },
+            },
+            {
+                "market": {
+                    "pair": "ueth:unusd",
+                    "enabled": True,
+                    "maintenanceMarginRatio": 0.0625,
+                    "maxLeverage": 10.0,
+                    "latestCumulativePremiumFraction": 0.0,
+                    "exchangeFeeRatio": 0.001,
+                    "ecosystemFundFeeRatio": 0.001,
+                    "liquidationFeeRatio": 0.05,
+                    "partialLiquidationRatio": 0.5,
+                    "fundingRateEpochId": "30 min",
+                    "twapLookbackWindow": "1800s",
+                    "prepaidBadDebt": {"denom": "unusd", "amount": "0"},
+                },
+                "amm": {
+                    "pair": "ueth:unusd",
+                    "baseReserve": 30000000000000.0,
+                    "quoteReserve": 30000000000000.0,
+                    "sqrtDepth": 30000000000000.0,
+                    "totalLong": 0.0,
+                    "totalShort": 0.0,
+                },
+            },
+        ]
+    }
+
+    # have to assert subset since i don't want to check the price which can change in loclanet
+    assert_subset(output, expected_to_be_equal)
+
+
 @pytest.mark.order(after="test_perp_query_position")
 def test_perp_query_all_positions(sdk_val: pysdk.Sdk):
     positions_map: Dict[str, dict] = sdk_val.query.perp.all_positions(
@@ -96,10 +158,10 @@ def test_perp_query_all_positions(sdk_val: pysdk.Sdk):
     tests.dict_keys_must_match(
         position_resp,
         [
-            'position',
-            'position_notional',
-            'unrealized_pnl',
-            'margin_ratio',
+            "position",
+            "position_notional",
+            "unrealized_pnl",
+            "margin_ratio",
         ],
     )
 

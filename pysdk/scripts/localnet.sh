@@ -36,9 +36,9 @@ echo_success() {
 
 # Flag parsing: --flag-name (BASH_VAR_NAME)
 #
-# --no-build ($FLAG_NO_BUILD): toggles whether to build from source. The default 
-#   behavior of the script is to run make install. 
-FLAG_NO_BUILD=false 
+# --no-build ($FLAG_NO_BUILD): toggles whether to build from source. The default
+#   behavior of the script is to run make install.
+FLAG_NO_BUILD=false
 
 build_from_source() {
   echo_info "Building from source..."

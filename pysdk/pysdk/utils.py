@@ -12,7 +12,7 @@ PRECISION = 18
 
 # reimplementation of cosmos-sdk/types/decimal.go
 def to_sdk_dec(dec: float) -> str:
-    '''
+    """
     create a decimal from an input decimal.
     valid must come in the form:
         (-) whole integers (.) decimal integers
@@ -26,52 +26,52 @@ def to_sdk_dec(dec: float) -> str:
     are provided in the string than the constant Precision.
 
     CONTRACT - This function does not mutate the input str.
-    '''
+    """
     dec_str = str(dec)
 
     if len(dec_str) == 0:
-        raise TypeError(f'Expected decimal string but got: {dec_str}')
+        raise TypeError(f"Expected decimal string but got: {dec_str}")
 
     # first extract any negative symbol
     neg = False
-    if dec_str[0] == '-':
+    if dec_str[0] == "-":
         neg = True
         dec_str = dec_str[1:]
 
     if len(dec_str) == 0:
-        raise TypeError(f'Expected decimal string but got: {dec_str}')
+        raise TypeError(f"Expected decimal string but got: {dec_str}")
 
-    strs = dec_str.split('.')
+    strs = dec_str.split(".")
     len_decs = 0
     combined_str = strs[0]
 
     if len(strs) == 2:  # has a decimal place
         len_decs = len(strs[1])
         if len_decs == 0 or len(combined_str) == 0:
-            raise TypeError(f'Expected decimal string but got: {dec_str}')
+            raise TypeError(f"Expected decimal string but got: {dec_str}")
         combined_str += strs[1]
     elif len(strs) > 2:
-        raise TypeError(f'Expected decimal string but got: {dec_str}')
+        raise TypeError(f"Expected decimal string but got: {dec_str}")
 
     if len_decs > PRECISION:
         raise TypeError(
-            f'value \'{dec_str}\' exceeds max precision by {PRECISION-len_decs} decimal places: max precision {PRECISION}'
+            f"value '{dec_str}' exceeds max precision by {PRECISION-len_decs} decimal places: max precision {PRECISION}"
         )
 
     # add some extra zero's to correct to the Precision factor
     zeros_to_add = PRECISION - len_decs
-    zeros = '0' * zeros_to_add
+    zeros = "0" * zeros_to_add
     combined_str += zeros
 
     try:
         int(combined_str, 10)
     except ValueError as err:
         raise ValueError(
-            f'failed to set decimal string with base 10: {combined_str}'
+            f"failed to set decimal string with base 10: {combined_str}"
         ) from err
 
     if neg:
-        return '-' + combined_str
+        return "-" + combined_str
 
     return combined_str
 
@@ -120,31 +120,31 @@ def format_fields_nested(
 
 
 def from_sdk_dec(dec_str: str) -> float:
-    if dec_str is None or dec_str == '':
+    if dec_str is None or dec_str == "":
         return 0
 
-    if '.' in dec_str:
-        raise TypeError(f'expected a decimal string but got {dec_str} containing \'.\'')
+    if "." in dec_str:
+        raise TypeError(f"expected a decimal string but got {dec_str} containing '.'")
 
     try:
         int(dec_str)
     except ValueError as err:
-        raise ValueError(f'failed to convert {dec_str} to a number') from err
+        raise ValueError(f"failed to convert {dec_str} to a number") from err
 
     neg = False
-    if dec_str[0] == '-':
+    if dec_str[0] == "-":
         neg = True
         dec_str = dec_str[1:]
 
     input_size = len(dec_str)
-    bz_str = ''
+    bz_str = ""
     # case 1, purely decimal
     if input_size <= PRECISION:
         # 0. prefix
-        bz_str = '0.'
+        bz_str = "0."
 
         # set relevant digits to 0
-        bz_str += '0' * (PRECISION - input_size)
+        bz_str += "0" * (PRECISION - input_size)
 
         # set final digits
         bz_str += dec_str
@@ -153,11 +153,11 @@ def from_sdk_dec(dec_str: str) -> float:
         dec_point_place = input_size - PRECISION
 
         bz_str = dec_str[:dec_point_place]  # pre-decimal digits
-        bz_str += '.'  # decimal point
+        bz_str += "."  # decimal point
         bz_str += dec_str[dec_point_place:]  # pre-decimal digits
 
     if neg:
-        bz_str = '-' + bz_str
+        bz_str = "-" + bz_str
 
     return float(bz_str)
 
@@ -386,3 +386,73 @@ def _count_diff_hashable(actual, expected):
             diff = _Mismatch(0, cnt_t, elem)
             result.append(diff)
     return result
+
+
+def update_nested_fields(
+    d: dict, fields: List[str], func: Callable[[Any], Any]
+) -> dict:
+    """
+    Update specified fields in a nested dictionary.
+
+    This function recursively traverses a dictionary and updates specified fields
+    using a provided function. Field names should be specified as a list of strings,
+    where each string represents a nested path to the key that should be updated
+    (e.g., "key1.key2.key3").
+
+    Args:
+        d: The dictionary to update.
+        fields: A list of fields to update, specified as strings representing key paths.
+        func: A function to apply to each specified field.
+
+    Returns:
+        The updated dictionary.
+    """
+    fields_set = {tuple(field.split(".")) for field in fields}
+
+    def helper(d: Union[dict, list], keys: tuple):
+        if isinstance(d, dict):
+            for key, value in d.items():
+                new_keys = keys + (key,)
+                if new_keys in fields_set:
+                    d[key] = func(value)
+                elif isinstance(value, (dict, list)):
+                    helper(value, new_keys)
+        elif isinstance(d, list):
+            for item in d:
+                helper(item, keys)
+
+    helper(d, ())
+    return d
+
+
+def assert_subset(result, expected, path=None):
+    """
+    Check if all values in expected are equal to the values in result.
+
+    This function iteratively checks if the expected values match the values in result. It traverses nested dictionaries
+    and lists, checking for matching values while ignoring missing keys in the expected dictionary.
+
+    Args:
+        result: The result dictionary.
+        expected: The expected dictionary.
+        path: The path to the current key (used for error messages).
+
+    Raises:
+        AssertionError: If a value in expected does not match the corresponding value in result.
+    """
+    if path is None:
+        path = []
+
+    for key, value in expected.items():
+        if isinstance(value, dict):
+            assert key in result, f"Key {key} not found in result at path {path}"
+            assert_subset(result[key], value, path + [key])
+        elif isinstance(value, list):
+            assert key in result, f"Key {key} not found in result at path {path}"
+            for i, item in enumerate(value):
+                assert_subset(result[key][i], item, path + [key, i])
+        else:
+            assert key in result, f"Key {key} not found in result at path {path}"
+            assert (
+                result[key] == value
+            ), f"Value {result[key]} at path {path + [key]} does not match expected value {value}"

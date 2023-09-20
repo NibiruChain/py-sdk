@@ -1280,22 +1280,20 @@ version = "0.21.9"
 description = "Nibiru Chain Python SDK"
 category = "main"
 optional = false
-python-versions = "^3.8"
-files = []
-develop = true
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "nibiru_proto-0.21.9-py3-none-any.whl", hash = "sha256:4ccc9d93549080f8ad56a3f15b6f43e30240778cdae879ac611f389f6829cb42"},
+    {file = "nibiru_proto-0.21.9.tar.gz", hash = "sha256:5915f1192ef699d77e3ad0166c398e226b1619fed06f01d7461a43873cc78448"},
+]
 
 [package.dependencies]
-asyncio = "^3.4.3"
-bech32 = "^1.2.0"
-grpcio = "^1.51.1"
-grpcio-tools = "^1.51.1"
-mypy-protobuf = "^3.4.0"
-protobuf = "^4.21.12"
-types-protobuf = "^4.21.0.2"
-
-[package.source]
-type = "directory"
-url = "../../sdk-proto-gen"
+asyncio = ">=3.4.3,<4.0.0"
+bech32 = ">=1.2.0,<2.0.0"
+grpcio = ">=1.51.1,<2.0.0"
+grpcio-tools = ">=1.51.1,<2.0.0"
+mypy-protobuf = ">=3.4.0,<4.0.0"
+protobuf = ">=4.21.12,<5.0.0"
+types-protobuf = ">=4.21.0.2,<5.0.0.0"
 
 [[package]]
 name = "nodeenv"
@@ -1691,26 +1689,26 @@ files = [
 
 [[package]]
 name = "types-protobuf"
-version = "4.24.0.1"
+version = "4.24.0.2"
 description = "Typing stubs for protobuf"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-protobuf-4.24.0.1.tar.gz", hash = "sha256:90adea3b693d6a40d8ef075c58fe6b5cc6e01fe1496301a7e6fc70398dcff92e"},
-    {file = "types_protobuf-4.24.0.1-py3-none-any.whl", hash = "sha256:df203a204e4ae97d4cca4c9cf725262579dd7857a19f9e7fc74871ccfa073c01"},
+    {file = "types-protobuf-4.24.0.2.tar.gz", hash = "sha256:598bb2290b9b0ea65f4f63569a09deaa4475edd7bb0d8589057a38deb0b19f4f"},
+    {file = "types_protobuf-4.24.0.2-py3-none-any.whl", hash = "sha256:b86b0deefd1cb1582d355be4fd7a2a807cf49c993d9744d3c9fbe1cbf1e6b044"},
 ]
 
 [[package]]
 name = "types-requests"
-version = "2.31.0.2"
+version = "2.31.0.3"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-requests-2.31.0.2.tar.gz", hash = "sha256:6aa3f7faf0ea52d728bb18c0a0d1522d9bfd8c72d26ff6f61bfc3d06a411cf40"},
-    {file = "types_requests-2.31.0.2-py3-none-any.whl", hash = "sha256:56d181c85b5925cbc59f4489a57e72a8b2166f18273fd8ba7b6fe0c0b986f12a"},
+    {file = "types-requests-2.31.0.3.tar.gz", hash = "sha256:d5d7a08965fca12bedf716eaf5430c6e3d0da9f3164a1dba2a7f3885f9ebe3c0"},
+    {file = "types_requests-2.31.0.3-py3-none-any.whl", hash = "sha256:938f51653c757716aeca5d72c405c5e2befad8b0d330e3b385ce7f148e1b10dc"},
 ]
 
 [package.dependencies]
@@ -1773,14 +1771,14 @@ devenv = ["black", "check-manifest", "flake8", "pyroma", "pytest (>=4.3)", "pyte
 
 [[package]]
 name = "urllib3"
-version = "2.0.4"
+version = "2.0.5"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "urllib3-2.0.4-py3-none-any.whl", hash = "sha256:de7df1803967d2c2a98e4b11bb7d6bd9210474c46e8a0401514e3a42a75ebde4"},
-    {file = "urllib3-2.0.4.tar.gz", hash = "sha256:8d22f86aae8ef5e410d4f539fde9ce6b2113a001bb4d189e0aed70642d602b11"},
+    {file = "urllib3-2.0.5-py3-none-any.whl", hash = "sha256:ef16afa8ba34a1f989db38e1dbbe0c302e4289a47856990d0682e374563ce35e"},
+    {file = "urllib3-2.0.5.tar.gz", hash = "sha256:13abf37382ea2ce6fb744d4dad67838eec857c9f4f57009891805e0b5e123594"},
 ]
 
 [package.extras]
@@ -1934,4 +1932,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "c8a571012c524c958d91593c794e5eaae2dd559c230450d0675436e4812529ea"
+content-hash = "83ad44e2061451948fb5674b61b5bfaa0a982850e202321265b9f12e082d576d"

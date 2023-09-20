@@ -35,19 +35,6 @@ def test_open_position(sdk_val: pysdk.Sdk):
             )
         )
         tests.broadcast_tx_must_succeed(res=tx_output)
-
-        # TODO deprecated
-        # tests.LOGGER.info(
-        #     f"nibid tx perp open-position: {tests.format_response(tx_output)}"
-        # )
-        # tx_resp = pt.TxResp.from_raw(pt.RawTxResp(tx_output))
-        # assert "/pysdk.perp.v2.MsgMarketOrder" in tx_resp.rawLog[0].msgs
-        # events_for_msg: List[str] = [
-        #     "pysdk.perp.v2.PositionChangedEvent",
-        # ]
-        # assert all(
-        #     [msg_event in tx_resp.rawLog[0].event_types for msg_event in events_for_msg]
-        # )
     except BaseException as err:
         ok_errors: List[str] = [ERRORS.no_prices]
         tests.raises(ok_errors, err)
@@ -69,10 +56,6 @@ def test_perp_query_position(sdk_val: pysdk.Sdk):
                 "margin_ratio",
             ],
         )
-        # TODO deprecated
-        # tests.LOGGER.info(
-        #     f"nibid query perp trader-position: \n{tests.format_response(position_res)}"
-        # )
         position = position_res["position"]
         assert position["margin"]
         assert position["open_notional"]
@@ -104,11 +87,7 @@ def test_perp_query_market(sdk_val: pysdk.Sdk):
                 },
                 "amm": {
                     "pair": "ubtc:unusd",
-                    "baseReserve": 30000000000000.0,
-                    "quoteReserve": 30000000000000.0,
                     "sqrtDepth": 30000000000000.0,
-                    "totalLong": 0.0,
-                    "totalShort": 0.0,
                 },
             },
             {
@@ -128,17 +107,13 @@ def test_perp_query_market(sdk_val: pysdk.Sdk):
                 },
                 "amm": {
                     "pair": "ueth:unusd",
-                    "baseReserve": 30000000000000.0,
-                    "quoteReserve": 30000000000000.0,
                     "sqrtDepth": 30000000000000.0,
-                    "totalLong": 0.0,
-                    "totalShort": 0.0,
                 },
             },
         ]
     }
 
-    # have to assert subset since i don't want to check the price which can change in loclanet
+    # test subset, exclude changing baseReserve, quoteReserve, totalLong, totalShort
     assert_subset(output, expected_to_be_equal)
 
 
@@ -198,10 +173,6 @@ def test_perp_remove_margin(sdk_val: pysdk.Sdk):
                 margin=pt.Coin(5, "unusd"),
             )
         )
-        # TODO deprecated
-        # tests.LOGGER.info(
-        #     f"nibid tx perp remove-margin: \n{tests.format_response(tx_output)}"
-        # )
         tests.broadcast_tx_must_succeed(res=tx_output)
         # TODO test: verify the margin changes using the events
     except BaseException as err:
@@ -220,10 +191,6 @@ def test_perp_close_posititon(sdk_val: pysdk.Sdk):
         tx_output = sdk_val.tx.execute_msgs(
             Msg.perp.close_position(sender=sdk_val.address, pair=PAIR)
         )
-        # TODO deprecated
-        # tests.LOGGER.info(
-        #     f"nibid tx perp close-position: \n{tests.format_response(tx_output)}"
-        # )
         tests.broadcast_tx_must_succeed(res=tx_output)
 
         out = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)

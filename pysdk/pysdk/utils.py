@@ -117,7 +117,7 @@ def format_fields_nested(
 
         return output
     else:
-        raise Exception(
+        raise TypeError(
             f"expect object of type Union[list, dict] but got {type(object)}"
         )
 

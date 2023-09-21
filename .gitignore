@@ -1,0 +1,12 @@
+*.pyc
+.coverage
+.env
+.venv
+.pytest_cache
+.coveragerc
+.DS_Store
+.idea
+build
+.python-version
+bin
+.vscode/

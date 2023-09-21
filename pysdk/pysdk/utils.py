@@ -94,10 +94,10 @@ def format_fields_nested(
     Returns:
         Union[list, dict]: The output formatted
     """
-    if type(object) == dict:
+    if isinstance(object, dict):
         output = {}
         for k, v in object.items():
-            if type(v) in (dict, list):
+            if isinstance(object, (dict, list)):
                 output[k] = format_fields_nested(v, fn, fields)
             else:
                 if k in fields:
@@ -106,17 +106,18 @@ def format_fields_nested(
                     output[k] = v
 
         return output
-
-    if type(object) == list:
+    elif isinstance(object, list):
         output = []
 
         for element in object:
-            if type(object) in (dict, list):
+            if isinstance(object, (dict, list)):
                 output.append(format_fields_nested(element, fn, fields))
             else:
                 output.append(element)
 
         return output
+    else:
+        return object
 
 
 def from_sdk_dec(dec_str: str) -> float:

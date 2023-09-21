@@ -29,11 +29,6 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    # `jobs.<job_id>.defaults`: 
-    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
-    defaults:
-      run:
-        working-directory: "pysdk"
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}

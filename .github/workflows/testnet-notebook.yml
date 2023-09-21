@@ -2,7 +2,9 @@ name: Colab notebook testing
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    # cron expression [minute hour day-of-month month day-of-week]
+    # - cron: "20 4 */4 * *" # Ex: Runs every 4 days at 04:20 UTC
+    - cron: "0 0 * * *" # Ex: Runs every 1 days at 00:00 UTC
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
@@ -11,11 +13,6 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    # `jobs.<job_id>.defaults`: 
-    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
-    defaults:
-      run:
-        working-directory: "pysdk"
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}

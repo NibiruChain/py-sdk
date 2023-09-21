@@ -1,4 +1,4 @@
-name: "py-sdk/scripts"
+name: "scripts"
 
 on:
   pull_request:
@@ -18,8 +18,8 @@ concurrency:
 
 jobs:
   localnet:
-  # The localnet job verifies that the repo's script for starting a local Nibiru
-  # chain runs without errors.
+    # The localnet job verifies that the repo's script for starting a local Nibiru
+    # chain runs without errors.
     runs-on: ubuntu-latest
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0

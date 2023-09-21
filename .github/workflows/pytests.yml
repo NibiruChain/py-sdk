@@ -27,11 +27,6 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    # `jobs.<job_id>.defaults`: 
-    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
-    defaults:
-      run:
-        working-directory: "pysdk"
     env:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       VALIDATOR_MNEMONIC: "guard cream sadness conduct invite crumble clock pudding hole grit liar hotel maid produce squeeze return argue turtle know drive eight casino maze host"
@@ -64,7 +59,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.local
-          key: poetry-2 # increment to reset cache
+          key: poetry-3 # increment to reset cache
 
       # ----------------------------------------------
       # Install ping for early tests

@@ -117,9 +117,7 @@ def format_fields_nested(
 
         return output
     else:
-        raise TypeError(
-            f"expect object of type Union[list, dict] but got {type(object)}"
-        )
+        return object
 
 
 def from_sdk_dec(dec_str: str) -> float:

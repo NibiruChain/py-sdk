@@ -170,7 +170,7 @@ def test_perp_remove_margin(sdk_val: pysdk.Sdk):
             Msg.perp.remove_margin(
                 sender=sdk_val.address,
                 pair=PAIR,
-                margin=pt.Coin(5, "unusd"),
+                margin=pt.Coin(2, "unusd"),
             )
         )
         tests.broadcast_tx_must_succeed(res=tx_output)

@@ -94,7 +94,7 @@ def format_fields_nested(
     Returns:
         Union[list, dict]: The output formatted
     """
-    if isinstance(dict):
+    if isinstance(object, dict):
         output = {}
         for k, v in object.items():
             if isinstance(object, (dict, list)):
@@ -106,7 +106,7 @@ def format_fields_nested(
                     output[k] = v
 
         return output
-    elif isinstance(list):
+    elif isinstance(object, list):
         output = []
 
         for element in object:

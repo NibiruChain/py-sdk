@@ -13,11 +13,11 @@ jobs:
   lint-py:
     runs-on: ubuntu-latest
     timeout-minutes: 2
-    # `jobs.<job_id>.defaults`: 
+    # `jobs.<job_id>.defaults`:
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
-    defaults:
-      run:
-        working-directory: "pysdk"
+    # defaults:
+    #   run:
+    #     working-directory: "pysdk"
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -76,7 +76,7 @@ jobs:
 
   mypy-static:
     runs-on: ubuntu-latest
-    # `jobs.<job_id>.defaults`: 
+    # `jobs.<job_id>.defaults`:
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
     defaults:
       run:

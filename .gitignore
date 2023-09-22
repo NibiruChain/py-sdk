@@ -1,3 +1,16 @@
+*.pyc
+.coverage
+.env
+.venv
+.pytest_cache
+.coveragerc
+.DS_Store
+.idea
+build
+.python-version
+bin
+.vscode/
+
 .DS_Store
 coverage.txt
 examples/trading_bot.py

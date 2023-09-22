@@ -228,7 +228,9 @@ class TxClient:
             tx_raw_bytes=tx_raw_bytes,
             id=420,
         )
-        return jsonrpc.jsonrpc.do_jsonrpc_request(data=jsonrpc_req)
+        return jsonrpc.jsonrpc.do_jsonrpc_request(
+            data=jsonrpc_req, endpoint=self.network.tendermint_rpc_endpoint
+        )
 
     def _broadcast_tx_grpc(
         self,

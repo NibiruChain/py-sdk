@@ -108,6 +108,6 @@ def test_do_BroadcastTxSync():
     )
 
     jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_jsonrpc_request(
-        data=jsonrpc_req,
+        data=jsonrpc_req, endpoint=sdk_val.network.tendermint_rpc_endpoint
     )
     assert jsonrpc_resp.ok()

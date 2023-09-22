@@ -219,7 +219,7 @@ class JsonRPCResponse:
 
 def do_jsonrpc_request(
     data: Union[JsonRPCRequest, RawJsonRPCRequest],
-    endpoint: str = "http://localhost:26657",
+    endpoint: str,
     headers: Dict[str, str] = {"Content-Type": "application/json"},
 ) -> JsonRPCResponse:
     return JsonRPCResponse.from_raw_dict(
@@ -233,7 +233,7 @@ def do_jsonrpc_request(
 
 def do_jsonrpc_request_raw(
     data: Union[JsonRPCRequest, RawJsonRPCRequest],
-    endpoint: str = "http://localhost:26657",
+    endpoint: str,
     headers: Dict[str, str] = {"Content-Type": "application/json"},
 ) -> RawJsonRPCResponse:
     if isinstance(data, dict):

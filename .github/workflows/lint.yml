@@ -15,9 +15,6 @@ jobs:
     timeout-minutes: 2
     # `jobs.<job_id>.defaults`: 
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
-    defaults:
-      run:
-        working-directory: "pysdk"
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -27,19 +24,6 @@ jobs:
         with:
           python-version: "3.8.16"
 
-      - name: "Load pip cache if cache exists"
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: ${{ runner.os }}-pip
-      - name: "Install and run flake8"
-        run: |
-          python -m pip install flake8
-          flake8 pysdk
-          flake8 tests
-          flake8 examples
-
       # ----------------------------------------------
       # Try to load a cached poetry binary
       # See https://github.com/snok/install-poetry#caching-the-poetry-installation for the source
@@ -69,59 +53,9 @@ jobs:
         # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      - name: Run checks for black and isort
+      - name: Run black, isort, flake8 and mypy
         run: |
           poetry run black . --check
-          poetry run isort .
-
-  mypy-static:
-    runs-on: ubuntu-latest
-    # `jobs.<job_id>.defaults`: 
-    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun
-    defaults:
-      run:
-        working-directory: "pysdk"
-    timeout-minutes: 2
-    steps:
-      - name: "Check out the repo"
-        uses: actions/checkout@v3
-
-      - name: "Setup Python"
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8.16"
-      # ----------------------------------------------
-      # Try to load a cached poetry binary
-      # See https://github.com/snok/install-poetry#caching-the-poetry-installation for the source
-      # ----------------------------------------------
-      - name: "Load cached Poetry installation"
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-2 # increment to reset cache
-
-      - name: "Install poetry"
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-          version: latest
-      - name: "Load cached venv"
-        id: cached-poetry-dependencies
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      - name: "Install dependencies with poetry (using cache)"
-        # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: "poetry run mypy [files ...] [-h] [-v]"
-        run: |
+          poetry run isort . --check
+          poetry run flake8
           poetry run mypy --version
-          # poetry run mypy tests --exclude 'pysdk/*'
-
-          # TODO: epic(pysdk): Add static type checking for pysdk (uncomment above)
-          # https://github.com/NibiruChain/py-sdk/issues/245

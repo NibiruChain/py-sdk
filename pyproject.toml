@@ -1,0 +1,90 @@
+[tool.poetry]
+name = "nibiru"
+version = "0.21.10"
+description = "Python SDK for interacting with Nibiru."
+authors = ["Nibiru Chain <dev@nibiru.fi>"]
+license = "MIT"
+maintainers = [
+  "NibiruHeisenberg <dev@nibiru.fi>",
+  "matthiasmat <dev@nibiru.fi>",
+  "onikonychev <dev@nibiru.fi>",
+  "Unique-Divine <dev@nibiru.fi>",
+]
+readme = "README.md" # similar to long_description in setuptools
+repository = "https://github.com/NibiruChain/py-sdk"
+keywords = ["nibiru", "blockchain", "sdk", "python", "cosmos"]
+classifiers = [
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Intended Audience :: Developers",
+]
+packages = [{ include = "pysdk" }]
+
+[tool.poetry.dependencies]
+python = "^3.8.16"
+asyncio = "^3.4.3"
+bech32 = "^1.2.0"
+python-dotenv = "^1.0.0"
+requests = "^2.28.1"
+aiohttp = "^3.8.3"
+ecdsa = "^0.18.0"
+mnemonic = "^0.20"
+hdwallets = "^0.1.2"
+aiocron = "^1.8"
+pre-commit = "^3.4.0"
+shutup = "^0.2.0"
+websocket-client = "^1.4.1"
+packaging = "^23.1"
+bip32 = "^3.3"
+importlib-metadata = "^6.8.0"
+types-protobuf = "^4.23.0.1"
+grpcio = "^1.51.1"
+grpcio-tools = "^1.51.1"
+protobuf = "^4.21.12"
+mypy-protobuf = "^3.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest-skip-slow = "^0.0.3"
+pytest-order = "^1.0.1"
+pdoc3 = "^0.10.0"
+pytest = "^7.1.3"
+black = "^22.10.0"
+pytest-cov = "^4.0.0"
+isort = "^5.12.0"
+types-requests = "^2.31.0.1"
+mypy = "^1.4.1"
+flake8 = "^6.1.0"
+flake8-pyproject = "^1.2.3"
+
+
+[tool.black]
+line-length = 88
+skip-string-normalization = true
+include = '.*\.pyi?$'
+target-version = ['py38']
+extend-exclude = '''
+^/(
+    \.vscode
+  | \.github
+  | nibiru_proto/
+  | scripts
+  | docs/
+  | docs-md/
+)$
+'''
+
+[tool.isort]
+profile = "black"
+py_version = 39
+skip_glob = ["nibiru_proto/*"]
+
+[tool.flake8]
+ignore = [
+  "W503", "E501", "F811", "F541", "W605", "E203", "F405", "E722", "W191",
+  "F403", "F821", "E101", "N806", "N802", "N801", "N811", "N818"
+]
+max-line-length = 88
+exclude = [".github", "nibiru_proto", "scripts", "docs", "docs-md"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

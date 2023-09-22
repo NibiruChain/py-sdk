@@ -83,7 +83,7 @@ ignore = [
   "F403", "F821", "E101", "N806", "N802", "N801", "N811", "N818"
 ]
 max-line-length = 88
-exclude = [".github", "nibiru_proto", "scripts", "docs", "docs-md"]
+exclude = [".github", "nibiru_proto", "scripts", "docs", "docs-md", ".venv"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

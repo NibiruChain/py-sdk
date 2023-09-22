@@ -3,6 +3,7 @@ from typing import Callable, Dict, Tuple, Union
 
 import pytest
 
+from pysdk import Network
 from pysdk.jsonrpc import jsonrpc, rpc_error
 
 
@@ -99,7 +100,7 @@ def test_rpc_calls(request_json: str, response_json: str):
     assert got_resp == want_resp
 
 
-def test_rpc_block_query():
+def test_rpc_block_query(network: Network):
     """
     Runs the example query JSON-RPC query from the Tendermint documentation:
     The following exampl
@@ -116,6 +117,7 @@ def test_rpc_block_query():
 
     jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_jsonrpc_request(
         data=dict(method="block", params=["5"], id=1),
+        endpoint=network.tendermint_rpc_endpoint,
     )
     assert isinstance(jsonrpc_resp, jsonrpc.JsonRPCResponse)
     assert jsonrpc_resp.error is None

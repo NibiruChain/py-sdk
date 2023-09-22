@@ -2,7 +2,6 @@ import dataclasses
 
 from nibiru_proto.cosmos.distribution.v1beta1 import tx_pb2 as pb_distribution
 from nibiru_proto.cosmos.staking.v1beta1 import tx_pb2 as pb_staking
-
 from pysdk.pytypes import Coin, PythonMsg
 
 

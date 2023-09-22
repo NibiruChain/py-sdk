@@ -1,8 +1,8 @@
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
+
 from nibiru_proto.cosmos.auth.v1beta1 import query_pb2 as auth_type
 from nibiru_proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
-
 from pysdk.query_clients.util import QueryClient
 
 

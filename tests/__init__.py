@@ -10,9 +10,9 @@ from typing import Iterable, List, Optional, Union
 # stubs or py.typed marker.
 # NOTE: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mis
 import shutup  # type: ignore
-from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service  # type: ignore
 
 import pysdk
+from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service  # type: ignore
 from pysdk import utils
 from pysdk.pytypes import common, tx_resp
 

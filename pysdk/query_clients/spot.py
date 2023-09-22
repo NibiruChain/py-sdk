@@ -2,10 +2,10 @@ from typing import List
 
 from google.protobuf import json_format, message
 from grpc import Channel
+
 from nibiru_proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from nibiru_proto.nibiru.spot.v1 import query_pb2 as spot_type
 from nibiru_proto.nibiru.spot.v1 import query_pb2_grpc as spot_query
-
 from pysdk.pytypes import Coin
 from pysdk.query_clients.util import QueryClient
 from pysdk.utils import format_fields_nested, from_sdk_dec_n

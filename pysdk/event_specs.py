@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 import google.protobuf.message
+
 from nibiru_proto.nibiru.oracle.v1 import event_pb2 as oracle_events
 from nibiru_proto.nibiru.perp.v2 import event_pb2 as perp_events
 from nibiru_proto.nibiru.spot.v1 import event_pb2 as spot_events

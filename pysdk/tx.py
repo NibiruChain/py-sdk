@@ -19,7 +19,6 @@ from nibiru_proto.cosmos.base.v1beta1.coin_pb2 import Coin
 from nibiru_proto.cosmos.tx.signing.v1beta1 import signing_pb2 as tx_sign
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.cosmos.tx.v1beta1 import tx_pb2 as cosmos_tx_type
-
 from pysdk import exceptions, jsonrpc
 from pysdk import pytypes as pt
 from pysdk import tmrpc, wallet

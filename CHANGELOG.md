@@ -5,17 +5,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [v0.21.9](https://github.com/NibiruChain/py-sdk/tree/v0.21.9)
+## [v0.21.10](https://github.com/NibiruChain/py-sdk/tree/v0.21.10)
 
 - [#252](https://github.com/NibiruChain/py-sdk/pull/252) Updates the `nibiru-proto` dependency to v0.21.9, corresponding to the same version of NibiruChain/nibiru.
 - deps!: This version of the chain uses Cosmos-SDK v0.47
 - [#250](https://github.com/NibiruChain/py-sdk/pull/250): feat(perp): add query markets
 - [#243](https://github.com/NibiruChain/py-sdk/pull/243): epic(tmrpc): all passing tests for v0.21
-- [#238](https://github.com/NibiruChain/py-sdk/pull/238): epic: migration for v0.21 with passing tests 
-- [#238](https://github.com/NibiruChain/py-sdk/pull/238): epic: migration for v0.21 with passing tests 
+- [#238](https://github.com/NibiruChain/py-sdk/pull/238): epic: migration for v0.21 with passing tests
+- [#238](https://github.com/NibiruChain/py-sdk/pull/238): epic: migration for v0.21 with passing tests
 - [#235](https://github.com/NibiruChain/py-sdk/pull/235): ci: Run tests on release branches
 - [#225](https://github.com/NibiruChain/py-sdk/pull/225): chore(deps): bump requests from 2.28.2 to 2.31.0
-- [#249](https://github.com/NibiruChain/py-sdk/pull/249): chore(deps): Bump aiohttp from 3.8.4 to 3.8.5 in /pysdk 
+- [#249](https://github.com/NibiruChain/py-sdk/pull/249): chore(deps): Bump aiohttp from 3.8.4 to 3.8.5 in /pysdk
 
 ## v0.19.0
 

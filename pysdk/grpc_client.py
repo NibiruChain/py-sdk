@@ -3,6 +3,9 @@ import time
 from typing import Dict, Generator, List, Literal, Optional, Tuple, Union
 
 import grpc
+from packaging import version
+
+from nibiru_proto import version as nibiru_proto_version
 from nibiru_proto.cosmos.auth.v1beta1 import auth_pb2 as auth_type
 from nibiru_proto.cosmos.auth.v1beta1 import query_pb2 as auth_query
 from nibiru_proto.cosmos.auth.v1beta1 import query_pb2_grpc as auth_query_grpc
@@ -17,8 +20,6 @@ from nibiru_proto.cosmos.base.tendermint.v1beta1 import (
 )
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2_grpc as tx_service_grpc
-from packaging import version
-
 from pysdk import exceptions, pytypes, query_clients
 
 DEFAULT_TIMEOUTHEIGHT = 20  # blocks
@@ -95,13 +96,6 @@ class GrpcClient:
         self.stablecoin = query_clients.StablecoinQueryClient(self.chain_channel)
 
         if not bypass_version_check:
-            try:
-                from importlib import metadata
-            except ImportError:  # for Python<3.8
-                import importlib_metadata as metadata
-
-            nibiru_proto_version = metadata.version("nibiru_proto")
-
             self.assert_compatible_versions(
                 nibiru_proto_version=nibiru_proto_version,
                 chain_nibiru_version=str(self.get_version()),

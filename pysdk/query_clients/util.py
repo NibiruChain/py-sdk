@@ -4,10 +4,10 @@ from typing import Dict, List, Optional, Union
 import grpc
 import grpc._channel
 from google.protobuf import json_format, message
+
 from nibiru_proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from nibiru_proto.cosmos.tx.v1beta1.tx_pb2 import Tx
 from nibiru_proto.tendermint.types.block_pb2 import Block
-
 from pysdk import utils
 from pysdk.exceptions import QueryError
 

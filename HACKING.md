@@ -112,6 +112,12 @@ poetry install
 
 This will resolve dependencies between each of the project's packages and install them into a virtual environment.
 
+## Generating nibiru protos
+
+```bash
+poetry run ./scripts/proto-gen-py.sh
+```
+
 ## Running tests
 
 #### Setting environment variables

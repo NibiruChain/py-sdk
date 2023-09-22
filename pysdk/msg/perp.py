@@ -3,7 +3,6 @@ from typing import List
 
 from nibiru_proto.nibiru.perp.v2 import state_pb2 as state_pb
 from nibiru_proto.nibiru.perp.v2 import tx_pb2 as pb
-
 from pysdk.pytypes import Coin, Direction, PythonMsg
 from pysdk.utils import to_sdk_dec, to_sdk_int
 

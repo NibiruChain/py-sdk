@@ -2,7 +2,6 @@ import dataclasses
 from typing import Iterable, List, Union
 
 from nibiru_proto.cosmos.bank.v1beta1 import tx_pb2 as pb
-
 from pysdk.pytypes import Coin, PythonMsg
 
 

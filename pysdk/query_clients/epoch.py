@@ -1,8 +1,8 @@
 from google.protobuf.json_format import MessageToDict
 from grpc import Channel
+
 from nibiru_proto.nibiru.epochs.v1 import query_pb2 as epoch_query
 from nibiru_proto.nibiru.epochs.v1 import query_pb2_grpc as epoch_query_grpc
-
 from pysdk.query_clients.util import QueryClient
 
 

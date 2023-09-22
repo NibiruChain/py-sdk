@@ -2,11 +2,11 @@ import subprocess
 from urllib.parse import ParseResult, urlparse
 
 import pytest
-from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend  # type: ignore
-from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder  # type: ignore
 
 import pysdk
 import tests
+from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend  # type: ignore
+from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder  # type: ignore
 from pysdk import Coin, pytypes, utils
 from pysdk.query_clients import util as query_util
 

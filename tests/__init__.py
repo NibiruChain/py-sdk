@@ -11,10 +11,10 @@ from typing import Iterable, List, Optional, Union
 # NOTE: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mis
 import shutup  # type: ignore
 
-import pysdk
+import nibiru
+from nibiru import utils
+from nibiru.pytypes import common, tx_resp
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service  # type: ignore
-from pysdk import utils
-from pysdk.pytypes import common, tx_resp
 
 shutup.please()
 
@@ -139,21 +139,21 @@ TX_CONFIG_TEST: common.TxConfig = common.TxConfig(
 )
 
 
-def fixture_network() -> pysdk.Network:
-    return pysdk.Network.customnet()
+def fixture_network() -> nibiru.Network:
+    return nibiru.Network.customnet()
 
 
-def fixture_sdk_val() -> pysdk.Sdk:
+def fixture_sdk_val() -> nibiru.Sdk:
     return (
-        pysdk.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
+        nibiru.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
         .with_config(TX_CONFIG_TEST)
         .with_network(fixture_network())
     )
 
 
-def fixture_sdk_other() -> pysdk.Sdk:
+def fixture_sdk_other() -> nibiru.Sdk:
     return (
-        pysdk.Sdk.authorize()
+        nibiru.Sdk.authorize()
         .with_config(TX_CONFIG_TEST)
         .with_network(fixture_network())
     )

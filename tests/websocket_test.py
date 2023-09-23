@@ -4,14 +4,14 @@ from typing import List
 
 import pytest
 
-import pysdk
+import nibiru
 import tests
-from pysdk import Msg, Network, event_specs
-from pysdk import websocket as ws
+from nibiru import Msg, Network, event_specs
+from nibiru import websocket as ws
 
 
 @pytest.mark.slow
-def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
+def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     """Open a position and ensure output is correct"""
     pair = "ubtc:unusd"
 
@@ -47,7 +47,7 @@ def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
             Msg.bank.send(
                 from_address=sdk_val.address,
                 to_address=random_address,
-                coins=pysdk.Coin(amount=10, denom="unibi"),
+                coins=nibiru.Coin(amount=10, denom="unibi"),
             ),
         ]
     )
@@ -89,7 +89,7 @@ def test_websocket_listen(sdk_val: pysdk.Sdk, network: Network):
 
 
 @pytest.mark.slow
-def test_websocket_tx_fail_queue(sdk_val: pysdk.Sdk, network: Network):
+def test_websocket_tx_fail_queue(sdk_val: nibiru.Sdk, network: Network):
     """
     Try executing failing TXs and get errors from tx_fail_queue
     """
@@ -107,7 +107,7 @@ def test_websocket_tx_fail_queue(sdk_val: pysdk.Sdk, network: Network):
     sdk_val.tx.client.sync_timeout_height()
     address = sdk_val.tx.ensure_address_info()
     tx = (
-        pysdk.Transaction()
+        nibiru.Transaction()
         .with_messages(
             [
                 Msg.perp.close_position(

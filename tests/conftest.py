@@ -17,7 +17,7 @@ import dotenv
 import pytest
 
 import tests
-from pysdk import Network, NetworkType, Sdk
+from nibiru import Network, NetworkType, Sdk
 
 
 def pytest_configure(config):

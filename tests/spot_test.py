@@ -4,10 +4,10 @@ from typing import Dict, List, Literal, Union, cast
 
 import pytest
 
-import pysdk
+import nibiru
 import tests
-from pysdk import Coin, PoolAsset, pytypes, utils
-from pysdk.exceptions import SimulationError
+from nibiru import Coin, PoolAsset, pytypes, utils
+from nibiru.exceptions import SimulationError
 
 PRECISION = 6
 
@@ -19,14 +19,14 @@ class SpotErrors:
     no_pool_shares = "0pysdk.pool/"
 
 
-def test_spot_create_pool(sdk_val: pysdk.Sdk):
+def test_spot_create_pool(sdk_val: nibiru.Sdk):
     """
     Test the workflow for pools
     """
 
     try:
         tx_output = sdk_val.tx.execute_msgs(
-            pysdk.Msg.spot.create_pool(
+            nibiru.Msg.spot.create_pool(
                 creator=sdk_val.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
@@ -69,7 +69,7 @@ def test_spot_create_pool(sdk_val: pysdk.Sdk):
 
 @pytest.mark.order(after="test_spot_create_pool")
 @pytest.fixture
-def pools(sdk_val: pysdk.Sdk) -> List[dict]:
+def pools(sdk_val: nibiru.Sdk) -> List[dict]:
     pools_resp = sdk_val.query.spot.pools()
     if pools_resp:
         return sdk_val.query.spot.pools()
@@ -129,13 +129,13 @@ def test_spot_query_pools(pools: List[dict]):
 
 
 @pytest.mark.order(after="test_spot_query_pools")
-def test_spot_join_pool(sdk_val: pysdk.Sdk, pool_ids: Dict[str, int]):
+def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
     if not pool_ids:
         return
     try:
         tx_output = sdk_val.tx.execute_msgs(
             [
-                pysdk.Msg.spot.join_pool(
+                nibiru.Msg.spot.join_pool(
                     sender=sdk_val.address,
                     pool_id=pool_ids["unibi:unusd"],
                     tokens=[Coin(1000, "unibi"), Coin(100, "unusd")],
@@ -148,7 +148,7 @@ def test_spot_join_pool(sdk_val: pysdk.Sdk, pool_ids: Dict[str, int]):
 
 
 @pytest.mark.order(after="test_spot_join_pool")
-def test_spot_swap(sdk_val: pysdk.Sdk, pool_ids: Dict[str, int]):
+def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
     if not pool_ids:
         return
     try:
@@ -167,7 +167,7 @@ def test_spot_swap(sdk_val: pysdk.Sdk, pool_ids: Dict[str, int]):
                 #     token_in=Coin(100, "uusdc"),
                 #     token_out_denom="unusd",
                 # ),
-                pysdk.Msg.spot.swap(
+                nibiru.Msg.spot.swap(
                     sender=sdk_val.address,
                     pool_id=pool_ids["unibi:unusd"],
                     token_in=Coin(100, "unusd"),
@@ -181,7 +181,7 @@ def test_spot_swap(sdk_val: pysdk.Sdk, pool_ids: Dict[str, int]):
 
 
 @pytest.mark.order(after="test_spot_swap")
-def test_spot_exit_pool(sdk_val: pysdk.Sdk):
+def test_spot_exit_pool(sdk_val: nibiru.Sdk):
     all_balance_maps = sdk_val.query.get_bank_balances(sdk_val.address)["balances"]
 
     balance_maps: List[Dict[Literal["denom", "amount"], Union[str, int]]] = [
@@ -200,7 +200,7 @@ def test_spot_exit_pool(sdk_val: pysdk.Sdk):
         amount = pool_token.get("amount")
         assert isinstance(amount, (str, int))
         msgs.append(
-            pysdk.Msg.spot.exit_pool(
+            nibiru.Msg.spot.exit_pool(
                 sender=sdk_val.address,
                 pool_id=int(pool_id),
                 pool_shares=Coin(int(amount), denom),

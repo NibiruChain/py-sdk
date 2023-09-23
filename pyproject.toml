@@ -17,7 +17,7 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Intended Audience :: Developers",
 ]
-packages = [{ include = "pysdk" }]
+packages = [{ include = "nibiru" }, { include = "nibiru_proto" }]
 
 [tool.poetry.dependencies]
 python = "^3.8.16"
@@ -41,6 +41,7 @@ grpcio = "^1.51.1"
 grpcio-tools = "^1.51.1"
 protobuf = "^4.21.12"
 mypy-protobuf = "^3.4.0"
+jupyter = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-skip-slow = "^0.0.3"

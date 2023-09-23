@@ -3,10 +3,10 @@ import json
 from typing import List, Optional
 
 import tests
-from pysdk import Transaction, pytypes
-from pysdk.jsonrpc import jsonrpc
-from pysdk.msg import bank
-from pysdk.tmrpc import broadcast
+from nibiru import Transaction, pytypes
+from nibiru.jsonrpc import jsonrpc
+from nibiru.msg import bank
+from nibiru.tmrpc import broadcast
 
 
 # This class CANNOT include "Test" in its name because pytest will think it's

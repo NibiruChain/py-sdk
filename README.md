@@ -71,7 +71,7 @@ python -m pip install --upgrade pip
 ### Ex: Creating a wallet and SDK client
 
 ```python
-from pysdk import wallet
+from nibiru import wallet
 
 # Save the mnemonic for later
 mnemonic, private_key = wallet.PrivateKey.generate()
@@ -123,7 +123,7 @@ print(query_resp)
 
 ```python
 # version 0.16.3
-from pysdk import Msg
+from nibiru import Msg
 
 tx_resp = sdk.tx.execute_msgs(
     Msg.perp.open_position(

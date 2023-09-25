@@ -1,11 +1,10 @@
 # stablecoin_test.py
 
-import nibiru
 from tests import dict_keys_must_match
 
 
-def test_query_params(sdk_val: nibiru.Sdk):
-    res = sdk_val.query.stablecoin.params()
+def test_query_params(client_validator):
+    res = client_validator.query.stablecoin.params()
     dict_keys_must_match(res, ["params"])
     dict_keys_must_match(
         res["params"],
@@ -23,6 +22,6 @@ def test_query_params(sdk_val: nibiru.Sdk):
     )
 
 
-def test_query_circulating_supplies(sdk_val: nibiru.Sdk):
-    res = sdk_val.query.stablecoin.circulating_supplies()
+def test_query_circulating_supplies(client_validator):
+    res = client_validator.query.stablecoin.circulating_supplies()
     assert isinstance(res, dict)

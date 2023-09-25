@@ -15,6 +15,6 @@ class TestEndpoints:
         assert chain_id == network.chain_id
 
     @staticmethod
-    def test_grpc(sdk_val: nibiru.Sdk):
-        block_height = sdk_val.query.get_latest_block_height()
+    def test_grpc(client_validator):
+        block_height = client_validator.query.get_latest_block_height()
         assert block_height > 0

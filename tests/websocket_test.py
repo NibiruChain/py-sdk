@@ -11,7 +11,7 @@ from nibiru import websocket as ws
 
 
 @pytest.mark.slow
-def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
+def test_websocket_listen(client_validator, network: Network):
     """Open a position and ensure output is correct"""
     pair = "ubtc:unusd"
 
@@ -34,10 +34,10 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     # Open a position from the validator node
     tests.LOGGER.info("Opening position")
     random_address: str = "nibi1a9s5adwysufv4n5ed2ahs4kaqkaf2x3upm2r9p"
-    sdk_val.tx.execute_msgs(
+    client_validator.tx.execute_msgs(
         [
             Msg.perp.open_position(
-                sender=sdk_val.address,
+                sender=client_validator.address,
                 pair=pair,
                 is_long=True,
                 quote_asset_amount=10,
@@ -45,7 +45,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
                 base_asset_amount_limit=0,
             ),
             Msg.bank.send(
-                from_address=sdk_val.address,
+                from_address=client_validator.address,
                 to_address=random_address,
                 coins=nibiru.Coin(amount=10, denom="unibi"),
             ),
@@ -53,9 +53,9 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
     )
 
     tests.LOGGER.info("Closing position")
-    sdk_val.tx.execute_msgs(
+    client_validator.tx.execute_msgs(
         Msg.perp.close_position(
-            sender=sdk_val.address,
+            sender=client_validator.address,
             pair=pair,
         )
     )
@@ -89,7 +89,7 @@ def test_websocket_listen(sdk_val: nibiru.Sdk, network: Network):
 
 
 @pytest.mark.slow
-def test_websocket_tx_fail_queue(sdk_val: nibiru.Sdk, network: Network):
+def test_websocket_tx_fail_queue(client_validator, network: Network):
     """
     Try executing failing TXs and get errors from tx_fail_queue
     """
@@ -104,14 +104,14 @@ def test_websocket_tx_fail_queue(sdk_val: nibiru.Sdk, network: Network):
     time.sleep(1)
 
     # Send failing closing transaction without simulation
-    sdk_val.tx.client.sync_timeout_height()
-    address = sdk_val.tx.ensure_address_info()
+    client_validator.tx.client.sync_timeout_height()
+    address = client_validator.tx.ensure_address_info()
     tx = (
         nibiru.Transaction()
         .with_messages(
             [
                 Msg.perp.close_position(
-                    sender=sdk_val.address,
+                    sender=client_validator.address,
                     pair="abc:def",
                 ).to_pb()
             ]
@@ -119,9 +119,9 @@ def test_websocket_tx_fail_queue(sdk_val: nibiru.Sdk, network: Network):
         .with_sequence(address.get_sequence())
         .with_account_num(address.get_number())
         .with_chain_id(network.chain_id)
-        .with_signer(sdk_val.tx.priv_key)
+        .with_signer(client_validator.tx.private_key)
     )
-    sdk_val.tx.execute_tx(tx, gas_estimate=300000)
+    client_validator.tx.execute_tx(tx, gas_estimate=300000)
 
     time.sleep(3)
 

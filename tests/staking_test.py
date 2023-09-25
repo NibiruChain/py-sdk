@@ -1,53 +1,52 @@
 import time
 
-import nibiru
 import tests
-from nibiru import Msg, event_specs, websocket
+from nibiru import ChainClient, Msg, Network, event_specs, websocket
 from nibiru.exceptions import QueryError, SimulationError
 
 
-def get_validator_operator_address(sdk_val: nibiru.Sdk):
+def get_validator_operator_address(client_validator: ChainClient):
     """
     Return the first validator and delegator
     """
-    validator = sdk_val.query.staking.validators()["validators"][0]
+    validator = client_validator.query.staking.validators()["validators"][0]
     return validator["operator_address"]
 
 
-def delegate(sdk_val: nibiru.Sdk):
-    return sdk_val.tx.execute_msgs(
+def delegate(client_validator: ChainClient):
+    return client_validator.tx.execute_msgs(
         [
             Msg.staking.delegate(
-                delegator_address=sdk_val.address,
-                validator_address=get_validator_operator_address(sdk_val),
+                delegator_address=client_validator.address,
+                validator_address=get_validator_operator_address(client_validator),
                 amount=1,
             ),
         ],
     )
 
 
-def undelegate(sdk_val: nibiru.Sdk):
-    return sdk_val.tx.execute_msgs(
+def undelegate(client_validator: ChainClient):
+    return client_validator.tx.execute_msgs(
         [
             Msg.staking.undelegate(
-                delegator_address=sdk_val.address,
-                validator_address=get_validator_operator_address(sdk_val),
+                delegator_address=client_validator.address,
+                validator_address=get_validator_operator_address(client_validator),
                 amount=1,
             ),
         ],
     )
 
 
-def test_query_vpool(sdk_val: nibiru.Sdk):
-    query_resp = sdk_val.query.staking.pool()
+def test_query_vpool(client_validator: ChainClient):
+    query_resp = client_validator.query.staking.pool()
     assert query_resp["pool"]["bonded_tokens"] >= 0
     assert query_resp["pool"]["not_bonded_tokens"] >= 0
 
 
-def test_query_delegation(sdk_val: nibiru.Sdk):
-    tests.broadcast_tx_must_succeed(delegate(sdk_val))
-    query_resp = sdk_val.query.staking.delegation(
-        sdk_val.address, get_validator_operator_address(sdk_val)
+def test_query_delegation(client_validator: ChainClient):
+    tests.broadcast_tx_must_succeed(delegate(client_validator))
+    query_resp = client_validator.query.staking.delegation(
+        client_validator.address, get_validator_operator_address(client_validator)
     )
     tests.dict_keys_must_match(
         query_resp["delegation_response"],
@@ -58,9 +57,9 @@ def test_query_delegation(sdk_val: nibiru.Sdk):
     )
 
 
-def test_query_delegations(sdk_val: nibiru.Sdk):
-    tests.broadcast_tx_must_succeed(delegate(sdk_val))
-    query_resp = sdk_val.query.staking.delegations(sdk_val.address)
+def test_query_delegations(client_validator: ChainClient):
+    tests.broadcast_tx_must_succeed(delegate(client_validator))
+    query_resp = client_validator.query.staking.delegations(client_validator.address)
     tests.dict_keys_must_match(
         query_resp["delegation_responses"][0],
         [
@@ -70,10 +69,10 @@ def test_query_delegations(sdk_val: nibiru.Sdk):
     )
 
 
-def test_query_delegations_to(sdk_val: nibiru.Sdk):
-    tests.broadcast_tx_must_succeed(delegate(sdk_val))
-    query_resp = sdk_val.query.staking.delegations_to(
-        get_validator_operator_address(sdk_val)
+def test_query_delegations_to(client_validator: ChainClient):
+    tests.broadcast_tx_must_succeed(delegate(client_validator))
+    query_resp = client_validator.query.staking.delegations_to(
+        get_validator_operator_address(client_validator)
     )
     tests.dict_keys_must_match(
         query_resp["delegation_responses"][0],
@@ -84,9 +83,9 @@ def test_query_delegations_to(sdk_val: nibiru.Sdk):
     )
 
 
-def test_historical_info(sdk_val: nibiru.Sdk):
+def test_historical_info(client_validator: ChainClient):
     try:
-        hist_info = sdk_val.query.staking.historical_info(1)
+        hist_info = client_validator.query.staking.historical_info(1)
         if hist_info["hist"]["valset"]:
             tests.dict_keys_must_match(
                 hist_info["hist"]["valset"][0],
@@ -110,8 +109,8 @@ def test_historical_info(sdk_val: nibiru.Sdk):
         pass
 
 
-def test_params(sdk_val: nibiru.Sdk):
-    query_resp = sdk_val.query.staking.params()
+def test_params(client_validator: ChainClient):
+    query_resp = client_validator.query.staking.params()
     tests.dict_keys_must_match(
         query_resp["params"],
         [
@@ -125,19 +124,19 @@ def test_params(sdk_val: nibiru.Sdk):
     )
 
 
-def test_redelegations(sdk_val: nibiru.Sdk):
-    query_resp = sdk_val.query.staking.redelegations(
-        sdk_val.address, get_validator_operator_address(sdk_val)
+def test_redelegations(client_validator: ChainClient):
+    query_resp = client_validator.query.staking.redelegations(
+        client_validator.address, get_validator_operator_address(client_validator)
     )
     tests.dict_keys_must_match(query_resp, ["redelegation_responses", "pagination"])
 
 
-def test_unbonding_delegation(sdk_val: nibiru.Sdk):
-    tests.broadcast_tx_must_succeed(delegate(sdk_val))
+def test_unbonding_delegation(client_validator: ChainClient):
+    tests.broadcast_tx_must_succeed(delegate(client_validator))
     try:
-        undelegate(sdk_val)
-        query_resp = sdk_val.query.staking.unbonding_delegation(
-            sdk_val.address, get_validator_operator_address(sdk_val)
+        undelegate(client_validator)
+        query_resp = client_validator.query.staking.unbonding_delegation(
+            client_validator.address, get_validator_operator_address(client_validator)
         )
         if query_resp.get("unbonding_responses"):
             tests.dict_keys_must_match(
@@ -152,33 +151,15 @@ def test_unbonding_delegation(sdk_val: nibiru.Sdk):
         )
 
 
-def test_unbonding_delegations(sdk_val: nibiru.Sdk):
-    tests.broadcast_tx_must_succeed(delegate(sdk_val))
+def test_unbonding_delegations(client_validator: ChainClient):
+    tests.broadcast_tx_must_succeed(delegate(client_validator))
     try:
-        undelegate(sdk_val)
+        undelegate(client_validator)
     except SimulationError as ex:
         assert "too many unbonding" in ex.args[0]
 
-    query_resp = sdk_val.query.staking.unbonding_delegations(sdk_val.address)
-
-    tests.dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
-    if query_resp.get("unbonding_responses"):
-        tests.dict_keys_must_match(
-            query_resp["unbonding_responses"][0],
-            ["delegator_address", "validator_address", "entries"],
-        )
-        assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
-
-
-def test_unbonding_delegations_from(sdk_val: nibiru.Sdk):
-    tests.broadcast_tx_must_succeed(delegate(sdk_val))
-    try:
-        undelegate(sdk_val)
-    except SimulationError as ex:
-        assert "too many unbonding" in ex.args[0]
-
-    query_resp = sdk_val.query.staking.unbonding_delegations_from(
-        get_validator_operator_address(sdk_val)
+    query_resp = client_validator.query.staking.unbonding_delegations(
+        client_validator.address
     )
 
     tests.dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
@@ -190,8 +171,28 @@ def test_unbonding_delegations_from(sdk_val: nibiru.Sdk):
         assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
 
 
-def test_validators(sdk_val: nibiru.Sdk):
-    query_resp = sdk_val.query.staking.validators()
+def test_unbonding_delegations_from(client_validator: ChainClient):
+    tests.broadcast_tx_must_succeed(delegate(client_validator))
+    try:
+        undelegate(client_validator)
+    except SimulationError as ex:
+        assert "too many unbonding" in ex.args[0]
+
+    query_resp = client_validator.query.staking.unbonding_delegations_from(
+        get_validator_operator_address(client_validator)
+    )
+
+    tests.dict_keys_must_match(query_resp, ["unbonding_responses", "pagination"])
+    if query_resp.get("unbonding_responses"):
+        tests.dict_keys_must_match(
+            query_resp["unbonding_responses"][0],
+            ["delegator_address", "validator_address", "entries"],
+        )
+        assert len(query_resp["unbonding_responses"][0]["entries"]) > 0
+
+
+def test_validators(client_validator: ChainClient):
+    query_resp = client_validator.query.staking.validators()
     tests.dict_keys_must_match(query_resp, ["validators", "pagination"])
     assert query_resp["pagination"]["total"] > 0
     assert len(query_resp["validators"]) > 0
@@ -215,9 +216,9 @@ def test_validators(sdk_val: nibiru.Sdk):
     )
 
 
-def test_validator(sdk_val: nibiru.Sdk):
-    validator = sdk_val.query.staking.validators()["validators"][0]
-    query_resp = sdk_val.query.staking.validator(validator["operator_address"])
+def test_validator(client_validator: ChainClient):
+    validator = client_validator.query.staking.validators()["validators"][0]
+    query_resp = client_validator.query.staking.validator(validator["operator_address"])
 
     tests.dict_keys_must_match(
         query_resp["validator"],
@@ -239,7 +240,7 @@ def test_validator(sdk_val: nibiru.Sdk):
     )
 
 
-def test_staking_events(sdk_val: nibiru.Sdk, network: nibiru.Network):
+def test_staking_events(client_validator: ChainClient, network: Network):
     """
     Check staking events are properly filtered
     """
@@ -253,7 +254,7 @@ def test_staking_events(sdk_val: nibiru.Sdk, network: nibiru.Network):
     ws.start()
     time.sleep(1)
 
-    delegate(sdk_val)
+    delegate(client_validator)
     time.sleep(5)
     success: bool = False
     ws.queue.put(None)

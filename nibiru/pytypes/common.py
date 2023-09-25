@@ -15,10 +15,10 @@ DEFAULT_GAS_PRICE = 1 * pow(10, -3)
 
 class TxBroadcastMode(Enum):
     """
-    The TxType allows you to choose what type of synchronization you want to
+    The TxBroadcastMode allows you to choose what type of synchronization you want to
     use to broadcast a transaction.
 
-    ### TxType.SYNC
+    ### TxBroadcastMode.SYNC
 
     The CLI waits for a CheckTx execution response only. Each full-node that
     receives a transaction sends a CheckTx to the application layer to check
@@ -30,26 +30,17 @@ class TxBroadcastMode(Enum):
     Prior to consensus, nodes continuously check incoming transactions and
     gossip them to their peers.
 
-    ### TxType.ASYNC
+    ### TxBroadcastMode.ASYNC
 
     The CLI returns immediately (transaction might fail silently). If you send
     a transaction with this option, it is recommended to query the transaction
     output using the hash of the transaction given by the output of the tx
     call.
 
-    ### TxType.BLOCK (Deprecated since Cosmos-SDK v0.47)
-
-    The tx function will wait unitl the tx is be committed in a block. This
-    have the effect of having the full log of the transaction available with
-    the output of the method. These logs will include information as to coin
-    sent and received, states changed etc.
     """
 
     SYNC = 1
-
     ASYNC = 2
-
-    BLOCK = 3
 
 
 class Direction(Enum):
@@ -117,5 +108,5 @@ class PythonMsg(abc.ABC):
         Generate the protobuf message
 
         Returns:
-            Any: The protobuff mesage
+            Any: The protobuf mesage
         """

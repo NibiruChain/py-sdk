@@ -128,9 +128,6 @@ class GrpcClient:
                 f"The chain is running a custom release from branch/commit {chain_nibiru_version}. "
                 "We bypass the compatibility assertion"
             )
-            logger.warning(
-                f"The chain is running a custom release from branch/commit {chain_nibiru_version}"
-            )
         else:
             error_string = (
                 f"Version error, Python sdk runs with nibiru protobuf version {nibiru_proto_version}, but the "

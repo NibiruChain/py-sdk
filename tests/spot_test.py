@@ -6,7 +6,7 @@ import pytest
 
 import nibiru
 import tests
-from nibiru import Coin, PoolAsset, pytypes, utils
+from nibiru import ChainClient, Coin, PoolAsset, pytypes, utils
 from nibiru.exceptions import SimulationError
 
 PRECISION = 6
@@ -19,15 +19,15 @@ class SpotErrors:
     no_pool_shares = "0pysdk.pool/"
 
 
-def test_spot_create_pool(sdk_val: nibiru.Sdk):
+def test_spot_create_pool(client_validator: ChainClient):
     """
     Test the workflow for pools
     """
 
     try:
-        tx_output = sdk_val.tx.execute_msgs(
+        tx_output = client_validator.tx.execute_msgs(
             nibiru.Msg.spot.create_pool(
-                creator=sdk_val.address,
+                creator=client_validator.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
                 assets=[
@@ -48,9 +48,9 @@ def test_spot_create_pool(sdk_val: nibiru.Sdk):
     """
     # # TODO fix: need usdc on-chain  to do this
     try:
-        tx_output = sdk_val.tx.execute_msgs(
+        tx_output = client_validator.tx.execute_msgs(
             pysdk.Msg.spot.create_pool(
-                creator=sdk_val.address,
+                creator=client_validator.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
                 assets=[
@@ -69,10 +69,10 @@ def test_spot_create_pool(sdk_val: nibiru.Sdk):
 
 @pytest.mark.order(after="test_spot_create_pool")
 @pytest.fixture
-def pools(sdk_val: nibiru.Sdk) -> List[dict]:
-    pools_resp = sdk_val.query.spot.pools()
+def pools(client_validator) -> List[dict]:
+    pools_resp = client_validator.query.spot.pools()
     if pools_resp:
-        return sdk_val.query.spot.pools()
+        return client_validator.query.spot.pools()
     else:
         return []
 
@@ -129,14 +129,14 @@ def test_spot_query_pools(pools: List[dict]):
 
 
 @pytest.mark.order(after="test_spot_query_pools")
-def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
+def test_spot_join_pool(client_validator, pool_ids: Dict[str, int]):
     if not pool_ids:
         return
     try:
-        tx_output = sdk_val.tx.execute_msgs(
+        tx_output = client_validator.tx.execute_msgs(
             [
                 nibiru.Msg.spot.join_pool(
-                    sender=sdk_val.address,
+                    sender=client_validator.address,
                     pool_id=pool_ids["unibi:unusd"],
                     tokens=[Coin(1000, "unibi"), Coin(100, "unusd")],
                 ),
@@ -148,11 +148,11 @@ def test_spot_join_pool(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
 
 
 @pytest.mark.order(after="test_spot_join_pool")
-def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
+def test_spot_swap(client_validator, pool_ids: Dict[str, int]):
     if not pool_ids:
         return
     try:
-        tx_output = sdk_val.tx.execute_msgs(
+        tx_output = client_validator.tx.execute_msgs(
             [
                 # # TODO fix: need usdc on-chain  to do this
                 # pysdk.Msg.spot.join_pool(
@@ -168,7 +168,7 @@ def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
                 #     token_out_denom="unusd",
                 # ),
                 nibiru.Msg.spot.swap(
-                    sender=sdk_val.address,
+                    sender=client_validator.address,
                     pool_id=pool_ids["unibi:unusd"],
                     token_in=Coin(100, "unusd"),
                     token_out_denom="unibi",
@@ -181,8 +181,10 @@ def test_spot_swap(sdk_val: nibiru.Sdk, pool_ids: Dict[str, int]):
 
 
 @pytest.mark.order(after="test_spot_swap")
-def test_spot_exit_pool(sdk_val: nibiru.Sdk):
-    all_balance_maps = sdk_val.query.get_bank_balances(sdk_val.address)["balances"]
+def test_spot_exit_pool(client_validator):
+    all_balance_maps = client_validator.query.get_bank_balances(
+        client_validator.address
+    )["balances"]
 
     balance_maps: List[Dict[Literal["denom", "amount"], Union[str, int]]] = [
         balance_map
@@ -201,16 +203,16 @@ def test_spot_exit_pool(sdk_val: nibiru.Sdk):
         assert isinstance(amount, (str, int))
         msgs.append(
             nibiru.Msg.spot.exit_pool(
-                sender=sdk_val.address,
+                sender=client_validator.address,
                 pool_id=int(pool_id),
                 pool_shares=Coin(int(amount), denom),
             )
         )
     if balance_maps:
-        broadcast_resp = sdk_val.tx.execute_msgs(msgs=msgs)
+        broadcast_resp = client_validator.tx.execute_msgs(msgs=msgs)
         tests.broadcast_tx_must_succeed(res=broadcast_resp)
     if not balance_maps:
         tests.LOGGER.info(
             "skipped test for 'nibid tx spot exit-pool' because\n"
-            + f"{sdk_val.address} did not have LP shares"
+            + f"{client_validator.address} did not have LP shares"
         )

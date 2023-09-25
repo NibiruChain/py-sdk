@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nibiru"
-version = "0.21.10"
+version = "0.21.10.7"
 description = "Python SDK for interacting with Nibiru."
 authors = ["Nibiru Chain <dev@nibiru.fi>"]
 license = "MIT"

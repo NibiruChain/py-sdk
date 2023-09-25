@@ -18,6 +18,7 @@ ProtobufMessage = google.protobuf.message.Message
 
 import nibiru.exceptions  # noqa
 import nibiru.pytypes  # noqa
+from nibiru.chain_client import ChainClient  # noqa
 from nibiru.grpc_client import GrpcClient  # noqa
 from nibiru.msg import Msg  # noqa
 from nibiru.pytypes import (  # noqa
@@ -29,6 +30,5 @@ from nibiru.pytypes import (  # noqa
     TxBroadcastMode,
     TxConfig,
 )
-from nibiru.sdk import Sdk  # noqa
 from nibiru.tx import Transaction  # noqa
 from nibiru.wallet import Address, PrivateKey, PublicKey  # noqa

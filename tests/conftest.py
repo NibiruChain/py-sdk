@@ -7,8 +7,8 @@ See "Scope: sharing fixtures across classes, modules, packages or session"
 - docs reference: https://docs.pytest.org/en/6.2.x/fixture.html
 
 Fixtures available:
-- sdk_val
-- sdk_agent
+- client_validator
+- client_new_user
 """
 import os
 from typing import Any, Dict, List
@@ -17,7 +17,7 @@ import dotenv
 import pytest
 
 import tests
-from nibiru import Network, NetworkType, Sdk
+from nibiru import ChainClient, Network, NetworkType
 
 
 def pytest_configure(config):
@@ -102,19 +102,10 @@ def network() -> Network:
 
 
 @pytest.fixture
-def sdk_val(network: Network) -> Sdk:
-    return tests.fixture_sdk_val()
-    # tx_config = tests.TX_CONFIG_TEST
-    # return (
-    #     Sdk.authorize(pytest.VALIDATOR_MNEMONIC)
-    #     .with_config(tx_config)
-    #     .with_network(network)
-    # )
+def client_validator(network: Network) -> ChainClient:
+    return tests.fixture_client_validator()
 
 
 @pytest.fixture
-def sdk_agent(network: Network) -> Sdk:
-    return tests.fixture_sdk_other()
-    # tx_config = tests.TX_CONFIG_TEST
-    # agent = Sdk.authorize().with_config(tx_config).with_network(network)
-    # return agent
+def client_new_user(network: Network) -> ChainClient:
+    return tests.fixture_client_new_user()

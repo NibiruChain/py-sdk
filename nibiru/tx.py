@@ -48,10 +48,10 @@ class TxClient:
 
     def __init__(
         self,
-        priv_key: wallet.PrivateKey,
         network: pt.Network,
         client: GrpcClient,
         config: pt.TxConfig,
+        priv_key: wallet.PrivateKey = None,
     ):
         self.priv_key = priv_key
         self.network = network
@@ -96,7 +96,7 @@ class TxClient:
         """
 
         tx: Transaction
-        address: wallet.Address = self.ensure_address_info()
+        # address: wallet.Address = self.ensure_address_info()
         tx, address = self.build_tx(
             msgs=msgs,
         )
@@ -106,7 +106,7 @@ class TxClient:
             sequence = address.sequence
         sequence_err: str = "sequence was not given or available on the wallet object."
         assert address, sequence_err
-        assert sequence, sequence_err
+        # assert sequence, sequence_err
 
         tx = tx.with_sequence(sequence=sequence)
 

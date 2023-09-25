@@ -11,13 +11,12 @@ from typing import Iterable, List, Optional, Union
 # NOTE: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mis
 import shutup  # type: ignore
 
-import pysdk
+from nibiru import Network, PrivateKey, utils
+from nibiru.chain_client import ChainClient
+from nibiru.pytypes import common, tx_resp
 from nibiru_proto.cosmos.tx.v1beta1 import service_pb2 as tx_service  # type: ignore
-from pysdk import utils
-from pysdk.pytypes import common, tx_resp
 
 shutup.please()
-
 
 LOGGER: logging.Logger = logging.getLogger("test-logger")
 
@@ -139,24 +138,27 @@ TX_CONFIG_TEST: common.TxConfig = common.TxConfig(
 )
 
 
-def fixture_network() -> pysdk.Network:
-    return pysdk.Network.customnet()
+def fixture_network() -> Network:
+    return Network.customnet()
 
 
-def fixture_sdk_val() -> pysdk.Sdk:
-    return (
-        pysdk.Sdk.authorize(key=os.getenv("VALIDATOR_MNEMONIC"))
-        .with_config(TX_CONFIG_TEST)
-        .with_network(fixture_network())
+def fixture_client_validator() -> ChainClient:
+    client = ChainClient(
+        network=fixture_network(),
+        tx_config=TX_CONFIG_TEST,
     )
+    client.authenticate(mnemonic=os.getenv("VALIDATOR_MNEMONIC"))
+    return client
 
 
-def fixture_sdk_other() -> pysdk.Sdk:
-    return (
-        pysdk.Sdk.authorize()
-        .with_config(TX_CONFIG_TEST)
-        .with_network(fixture_network())
+def fixture_client_new_user() -> ChainClient:
+    client = ChainClient(
+        network=fixture_network(),
+        tx_config=TX_CONFIG_TEST,
     )
+    mnemonic, private_key = PrivateKey.generate()
+    client.authenticate(mnemonic=mnemonic)
+    return client
 
 
 @dataclasses.dataclass

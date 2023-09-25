@@ -54,90 +54,91 @@ The package is intended to be used by coders, developers, technically-skilled tr
 </p>
 </a>
 
-## Installation from `PyPI`
-
 ```bash
-pip install nibiru  # requires Python 3.7+
-```
-
-You may need to update `pip` to get this to run:
-
-```bash
-python -m pip install --upgrade pip
+pip install nibiru  # requires Python 3.8+
 ```
 
 ## Usage
 
-### Ex: Creating a wallet and SDK client
+### Querying the chain
 
 ```python
-from pysdk import wallet
+import json
+from nibiru import Network, ChainClient
 
-# Save the mnemonic for later
-mnemonic, private_key = wallet.PrivateKey.generate()
-```
+client = ChainClient(Network.testnet(2))
 
-After, creating an account, you can create an `Sdk` instance.
+# Query perp markets
+print(json.dumps(client.query.perp.markets(), indent=4))
 
-```python
-import nibiru
-
-network = nibiru.network.Network.testnet(2)
-sdk = nibiru.Sdk.authorize(mnemonic)
-  .with_network(network)
-```
-
-The `Sdk` class creates an interface to sign and send transactions or execute
-queries. It is associated with:
-- A transaction signer (wallet), which is configured from existing mnemonic to recover a `PrivateKey`.
-- A `Network`, which specifies the RPC, LCD, and gRPC endpoints for connecting to Nibiru Chain.
-- An optional `TxConfig` for changing gas parameters.
-
-### Ex: Using the faucet
-
-```python
-import requests
-
-requests.post(
-    "https://faucet.testnet-2.nibiru.fi/",
-    json={
-        "address": sdk.address,
-        "coins": ["10000000unibi", "100000000000unusd"],
-    },
+# Query trader's positions
+print(
+  json.dumps(
+    client.query.perp.all_positions(
+      trader="nibi1jle8khj3aennq24zx6g93aam9rt0fqhgyp4h52"
+    ),
+    indent=4)
 )
 ```
 
-### Ex: Querying chain state
+### Submitting transactions to the chain
+
+To send a tx you need to authenticate using your wallet mnemonic or private key.
+
+To create a new wallet, generate a mnemonic key using any service or using SDK call.
 
 ```python
-# Querying the token balances of the account
-sdk.query.get_bank_balances(sdk.address)
+import json
+import nibiru
+from nibiru import Network, ChainClient, Msg, PrivateKey
 
-# Querying from the vpool module
-query_resp = sdk.query.vpool.all_pools()
-print(query_resp)
-# Queries from other modules can be accessed from "sdk.query.module"
+mnemonic, private_key = PrivateKey.generate()
+print(mnemonic)
+# Example OUTPUT:
+# enlist satisfy inspire hobby romance caught great neither kitchen unfair cage awesome update fade object eagle sun ordinary again journey spell gown tiger spin
+
+# Your wallet address
+print(private_key.to_public_key().to_address().to_acc_bech32())
+# Example OUTPUT:
+# nibi1efsh4dq3ve58dgu68rxp8cfe4mgf89el0qfucm
 ```
 
-### Ex: Submitting transactions
+Store your mnemonic key in a safe place and use it going forward. 
+
+Use faucet to get some test tokens into your wallet: https://app.nibiru.fi/faucet
+
+Сreate your chain client and authenticate with the mnemoniс generated
 
 ```python
-# version 0.16.3
-from pysdk import Msg
+mnemonic = "put your mnemonic here..."
+client = ChainClient(network=Network.testnet(2))
+client.authenticate(mnemonic=mnemonic)
+print(client.address)
+```
 
-tx_resp = sdk.tx.execute_msgs(
+Check your bank balances. If the faucet succeded - your wallet should not be empty.
+
+```python
+print(client.query.get_bank_balances(client.address))
+```
+
+### Send tx
+
+```python
+output = client.tx.execute_msgs(
     Msg.perp.open_position(
-        sender=sdk.address,
-        pair="ubtc:unusd",
+        sender=client.address,
+        pair=pair,
         is_long=True,
         quote_asset_amount=10,
-        leverage=10,
+        leverage=1,
         base_asset_amount_limit=0,
     )
 )
+print(output)
 ```
 
-You can broadcast any available transaction by passing its corresponding `Msg` to the `sdk.tx.execute_msgs` function.
+You can broadcast any available transaction by passing its corresponding `Msg` to the `client.tx.execute_msgs` function.
 
 ## Documentation Website
 

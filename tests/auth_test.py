@@ -1,17 +1,12 @@
-import pysdk
-import tests
+from nibiru import ChainClient
 
 
-def test_query_auth_account(sdk_val: pysdk.Sdk):
-    tests.LOGGER.debug(
-        "sdk_val",
-    )
-
-    _: dict = sdk_val.query.auth.account(sdk_val.address)["account"]
+def test_query_auth_account(client_validator: ChainClient):
+    _: dict = client_validator.query.auth.account(client_validator.address)["account"]
 
 
-def test_query_auth_accounts(sdk_val: pysdk.Sdk):
-    query_resp: dict = sdk_val.query.auth.accounts()
+def test_query_auth_accounts(client_validator):
+    query_resp: dict = client_validator.query.auth.accounts()
 
     for account in query_resp["accounts"]:
         assert all(

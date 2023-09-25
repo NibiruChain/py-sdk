@@ -3,8 +3,8 @@ from typing import Callable, Dict, Tuple, Union
 
 import pytest
 
-from pysdk import Network
-from pysdk.jsonrpc import jsonrpc, rpc_error
+from nibiru import Network
+from nibiru.jsonrpc import jsonrpc, rpc_error
 
 
 def mock_rpc_method_subtract(params):

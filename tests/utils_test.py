@@ -3,12 +3,12 @@ from urllib.parse import ParseResult, urlparse
 
 import pytest
 
-import pysdk
+import nibiru
 import tests
+from nibiru import ChainClient, Coin, pytypes, utils
+from nibiru.query_clients import util as query_util
 from nibiru_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend  # type: ignore
 from nibiru_proto.nibiru.perp.v2.tx_pb2 import MsgMarketOrder  # type: ignore
-from pysdk import Coin, pytypes, utils
-from pysdk.query_clients import util as query_util
 
 
 @pytest.mark.parametrize(
@@ -84,16 +84,18 @@ def test_get_msg_pb_by_type_url(type_url, cls):
     assert query_util.get_msg_pb_by_type_url(type_url) == cls
 
 
-def test_get_block_messages(sdk_val: pysdk.Sdk, sdk_agent: pysdk.Sdk):
-    out: pytypes.ExecuteTxResp = sdk_val.tx.execute_msgs(
-        pysdk.Msg.bank.send(
-            sdk_val.address,
-            sdk_agent.address,
+def test_get_block_messages(
+    client_validator: ChainClient, client_new_user: ChainClient
+):
+    out: pytypes.ExecuteTxResp = client_validator.tx.execute_msgs(
+        nibiru.Msg.bank.send(
+            client_validator.address,
+            client_new_user.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],
         )
     )
     tests.broadcast_tx_must_succeed(res=out)
-    # tx_output = sdk_val.query.tx_by_hash(tx_hash=out["txhash"])
+    # tx_output = client_validator.query.tx_by_hash(tx_hash=out["txhash"])
 
     # height = int(tx_output["height"])
     # block_resp = sdk_agent.query.get_block_by_height(height)

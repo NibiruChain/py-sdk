@@ -3,10 +3,10 @@ import json
 from typing import List, Optional
 
 import tests
-from pysdk import Transaction, pytypes
-from pysdk.jsonrpc import jsonrpc
-from pysdk.msg import bank
-from pysdk.tmrpc import broadcast
+from nibiru import Transaction, pytypes
+from nibiru.jsonrpc import jsonrpc
+from nibiru.msg import bank
+from nibiru.tmrpc import broadcast
 
 
 # This class CANNOT include "Test" in its name because pytest will think it's
@@ -81,21 +81,21 @@ def test_init_BroadcastTxSync():
 
 
 def test_do_BroadcastTxSync():
-    sdk_val = tests.fixture_sdk_val()
-    sdk_other = tests.fixture_sdk_other()
-    assert sdk_val.tx.ensure_address_info()
-    assert sdk_val.tx.ensure_tx_config()
+    client_validator = tests.fixture_client_validator()
+    client_new_user = tests.fixture_client_new_user()
+    assert client_validator.tx.ensure_address_info()
+    assert client_validator.tx.ensure_tx_config()
     tx: Transaction
-    tx, _ = sdk_val.tx.build_tx(
+    tx, _ = client_validator.tx.build_tx(
         msgs=[
             bank.MsgsBank.send(
-                sdk_val.address,
-                sdk_other.address,
+                client_validator.address,
+                client_new_user.address,
                 [pytypes.Coin(7, "unibi"), pytypes.Coin(70, "unusd")],
             ),
             bank.MsgsBank.send(
-                sdk_val.address,
-                sdk_other.address,
+                client_validator.address,
+                client_new_user.address,
                 [pytypes.Coin(15, "unibi"), pytypes.Coin(23, "unusd")],
             ),
         ]
@@ -108,6 +108,6 @@ def test_do_BroadcastTxSync():
     )
 
     jsonrpc_resp: jsonrpc.JsonRPCResponse = jsonrpc.do_jsonrpc_request(
-        data=jsonrpc_req, endpoint=sdk_val.network.tendermint_rpc_endpoint
+        data=jsonrpc_req, endpoint=client_validator.network.tendermint_rpc_endpoint
     )
     assert jsonrpc_resp.ok()

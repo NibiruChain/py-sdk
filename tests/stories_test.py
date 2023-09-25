@@ -2,7 +2,7 @@
 
 import pytest
 
-import pysdk
+import nibiru
 import tests
 
 
@@ -12,7 +12,7 @@ def test_query_tx_by_hash():
     'BroadcastTxResp' objects that may each hold a tx hash. Each successful
     broadcast should have a hash and be queriable.
     """
-    sdk = tests.fixture_sdk_val()
+    sdk = tests.fixture_client_validator()
     story: tests.FullTxStory
     for idx, story in enumerate(tests.FULL_TX_STORIES):
         if story.broadcast_resp.code == 0:
@@ -21,7 +21,7 @@ def test_query_tx_by_hash():
             check_tx_by_hash(sdk=sdk, tx_hash=tx_hash, idx=idx)
 
 
-def check_tx_by_hash(sdk: pysdk.Sdk, tx_hash: str, idx: int):
+def check_tx_by_hash(sdk: nibiru.ChainClient, tx_hash: str, idx: int):
     try:
         query_tx_resp = sdk.tx.client.tx_by_hash(tx_hash=tx_hash)
         tests.FULL_TX_STORIES[idx].query_tx_resp = query_tx_resp

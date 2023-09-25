@@ -1,26 +1,26 @@
 # bank_test.py
 
-import pysdk
+import nibiru
 import tests
-from pysdk import Coin
+from nibiru import Coin
 
 PRECISION = 6
 
 
-def test_send_multiple_msgs(sdk_val: pysdk.Sdk, sdk_agent: pysdk.Sdk):
+def test_send_multiple_msgs(client_validator, client_new_user):
     """Tests the transfer of funds for a transaction with a multiple
     'MsgSend' tx messages.
     """
-    tx_output = sdk_val.tx.execute_msgs(
+    tx_output = client_validator.tx.execute_msgs(
         msgs=[
-            pysdk.Msg.bank.send(
-                sdk_val.address,
-                sdk_agent.address,
+            nibiru.Msg.bank.send(
+                client_validator.address,
+                client_new_user.address,
                 [Coin(7, "unibi"), Coin(70, "unusd")],
             ),
-            pysdk.Msg.bank.send(
-                sdk_val.address,
-                sdk_agent.address,
+            nibiru.Msg.bank.send(
+                client_validator.address,
+                client_new_user.address,
                 [Coin(15, "unibi"), Coin(23, "unusd")],
             ),
         ],
@@ -35,16 +35,16 @@ def test_send_multiple_msgs(sdk_val: pysdk.Sdk, sdk_agent: pysdk.Sdk):
     tests.FullTxStory(broadcast_resp=tx_output).save()
 
 
-def test_send_single_msg(sdk_val: pysdk.Sdk, sdk_agent: pysdk.Sdk):
+def test_send_single_msg(client_validator, client_new_user):
     """Tests the transfer of funds for a transaction with a single 'MsgSend'
     tx message.
     """
 
-    tx_output = sdk_val.tx.execute_msgs(
+    tx_output = client_validator.tx.execute_msgs(
         [
-            pysdk.Msg.bank.send(
-                sdk_val.address,
-                sdk_agent.address,
+            nibiru.Msg.bank.send(
+                client_validator.address,
+                client_new_user.address,
                 [Coin(10, "unibi"), Coin(10, "unusd")],
             ),
         ]

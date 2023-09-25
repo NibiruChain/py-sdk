@@ -5,12 +5,12 @@ from typing import Any, Dict, List, Union
 import pytest
 import requests
 
-import pysdk
+import nibiru
 import tests
-from pysdk import pytypes
+from nibiru import ChainClient, Network
 
 
-def test_genesis_block_ping(network: pytypes.Network):
+def test_genesis_block_ping(network: Network):
     """Manually query block info from the chain using a get request. This verifies that
     the configuration is valid.
     """
@@ -21,22 +21,22 @@ def test_genesis_block_ping(network: pytypes.Network):
     assert all([key in query_resp.keys() for key in ["jsonrpc", "id", "result"]])
 
 
-def test_get_chain_id(sdk_val: pysdk.Sdk):
-    assert sdk_val.network.chain_id == sdk_val.query.get_chain_id()
+def test_get_chain_id(client_validator: ChainClient):
+    assert client_validator.network.chain_id == client_validator.query.get_chain_id()
 
 
-def test_wait_next_block(sdk_val: pysdk.Sdk):
+def test_wait_next_block(client_validator: ChainClient):
     ...
 
 
-#     current_block_height = sdk_val.query.get_latest_block().block.header.height
-#     sdk_val.query.wait_for_next_block()
-#     new_block_height = sdk_val.query.get_latest_block().block.header.height
+#     current_block_height = client_validator.query.get_latest_block().block.header.height
+#     client_validator.query.wait_for_next_block()
+#     new_block_height = client_validator.query.get_latest_block().block.header.height
 
 #     assert new_block_height > current_block_height
 
 
-def test_version_works(sdk_val: pysdk.Sdk):
+def test_version_works(client_validator: ChainClient):
     test_cases: List[Dict[str, Union[bool, List[str]]]] = [
         {"should_fail": False, "versions": ["0.3.2", "0.3.2"]},
         {"should_fail": False, "versions": ["0.3.2", "0.3.4"]},
@@ -52,20 +52,20 @@ def test_version_works(sdk_val: pysdk.Sdk):
         if tc["should_fail"]:
             with pytest.raises(AssertionError, match="Version error"):
                 assert isinstance(tc["versions"], list)
-                sdk_val.query.assert_compatible_versions(*tc["versions"])
+                client_validator.query.assert_compatible_versions(*tc["versions"])
         else:
             assert isinstance(tc["versions"], list)
-            sdk_val.query.assert_compatible_versions(*tc["versions"])
+            client_validator.query.assert_compatible_versions(*tc["versions"])
 
 
-def test_block_getters(sdk_agent: pysdk.Sdk):
+def test_block_getters(client_new_user: ChainClient):
     """Tests queries from the Tendemint gRPC channel
     - GetBlockByHeight
     - GetLatestBlock
     """
 
-    block_by_height_resp = sdk_agent.query.get_block_by_height(2)
-    latest_block_resp = sdk_agent.query.get_latest_block()
+    block_by_height_resp = client_new_user.query.get_block_by_height(2)
+    latest_block_resp = client_new_user.query.get_latest_block()
     block_id_fields: List[str] = ["hash", "part_set_header"]
     block_fields: List[str] = ["data", "evidence", "header", "last_commit"]
     for block_resp in [block_by_height_resp, latest_block_resp]:
@@ -77,12 +77,12 @@ def test_block_getters(sdk_agent: pysdk.Sdk):
         ), "missing attributes on the 'block' field"
 
 
-def test_blocks_getters(sdk_agent: pysdk.Sdk):
+def test_blocks_getters(client_new_user: ChainClient):
     """Tests queries from the Tendemint gRPC channel
     - GetBlocksByHeight
     """
 
-    block_by_height_resp = sdk_agent.query.get_blocks_by_height(2, 5)
+    block_by_height_resp = client_new_user.query.get_blocks_by_height(2, 5)
     block_id_fields: List[str] = ["hash", "part_set_header"]
     block_fields: List[str] = ["data", "evidence", "header", "last_commit"]
     for block_resp in block_by_height_resp:
@@ -94,15 +94,15 @@ def test_blocks_getters(sdk_agent: pysdk.Sdk):
         ), "missing attributes on the 'block' field"
 
 
-def test_query(sdk_val: pysdk.Sdk):
+def test_query(client_validator: ChainClient):
     """
     Open a position and ensure output is correct
     """
-    assert isinstance(sdk_val.query.get_latest_block_height(), int)
-    assert isinstance(sdk_val.query.get_version(), str)
+    assert isinstance(client_validator.query.get_latest_block_height(), int)
+    assert isinstance(client_validator.query.get_version(), str)
 
 
-def test_Network_from_chain_id():
+def test_network_from_chain_id():
     @dataclasses.dataclass
     class Case:
         chain_id_in: str
@@ -111,11 +111,11 @@ def test_Network_from_chain_id():
     def run_case(test_case: Case):
         if test_case.expected_fail:
             try:
-                _ = pysdk.Network.from_chain_id(test_case.chain_id_in)
+                _ = nibiru.Network.from_chain_id(test_case.chain_id_in)
             except BaseException as err:
                 tests.raises(["invalid chain type", "invalid chain_id format"], err)
         else:
-            network = pysdk.Network.from_chain_id(test_case.chain_id_in)
+            network = nibiru.Network.from_chain_id(test_case.chain_id_in)
             _, chain_type, _ = network.chain_id.split("-")
 
             if chain_type == "localnet":

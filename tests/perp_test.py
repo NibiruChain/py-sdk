@@ -3,11 +3,10 @@ from typing import Dict, List
 
 import pytest
 
-import pysdk
 import tests
-from pysdk import Msg
-from pysdk import pytypes as pt
-from pysdk.utils import assert_subset
+from nibiru import Msg
+from nibiru import pytypes as pt
+from nibiru.utils import assert_subset
 
 PRECISION = 6
 
@@ -21,12 +20,12 @@ class ERRORS:
     no_prices = "no valid prices available"
 
 
-def test_open_position(sdk_val: pysdk.Sdk):
+def test_open_position(client_validator):
     tests.LOGGER.info("nibid tx perp open-position")
     try:
-        tx_output: pt.ExecuteTxResp = sdk_val.tx.execute_msgs(
+        tx_output: pt.ExecuteTxResp = client_validator.tx.execute_msgs(
             Msg.perp.open_position(
-                sender=sdk_val.address,
+                sender=client_validator.address,
                 pair=PAIR,
                 is_long=False,
                 quote_asset_amount=10,
@@ -43,10 +42,12 @@ def test_open_position(sdk_val: pysdk.Sdk):
 
 
 @pytest.mark.order(after="test_open_position")
-def test_perp_query_position(sdk_val: pysdk.Sdk):
+def test_perp_query_position(client_validator):
     try:
         # Trader position must be a dict with specific keys
-        position_res = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
+        position_res = client_validator.query.perp.position(
+            trader=client_validator.address, pair=PAIR
+        )
         tests.dict_keys_must_match(
             position_res,
             [
@@ -65,8 +66,8 @@ def test_perp_query_position(sdk_val: pysdk.Sdk):
         tests.raises(ok_errors, err)
 
 
-def test_perp_query_market(sdk_val: pysdk.Sdk):
-    output = sdk_val.query.perp.markets()
+def test_perp_query_market(client_validator):
+    output = client_validator.query.perp.markets()
 
     expected_to_be_equal = {
         "ammMarkets": [
@@ -118,9 +119,9 @@ def test_perp_query_market(sdk_val: pysdk.Sdk):
 
 
 @pytest.mark.order(after="test_perp_query_position")
-def test_perp_query_all_positions(sdk_val: pysdk.Sdk):
-    positions_map: Dict[str, dict] = sdk_val.query.perp.all_positions(
-        trader=sdk_val.address
+def test_perp_query_all_positions(client_validator):
+    positions_map: Dict[str, dict] = client_validator.query.perp.all_positions(
+        trader=client_validator.address
     )
 
     if not positions_map:
@@ -141,12 +142,12 @@ def test_perp_query_all_positions(sdk_val: pysdk.Sdk):
 
 
 @pytest.mark.order(after="test_perp_query_all_positions")
-def test_perp_add_margin(sdk_val: pysdk.Sdk):
+def test_perp_add_margin(client_validator):
     try:
         # Transaction add_margin must succeed
-        tx_output = sdk_val.tx.execute_msgs(
+        tx_output = client_validator.tx.execute_msgs(
             Msg.perp.add_margin(
-                sender=sdk_val.address,
+                sender=client_validator.address,
                 pair=PAIR,
                 margin=pt.Coin(10, "unusd"),
             ),
@@ -164,11 +165,11 @@ def test_perp_add_margin(sdk_val: pysdk.Sdk):
 
 
 @pytest.mark.order(after="test_perp_add_margin")
-def test_perp_remove_margin(sdk_val: pysdk.Sdk):
+def test_perp_remove_margin(client_validator):
     try:
-        tx_output = sdk_val.tx.execute_msgs(
+        tx_output = client_validator.tx.execute_msgs(
             Msg.perp.remove_margin(
-                sender=sdk_val.address,
+                sender=client_validator.address,
                 pair=PAIR,
                 margin=pt.Coin(2, "unusd"),
             )
@@ -181,19 +182,21 @@ def test_perp_remove_margin(sdk_val: pysdk.Sdk):
 
 
 @pytest.mark.order(after="test_perp_remove_margin")
-def test_perp_close_posititon(sdk_val: pysdk.Sdk):
+def test_perp_close_posititon(client_validator):
     """
     Open a position and ensure output is correct
     """
 
     try:
         # Transaction close_position must succeed
-        tx_output = sdk_val.tx.execute_msgs(
-            Msg.perp.close_position(sender=sdk_val.address, pair=PAIR)
+        tx_output = client_validator.tx.execute_msgs(
+            Msg.perp.close_position(sender=client_validator.address, pair=PAIR)
         )
         tests.broadcast_tx_must_succeed(res=tx_output)
 
-        out = sdk_val.query.perp.position(trader=sdk_val.address, pair=PAIR)
+        out = client_validator.query.perp.position(
+            trader=client_validator.address, pair=PAIR
+        )
         # Querying the position should raise an exception if it closed
         # successfully
         # with pytest.raises(

@@ -140,7 +140,7 @@ def deserialize_exp(proto_message: message.Message) -> dict:
                     proto_message.__getattribute__(field.camelcase_name)
                 )
             except AttributeError:
-                output[field.camelcase_name] = output[field.camelcase_name]
+                pass
 
         elif is_sdk_dec[field.camelcase_name]:
             output[field.camelcase_name] = utils.from_sdk_dec(

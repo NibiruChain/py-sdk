@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Any, Mapping
 
 
-def to_jsonable(obj: Any) -> Any:
+def to_jsonable(obj):
     if hasattr(obj, "to_jsonable"):
         return obj.to_jsonable()
     if isinstance(obj, int):

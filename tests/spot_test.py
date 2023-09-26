@@ -27,7 +27,6 @@ def test_spot_create_pool(client_validator: ChainClient):
     try:
         tx_output = client_validator.tx.execute_msgs(
             nibiru.Msg.spot.create_pool(
-                creator=client_validator.address,
                 swap_fee=0.01,
                 exit_fee=0.02,
                 assets=[

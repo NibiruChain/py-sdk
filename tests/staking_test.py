@@ -17,7 +17,6 @@ def delegate(client_validator: ChainClient):
     return client_validator.tx.execute_msgs(
         [
             Msg.staking.delegate(
-                delegator_address=client_validator.address,
                 validator_address=get_validator_operator_address(client_validator),
                 amount=1,
             ),
@@ -29,7 +28,6 @@ def undelegate(client_validator: ChainClient):
     return client_validator.tx.execute_msgs(
         [
             Msg.staking.undelegate(
-                delegator_address=client_validator.address,
                 validator_address=get_validator_operator_address(client_validator),
                 amount=1,
             ),

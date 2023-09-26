@@ -96,17 +96,13 @@ class TxClient:
         """
 
         tx: Transaction
-        # address: wallet.Address = self.ensure_address_info()
-        tx, address = self.build_tx(
-            msgs=msgs,
-        )
+        tx, address = self.build_tx(msgs=msgs)
 
         # Validate account sequence
         if sequence is None:
             sequence = address.sequence
         sequence_err: str = "sequence was not given or available on the wallet object."
         assert address, sequence_err
-        # assert sequence, sequence_err
 
         tx = tx.with_sequence(sequence=sequence)
 
@@ -281,7 +277,6 @@ class TxClient:
         if not isinstance(msgs, list):
             msgs = [msgs]
 
-        pb_msgs = [msg.to_pb() for msg in msgs]
         self.client.sync_timeout_height()
 
         address: wallet.Address
@@ -294,6 +289,8 @@ class TxClient:
 
         if sequence is None:
             sequence = self.address.sequence
+
+        pb_msgs = [msg.to_pb(sender=address.to_acc_bech32()) for msg in msgs]
 
         tx = (
             Transaction()

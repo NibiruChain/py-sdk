@@ -127,7 +127,6 @@ print(client.query.get_bank_balances(client.address))
 ```python
 output = client.tx.execute_msgs(
     Msg.perp.open_position(
-        sender=client.address,
         pair=pair,
         is_long=True,
         quote_asset_amount=10,

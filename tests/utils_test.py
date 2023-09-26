@@ -89,7 +89,6 @@ def test_get_block_messages(
 ):
     out: pytypes.ExecuteTxResp = client_validator.tx.execute_msgs(
         nibiru.Msg.bank.send(
-            client_validator.address,
             client_new_user.address,
             [Coin(10000, "unibi"), Coin(100, "unusd")],
         )

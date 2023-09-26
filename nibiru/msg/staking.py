@@ -17,7 +17,6 @@ class MsgsStaking:
 
     @staticmethod
     def delegate(
-        delegator_address: str,
         validator_address: str,
         amount: float,
     ) -> 'MsgDelegate':
@@ -25,7 +24,6 @@ class MsgsStaking:
         Delegate tokens to a validator
 
         Attributes:
-            delegator_address: str
             validator_address: str
             amount: float
 
@@ -33,14 +31,12 @@ class MsgsStaking:
             MsgDelegate: PythonMsg for type 'cosmos.staking.v1beta1.MsgDelegate'
         """
         return MsgDelegate(
-            delegator_address=delegator_address,
             validator_address=validator_address,
             amount=amount,
         )
 
     @staticmethod
     def undelegate(
-        delegator_address: str,
         validator_address: str,
         amount: float,
     ) -> 'MsgUndelegate':
@@ -48,34 +44,28 @@ class MsgsStaking:
         Undelegate tokens from a validator
 
         Attributes:
-            delegator_address (str): Bech32 address for the delegator
             validator_address (str): Bech32 valoper address
             amount (float): Amount of unibi to undelegate.
         """
         return MsgUndelegate(
-            delegator_address=delegator_address,
             validator_address=validator_address,
             amount=amount,
         )
 
     @staticmethod
     def withdraw_delegator_reward(
-        delegator_address: str,
         validator_address: str,
     ) -> 'MsgWithdrawDelegatorReward':
         """TODO
         Withdraw the reward from a validator
 
         Attributes:
-            delegator_address (str)
             validator_address (str)
 
         Returns:
             MsgWithdrawDelegatorReward: _description_
         """
-        return MsgWithdrawDelegatorReward(
-            delegator_address=delegator_address, validator_address=validator_address
-        )
+        return MsgWithdrawDelegatorReward(validator_address=validator_address)
 
 
 @dataclasses.dataclass
@@ -84,16 +74,14 @@ class MsgDelegate(PythonMsg):
     Delegate tokens to a validator
 
     Attributes:
-        delegator_address: str
         validator_address: str
         amount: float
     """
 
-    delegator_address: str
     validator_address: str
     amount: float
 
-    def to_pb(self) -> pb_staking.MsgDelegate:
+    def to_pb(self, sender: str) -> pb_staking.MsgDelegate:
         """
         Returns the Message as protobuf object.
 
@@ -102,9 +90,9 @@ class MsgDelegate(PythonMsg):
 
         """
         return pb_staking.MsgDelegate(
-            delegator_address=self.delegator_address,
+            delegator_address=sender,
             validator_address=self.validator_address,
-            amount=Coin(self.amount, "unibi")._generate_proto_object(),
+            amount=Coin(self.amount, "unibi").to_pb(),
         )
 
 
@@ -114,16 +102,14 @@ class MsgUndelegate(PythonMsg):
     Undelegate tokens from a validator
 
     Attributes:
-        delegator_address: str
         validator_address: str
         amount: float
     """
 
-    delegator_address: str
     validator_address: str
     amount: float
 
-    def to_pb(self) -> pb_staking.MsgUndelegate:
+    def to_pb(self, sender: str) -> pb_staking.MsgUndelegate:
         """
         Returns the Message as protobuf object.
 
@@ -132,9 +118,9 @@ class MsgUndelegate(PythonMsg):
 
         """
         return pb_staking.MsgUndelegate(
-            delegator_address=self.delegator_address,
+            delegator_address=sender,
             validator_address=self.validator_address,
-            amount=Coin(self.amount, "unibi")._generate_proto_object(),
+            amount=Coin(self.amount, "unibi").to_pb(),
         )
 
 
@@ -144,14 +130,12 @@ class MsgWithdrawDelegatorReward(PythonMsg):
     Withdraw the reward from a validator
 
     Attributes:
-        delegator_address (str)
         validator_address (str)
     """
 
-    delegator_address: str
     validator_address: str
 
-    def to_pb(self) -> pb_distribution.MsgWithdrawDelegatorReward:
+    def to_pb(self, sender: str) -> pb_distribution.MsgWithdrawDelegatorReward:
         """
         Returns the Message as protobuf object.
 
@@ -160,6 +144,6 @@ class MsgWithdrawDelegatorReward(PythonMsg):
 
         """
         return pb_distribution.MsgWithdrawDelegatorReward(
-            delegator_address=self.delegator_address,
+            delegator_address=sender,
             validator_address=self.validator_address,
         )

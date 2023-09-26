@@ -30,7 +30,6 @@ class MsgsPerp:
 
     @staticmethod
     def open_position(
-        sender: str,
         pair: str,
         is_long: bool,
         quote_asset_amount: float,
@@ -41,7 +40,6 @@ class MsgsPerp:
         Open a posiiton using the specified parameters.
 
         Attributes:
-            sender (str): The sender address
             pair (str): The token pair
             is_long (bool): Determines whether to open with long or short exposure.
             quote_asset_amount (float): The quote amount you want to use to buy base
@@ -51,7 +49,6 @@ class MsgsPerp:
                 quote.
         """
         return MsgMarketOrder(
-            sender=sender,
             pair=pair,
             dir=Direction.LONG if is_long else Direction.SHORT,
             quote_asset_amount=quote_asset_amount,
@@ -60,22 +57,17 @@ class MsgsPerp:
         )
 
     @staticmethod
-    def close_position(
-        sender: str,
-        pair: str,
-    ) -> 'MsgClosePosition':
+    def close_position(pair: str) -> 'MsgClosePosition':
         """
         Close the position.
 
         Attributes:
-            sender (str): The sender address
             pair (str): The token pair
         """
-        return MsgClosePosition(sender=sender, pair=pair)
+        return MsgClosePosition(pair=pair)
 
     @staticmethod
     def add_margin(
-        sender: str,
         pair: str,
         margin: Coin,
     ) -> 'MsgAddMargin':
@@ -83,58 +75,42 @@ class MsgsPerp:
         Add margin for the position (pair + trader)
 
         Attributes:
-            sender (str): The trader address
             pair (str): The token pair
             margin (Coin): The margin to remove in a coin format
         """
-        return MsgAddMargin(sender=sender, pair=pair, margin=margin)
+        return MsgAddMargin(pair=pair, margin=margin)
 
     @staticmethod
-    def remove_margin(
-        sender: str,
-        pair: str,
-        margin: Coin,
-    ) -> 'MsgRemoveMargin':
+    def remove_margin(pair: str, margin: Coin) -> 'MsgRemoveMargin':
         """
         Remove margin for the position (pair + trader)
 
         Attributes:
-            sender (str): The trader address
             pair (str): The token pair
             margin (Coin): The margin to remove in a coin format
         """
-        return MsgRemoveMargin(sender=sender, pair=pair, margin=margin)
+        return MsgRemoveMargin(pair=pair, margin=margin)
 
     @staticmethod
-    def liquidate(
-        sender: str,
-        pair: str,
-        trader: str,
-    ) -> 'MsgMultiLiquidate':
+    def liquidate(pair: str, trader: str) -> 'MsgMultiLiquidate':
         """
         Liquidates unhealthy position (pair + trader)
 
         Attributes:
-            sender (str): The liquidator address
             pair (str): The token pair
             trader (str): The trader address
         """
-        return MsgMultiLiquidate(
-            sender=sender, liquidations=[Liquidation(pair=pair, trader=trader)]
-        )
+        return MsgMultiLiquidate(liquidations=[Liquidation(pair=pair, trader=trader)])
 
     @staticmethod
-    def liquidate_multiple(
-        sender: str, liquidations: List[Liquidation]
-    ) -> 'MsgMultiLiquidate':
+    def liquidate_multiple(liquidations: List[Liquidation]) -> 'MsgMultiLiquidate':
         """
         Liquidates multiple unhealthy positions (pair + trader)
 
         Attributes:
-            sender (str): The liquidator address
             liquidations (List[Liquidation]): list of pair/traders to liquidate
         """
-        return MsgMultiLiquidate(sender=sender, liquidations=liquidations)
+        return MsgMultiLiquidate(liquidations=liquidations)
 
 
 @dataclasses.dataclass
@@ -143,16 +119,14 @@ class MsgRemoveMargin(PythonMsg):
     Remove margin for the position (pair + trader)
 
     Attributes:
-        sender (str): The trader address
         pair (str): The token pair
         margin (Coin): The margin to remove in a coin format
     """
 
-    sender: str
     pair: str
     margin: Coin
 
-    def to_pb(self) -> pb.MsgRemoveMargin:
+    def to_pb(self, sender: str) -> pb.MsgRemoveMargin:
         """
         Returns the Message as protobuf object.
 
@@ -161,9 +135,9 @@ class MsgRemoveMargin(PythonMsg):
 
         """
         return pb.MsgRemoveMargin(
-            sender=self.sender,
+            sender=sender,
             pair=self.pair,
-            margin=self.margin._generate_proto_object(),
+            margin=self.margin.to_pb(),
         )
 
 
@@ -173,16 +147,14 @@ class MsgAddMargin(PythonMsg):
     Add margin for the position (pair + trader)
 
     Attributes:
-        sender (str): The trader address
         pair (str): The token pair
         margin (Coin): The margin to remove in a coin format
     """
 
-    sender: str
     pair: str
     margin: Coin
 
-    def to_pb(self) -> pb.MsgAddMargin:
+    def to_pb(self, sender: str) -> pb.MsgAddMargin:
         """
         Returns the Message as protobuf object.
 
@@ -191,9 +163,9 @@ class MsgAddMargin(PythonMsg):
 
         """
         return pb.MsgAddMargin(
-            sender=self.sender,
+            sender=sender,
             pair=self.pair,
-            margin=self.margin._generate_proto_object(),
+            margin=self.margin.to_pb(),
         )
 
 
@@ -203,7 +175,6 @@ class MsgMarketOrder(PythonMsg):
     Open a position using the specified parameters.
 
     Attributes:
-        sender (str): The sender address
         pair (str): The token pair
         side (Side): The side, either Side.BUY or Side.SELL
         quote_asset_amount (float): The quote amount you want to use to buy base
@@ -213,14 +184,13 @@ class MsgMarketOrder(PythonMsg):
             quote.
     """
 
-    sender: str
     pair: str
     dir: Direction
     quote_asset_amount: float
     leverage: float
     base_asset_amount_limit: float
 
-    def to_pb(self) -> pb.MsgMarketOrder:
+    def to_pb(self, sender: str) -> pb.MsgMarketOrder:
         """
         Returns the Message as protobuf object.
 
@@ -238,7 +208,7 @@ class MsgMarketOrder(PythonMsg):
         leverage_pb = to_sdk_dec(self.leverage)
 
         return pb.MsgMarketOrder(
-            sender=self.sender,
+            sender=sender,
             pair=self.pair,
             side=pb_side,
             quote_asset_amount=quote_asset_amount_pb,
@@ -253,14 +223,12 @@ class MsgClosePosition(PythonMsg):
     Close the position.
 
     Attributes:
-        sender (str): The sender address
         pair (str): The token pair
     """
 
-    sender: str
     pair: str
 
-    def to_pb(self) -> pb.MsgClosePosition:
+    def to_pb(self, sender: str) -> pb.MsgClosePosition:
         """
         Returns the Message as protobuf object.
 
@@ -269,7 +237,7 @@ class MsgClosePosition(PythonMsg):
 
         """
         return pb.MsgClosePosition(
-            sender=self.sender,
+            sender=sender,
             pair=self.pair,
         )
 
@@ -277,17 +245,16 @@ class MsgClosePosition(PythonMsg):
 @dataclasses.dataclass
 class MsgMultiLiquidate(PythonMsg):
     """
-    Close the position.
+    Liquidate one or multiple unhealthy positions.
+    Unhealthy positions are positions with margin_ratio < maintenance_margin_ratio.
 
     Attributes:
-        sender (str): The sender address
         liquidations (Liquidation): The list of {pair, trader} pairs.
     """
 
-    sender: str
     liquidations: List[Liquidation]
 
-    def to_pb(self) -> pb.MsgMultiLiquidate:
+    def to_pb(self, sender: str) -> pb.MsgMultiLiquidate:
         """
         Returns the Message as protobuf object.
 
@@ -296,7 +263,7 @@ class MsgMultiLiquidate(PythonMsg):
 
         """
         return pb.MsgMultiLiquidate(
-            sender=self.sender,
+            sender=sender,
             liquidations=[
                 pb.MsgMultiLiquidate.Liquidation(
                     pair=liquidation.pair,

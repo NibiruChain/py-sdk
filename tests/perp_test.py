@@ -25,7 +25,6 @@ def test_open_position(client_validator):
     try:
         tx_output: pt.ExecuteTxResp = client_validator.tx.execute_msgs(
             Msg.perp.open_position(
-                sender=client_validator.address,
                 pair=PAIR,
                 is_long=False,
                 quote_asset_amount=10,
@@ -147,7 +146,6 @@ def test_perp_add_margin(client_validator):
         # Transaction add_margin must succeed
         tx_output = client_validator.tx.execute_msgs(
             Msg.perp.add_margin(
-                sender=client_validator.address,
                 pair=PAIR,
                 margin=pt.Coin(10, "unusd"),
             ),
@@ -169,7 +167,6 @@ def test_perp_remove_margin(client_validator):
     try:
         tx_output = client_validator.tx.execute_msgs(
             Msg.perp.remove_margin(
-                sender=client_validator.address,
                 pair=PAIR,
                 margin=pt.Coin(2, "unusd"),
             )
@@ -189,9 +186,7 @@ def test_perp_close_posititon(client_validator):
 
     try:
         # Transaction close_position must succeed
-        tx_output = client_validator.tx.execute_msgs(
-            Msg.perp.close_position(sender=client_validator.address, pair=PAIR)
-        )
+        tx_output = client_validator.tx.execute_msgs(Msg.perp.close_position(pair=PAIR))
         tests.broadcast_tx_must_succeed(res=tx_output)
 
         out = client_validator.query.perp.position(

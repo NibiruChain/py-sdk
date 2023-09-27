@@ -273,7 +273,7 @@ class SpotQueryClient(QueryClient):
             api_callable=self.api.EstimateSwapExactAmountIn,
             req=spot_type.QuerySwapExactAmountInRequest(
                 pool_id=pool_id,
-                token_in=token_in._generate_proto_object(),
+                token_in=token_in.to_pb(),
                 token_out_denom=token_out_denom,
             ),
             should_deserialize=False,
@@ -310,9 +310,7 @@ class SpotQueryClient(QueryClient):
             api_callable=self.api.EstimateJoinExactAmountIn,
             req=spot_type.QueryJoinExactAmountInRequest(
                 pool_id=pool_id,
-                tokens_in=[
-                    tokens_in._generate_proto_object() for tokens_in in tokens_ins
-                ],
+                tokens_in=[tokens_in.to_pb() for tokens_in in tokens_ins],
             ),
             should_deserialize=False,
         )

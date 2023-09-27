@@ -15,7 +15,6 @@ class MsgsBank:
 
     @staticmethod
     def send(
-        from_address: str,
         to_address: str,
         coins: Union[Coin, List[Coin]],
     ) -> 'MsgSend':
@@ -23,14 +22,13 @@ class MsgsBank:
         Send tokens from one account to another
 
         Attributes:
-            from_address (str): The address of the sender
             to_address (str): The address of the receiver
             coins (List[Coin]): The list of coins to send
 
         Returns:
             MsgSend: PythonMsg corresponding to the 'cosmos.bank.v1beta1.MsgSend' message
         """
-        return MsgSend(from_address=from_address, to_address=to_address, coins=coins)
+        return MsgSend(to_address=to_address, coins=coins)
 
 
 @dataclasses.dataclass
@@ -40,16 +38,14 @@ class MsgSend(PythonMsg):
     'cosmos.bank.v1beta1.MsgSend' message.
 
     Attributes:
-        from_address (str): The address of the sender
         to_address (str): The address of the receiver
         coins (Union[Coin, List[Coin]]): The list of coins to send
     """
 
-    from_address: str
     to_address: str
     coins: Union[Coin, List[Coin]]
 
-    def to_pb(self) -> pb.MsgSend:
+    def to_pb(self, sender: str) -> pb.MsgSend:
         """
         Returns the Message as protobuf object.
 
@@ -62,7 +58,7 @@ class MsgSend(PythonMsg):
             coins = [self.coins]
 
         return pb.MsgSend(
-            from_address=self.from_address,
+            from_address=sender,
             to_address=self.to_address,
-            amount=[coin._generate_proto_object() for coin in coins],
+            amount=[coin.to_pb() for coin in coins],
         )

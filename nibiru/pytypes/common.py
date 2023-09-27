@@ -53,7 +53,7 @@ class Coin:
     amount: float
     denom: str
 
-    def _generate_proto_object(self):
+    def to_pb(self):
         """
 
         Returns:
@@ -103,7 +103,7 @@ TX_CONFIG_ATTRS: List[str] = [
 
 class PythonMsg(abc.ABC):
     @abc.abstractmethod
-    def to_pb(self) -> nibiru.ProtobufMessage:
+    def to_pb(self, sender: str) -> nibiru.ProtobufMessage:
         """
         Generate the protobuf message
 

@@ -89,12 +89,10 @@ def test_do_BroadcastTxSync():
     tx, _ = client_validator.tx.build_tx(
         msgs=[
             bank.MsgsBank.send(
-                client_validator.address,
                 client_new_user.address,
                 [pytypes.Coin(7, "unibi"), pytypes.Coin(70, "unusd")],
             ),
             bank.MsgsBank.send(
-                client_validator.address,
                 client_new_user.address,
                 [pytypes.Coin(15, "unibi"), pytypes.Coin(23, "unusd")],
             ),

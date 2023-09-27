@@ -14,12 +14,10 @@ def test_send_multiple_msgs(client_validator, client_new_user):
     tx_output = client_validator.tx.execute_msgs(
         msgs=[
             nibiru.Msg.bank.send(
-                client_validator.address,
                 client_new_user.address,
                 [Coin(7, "unibi"), Coin(70, "unusd")],
             ),
             nibiru.Msg.bank.send(
-                client_validator.address,
                 client_new_user.address,
                 [Coin(15, "unibi"), Coin(23, "unusd")],
             ),
@@ -43,7 +41,6 @@ def test_send_single_msg(client_validator, client_new_user):
     tx_output = client_validator.tx.execute_msgs(
         [
             nibiru.Msg.bank.send(
-                client_validator.address,
                 client_new_user.address,
                 [Coin(10, "unibi"), Coin(10, "unusd")],
             ),

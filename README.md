@@ -34,26 +34,19 @@ The `nibiru` package allows you to index, query, and send transactions on Nibiru
 
 The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
-#### README Contents
+## Try running nibiru sdk online
 
-- [Python SDK Tutorial](#python-sdk-tutorial)
-- [Installation from `PyPI`](#installation-from-pypi)
-- [Usage](#usage)
-  - [Ex: Creating a wallet and SDK client](#ex-creating-a-wallet-and-sdk-client)
-  - [Ex: Using the faucet](#ex-using-the-faucet)
-  - [Ex: Querying chain state](#ex-querying-chain-state)
-  - [Ex: Submitting transactions](#ex-submitting-transactions)
-- [Documentation Website](#documentation-website)
-- [Contributing](#contributing)
+Open the google collab link below to try running Niburu code online: 
 
-## Python SDK Tutorial
-
-<a href="https://colab.research.google.com/github/NibiruChain/py-sdk/blob/master/examples/collab_notebook.ipynb" target="_blank">
+<a href="https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/colab_notebook.ipynb" target="_blank">
 <p align="center">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" style="width: 300px;">
 </p>
 </a>
 
+Or go to the [examples folder](examples) to see the codes and run Jupyter notebooks locally.
+
+## Installation
 ```bash
 pip install nibiru  # requires Python 3.8+
 ```
@@ -126,13 +119,12 @@ print(client.query.get_bank_balances(client.address))
 
 ```python
 output = client.tx.execute_msgs(
-    Msg.perp.open_position(
-        pair=pair,
-        is_long=True,
-        quote_asset_amount=10,
-        leverage=1,
-        base_asset_amount_limit=0,
-    )
+  Msg.perp.open_position(
+    pair=pair,
+    is_long=True,
+    margin=10,
+    leverage=2,
+  )
 )
 print(output)
 ```

@@ -32,9 +32,9 @@ class MsgsPerp:
     def open_position(
         pair: str,
         is_long: bool,
-        quote_asset_amount: float,
+        margin: float,
         leverage: float,
-        base_asset_amount_limit: float,
+        base_asset_amount_limit: float = 0,
     ) -> 'MsgMarketOrder':
         """
         Open a posiiton using the specified parameters.
@@ -42,16 +42,16 @@ class MsgsPerp:
         Attributes:
             pair (str): The token pair
             is_long (bool): Determines whether to open with long or short exposure.
-            quote_asset_amount (float): The quote amount you want to use to buy base
+            margin (float): The margin of the position
             leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
                 margin ratio of the pool.
-            base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
-                quote.
+            base_asset_amount_limit (float): The minimum amount of base you are willing
+                to receive for this amount of quote.
         """
         return MsgMarketOrder(
             pair=pair,
             dir=Direction.LONG if is_long else Direction.SHORT,
-            quote_asset_amount=quote_asset_amount,
+            margin=margin,
             leverage=leverage,
             base_asset_amount_limit=base_asset_amount_limit,
         )
@@ -177,7 +177,7 @@ class MsgMarketOrder(PythonMsg):
     Attributes:
         pair (str): The token pair
         side (Side): The side, either Side.BUY or Side.SELL
-        quote_asset_amount (float): The quote amount you want to use to buy base
+        margin (float): The quote amount you want to use to buy base
         leverage (float): The leverage you want to use, typically between 1 and 15, depending on the maintenance
             margin ratio of the pool.
         base_asset_amount_limit (float): The minimum amount of base you are willing to receive for this amount of
@@ -186,7 +186,7 @@ class MsgMarketOrder(PythonMsg):
 
     pair: str
     dir: Direction
-    quote_asset_amount: float
+    margin: float
     leverage: float
     base_asset_amount_limit: float
 
@@ -203,7 +203,7 @@ class MsgMarketOrder(PythonMsg):
             if self.dir == Direction.LONG
             else state_pb.Direction.SHORT
         )
-        quote_asset_amount_pb = to_sdk_int(self.quote_asset_amount)
+        quote_asset_amount_pb = to_sdk_int(self.margin)
         base_asset_amount_limit_pb = to_sdk_int(self.base_asset_amount_limit)
         leverage_pb = to_sdk_dec(self.leverage)
 

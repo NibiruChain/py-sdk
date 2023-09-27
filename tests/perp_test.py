@@ -27,9 +27,8 @@ def test_open_position(client_validator):
             Msg.perp.open_position(
                 pair=PAIR,
                 is_long=False,
-                quote_asset_amount=10,
+                margin=10,
                 leverage=10,
-                base_asset_amount_limit=0,
             )
         )
         tests.broadcast_tx_must_succeed(res=tx_output)

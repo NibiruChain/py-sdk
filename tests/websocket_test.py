@@ -40,9 +40,8 @@ def test_websocket_listen(client_validator, network: Network):
                 sender=client_validator.address,
                 pair=pair,
                 is_long=True,
-                quote_asset_amount=10,
+                margin=10,
                 leverage=10,
-                base_asset_amount_limit=0,
             ),
             Msg.bank.send(
                 from_address=client_validator.address,

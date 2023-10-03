@@ -100,6 +100,7 @@ jobs:
           for filename in *; do
             if [[ $filename == *.ipynb ]] ; then
               sed -i '/pip install nibiru/d' "$filename"
+              sed -i "s/put your mnemonic here.../$VALIDATOR_MNEMONIC/g" "$filename"
               jupyter nbconvert --to python "$filename"
             fi
           for filename in *; do

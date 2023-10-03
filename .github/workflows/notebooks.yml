@@ -99,8 +99,8 @@ jobs:
           cd examples
           for filename in *; do
             if [[ $filename == *.ipynb ]] ; then
-              jupyter nbconvert --to python "$filename"
               sed -i '/pip install nibiru/d' "$filename"
+              jupyter nbconvert --to python "$filename"
             fi
           for filename in *; do
             if [[ $filename == *.py ]]; then

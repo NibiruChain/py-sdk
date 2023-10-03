@@ -34,18 +34,6 @@ The `nibiru` package allows you to index, query, and send transactions on Nibiru
 
 The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
-## Try running nibiru sdk online
-
-Open the google collab link below to try running Niburu code online: 
-
-<a href="https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/colab_notebook.ipynb" target="_blank">
-<p align="center">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" style="width: 300px;">
-</p>
-</a>
-
-Or go to the [examples folder](examples) to see the codes and run Jupyter notebooks locally.
-
 ## Installation
 ```bash
 pip install nibiru  # requires Python 3.8+
@@ -59,19 +47,16 @@ pip install nibiru  # requires Python 3.8+
 import json
 from nibiru import Network, ChainClient
 
-client = ChainClient(Network.testnet(2))
+client = ChainClient(Network.testnet(3))
 
 # Query perp markets
-print(json.dumps(client.query.perp.markets(), indent=4))
+perp_markets = client.query.perp.markets()
+print(json.dumps(perp_markets, indent=4))
 
 # Query trader's positions
-print(
-  json.dumps(
-    client.query.perp.all_positions(
-      trader="nibi1jle8khj3aennq24zx6g93aam9rt0fqhgyp4h52"
-    ),
-    indent=4)
-)
+trader_addr = "nibi1jle8khj3aennq24zx6g93aam9rt0fqhgyp4h52"
+positions = client.query.perp.all_positions(trader=trader_addr)
+print(json.dumps(positions, indent=4))
 ```
 
 ### Submitting transactions to the chain
@@ -104,7 +89,7 @@ Use faucet to get some test tokens into your wallet: https://app.nibiru.fi/fauce
 
 ```python
 mnemonic = "put your mnemonic here..."
-client = ChainClient(network=Network.testnet(2))
+client = ChainClient(network=Network.testnet(3))
 client.authenticate(mnemonic=mnemonic)
 print(client.address)
 ```
@@ -124,19 +109,29 @@ output = client.tx.execute_msgs(
     is_long=True,
     margin=10,
     leverage=2,
-  )
+  ),
+  wait_for_tx_resp=True,  # wait for block and get tx response
 )
 print(output)
 ```
 
 You can broadcast any available transaction by passing its corresponding `Msg` to the `client.tx.execute_msgs` function.
 
-## Documentation Website
+## Nibiru SDK By Example
 
-Documentation can be found here: [Nibiru-py documentation](https://nibiru-py.readthedocs.io/en/latest/index.html)
+The [examples folder](examples) folder contains jupyter notebooks for a quick introduction with example to the nibiru python sdk. The goal is to teach how to query and interact with any chain (testnet, localnet, mainnet).
 
-- Learn more about opening and managing your spot and perp positions [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.sdks.tx.html#nibiru-sdks-tx-package)
-- Learn about querying the chain using the Sdk [here](https://nibiru-py.readthedocs.io/en/latest/nibiru.clients.html#nibiru-clients-package)
+All the examples are available for running online in Google Colab.
+
+
+| Local                                       | Google Colab |
+|---------------------------------------------|--------------|
+| [Quick start](examples/1_quick_start.ipynb) | [![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/1_quick_start.ipynb) |
+| [Bank](examples/2_bank.ipynb)               | [![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/2_bank.ipynb) |
+| [Perpetuals](examples/3_perp.ipynb)         | [![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/3_perp.ipynb) |
+| [Spots](examples/4_spot.ipynb)              | [![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/4_spot.ipynb) |
+| [Staking](examples/5_staking.ipynb)         | [![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NibiruChain/py-sdk/blob/main/examples/5_staking.ipynb) |
+
 
 ## Contributing
 

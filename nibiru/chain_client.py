@@ -107,13 +107,13 @@ class ChainClient:
     @property
     def tx(self):
         if not self.is_authenticated():
-            return ValueError("Not authenticated! Call authenticate() to use tx client")
+            raise ValueError("Not authenticated! Call authenticate() to use tx client")
         return self._tx
 
     @property
     def private_key(self):
         if not self.is_authenticated():
-            return ValueError(
+            raise ValueError(
                 "Not authenticated! Call authenticate() to get private key"
             )
         return self._private_key
@@ -121,7 +121,7 @@ class ChainClient:
     @property
     def address(self):
         if not self.is_authenticated():
-            return ValueError(
+            raise ValueError(
                 "Not authenticated! Call authenticate() to get your wallet address"
             )
         return self._address

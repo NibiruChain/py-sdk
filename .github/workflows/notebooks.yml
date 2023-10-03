@@ -33,6 +33,7 @@ jobs:
       # https://www.notion.so/nibiru/Resources-and-Repo-Configs-b31aa8074a2b419d80b0c946ed5efab0
       DEVNET_NUMBER: ${{ secrets.DEVNET_NUMBER }}
       VALIDATOR_MNEMONIC: ${{ secrets.VALIDATOR_MNEMONIC }}
+      EXAMPLES_WALLET_MNEMONIC: ${{ secrets.EXAMPLES_WALLET_MNEMONIC }}
     steps:
       # ----------------------------------------------
       # check-out repo and set-up python
@@ -100,7 +101,7 @@ jobs:
           for filename in *; do
             if [[ $filename == *.ipynb ]] ; then
               sed -i '/pip install nibiru/d' "$filename"
-              sed -i "s/put your mnemonic here.../$VALIDATOR_MNEMONIC/g" "$filename"
+              sed -i "s/put your mnemonic here.../$EXAMPLES_WALLET_MNEMONIC/g" "$filename"
               jupyter nbconvert --to python "$filename"
             fi
           for filename in *; do

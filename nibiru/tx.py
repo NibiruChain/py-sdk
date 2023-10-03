@@ -7,18 +7,19 @@ Classes:
 """
 import logging
 import pprint
+import time
 from numbers import Number
-from typing import Iterable, List, Optional, Tuple, Union
+from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 from google.protobuf import any_pb2, message
+from grpc import StatusCode
+from grpc._channel import _InactiveRpcError
 
 from nibiru import exceptions, jsonrpc
 from nibiru import pytypes as pt
 from nibiru import tmrpc, wallet
 from nibiru.exceptions import SimulationError, TxError
 from nibiru.grpc_client import GrpcClient
-
-# from google.protobuf.json_format import MessageToDict
 from nibiru_proto.cosmos.base.abci.v1beta1 import abci_pb2 as abci_type
 from nibiru_proto.cosmos.base.v1beta1 import coin_pb2 as cosmos_base_coin_pb
 from nibiru_proto.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -64,7 +65,8 @@ class TxClient:
         msgs: Union[pt.PythonMsg, List[pt.PythonMsg]],
         sequence: Optional[int] = None,
         tx_config: Optional[pt.TxConfig] = None,
-    ) -> pt.ExecuteTxResp:
+        wait_for_tx_resp=False,
+    ) -> Union[pt.ExecuteTxResp, Dict]:
         """
         Broadcasts messages to a node in a single transaction. This function
         first simulates the corresponding transaction to estimate the amount of
@@ -84,7 +86,9 @@ class TxClient:
             get_sequence_from_node (bool, optional): Specifies whether the
                 sequence comes from the local value or the lcd endpoint.
                 Defaults to False.
-
+            wait_for_tx_resp (bool): If True then waits for block results and
+                returns tx response, otherwize returns just tx hash and status.
+                Defaults to False.
         Raises:
             SimulationError: If broadcasting fails during the simulation.
             TxError: If the response code is nonzero, the 'TxError' includes
@@ -122,6 +126,7 @@ class TxClient:
                     msgs=msgs,
                     sequence=sequence,
                     tx_config=tx_config,
+                    wait_for_tx_resp=wait_for_tx_resp,
                 )
             if address:
                 address.decrease_sequence()
@@ -139,26 +144,31 @@ class TxClient:
                 tx_hash=jsonrcp_resp.result.get("hash"),
                 log=jsonrcp_resp.result.get("log"),
             )
-            if execute_resp.code != 0:
+
+            if execute_resp.code == 0:
+                if not wait_for_tx_resp:
+                    return execute_resp
+
+                # Poll tx response
+                tx_hash = execute_resp.tx_hash
+                timeout = 10000  # milliseconds until failure
+                step = 500  # milliseconds between checks
+                for attempt in range(0, timeout, step):
+                    try:
+                        return self.client.tx_by_hash(tx_hash)["tx_response"]
+                    except _InactiveRpcError as ie:
+                        if ie.code() == StatusCode.NOT_FOUND:
+                            time.sleep(step / 1000)
+                            continue
+                        else:
+                            raise ie
+                    except Exception as ex:
+                        raise ex
+
+            else:
                 address.decrease_sequence()
                 raise TxError(execute_resp.log)
-            return execute_resp
-            # ------------------------------------------------
-            # gRPC version: TODO - add back as feature.
-            # ------------------------------------------------
-            # tx_resp: dict[str, Any] = MessageToDict(tx_resp)
-            # tx_hash: Union[str, None] = tx_resp.get("txhash")
-            # assert tx_hash, f"null txhash on tx_resp: {tx_resp}"
-            # tx_output: tx_service.GetTxResponse = self.client.tx_by_hash(
-            #     tx_hash=tx_hash
-            # )
-            #
-            # if tx_output.get("tx_response").get("code") != 0:
-            #     address.decrease_sequence()
-            #     raise TxError(tx_output.raw_log)
-            #
-            # tx_output["rawLog"] = json.loads(tx_output.get("rawLog", "{}"))
-            # return pt.RawSyncTxResp(tx_output)
+
         except exceptions.ErrorQueryTx as err:
             logging.info("ErrorQueryTx")
             logging.error(err)
@@ -180,7 +190,7 @@ class TxClient:
         def compute_gas_wanted() -> float:
             # Related to https://github.com/cosmos/cosmos-sdk/issues/14405
             # TODO We should consider adding the behavior mentioned by tac0turtle.
-            gas_wanted = gas_estimate * 1.25  # apply gas multiplier
+            gas_wanted = gas_estimate
             if conf.gas_wanted > 0:
                 gas_wanted = conf.gas_wanted
             elif conf.gas_multiplier > 0:
@@ -350,16 +360,7 @@ class TxClient:
         Returns:
             (pt.TxConfig): The new value for the TxClient.tx_config.
         """
-        tx_config: pt.TxConfig
-        if new_tx_config is not None:
-            tx_config = new_tx_config
-        elif self.tx_config is None:
-            # Set as the default if the TxConfig has not been initialized.
-            tx_config = pt.TxConfig()
-        else:
-            pass
-        tx_config = self.tx_config
-        return tx_config
+        return new_tx_config or self.tx_config or pt.TxConfig()
 
 
 # TODO: Refactor this into a dataclass for brevity.

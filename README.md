@@ -1,8 +1,17 @@
-# Python SDK - Nibiru Chain    <!-- omit in toc -->
+# 🚧 Python SDK - Nibiru [Archived]
 
-> Python-based client for interacting with the Nibiru blockchain.
+> [!IMPORTANT]
+> This repository is **no longer actively maintained**.
+
+ Most developers building on Nibiru use TypeScript/JavaScript (via `@nibiruchain/nibijs`) or Go, the language Nibiru itself is built in. As a result, maintaining a separate Python client interface for transaction broadcasting is no longer productive or necessary.
+
+For development, we recommend anything from the "[Core Tools and Language Clients](https://nibiru.fi/docs/dev/#core-tools-and-language-clients)" section of the Nibiru documentation.
 
 <!-- Badges -->
+
+## Introduction 
+
+> Python-based client for interacting with the Nibiru blockchain.
 
 [![Nibiru Test workflow][tests-badge]][tests-workflow]
 [![Examples tests][examples-badge]][tests-example]
@@ -30,7 +39,7 @@
 [tests-workflow]: https://github.com/NibiruChain/py-sdk/actions/workflows/pytests.yml
 [tests-example]: https://github.com/NibiruChain/py-sdk/actions/workflows/notebooks.yml
 
-The `nibiru` package allows you to index, query, and send transactions on Nibiru Chain using Python. It provides access to market data for analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
+The Python SDK includes a `nibiru` package allows you to index, query, and send transactions on Nibiru Chain using Python. It provides access to market data for analysis, visualization, indicator development, algorithmic trading, strategy backtesting, bot programming, and related software engineering.
 
 The package is intended to be used by coders, developers, technically-skilled traders and  data-scientists for building trading algorithms.
 
